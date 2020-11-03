@@ -66,6 +66,11 @@ const module = {
                     await dispatch('setMapping', {target, source:index})
                 }
             })
+            return state.mapping
+        },
+        async guessPrimaryKeysMapping(context) {
+            const {dispatch, rootState} = context
+            const {columns} = rootState.csv_data
             const {primary_keys=[]} = rootState.settings
             primary_keys.forEach( async target => {
                 let index = columns.indexOf(target)
@@ -73,7 +78,6 @@ const module = {
                     await dispatch('setMapping', {target, source:index})
                 }
             })
-            return state.mapping
         }
     },
 }

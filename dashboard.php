@@ -35,6 +35,6 @@ new Vue({
 
 </style>
 <?php 
-//$page->PrintFooterExt();
+$page->PrintFooterExt();
 ?>
 

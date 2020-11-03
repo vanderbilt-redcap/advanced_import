@@ -4,7 +4,11 @@
 
         <EventFormSelect v-model="form" />
 
-        <slot :validation="$v" :processFunction="processSettings"></slot>
+        <div class="buttons d-flex flex-row justify-content-between" >
+            <slot name="left" ></slot>
+            <slot></slot>
+            <slot name="right" :validation="$v" :processFunction="processSettings"></slot>
+        </div>
     </div>
 </template>
 

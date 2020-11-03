@@ -24,7 +24,11 @@
             </div>
         </div>
         
-        <slot :validation="$v"></slot>
+        <div class="buttons d-flex flex-row justify-content-between" >
+            <slot name="left" ></slot>
+            <slot></slot>
+            <slot name="right" :validation="$v" ></slot>
+        </div>
     </div>
 </template>
 

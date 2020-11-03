@@ -3,6 +3,7 @@ import Vue from 'vue';
 Vue.use(Vuex);
 
 import settings from '@/store/modules/settings'
+import logs from '@/store/modules/logs'
 import import_settings from '@/store/modules/import_settings'
 import export_settings from '@/store/modules/export_settings'
 import csv_data from '@/store/modules/csv_data'
@@ -16,6 +17,7 @@ const store = new Vuex.Store({
     state: {...initialState},
     modules: {
         settings,
+        logs,
         import_settings,
         export_settings,
         csv_data,

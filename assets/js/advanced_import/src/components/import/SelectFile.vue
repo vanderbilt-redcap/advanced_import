@@ -20,7 +20,11 @@
       ></b-form-file>
       
     </div>
-    <slot :validation="$v" :processFunction="parseFile"></slot>
+    <div class="buttons d-flex flex-row justify-content-between" >
+      <slot name="left" ></slot>
+      <slot></slot>
+      <slot name="right" :validation="$v" :processFunction="parseFile"></slot>
+    </div>
   </div>
 </template>
 

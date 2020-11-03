@@ -6,6 +6,7 @@ const routes = [
     { path: '/', component: () => import('@/layouts/MainLayout'),
         children: [
             { path: '', name: 'home', component: () => import('@/pages/Home') },
+            { path: 'logs', name: 'logs', component: () => import('@/pages/Logs') },
             { path: 'test', name: 'test', component: () => import('@/pages/Test') },
             { path: 'import', name: 'import', component: () => import('@/pages/import/Index') },
             { path: 'export', name: 'export', component: () => import('@/pages/export/Index') },

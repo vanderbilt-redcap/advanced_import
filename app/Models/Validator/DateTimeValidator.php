@@ -21,17 +21,12 @@ class DateTimeValidator implements ValidatorInterface
         'datetime_seconds_dmy' => DateTimeFormat::DATETIME_SECONDS_DMY,
     ];
 
-    public function __construct($format)
-    {
-        if(!array_key_exists($format, self::FORMATS)) throw new \Exception("Invalid format provided: '{$format}'", 1);
-        $this->format = self::FORMATS[$format];
-    }
-
     public function validate($value)
     {
         if(empty($value)) return true;
-        $datetime = \DateTime::createFromFormat($this->format, $value);
-        if(!($datetime instanceof \DateTime)) throw new \Exception("The value '{$value}' is not in the valid format '{$this->format}", 1);
+        $db_format = DateTimeFormat::DATETIME_SECONDS;
+        $datetime = \DateTime::createFromFormat($db_format, $value);
+        if(!($datetime instanceof \DateTime)) throw new \Exception("The value '{$value}' is not in the valid format '{$db_format}", 1);
         return true;
     }
 }

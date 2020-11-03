@@ -8,7 +8,7 @@ export default class API {
     module_prefix = 'advanced_import'
 
     constructor({modules}) {
-        let baseURL = window.app_path_webroot ? `/api/` : '/backend/api'
+        let baseURL = `/api/`
         this.baseURL = baseURL
         const redcap_params = this.getRedCapQueryParams()
         

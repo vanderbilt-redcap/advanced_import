@@ -51,12 +51,12 @@
   "vue": {
     "devServer": {
       "proxy": {
-        "/backend": {
+        "/": {
           "target": "https://redcap.test/API_PROXY/external_modules.php",
           "ws": false,
           "changeOrigin": true,
           "pathRewrite": {
-            "^/backend": ""
+            "^/": ""
           }
         }
       }

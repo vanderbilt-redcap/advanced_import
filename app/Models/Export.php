@@ -32,8 +32,8 @@ class Export extends BaseModel
             throw new \Exception("No primary key was found.", 400);
         }
         // get fields data
-        $form_fields = $this->getProjectFormFields($project_id, $form_name);
-        $csv_columns = [$primary_key]+$form_fields;
+        $csv_columns = $this->getProjectFormFields($project_id, $form_name);
+        array_unshift($csv_columns, $primary_key);
 
         // get the CSV. Note that field names are contained in an array and extract headers is false
         $csv = $this->writeCSV([$csv_columns], $extract_headers=false, $delimiter, $enclosure);

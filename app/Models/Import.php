@@ -3,7 +3,6 @@
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
 use Vanderbilt\AdvancedImport\App\Models\Importers\ImporterFactory;
-use Vanderbilt\AdvancedImport\App\Traits\CanProcessCsvData;
 use Vanderbilt\AdvancedImport\App\Traits\CanReadCSV;
 use Vanderbilt\AdvancedImport\App\Traits\SubjectTrait;
 
@@ -11,7 +10,6 @@ class Import extends BaseModel
 {
     use CanReadCSV;
     use SubjectTrait;
-    use CanProcessCsvData;
 
     /**
      *

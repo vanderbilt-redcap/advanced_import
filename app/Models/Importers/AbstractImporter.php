@@ -18,6 +18,12 @@ abstract class AbstractImporter implements ImporterInterface
      * @var int
      */
     protected $project_id;
+    
+    /**
+     *
+     * @var int
+     */
+    protected $line;
 
     /**
      * @var ImportSettings

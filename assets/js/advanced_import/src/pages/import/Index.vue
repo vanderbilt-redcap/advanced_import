@@ -6,16 +6,18 @@
           <div class="steps text-center mb-2">
             <b-badge variant="light">Step {{step_index+1}} of {{steps.length}}</b-badge>
           </div>
-          <component :is="item.component" v-slot="{validation, processFunction}">
-            <div class="buttons d-flex flex-row justify-content-between">
+          <component :is="item.component">
+            <template v-slot:left>
               <button class="btn btn-outline-primary" @click="goToPrevStep" :disabled="step_index==0" v-if="step_index>0">go back</button>
-              <span v-else/> <!-- this is a placeholder for the left button -->
-              <button v-if="step_index<(steps.length-1)" class="btn btn-outline-primary" @click="goToNextStep(processFunction)" :disabled="validation.$invalid">next</button>
-              <template v-else>
-                <!-- execute function for last element -->
-                <button v-if="processFunction" class="btn btn-outline-primary" @click="run(processFunction)" :disabled="processing">Ok</button>
-              </template>
-            </div>
+              <span v-else/>
+            </template>
+            <template v-slot:default>
+
+            </template>
+            <template v-slot:right="{validation, processFunction}">
+              <button class="btn btn-outline-primary" @click="goToNextStep(processFunction)" :disabled="validation.$invalid" v-show="step_index<(steps.length-1)">next</button>
+            </template>
+
           </component>
           </b-card>
         </b-tab>

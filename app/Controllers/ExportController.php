@@ -10,11 +10,11 @@ class ExportController extends BaseController
 
     function __construct()
     {
-        global $module;
+        // global $module;
         parent::__construct();
 		
-        $this->module = $module;
-		$this->app = new AdvancedImport($module);
+        // $this->module = $module;
+		$this->module = new AdvancedImport();
     }
     
     function export()

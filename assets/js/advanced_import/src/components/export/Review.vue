@@ -19,7 +19,10 @@
       <div class="buttons d-flex flex-row justify-content-between" >
             <slot name="left"></slot>
             <slot>
-                <button class="btn btn-primary" @click="exportCSV">Download</button>
+                <button class="btn btn-primary" @click="exportCSV">
+                    <font-awesome-icon icon="file-export" />
+                    <span> Download</span>
+                </button>
             </slot>
             <!-- <slot name="right" :validation="$v"></slot> -->
         </div>
@@ -44,10 +47,10 @@ export default {
         }
     },
     methods: {
-        exportCSV() {
+        async exportCSV() {
             const settings = {...this.settings}
-            console.log(settings)
-            this.$API.dispatch('exportData/download', settings)
+            await this.$API.dispatch('exportData/download', settings)
+            this.$router.push({name: 'home'})
         },
     },
     validations: {},
