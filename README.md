@@ -1,6 +1,6 @@
 # Redcap Advanced Import/Export
 
-External module to collect data from EPIC and update/create records on redcap
+External module to import/export data in REDCap
 
 ### Install dependencies
 Install dependencies with `Composer`.
