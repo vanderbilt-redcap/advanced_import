@@ -1,8 +1,16 @@
 <template>
-    <div class="mb-2">
+    <div class="mb-2 menu-wrapper">
         <router-link :to="{name:'home'}" exact>
             <font-awesome-icon icon="home" />
             <span> Dashboard</span>
+        </router-link>
+        <router-link :to="{name:'import'}">
+            <font-awesome-icon icon="file-import" />
+            <span> Import</span>
+        </router-link>
+        <router-link :to="{name:'export'}">
+            <font-awesome-icon icon="file-export" />
+            <span> Export</span>
         </router-link>
         <router-link :to="{name:'logs'}">
             <font-awesome-icon icon="clipboard-list" />
@@ -29,6 +37,9 @@ export default {
 </script>
 
 <style scoped>
+.menu-wrapper {
+    border-bottom: solid 1px #cacaca;
+}
 a.router-link-active,
 a.router-link-exact-active {
     text-decoration: underline;

@@ -1,7 +1,7 @@
 <template>
   <div class="wizard">
     <b-tabs class="wizard-tabs" no-nav-style content-class="mt-0" v-model="step_index" >        
-        <b-tab v-for="(item, index) in steps" :key="index" :title="``">
+        <b-tab v-for="(item, index) in steps" :key="index" :title="``" title-link-class="d-none">
           <b-card>
           <div class="steps text-center mb-2">
             <b-badge variant="light">Step {{step_index+1}} of {{steps.length}}</b-badge>

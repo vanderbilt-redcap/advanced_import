@@ -10,7 +10,7 @@
             <font-awesome-icon icon="trash" />
             <span> Delete logs</span>
         </b-button>
-        
+
         <b-modal id="modal-delete" title="Delete logs" @ok="handleOkDelete">
             <p class="my-4">Are you sure you want to delete all logs for the current project?</p>
         </b-modal>
@@ -22,6 +22,10 @@
         aria-controls="my-table"
         ></b-pagination>
     </div>
+
+     <div v-if="!loading && items.length<=0">
+         <span>no logs</span>
+     </div>
 
     <b-table
       id="my-table"

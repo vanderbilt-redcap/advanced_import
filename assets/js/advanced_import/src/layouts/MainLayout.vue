@@ -18,6 +18,16 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
+.fade-enter-active {
+  transition: opacity 100ms;
+}
+.fade-enter-active {
+  /** delay same amount of time of the transition duration */
+  transition-delay: 100ms;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
 </style>
