@@ -6,7 +6,7 @@ class NumberValidator implements ValidatorInterface
 {
     use CanValidateRegExp;
     
-    const REGEXP = '/^([+-])[0-9]+(\.[0-9]+)?$/';
+    const REGEXP = '/^(?:(0|[1-9]+)\.?\d*)?$/';
 
     public function __construct()
     {

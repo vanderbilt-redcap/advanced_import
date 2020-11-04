@@ -10,7 +10,7 @@ class PhoneValidator implements ValidatorInterface
         'us' => self::REGEXP_US,
     ];
 
-    const REGEXP_US = "/^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/";
+    const REGEXP_US = "/^(?:\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4}))?$/";
 
     public function __construct($format='us')
     {

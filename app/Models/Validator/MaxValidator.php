@@ -11,6 +11,7 @@ class MaxValidator implements ValidatorInterface
     
     public function validate($value)
     {
+        if(empty($value)) return true;
         if(!is_numeric($value)) throw new \Exception("Invalid number provided: '{$value}'", 1);
         if(!is_numeric($this->max)) throw new \Exception("Invalid maximum number provided: '{$this->max}'", 1);
         if($value <= $this->max) return true;

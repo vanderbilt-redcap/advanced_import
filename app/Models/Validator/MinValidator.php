@@ -10,6 +10,7 @@ class MinValidator implements ValidatorInterface
     
     public function validate($value)
     {
+        if(empty($value)) return true;
         if(!is_numeric($value)) throw new \Exception("Invalid number provided: '{$value}'", 1);
         if(!is_numeric($this->min)) throw new \Exception("Invalid minimum number provided: '{$this->min}'", 1);
         if($value >= $this->min) return true;
