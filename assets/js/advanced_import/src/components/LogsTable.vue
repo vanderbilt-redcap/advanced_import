@@ -6,7 +6,7 @@
             <font-awesome-icon v-else icon="sync" />
             <span> Reload</span>
         </b-button>
-        <b-button variant="danger" class="ml-2" v-b-modal.modal-delete>
+        <b-button variant="danger" class="ml-2" v-b-modal.modal-delete :disabled="loading" v-if="hasLogs">
             <font-awesome-icon icon="trash" />
             <span> Delete logs</span>
         </b-button>
@@ -15,7 +15,7 @@
             <p class="my-4">Are you sure you want to delete all logs for the current project?</p>
         </b-modal>
 
-        <b-pagination class="ml-2" v-if="items.length>0"
+        <b-pagination class="ml-2" v-if="hasLogs"
         v-model="current_page"
         :total-rows="rows"
         :per-page="per_page"
@@ -23,7 +23,7 @@
         ></b-pagination>
     </div>
 
-     <div v-if="!loading && items.length<=0">
+     <div v-if="!loading && !hasLogs">
          <span>no logs</span>
      </div>
 
@@ -37,7 +37,7 @@
       striped
     ></b-table>
     
-    <b-pagination v-if="items.length>0"
+    <b-pagination v-if="hasLogs"
         v-model="current_page"
         :total-rows="rows"
         :per-page="per_page"
@@ -66,6 +66,13 @@ export default {
             const total = this.$store.getters['logs/total']
             return total || this.items.length
         },
+        hasLogs() {
+            try {
+                return this.items.length>0
+            } catch (error) {
+                return false
+            }
+        }
     },
     watch: {
         current_page: {
