@@ -2,24 +2,25 @@
   <div class="wizard">
     <b-tabs class="wizard-tabs" no-nav-style content-class="mt-0" v-model="step_index" >        
         <b-tab v-for="(item, index) in steps" :key="index" :title="``" title-link-class="d-none">
-          <b-card>
-            <div class="steps text-center mb-2">
-              <b-badge variant="light">Step {{step_index+1}} of {{steps.length}}</b-badge>
-            </div>
-            <component :is="item.component">
-              <template v-slot:left>
-                <button class="btn btn-outline-primary" @click="goToPrevStep" :disabled="step_index==0" v-if="step_index>0">go back</button>
-                <span v-else/>
-              </template>
-              <template v-slot:default>
 
-              </template>
-              <template v-slot:right="{validation, processFunction}">
-                <button class="btn btn-outline-primary" @click="goToNextStep(processFunction)" :disabled="validation.$invalid" v-show="step_index<(steps.length-1)">next</button>
-              </template>
+          <div class="steps text-center mb-2">
+            <b-badge variant="light">Step {{step_index+1}} of {{steps.length}}</b-badge>
+          </div>
+          
+          <component :is="item.component">
+            <template v-slot:left>
+              <button class="btn btn-outline-primary" @click="goToPrevStep" :disabled="step_index==0" v-if="step_index>0">go back</button>
+              <span v-else/>
+            </template>
+            <template v-slot:default>
 
-            </component>
-          </b-card>
+            </template>
+            <template v-slot:right="{validation, processFunction}">
+              <button class="btn btn-outline-primary" @click="goToNextStep(processFunction)" :disabled="validation.$invalid" v-show="step_index<(steps.length-1)">next</button>
+            </template>
+
+          </component>
+
         </b-tab>
     </b-tabs>
 

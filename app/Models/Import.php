@@ -33,7 +33,7 @@ class Import extends BaseModel
     {
         $settings = new ImportSettings($settings);
         $importer = ImporterFactory::create($project_id, $settings);
-        $importer->attach($this->module, '*'); // attache the module as a subscriber
+        $importer->attach($this->module, '*'); // attach the module as a subscriber
 
         $test = compact('project_id', 'file', 'settings');
         $file_path = $file['tmp_name'];

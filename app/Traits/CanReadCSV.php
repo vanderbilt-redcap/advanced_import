@@ -46,6 +46,13 @@ trait CanReadCSV {
 		return $fields;
 	}
 
+	/**
+	 * read a line from a file
+	 *
+	 * @param SplFileObject|string $file
+	 * @param string $line_number
+	 * @return string
+	 */
 	public function readFileAtLine($file, $line_number)
 	{
 		if(!($file instanceof SplFileObject)) $file = $this->openFile($file);

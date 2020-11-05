@@ -10,22 +10,25 @@ class ImportController extends BaseController
 
     function __construct()
     {
-        // global $module;
         parent::__construct();
-		
-        // $this->module = $module;
 		$this->module = new AdvancedImport();
     }
     
     function import()
     {
-        $project_id = $_GET['pid'];
-        $file = reset($_FILES); // get only one file
-        $settings = json_decode($_POST['settings']);
-        $model = new Import($this->module);
-        $results = $model->importCSV($project_id, $file, $settings);
-        
-        return $this->printJSON($results);
+        try {
+            $project_id = $_GET['pid'];
+            $file = reset($_FILES); // get only one file
+            $settings = json_decode($_POST['settings']);
+            $model = new Import($this->module);
+            $results = $model->importCSV($project_id, $file, $settings);
+            
+            return $this->printJSON($results);
+        } catch (\Exception $e) {
+            $response = ['message'=>$e->getMessage()];
+            $code = $e->getCode();
+            return $this->printJSON($response, $code);
+        }
     }
 
     /**
@@ -35,10 +38,16 @@ class ImportController extends BaseController
      */
     function parse()
     {
-        $model = new Import($this->module);
-        $file = reset($_FILES); // get only one file
-        $settings = json_decode($_POST['settings']);
-        $data = $model->parseFile($file, $settings);
-        return $this->printJSON($data);
+        try {
+            $model = new Import($this->module);
+            $file = reset($_FILES); // get only one file
+            $settings = json_decode($_POST['settings']);
+            $data = $model->parseFile($file, $settings);
+            return $this->printJSON($data);
+        } catch (\Exception $e) {
+            $response = ['message'=>$e->getMessage()];
+            $code = $e->getCode();
+            return $this->printJSON($response, $code);
+        }
     }
 }
