@@ -6,15 +6,9 @@ use Vanderbilt\AdvancedImport\App\Models\Export;
 
 class ExportController extends BaseController
 {
-    private $module;
-
     function __construct()
     {
-        // global $module;
         parent::__construct();
-		
-        // $this->module = $module;
-		$this->module = new AdvancedImport();
     }
     
     function export()
@@ -30,7 +24,7 @@ class ExportController extends BaseController
                 'primary_key' => $_GET['primary_key'],
             ];
 
-            $model = new Export($this->module);
+            $model = new Export();
             return $model->exportCSV($project_id, $event_id, $form_name, $settings);
         } catch (\Exception $e) {
             return $e->getMessage();

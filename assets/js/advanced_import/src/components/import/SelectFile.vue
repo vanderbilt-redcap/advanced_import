@@ -32,6 +32,7 @@
 import { required } from 'vuelidate/lib/validators'
 
 export default {
+
   data() {
     return {
       accept: ['.txt','.csv','.json'].join(',')
@@ -46,15 +47,6 @@ export default {
       get() { return this.$store.state.import_settings.files },
       set(value) { this.$store.dispatch('import_settings/setStateProperty', {key: 'files', value})},
     }
-  },
-  watch: {
-    /* files: {
-      immediate: true,
-      handler(value) {
-        console.log(this)
-        if(typeof this.$refs.fileinput!=='undefined') this.$refs.fileinput.files = value
-      }
-    } */
   },
   methods: {
     // this function is processed befo switching to the next tab in the import wizard

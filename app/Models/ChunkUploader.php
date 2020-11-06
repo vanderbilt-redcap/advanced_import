@@ -6,37 +6,82 @@ class ChunkUploader
 
     public function __construct($upload_dir=null)
     {
-        $this->upload_dir = $upload_dir ?: sys_get_temp_dir();
+        $this->setUploadDirectory($upload_dir);
+    }
+
+    /**
+     * set the upload directory path:
+     * - remove extra slashes
+     * - remove final slash
+     *
+     * @param string $path
+     * @return void
+     */
+    private function setUploadDirectory($path)
+    {
+        $normalizePath = function($str) {
+            $str = preg_replace('#/+#','/',$str); //remove extra slashes
+            $str = preg_replace('#(.*)/?$#', '$1', $str); // no slash at the end
+            return $str;
+        };
+        $this->upload_dir = $normalizePath($path ?: sys_get_temp_dir());
     }
 
     public function upload($params)
     {
-        // check sent file size against local file
-        $checkFileSize = function($file_path) use($params) {
-            $sent_file_size = @$params['size'] ?: 0;
-            $file_size = filesize($file_path); //37067676
-            return $file_size-$sent_file_size;
-            // return $sent_file_size <=> $file_size; //spaceship operators return -1,0 or 1 (only PHP 7)
+        /**
+         * check sent file size against local file
+         * and throw exception if trying to upload too much data
+         */
+        $checkFileSize = function($file_path, $file_size) {
+            $uploaded_file_size = filesize($file_path) ?: 0; //37067676
+            $remaining_data_to_upload = $file_size-$uploaded_file_size;
+            if($remaining_data_to_upload<=0)
+                throw new \Exception("Error: trying to upload more data than expected: {$uploaded_file_size}/{$file_size} bytes have been uploaded.", 1);
         };
-        $removeExtraSlashes = function($str) {
-            return preg_replace('#/+#','/',$str);
-        };
-
-        $file_name = $params['name'];
-        $file_data = $params['chunk'];
-        $file_path = $removeExtraSlashes($this->upload_dir .DIRECTORY_SEPARATOR. $file_name);
-        // check sent file size against local file
-        if($checkFileSize($file_path)>=0) {
-            throw new \Exception("Error the file on the server is bigger than the one sent", 1);
-        }
         
-        $file_data = $this->decode_chunk( $file_data );
+        $file_size = intval(@$params['size'] ?: 0);
+        // use the unique name if availabvle as parameter, otherwise create one
+        $unique_name = @$params['unique_name'] ?: $this->getUniqueName($params['name']);
+        $file_path = "{$this->upload_dir}/{$unique_name}";
+        
+        // check sent file size against local file
+        $checkFileSize($file_path, $file_size);
+        
+        $data_chunk = @$params['chunk'];
+        $file_data = $this->decode_chunk($data_chunk);
         
         if ( false === $file_data ) {
-            throw new \Exception("No file data", 1);
+            throw new \Exception("No file data", 400);
         }
 
-        return file_put_contents( $file_path, $file_data, FILE_APPEND );
+        $written_bytes = file_put_contents( $file_path, $file_data, FILE_APPEND );
+        $uploaded_bytes = filesize($file_path);
+        return compact('written_bytes', 'uploaded_bytes', 'file_size', 'unique_name');
+    }
+
+    /**
+     * check for existing files and create a unique name for the file
+     *
+     * @param string $filename
+     * @return string
+     */
+    private function getUniqueName($filename) {
+        $getHashedName = function($filename, $salt='') {
+            $path_parts = pathinfo($filename);
+            $extension = $path_parts['extension'];
+            $name = md5($path_parts['filename'].$salt);
+            return "{$name}.{$extension}";
+        };
+
+        $hashed_name = $getHashedName($filename);
+        $counter = 0;
+        $file_path = "{$this->upload_dir}/{$hashed_name}";
+        while(file_exists($file_path)) {
+            $hashed_name = $getHashedName($file_path, $counter++);
+            $file_path = "{$this->upload_dir}/{$hashed_name}";
+        }
+        return $hashed_name;
     }
 
     /**
@@ -46,7 +91,7 @@ class ChunkUploader
      * @return string
      */
     public function decode_chunk($data) {
-        $data = explode(';base64,', $data);
+        $data = explode(';base64,', $data); //strip the initial base64 signature
         
         if ( ! is_array( $data ) || ! isset( $data[1] ) ) return false;
         
@@ -56,11 +101,4 @@ class ChunkUploader
         return $data;
     }
 
-    public static function printJSON($response, $status_code=200)
-	{
-		http_response_code($status_code); // set the status header
-		header('Content-Type: application/json');
-		print json_encode( $response );
-		exit;
-	}
 }

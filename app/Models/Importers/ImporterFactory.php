@@ -1,5 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Importers;
 
+use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 
 class ImporterFactory

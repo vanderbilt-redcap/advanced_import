@@ -10,14 +10,8 @@ class Export extends BaseModel
 {
     use CanWriteCSV, CanForceDownload, CanGetProjectData;
 
-    /**
-     * constructor
-     *
-     * @param AdvancedImport $module
-     */
-	function __construct($module)
+	function __construct()
 	{
-        $this->module = $module;
 		parent::__construct();
     }
 

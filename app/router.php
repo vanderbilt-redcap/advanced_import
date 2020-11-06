@@ -14,8 +14,8 @@ $routes = [
     ['POST', "parse", ['Vanderbilt\AdvancedImport\App\Controllers\ImportController/parse']], // parse file and get info
     ['POST', "upload", ['Vanderbilt\AdvancedImport\App\Controllers\UploadController/upload']], // parse file and get info
     ['GET', "export", ['Vanderbilt\AdvancedImport\App\Controllers\ExportController/export']],
-    ['GET', "logs", ['Vanderbilt\AdvancedImport\App\Controllers\LogController/index']],
-    ['DELETE', "logs", ['Vanderbilt\AdvancedImport\App\Controllers\LogController/delete']],
+    ['GET', "logs", ['Vanderbilt\AdvancedImport\App\Controllers\LogsController/index']],
+    ['DELETE', "logs", ['Vanderbilt\AdvancedImport\App\Controllers\LogsController/delete']],
 ];
 
 // create a BaseController to manage common routes or errors

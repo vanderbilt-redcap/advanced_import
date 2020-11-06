@@ -9,7 +9,13 @@ export default {
          * @param {File} file 
          * @param {object} settings 
          */
-        upload(form_data) {
+        upload(file, chunk) {
+            const form_data = new FormData()
+            const file_keys = ['name', 'lastModified', 'lastModifiedDate', 'size', 'type', 'unique_name']
+            file_keys.forEach(key => {
+                if(key in file) form_data.append(key, file[key]) 
+            })
+            form_data.append('chunk', chunk)
             var params = {
                 route: `upload`,
             }

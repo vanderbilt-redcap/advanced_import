@@ -1,8 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Importers;
 
-use SplObjectStorage;
-use SplObserver;
-use SplSubject;
+use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 use Vanderbilt\AdvancedImport\App\Traits\CanLog;
 use Vanderbilt\AdvancedImport\App\Traits\CanProcessCsvData;
@@ -38,6 +36,8 @@ abstract class AbstractImporter implements ImporterInterface
     {
         $this->project_id = $project_id;
         $this->settings = $settings;
+        $module = AdvancedImport::getInstance();
+        $this->attach($module, '*'); // attach the module as a subscriber
     }
 
 }

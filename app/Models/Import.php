@@ -11,32 +11,17 @@ class Import extends BaseModel
     use CanReadCSV;
     use SubjectTrait;
 
-    /**
-     *
-     * @var AdvancedImport
-     */
-    private $module;
-
-    /**
-     * constructor
-     *
-     * @param AdvancedImport $module
-     */
-	function __construct($module)
+	function __construct()
 	{
-        $this->module = $module;
-        $this->attach($this->module, '*'); //attach the module as a subscriber
 		parent::__construct();
     }
     
-    function importCSV($project_id, $file, $settings)
+    function importCSV($project_id, $file_path, $settings)
     {
         $settings = new ImportSettings($settings);
         $importer = ImporterFactory::create($project_id, $settings);
-        $importer->attach($this->module, '*'); // attach the module as a subscriber
 
         $test = compact('project_id', 'file', 'settings');
-        $file_path = $file['tmp_name'];
         // if(empty($file_path)) throw new \Exception("No file path", 1);
         $row_index = $settings->data_row_start ?: 1;
         

@@ -1,36 +1,37 @@
 <template>
     <div>
+        <FileUploader @completed="onUploadCompleted"/>
         <div class="d-flex flex-row justify-content-center align-items-center">
-
-        <b-card 
-            title="This is a test"
-            :img-src="cat">
-        <template #header>
-            <h6 class="mb-0">Header Slot</h6>
-        </template>
-            <b-card-text>
-            This is a test
-            </b-card-text>
-            <template #footer>
-                <h6 class="mb-0">Footer Slot</h6>
+            <b-card 
+                title="This is a test"
+                :img-src="cat">
+            <template #header>
+                <h6 class="mb-0">Header Slot</h6>
             </template>
-        </b-card>
+                <b-card-text>
+                This is a test
+                </b-card-text>
+                <template #footer>
+                    <h6 class="mb-0">Footer Slot</h6>
+                </template>
+            </b-card>
         </div>
-        <div>
+        <!-- <div>
             <input type="file" ref="file" @change="onFileChange">
             <button @click="upload">upload</button>
         </div>
         <b-progress :value="progress" :max="max" show-progress animated v-if="uploading"></b-progress>
-        <span v-else-if="completed">Completed!</span>
+        <span v-else-if="completed">Completed!</span> -->
     </div>
 </template>
 
 <script>
 import cat from "@/assets/crying-cat.jpg"
 import Uploader from '@/libs/Uploader/Uploader'
+import FileUploader from '@/components/import/FileUploader'
 
 export default {
-    components: {  },
+    components: {FileUploader},
     data() {
         return {
             cat,
@@ -82,6 +83,9 @@ export default {
         },
         update(subject, event, data) {
             console.log(subject, event, data)
+        },
+        onUploadCompleted({component,file_name}) {
+            console.log(component,file_name)
         }
     },
 }

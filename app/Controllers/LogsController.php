@@ -1,19 +1,21 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Controllers;
 
 use Vanderbilt\AdvancedImport\AdvancedImport;
-use Vanderbilt\AdvancedImport\App\Models\Logger;
+use Vanderbilt\AdvancedImport\App\Models\Logs;
 
-class LogController extends BaseController
+class LogsController extends BaseController
 {
+
+    /**
+     *
+     * @var AdvancedImport
+     */
     private $module;
 
     function __construct()
     {
-        // global $module;
+        $this->module = AdvancedImport::getInstance();
         parent::__construct();
-		
-        // $this->module = $module;
-		$this->module = new AdvancedImport();
     }
 
     /**
@@ -27,7 +29,7 @@ class LogController extends BaseController
             // $project_id = $_GET['pid'];
             $start = @$_GET['_start'];
             $limit =  @$_GET['_limit'];
-            $model = new Logger($this->module);
+            $model = new Logs($this->module);
             $logs = $model->getList($start, $limit);
             $total = $model->getTotal();
             $response = array(
@@ -52,7 +54,7 @@ class LogController extends BaseController
     {
         try {
             $project_id = $this->module->getProjectId();
-            $model = new Logger($this->module);
+            $model = new Logs($this->module);
             $result = $model->delete($project_id);
             $response = [
                 'message'=>'ok',

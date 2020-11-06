@@ -3,9 +3,16 @@
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Traits\SubjectTrait;
 
-class Logger extends BaseModel
+class Logs extends BaseModel
 {
     use SubjectTrait;
+
+    /**
+     *
+     * @var AdvancedImport
+     */
+    private $module;
+    
     /**
      * constructor
      *
