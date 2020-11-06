@@ -10,10 +10,26 @@ use Vanderbilt\AdvancedImport\App\Models\Mediator;
 
 class AdvancedImport extends AbstractExternalModule implements Mediator, SplObserver
 {
+    private static $instance;
 
     function __construct()
     {
         parent::__construct();
+    }
+
+    /**
+     * get the singleton
+     *
+     * @return void
+     */
+    public static function getInstance()
+    {
+        global $module;
+        if(!static::$instance) {
+            if($module instanceof static) static::$instance = $module;
+            else static::$instance = new static();
+        }
+        return static::$instance;
     }
 
      /**
