@@ -56,14 +56,12 @@ class Import extends BaseModel
      *
      * @return void
      */
-    function parseFile($file, $settings)
+    function parseFile($text_line, $settings)
     {
         $settings = new ImportSettings($project_id=null, $settings); // don't need the project ID
-        $file_path = $file['tmp_name'];
-        if(empty($file_path)) throw new \Exception("No file path", 1);
-        $first_line = $this->readFileAtLine($file_path, $line_number=0);
-        $settings->field_delimiter = $delimiter = $this->guessDelimiter($first_line);
-        $columns = $this->getColumnNames($first_line, $settings->field_delimiter, $settings->text_qualifier);
+        if(empty($text_line)) throw new \Exception("No text to parse", 1);
+        $settings->field_delimiter = $delimiter = $this->guessDelimiter($text_line);
+        $columns = $this->getColumnNames($text_line, $settings->field_delimiter, $settings->text_qualifier);
         $data = compact('columns','delimiter');
         return $data;
     }

@@ -24,12 +24,12 @@
         </b-tab>
     </b-tabs>
 
-    
+    <FileParser />
   </div>
 </template>
 
 <script>
-// import Step1 from '@/components/import/Step1'
+import FileParser from '@/components/FileParser'
 
 const steps = [
   { component: () => import('@/components/import/SelectFile'), },
@@ -43,9 +43,7 @@ const steps = [
 ]
 
 export default {
-  components: {
-    // Step1,
-  },
+  components: { FileParser },
   data() {
     return {
       step_index: 0,

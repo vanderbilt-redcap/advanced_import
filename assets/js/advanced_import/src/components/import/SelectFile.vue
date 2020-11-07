@@ -30,6 +30,8 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
+import FileParser from '@/libs/FileParser'
+const parser = new FileParser
 
 export default {
 
@@ -53,16 +55,21 @@ export default {
     async parseFile() {
       const settings = {...this.$store.state.import_settings}
       const file = settings.files
-      const response = await this.$API.dispatch('importData/parse',file, settings)
+      let first_line = await parser.getLines(file, 1)
+      if(!first_line || first_line=='') {
+        alert('no text detected in the file')
+        return
+      }
+      const response = await this.$API.dispatch('importData/parse',first_line, settings)
       const {data} = response
       if(data.delimiter) await this.$store.dispatch('import_settings/setStateProperty', {key: 'field_delimiter', value: data.delimiter})
       await this.$store.dispatch('csv_data/setState', data)
       return data
     },
   },
-   validations: {
+  validations: {
     files: {required},
-   }
+  }
 }
 </script>
 

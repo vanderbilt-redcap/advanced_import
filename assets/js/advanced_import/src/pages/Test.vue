@@ -28,7 +28,7 @@
 <script>
 import cat from "@/assets/crying-cat.jpg"
 import Uploader from '@/libs/Uploader/Uploader'
-import FileUploader from '@/components/import/FileUploader'
+import FileUploader from '@/components/FileUploader'
 
 export default {
     components: {FileUploader},

@@ -1,7 +1,5 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Controllers;
 
-use Project;
-use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\Import;
 
 class ImportController extends BaseController
@@ -38,10 +36,10 @@ class ImportController extends BaseController
     function parse()
     {
         try {
-            $model = new Import();
-            $file = reset($_FILES); // get only one file
+            $importer = new Import();
+            $text = @$_POST['text'] ?: '';
             $settings = json_decode($_POST['settings']);
-            $data = $model->parseFile($file, $settings);
+            $data = $importer->parseFile($text, $settings);
             return $this->printJSON($data);
         } catch (\Exception $e) {
             $response = ['message'=>$e->getMessage()];
