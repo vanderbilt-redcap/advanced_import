@@ -1,4 +1,4 @@
-
+import Vue from 'vue'
 
 const initialState = {
     // import options
@@ -41,11 +41,8 @@ const module = {
             if(key in initialState) state[key] = value
         },
         SET_MAPPING_PROPERTY: (state, {target, source}) => {
-            const mapping = {...state.mapping}
-            
-            if(source=='' && target in mapping) delete mapping[target]
-            else mapping[target] = source
-            state.mapping = mapping
+            if(source==='' && target in state.mapping) Vue.delete(state.mapping, target)
+            else Vue.set(state.mapping, target, source)
         },
     },
     actions: {
@@ -55,18 +52,21 @@ const module = {
         async guessMapping(context) {
             const {state, dispatch, rootGetters, rootState} = context
             const {form_name} = state
-            const {columns} = rootState.csv_data
+            const {fields:csv_fields} = rootState.csv_data
             const fields = rootGetters['settings/form_fields'](form_name)
             fields.forEach(async field => {
                 let target = field.field_name
                 if(!target) return
-                let index = columns.indexOf(target)
+                let index = csv_fields.indexOf(target)
                 if(index>=0) {
                     // let source = columns[index]
                     await dispatch('setMapping', {target, source:index})
                 }
             })
             return state.mapping
+        },
+        async setPrimaryKey(context, primary_key) {
+            context.commit('SET_STATE_PROPERTY', {key:'primary_key', value:primary_key})
         },
         async guessPrimaryKeysMapping(context) {
             const {dispatch, rootState} = context

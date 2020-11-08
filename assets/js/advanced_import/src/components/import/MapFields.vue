@@ -26,10 +26,14 @@
                     <td>
                         <select class="form-control" @change="onInput(field.field_name)($event)" :value="mapping[field.field_name]">
                             <option value="">--- skip ---</option>
-                            <option v-for="(column, index) in csv_columns" :key="index" :value="index" :disabled="Object.values(mapping).includes(index)">{{column}}</option>
+                            <option v-for="(csv_field, index) in csv_fields" :key="index" :value="index" :disabled="Object.values(mapping).includes(index)">{{csv_field}}</option>
                         </select>
                     </td>
-                    <td><input type="checkbox" name="" id="" v-model="dynamic_keys" :disabled="!field.field_name || !mapping[field.field_name]" :value="field.field_name"></td>
+                    <td>
+                        <b-form-checkbox v-model="dynamic_keys" :disabled="!field.field_name || isNaN(mapping[field.field_name])" :value="field.field_name" switch>
+                        </b-form-checkbox>
+                        <!-- <input type="checkbox" name="" id="" v-model="dynamic_keys" :disabled="!field.field_name || !mapping[field.field_name]" :value="field.field_name"> -->
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -61,7 +65,7 @@ export default {
     },
     computed: {
         ...mapState({
-            csv_columns: state => state.csv_data.columns,
+            csv_fields: state => state.csv_data.fields,
             mapping: state => state.import_settings.mapping,
             primary_key: state => state.import_settings.primary_key,
         }),

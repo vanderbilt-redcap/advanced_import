@@ -19,7 +19,7 @@
                     <td>
                         <select class="form-control" @change="onInput(primary_key)($event)" :value="mapping[primary_key]" :disabled="!primary_key">
                             <option value="" disabled>Select...</option>
-                            <option v-for="(column, index) in csv_columns" :key="index" :value="index">{{column}}</option>
+                            <option v-for="(csv_field, index) in csv_fields" :key="index" :value="index">{{csv_field}}</option>
                         </select>
                     </td>
                 </tr>
@@ -42,13 +42,23 @@ export default {
     computed: {
         ...mapState({
             primary_keys: state => state.settings.primary_keys,
-            csv_columns: state => state.csv_data.columns,
+            csv_fields: state => state.csv_data.fields,
             mapping: state => state.import_settings.mapping,
         }),
         primary_key: {
             get() { return this.$store.state.import_settings.primary_key },
-            set(value) {
-                this.$store.dispatch('import_settings/setStateProperty', {key: 'primary_key', value})
+            async set(value) {
+                const updatePrimaryKeyMapping = async (primary_key) => {
+                    let {primary_key:current_primary_key} = this.$store.state.import_settings
+                    let mapping = {...this.mapping}
+                    if(current_primary_key in mapping) {
+                        let previous_source = mapping[current_primary_key]
+                        await this.$store.dispatch('import_settings/setMapping', {target:current_primary_key, source: ''}) // remove previous mapping
+                        await this.$store.dispatch('import_settings/setMapping', {target:primary_key, source:previous_source}) // update with the new one
+                    }
+                }
+                await updatePrimaryKeyMapping(value)
+                this.$store.dispatch('import_settings/setPrimaryKey', value)
             },
         }
     },

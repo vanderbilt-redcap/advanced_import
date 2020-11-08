@@ -1,5 +1,7 @@
 const initialState = {
-    columns: [],
+    fields: [], // name of columns
+    lines: [], // lines of text
+    data: [], // list of translated data
 }
 
 const module = {

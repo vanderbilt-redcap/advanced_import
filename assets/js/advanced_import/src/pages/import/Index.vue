@@ -1,5 +1,6 @@
 <template>
   <div class="wizard">
+
     <b-tabs class="wizard-tabs" no-nav-style content-class="mt-0" v-model="step_index" >        
         <b-tab v-for="(item, index) in steps" :key="index" :title="``" title-link-class="d-none">
 
@@ -24,12 +25,12 @@
         </b-tab>
     </b-tabs>
 
-    <FileParser />
+    <FilePreview />
   </div>
 </template>
 
 <script>
-import FileParser from '@/components/FileParser'
+import FilePreview from '@/components/import/FilePreview'
 
 const steps = [
   { component: () => import('@/components/import/SelectFile'), },
@@ -43,7 +44,7 @@ const steps = [
 ]
 
 export default {
-  components: { FileParser },
+  components: { FilePreview },
   data() {
     return {
       step_index: 0,
@@ -92,6 +93,6 @@ export default {
   margin: 0 auto;
 }
 .wizard-tabs {
-  min-height: 400px;
+
 }
 </style>
