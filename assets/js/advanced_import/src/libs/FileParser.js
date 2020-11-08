@@ -86,5 +86,34 @@ export default class FileParser {
         
     }
 
+    async *countLinesGenerator(file) {
+        let stop = false
+        let cancel = () => stop = true
+        
+        let lines
+        let counter = 0
+        const load = async () => {
+            const text = await this.read(file)
+            if(text=='') return false
+            return text
+        }
+        /*eslint no-control-regex: "off"*/
+        const new_line_regexp = new RegExp("^(.+)$","gm")
+        let text
+        let truncated // store here any truncated text not parsed with new_line_regexp
+        do {
+            text = await load()
+            if(truncated) text = truncated[0]+text // add previously truncated text if any
+            lines = text.match(new_line_regexp)
+            let truncated_text_regexp = new RegExp("(.+)(?![\n\r])$","gm") // create a new one on each loop to reset it's position (exec saves the position every time is used)
+            truncated = truncated_text_regexp.exec(text) // set new truncated text
+            if(truncated) lines.pop() // remove the truncated line
+            if(lines) counter +=lines.length
+            if(stop) return counter
+            yield {partial:lines.length, cancel}
+        } while (lines!=false && this.position<file.size)
+        return counter
+    }
+
 
 }

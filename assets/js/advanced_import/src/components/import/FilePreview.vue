@@ -2,7 +2,7 @@
   <div>
      <b-card id="table-container"
      v-if="items && items.length>0" class="mt-2" 
-        title="Data preview">
+        :title="title">
 
         <b-table
             id="my-table"
@@ -29,8 +29,9 @@
                 </template> -->
             </b-table>
             <section>
-                <span v-if="counting">Counting <font-awesome-icon v-if="counting" icon="spinner" spin/></span>
-                <span v-else>Total lines: {{total_lines}}</span>
+                <span v-if="counting">Counting lines:</span>
+                <span v-else>Total lines:</span>
+                <span> {{formatNumber(total_lines)}}</span>
             </section>
         </b-card>
   </div>
@@ -52,8 +53,19 @@ export default {
             items: state => state.csv_data.data,
             files: state => state.import_settings.files,
         }),
+        title() {
+            let title = 'Data (preview)'
+            if(this.files && this.files.name) {
+                let {name=false} = this.files
+                if(name) title = `${name} (preview)`
+            }
+            return title
+        },
     },
     methods: {
+        formatNumber(number) {
+            return new Intl.NumberFormat('en-US', {}).format(number)
+        },
         getMappingIndex(column_name) {
             const {mapping} = {...this.$store.state.import_settings}
             const first_item = this.items[0] || {}
@@ -73,7 +85,11 @@ export default {
             return redcap_field && redcap_field==primary_key
         },
         async count(file) {
+            if(!file) return
+
+            let timer_label = 'count lines'
             try {
+                console.time(timer_label)
                 this.counting = true
                 this.total_lines = 0
                 if(!file) {
@@ -84,8 +100,34 @@ export default {
                     let promise = parser.countLines(file)
                     this.countCancel = promise.cancel
                     this.total_lines = await promise
+                    this.countCancel = null // reset if done
                 }
             } finally {
+                console.timeEnd(timer_label)
+                this.counting = false
+            }
+        },
+        async countGenerator(file) {
+            if(typeof this.cancel==='function') this.cancel()
+            if(!file) return
+            let timer_label = 'count lines'
+            try {
+                console.time(timer_label)
+                this.counting = true
+                this.total_lines = 0
+                
+                if(!file) {
+                    this.total_lines = 0
+                }else {
+                    let parser = new FileParser
+                    let generator = parser.countLinesGenerator(file)
+                    for await (let {partial, cancel} of generator) {
+                        this.cancel = cancel
+                        if(partial) this.total_lines += partial
+                    }
+                }
+            } finally {
+                console.timeEnd(timer_label)
                 this.counting = false
             }
         },
@@ -94,8 +136,9 @@ export default {
     files: {
       immediate: true,
       handler(file) {
+        //   this.test1()
         //   if(this.count_promise)
-        this.count(file)
+        this.countGenerator(file)
       }
     }
   },
