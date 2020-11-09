@@ -31,6 +31,9 @@ Vue.component('font-awesome-layers', FontAwesomeLayers) // for stacking icons
 import Vuelidate from 'vuelidate'
 Vue.use(Vuelidate)
 
+import NonBlankSpace from '@/components/NonBlankSpace'
+Vue.component('non-blank-space', NonBlankSpace)
+
 const status_list = Object.freeze({
   READY: 'ready',
   LOADING: 'loading',

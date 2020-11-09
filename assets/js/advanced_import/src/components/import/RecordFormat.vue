@@ -81,32 +81,12 @@ export default {
           delimiter: this.field_delimiter,
           quoteChar: this.text_qualifier,
         }
+        // exit if FieldDelimiter element is set to 'other' (value is empty string)
+        if(config.delimiter=='') return
         const text = this.$store.state.csv_data.text
         this.$store.dispatch('csv_data/parse', {text, config})
     }
   },
-  watch: {
-    /* text_qualifier: {
-      immediate: true,
-      handler(value) {
-        const text = this.$store.state.csv_data.text
-        this.$store.dispatch('csv_data/parse', text, {quoteChar:value})
-      }
-    },
-    field_delimiter: {
-      immediate: true,
-      handler(value) {
-        const text = this.$store.state.csv_data.text
-        this.$store.dispatch('csv_data/parse', text, {delimiter:value})
-      }
-    }, */
-    /* record_delimiter: {
-      immediate: true,
-      handler(value) {
-        console.log('record_delimiter watch handler', value)
-      }
-    }, */
-  }
 }
 </script>
 

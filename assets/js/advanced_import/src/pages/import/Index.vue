@@ -1,6 +1,6 @@
 <template>
   <div class="wizard">
-
+    <FilePreview />
     <b-tabs class="wizard-tabs" no-nav-style content-class="mt-0" v-model="step_index" >        
         <b-tab v-for="(item, index) in steps" :key="index" :title="``" title-link-class="d-none">
 
@@ -25,7 +25,7 @@
         </b-tab>
     </b-tabs>
 
-    <FilePreview />
+    
   </div>
 </template>
 

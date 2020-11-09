@@ -28,6 +28,19 @@
                             <option value="">--- skip ---</option>
                             <option v-for="(csv_field, index) in csv_fields" :key="index" :value="index" :disabled="Object.values(mapping).includes(index)">{{csv_field}}</option>
                         </select>
+                        <div>
+                            <!-- <b-button-group class="mt-2">
+                                <select class="form-control" @change="onInput(field.field_name)($event)" :value="mapping[field.field_name]">
+                                    <option value="">--- skip ---</option>
+                                    <option v-for="(csv_field, index) in csv_fields" :key="index" :value="index" :disabled="Object.values(mapping).includes(index)">{{csv_field}}</option>
+                                </select>
+                                <b-button>
+
+                                <b-form-checkbox v-model="dynamic_keys" :disabled="!field.field_name || isNaN(mapping[field.field_name])" :value="field.field_name">
+                                </b-form-checkbox>
+                                </b-button>
+                            </b-button-group> -->
+                        </div>
                     </td>
                     <td>
                         <b-form-checkbox v-model="dynamic_keys" :disabled="!field.field_name || isNaN(mapping[field.field_name])" :value="field.field_name" switch>

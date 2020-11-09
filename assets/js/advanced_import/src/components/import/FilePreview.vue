@@ -1,12 +1,12 @@
 <template>
   <div>
      <b-card id="table-container"
-     v-if="items && items.length>0" class="mt-2" 
+     v-if="items_proxy && items_proxy.length>0" class="mt-2" 
         :title="title">
 
         <b-table
             id="my-table"
-            :items="items"
+            :items="items_proxy"
             small
             bordered
             striped
@@ -16,6 +16,7 @@
                 <template #head()="data">
                     <section>
                         <span class="d-block small" title="REDCap field">
+                            <non-blank-space />
                             <b-badge variant="danger">{{getMappingIndex(data.column)}}</b-badge>
                             <!-- <b-badge variant="success" class="ml-1" v-if="isDynamic(data.column)">D</b-badge> -->
                             <font-awesome-icon icon="level-down-alt" v-if="isDynamic(data.column)" class="ml-1 text-success" title="dynamic"/>
@@ -54,12 +55,24 @@ export default {
             files: state => state.import_settings.files,
         }),
         title() {
-            let title = 'Data (preview)'
+            let title = 'Preview'
             if(this.files && this.files.name) {
                 let {name=false} = this.files
                 if(name) title = `${name} (preview)`
             }
             return title
+        },
+        /**
+         * proxy for items.
+         * return dummy data if no file is selected
+         */
+        items_proxy() {
+            let files = this.files
+            if(!files) {
+                const dummy_items = [...Array(5).keys()].map(() => ({'no data':"\u001E"}))
+                return dummy_items
+            }
+            return this.items
         },
     },
     destroyed() {

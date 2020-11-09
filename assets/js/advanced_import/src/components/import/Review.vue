@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h6>Import settings</h6>
+        <h6>Review your settings</h6>
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
@@ -9,7 +9,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(value, key) in all_settings" :key="key">
+                <tr v-for="(value, key) in settings" :key="key">
                     <td>{{key}}</td>
                     <td>{{value}}</td>
                 </tr>
@@ -50,14 +50,21 @@ export default {
             event_id: state => state.import_settings.event_id,
             form_name: state => state.import_settings.form_name,
             all_settings: state => state.import_settings,
-
         }),
         settings() {
             const {name:file_name=''} = this.files || {}
+            const all_settings = {...this.all_settings}
             const settings = {
-                'File name': file_name,
-                'Event ID': this.event_id,
-                'Form name': this.form_name,
+                'file name': file_name,
+                'event ID': all_settings.event_id,
+                'form name': all_settings.form_name,
+                'field delimiter': all_settings.field_delimiter,
+                'text qualifier': all_settings.text_qualifier,
+                'dates format': all_settings.dates_format,
+                'import mode': all_settings.import_mode,
+                'primary key': all_settings.primary_key,
+                'dynamic keys': all_settings.dynamic_keys,
+                'mapping': all_settings.mapping,
             }
             return settings
         }
