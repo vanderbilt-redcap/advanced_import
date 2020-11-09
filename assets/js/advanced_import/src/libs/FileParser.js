@@ -102,6 +102,7 @@ export default class FileParser {
         let text
         let truncated // store here any truncated text not parsed with new_line_regexp
         do {
+            if(stop) return counter
             text = await load()
             if(truncated) text = truncated[0]+text // add previously truncated text if any
             lines = text.match(new_line_regexp)
@@ -109,8 +110,7 @@ export default class FileParser {
             truncated = truncated_text_regexp.exec(text) // set new truncated text
             if(truncated) lines.pop() // remove the truncated line
             if(lines) counter +=lines.length
-            if(stop) return counter
-            yield {partial:lines.length, cancel}
+            yield {partial:lines.length, total:counter, cancel}
         } while (lines!=false && this.position<file.size)
         return counter
     }

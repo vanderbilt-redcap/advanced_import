@@ -62,6 +62,9 @@ export default {
             return title
         },
     },
+    destroyed() {
+        this.stopCount()
+    },
     methods: {
         formatNumber(number) {
             return new Intl.NumberFormat('en-US', {}).format(number)
@@ -95,23 +98,28 @@ export default {
                 if(!file) {
                     this.total_lines = 0
                 }else {
-                    if(typeof this.countCancel=== 'function') this.countCancel()
+                    this.stopCount() // stop previous counting if any
                     let parser = new FileParser
                     let promise = parser.countLines(file)
                     this.countCancel = promise.cancel
                     this.total_lines = await promise
-                    this.countCancel = null // reset if done
                 }
             } finally {
                 console.timeEnd(timer_label)
-                this.counting = false
+                this.counting = false 
+            }
+        },
+        stopCount() {
+            if(typeof this.countCancel==='function') {
+                this.countCancel()
+                this.countCancel = null // remove reference
             }
         },
         async countGenerator(file) {
-            if(typeof this.cancel==='function') this.cancel()
+            this.stopCount() // stop previous counting if any
             if(!file) return
             let timer_label = 'count lines'
-            try {
+            // try {
                 console.time(timer_label)
                 this.counting = true
                 this.total_lines = 0
@@ -121,15 +129,52 @@ export default {
                 }else {
                     let parser = new FileParser
                     let generator = parser.countLinesGenerator(file)
-                    for await (let {partial, cancel} of generator) {
-                        this.cancel = cancel
-                        if(partial) this.total_lines += partial
+
+                    /**
+                     * better memory performance
+                     */
+                    const timeout = () => {
+                        const next = async() => {
+                            let result = await generator.next()
+                            let {value={}} = result
+                            let {partial=false, cancel} = value
+                            if(partial) {
+                                this.countCancel = cancel // set reference to the stopping function
+                                if(partial) this.total_lines += partial
+                                setTimeout(next, 100) //recursive call
+                            }
+                            else {
+                                console.timeEnd(timer_label)
+                                this.counting = false
+                            }
+                        }
+                        next()
                     }
+                    this.timeout = timeout
+                    timeout()
+                    
+
+                    /**
+                     * faster
+                     */
+                    const asyncGeneratorLoop = async() => {
+                        const loop = async() => {
+                            for await (let {partial, cancel} of generator) {
+                                this.cancel = cancel
+                                if(partial) this.total_lines += partial
+                            }
+                        }
+                        await loop()
+                        console.timeEnd(timer_label)
+                        this.counting = false
+                    }
+                    this.asyncGeneratorLoop = asyncGeneratorLoop
+                    
                 }
-            } finally {
+            /*} finally {
                 console.timeEnd(timer_label)
                 this.counting = false
-            }
+            } */
         },
     },
     watch: {

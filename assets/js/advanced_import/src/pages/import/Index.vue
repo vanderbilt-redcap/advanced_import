@@ -55,18 +55,11 @@ export default {
   created() {
     this.step = this.steps[0]
   },
+  destroyed() {
+    this.$store.dispatch('import_settings/reset')
+    this.$store.dispatch('csv_data/reset')
+  },
   methods: {
-    async run(processFunction) {
-      try {
-          this.processing = true
-          const response = await processFunction()
-          const {data={}} = response
-          console.log(response, data)
-          alert(JSON.stringify(data))
-      }finally {
-          this.processing = false
-      }
-    },
     goToPrevStep() {
       let index = this.step_index
       if(--index<=0) index = 0
@@ -81,7 +74,6 @@ export default {
         let index = this.step_index
         if(++index>=this.steps.length) index = this.steps.length-1
         this.step_index = index
-      
     },
   },
 }

@@ -46,6 +46,7 @@ const module = {
         },
     },
     actions: {
+        reset(context) { context.commit('SET_STATE', initialState) },
         setState(context, params) { context.commit('SET_STATE', params) },
         setStateProperty(context, {key, value}) { context.commit('SET_STATE_PROPERTY', {key, value}) },
         setMapping(context, {target, source}) { context.commit('SET_MAPPING_PROPERTY', {target, source}) },

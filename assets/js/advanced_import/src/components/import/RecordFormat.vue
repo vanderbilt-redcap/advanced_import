@@ -3,9 +3,9 @@
     <p>Select the field delimiter and the text qualifier.</p>
     <div class="d-flex flex-row align-items-center">
       
-      <FieldDelimiter v-model="field_delimiter" class="col pl-0"/>
+      <FieldDelimiter v-model="field_delimiter" class="col pl-0" @input="onChange"/>
       
-      <TextQualifier v-model="text_qualifier" class="col px-0"/>
+      <TextQualifier v-model="text_qualifier" class="col px-0" @input="onChange"/>
 
       <!-- <div class="form-group ml-2">
         <label for="record_delimiter">Record delimiter</label>
@@ -74,6 +74,39 @@ export default {
       // }
     }
   },
+  methods: {
+    // parse the text whenever the delimiter or text qualifier are changed
+    onChange() {
+        let config = {
+          delimiter: this.field_delimiter,
+          quoteChar: this.text_qualifier,
+        }
+        const text = this.$store.state.csv_data.text
+        this.$store.dispatch('csv_data/parse', {text, config})
+    }
+  },
+  watch: {
+    /* text_qualifier: {
+      immediate: true,
+      handler(value) {
+        const text = this.$store.state.csv_data.text
+        this.$store.dispatch('csv_data/parse', text, {quoteChar:value})
+      }
+    },
+    field_delimiter: {
+      immediate: true,
+      handler(value) {
+        const text = this.$store.state.csv_data.text
+        this.$store.dispatch('csv_data/parse', text, {delimiter:value})
+      }
+    }, */
+    /* record_delimiter: {
+      immediate: true,
+      handler(value) {
+        console.log('record_delimiter watch handler', value)
+      }
+    }, */
+  }
 }
 </script>
 

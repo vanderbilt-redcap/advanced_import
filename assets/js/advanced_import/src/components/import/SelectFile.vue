@@ -32,9 +32,7 @@
 <script>
 import { mapState } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
-import {default as papaparse, config as parse_config} from '@/libs/CsvParser'
 import FileParser from '@/libs/FileParser'
-const parser = new FileParser
 
 // check the minimum number of parsed CSV lines
 const minNumberLines = (min) => (value, vm) =>  {
@@ -48,10 +46,11 @@ export default {
       accept: ['.txt','.csv','.json'].join(','),
     }
   },
-  mounted() {
+  /* mounted() {
     this.files = null
-    this.$refs.file.reset()
-  },
+    const fileinput = this.$refs.file // reference to the b-form-file element
+    fileinput.reset()
+  }, */
   computed: {
     ...mapState({
       csv_fields: state => state.csv_data.fields,
@@ -67,17 +66,14 @@ export default {
   methods: {
     async parse(file) {
       if(!file) return
-      const lines = await parser.getLines(file, 6) //read a maximum of 6 lines
-      const text = lines.join("\n")
-      const {data=[], errors=[], meta={}} = papaparse.parse(text, parse_config)
-      const {fields=[], delimiter} = meta
-      const payload = {data, lines, fields}
-      if(errors.length>0) {
-        console.log(errors)
-        alert('error parsing the csv file')
-      }else {
-        if(delimiter) await this.$store.dispatch('import_settings/setStateProperty', {key: 'field_delimiter', value: delimiter})
-        await this.$store.dispatch('csv_data/setState', payload)
+      try {
+        const parser = new FileParser
+        const lines = await parser.getLines(file, 6) //read a maximum of 6 lines
+        const text = lines.join("\n")
+        await this.$store.dispatch('csv_data/setStateProperty', {key:'text', value:text})
+        await this.$store.dispatch('csv_data/parse', {text})
+      } catch (error) {
+        console.log(error)
       }
       // this.$v.$touch()
     },
@@ -94,7 +90,7 @@ export default {
   validations() {
     return {
       files: {required},
-      csv_data: {minLength: minNumberLines(1)}, //at least 1 line to import plus the columns
+      csv_lines: {minLength: minNumberLines(2)}, //at least 1 line to import plus the columns
     }
   }
 }
