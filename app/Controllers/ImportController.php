@@ -28,6 +28,25 @@ class ImportController extends BaseController
         }
     }
 
+    function process()
+    {
+        try {
+            $project_id = $_GET['pid'];
+            $file_name = @$_POST['file_name'];
+            $upload_dir = APP_PATH_TEMP.'uploads';
+            $file_path = "{$upload_dir}/{$file_name}";
+            $settings = json_decode($_POST['settings']);
+            $model = new Import();
+            $results = $model->processCSV($project_id, $file_path, $settings);
+            
+            return $this->printJSON($results);
+        } catch (\Exception $e) {
+            $response = ['message'=>$e->getMessage()];
+            $code = $e->getCode();
+            return $this->printJSON($response, $code);
+        }
+    }
+
     /**
      * check if the file is valid
      *

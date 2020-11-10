@@ -20,8 +20,6 @@ class Import extends BaseModel
     {
         $settings = new ImportSettings($settings);
         $importer = ImporterFactory::create($project_id, $settings);
-
-        $test = compact('project_id', 'file', 'settings');
         // if(empty($file_path)) throw new \Exception("No file path", 1);
         $row_index = $settings->data_row_start ?: 1;
         
@@ -36,6 +34,48 @@ class Import extends BaseModel
         }
 
         return $results;
+    }
+
+    function processCSV($project_id, $file_path, $settings)
+    {
+        $settings = new ImportSettings($settings);
+        $importer = ImporterFactory::create($project_id, $settings);
+
+        // if(empty($file_path)) throw new \Exception("No file path", 1);
+        $row_index = $settings->data_row_start ?: 1;
+        $max_lines = $settings->max_lines ?: 100;
+
+        $counter = 0;
+        $results = [];
+        while($counter++<$max_lines && $line = $this->readFileAtLine($file_path, $row_index++)) {
+            $csv_data = $this->readCSVLine($line, $settings->field_delimiter, $settings->text_qualifier);
+            if(!empty($csv_data)) {
+                $response = $importer->process($csv_data, $row_index);
+                $results = $this->reduceResults($response, $results);
+            }
+        }
+        if(empty($results)) return;
+        $total_lines = $this->countLines($file_path);
+        $results['total_lines'] = $total_lines;
+        $results['line'] = $row_index<$total_lines ? $row_index : $total_lines; // do not exceed max number of lines
+
+        return $results;
+    }
+
+
+    public function countLines($file_path)
+    {
+        $counter = 0;
+        return $counter;
+        $handle = fopen($file_path, "r");
+        while(!feof($handle)){
+        $line = fgets($handle, 4096);
+        $counter += substr_count($line, PHP_EOL);
+        }
+
+        fclose($handle);
+
+        return $counter;
     }
 
     private function reduceResults($response, $seed=[])

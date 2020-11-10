@@ -1,10 +1,14 @@
 <template>
     <div>
+        <section v-if="false">
+            <input type="file" ref="fileinput" @change="onFileChanged">
+            <button class="btn btn-info d-block my-2" @click="upload(0)" :disabled="!file||processing">upload</button>
+        </section>
         <div v-if="processing">
-            <b-progress  :max="max" show-progress animated variant="success" height="2rem">
+            <b-progress  :max="max" show-progress animated variant="success">
                 <b-progress-bar :value="progress" :label="`${(progress*100).toFixed(2)}%`"></b-progress-bar>
             </b-progress>
-            <!-- <button class="btn btn-danger" @click="onPause">Pause</button> -->
+            <button class="btn btn-danger" @click="onPause">Pause</button>
             <div>Processing {{current_part}}/{{parts}}</div>
         </div>
         <section class="debug" v-if="false">
@@ -27,10 +31,10 @@ const TOTAL_CHUNKS = 20
 export default {
     data() {
         return {
-            cancel: null, // placeholder for canceling the promsie
             content: '',
             start: 0,
             end: 0,
+            // files: [],
             max:1,
             processing: false,
             paused: false,
@@ -50,10 +54,8 @@ export default {
         }), */
         file() {
             let files = this.files
-            let file
-            if(typeof files==='object') file = files
-            else if(Array.isArray(files) && files.length>0) file = files[0]
-            if(file) return new File([file], file.name)
+            if(typeof files==='object') return files
+            else if(Array.isArray(files) && files.length>0) return files[0]
             else return null
         },
         current_part() {
@@ -86,18 +88,16 @@ export default {
                 // advance the start
                 this.start = this.end
                 
-                const {unique_name} = data
-                if(unique_name) this.updateUniqueFileName(unique_name)
 
                 if(!this.paused && (this.end < file.size)) {
+                    const {unique_name} = data
+                    this.updateUniqueFileName(unique_name)
                     return this.upload()
                 }
                 else {
                     // exit if we are done
                     this.reset()
-                    let result = {component:this,file_name:this.remote_file_name }
-                    this.$emit('completed', result) // notify completed
-                    return result
+                    return this.$emit('completed', {component:this,file_name:this.remote_file_name }) // notify completed
                 }
             } catch (error) {
                 const {response={}} = error
@@ -126,9 +126,7 @@ export default {
             }
         },
         sendChunk(file, chunk) {
-            const promise = this.$API.dispatch('upload/upload',file, chunk)
-            this.cancel = promise.cancel
-            return promise
+            return this.$API.dispatch('upload/upload',file, chunk)
         },
         calcChunkSize(file) {
             if(!file) return MIN_CHUNK_SIZE
@@ -141,9 +139,9 @@ export default {
         },
         async upload() {
             if(!this.file) return
-            const file = this.file
             this.processing = true
             this.paused = false
+            const file = this.file
             this.end = this.start + this.chunk_size + 1
             const blob = file.slice( this.start, this.end )
             const file_reader = new FileReaderAsync()
@@ -152,8 +150,11 @@ export default {
 
         },
         stop() {
-            if(typeof this.cancel==='function') this.cancel()
             this.abort = true
+        },
+        onFileChanged() {
+            console.log(this.$refs.fileinput.files)
+            this.files = this.$refs.fileinput.files
         },
         onPause() {
             this.processing = false
@@ -167,6 +168,8 @@ export default {
         },
         reset() {
             setTimeout(()=>{
+                let fileinput = this.$refs.fileinput
+                if(fileinput) fileinput.value = null
                 this.start = 0
                 this.end = 0
                 this.processing = false

@@ -1,7 +1,5 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Controllers;
 
-use Project;
-use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\ChunkUploader;
 
 class UploadController extends BaseController

@@ -1,6 +1,7 @@
 import {default as papaparse, config as parse_config} from '@/libs/CsvParser'
 
 const initialState = {
+    total_preview_lines: 5, // number of lines to save for displaying the preview
     fields: [], // name of columns
     lines: [], // lines of text
     data: [], // list of translated data

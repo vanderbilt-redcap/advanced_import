@@ -50,6 +50,8 @@ trait CanGetRecordData
         };
         $queries = array_map($getQueryClause, array_keys($data), $data);
         $filter_query = implode("\nOR ", $queries); */
+        if(empty($data)) return false;
+
 
         $getConcat = function($data, $unit_separator=':', $record_separator=',') {
             // 'vitals_label',':',COALESCE(vitals_label, ''), ';',

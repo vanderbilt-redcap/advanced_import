@@ -28,8 +28,30 @@
             <slot name="right" :validation="$v" ></slot>
         </div>
 
-        <b-modal ref="modal" id="modal-process-complete" title="Process completed" ok-only @hidden="onCloseModal">
+        <b-modal ref="modal-complete" title="Process completed" ok-only @hidden="onCloseModal">
             <p class="my-4">The import proces is completed. Please check the <router-link :to="{name:'logs'}">logs</router-link> for details.</p>
+        </b-modal>
+
+        <b-modal ref="modal-upload" title="Uploading CSV file"
+            ok-only
+            no-close-on-esc
+            no-close-on-backdrop
+            hide-header-close
+            ok-title='cancel'
+        >
+            <p class="my-4">The import process will start after the file upload</p>
+            <FileUploader ref="uploader" :files="files"/>
+        </b-modal>
+
+        <b-modal ref="modal-process" title="Processing CSV file"
+            ok-only
+            no-close-on-esc
+            no-close-on-backdrop
+            hide-header-close
+            ok-title='cancel'
+        >
+            <p class="my-4">Processing the file</p>
+            <FileProcesser ref="processer" />
         </b-modal>
 
   </div>
@@ -37,8 +59,11 @@
 
 <script>
 import { mapState } from 'vuex'
+import FileUploader from '@/components/FileUploader'
+import FileProcesser from '@/components/FileProcesser'
 
 export default {
+    components: {FileUploader,FileProcesser},
     data() {
         return {
             processing: false,
@@ -70,17 +95,65 @@ export default {
         }
     },
     methods: {
-        showModal() {
-            this.$refs['modal'].show()
+        showModal(ref_name) {
+            const promise = new Promise((resolve, reject) => {
+                const modal_element = this.$refs[ref_name]
+                if(!modal_element) return reject()
+                const onShown = () => {
+                    modal_element.$off('shown', onShown)
+                    resolve()
+                }
+                modal_element.$on('shown', onShown)
+                modal_element.show()
+                return resolve()
+            })
+            return promise
         },
+        closeModal(ref_name) {
+            const promise = new Promise((resolve, reject) => {
+                const modal_element = this.$refs[ref_name]
+                if(!modal_element) return reject()
+                const onShown = () => {
+                    modal_element.$off('hidden', onShown)
+                    resolve()
+                }
+                modal_element.$on('hidden', onShown)
+                modal_element.hide()
+                return resolve()
+            })
+            return promise
+        },
+        /**
+         * upload a file for later processing
+         */
+        async upload() {
+            await this.showModal('modal-upload')
+            const uploader = this.$refs.uploader
+            uploader.$on('completed', () => {
+                this.closeModal('modal-upload')
+            })
+            return uploader.upload()
+        },
+        /**
+         * process the reomte file
+         */
+        async process_csv(file_name) {
+            await this.showModal('modal-process')
+            const processer = this.$refs.processer
+            await processer.process(file_name)
+            this.closeModal('modal-process')
+        },
+        /**
+         * start the process:
+         * - upload the file
+         * - process the remote file
+         */
         async importCSV() {
             try {
-                this.processing = true
-                const settings = {...this.$store.state.import_settings}
-                const file = settings.files
-                const response = await this.$API.dispatch('importData/sendCSV',file, settings)
-                this.showModal()
-                return response
+                const {file_name} = await this.upload()
+                if(!file_name) return
+                // let file_name = '5de30e1025f1c5830df97051af2dc37c.csv'
+                await this.process_csv(file_name)
             } catch (error) {
                 console.log(error)
             }finally {
@@ -88,7 +161,7 @@ export default {
             }
         },
         onCloseModal() {
-            this.$router.push({name: 'home'})
+            this.$router.push({name: 'logs'})
         },
     },
     validations: {}

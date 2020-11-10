@@ -56,6 +56,7 @@ export default {
       csv_fields: state => state.csv_data.fields,
       csv_lines: state => state.csv_data.lines,
       csv_data: state => state.csv_data.data,
+      total_preview_lines: state => state.csv_data.total_preview_lines,
     }),
     files: {
       get() { return this.$store.state.import_settings.files },
@@ -67,8 +68,10 @@ export default {
     async parse(file) {
       if(!file) return
       try {
+        let total_lines = this.total_preview_lines+1
+        if(isNaN(total_lines)) throw new Error(`total preview lines must be a number '(${this.total_preview_lines} provided)'`)
         const parser = new FileParser
-        const lines = await parser.getLines(file, 6) //read a maximum of 6 lines
+        const lines = await parser.getLines(file, total_lines) //read a maximum of 6 lines
         const text = lines.join("\n")
         await this.$store.dispatch('csv_data/setStateProperty', {key:'text', value:text})
         await this.$store.dispatch('csv_data/parse', {text})

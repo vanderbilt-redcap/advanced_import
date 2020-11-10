@@ -41,11 +41,11 @@ class AppendUpdate extends AbstractImporter
 		 * perform operations on the csv_data: parsing, validation, mapping
 		 */
 		$processCsvData = function($csv_data) use($filterMappedColumns, $assignColumnNames, $parse, $validate) {
-			$boxed_data = ArrayBox::from($csv_data);
-				$boxed_data = $boxed_data->filter($filterMappedColumns);
-				$boxed_data = $boxed_data->mapKeys($assignColumnNames);
-				$boxed_data = $boxed_data->map($parse); // transform dates, numbers...
-				$boxed_data = $boxed_data->map($validate); // validate 
+			$boxed_data = ArrayBox::from($csv_data)
+							->filter($filterMappedColumns)
+							->mapKeys($assignColumnNames)
+							->map($parse) // transform dates, numbers...
+							->map($validate); // validate 
 			return $boxed_data();
 		};
 

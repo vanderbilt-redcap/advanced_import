@@ -1,19 +1,22 @@
 import axios from 'axios'
 
+const CancelToken = axios.CancelToken;
+// let cancel // placeholder for the cancel function
+
 // import {API_BASE_URL} from '@/config'
 
 export default class API {
     route = '' // route name for the CDP Mapping API
     actions = {} // api actions
     module_prefix = 'advanced_import'
+    cancel = null
 
     constructor({modules}) {
-        let baseURL = `/api/`
-        this.baseURL = baseURL
-        const redcap_params = this.getRedCapQueryParams()
+        this.baseURL = `/api/`
+        /* const redcap_params = this.getRedCapQueryParams()
         
         this.api_client = axios.create({
-            baseURL,
+            baseUR: this.baseURL,
             timeout: 60*1000,
             headers: {common: {'X-Requested-With': 'XMLHttpRequest'}}, // set header for REDCap ajax
             paramsSerializer: (params) => {
@@ -21,10 +24,31 @@ export default class API {
                 const search_params =  new URLSearchParams(params)
                 return search_params.toString()
             },
-        })
+            cancelToken: new CancelToken(function executor(c) {
+                // An executor function receives a cancel function as a parameter
+                this.cancel = c
+            })
+        }) */
         
         this.loadModules(modules)
     }
+
+    createClient(cancelToken) {
+        const redcap_params = this.getRedCapQueryParams()
+        
+        return axios.create({
+            baseURL: this.baseURL,
+            timeout: 60*1000,
+            headers: {common: {'X-Requested-With': 'XMLHttpRequest'}}, // set header for REDCap ajax
+            paramsSerializer: (params) => {
+                params = Object.assign({}, redcap_params, params)
+                const search_params =  new URLSearchParams(params)
+                return search_params.toString()
+            },
+            cancelToken,
+        })
+    }
+
     
     /**
      * set project_id, page, module prefix
@@ -44,11 +68,27 @@ export default class API {
         return query_params
     }
 
+    /**
+     * duplicate the instance of the current object
+     * and assign it a new api_client
+     * this way all requests can be canceled individually
+     * @param {*} command 
+     */
     dispatch(command)
     {
         const [name, action] = command.split('/')
         const params = [...arguments].slice(1)
-        return this.actions[name][action].call(this, ...params)
+        
+        // create a cancel function and a cancelToken function
+        const {token: cancelToken, cancel} = CancelToken.source()
+        // duplicate the object
+        const instance = {...this}
+        // assign an API client to the duplicated instance
+        instance.api_client = this.createClient(cancelToken)
+
+        let promise = this.actions[name][action].call(instance, ...params)
+        promise.cancel = cancel // pass the cancel along with the promise
+        return promise
     }
 
     /**

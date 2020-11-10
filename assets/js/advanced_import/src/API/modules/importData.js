@@ -44,6 +44,29 @@ export default {
                 },
             })
         },
+
+        /**
+         * parse a file and get info about it:
+         * checks if valid and get column names
+         * 
+         * @param {File} file 
+         * @param {object} settings 
+         */
+        processCSV(file_name, settings) {
+            const form_data = new FormData()
+            form_data.append('file_name', file_name)
+            form_data.append('settings', JSON.stringify (settings))
+
+            var params = {
+                route: `process`,
+            }
+            return this.api_client.post('',form_data, {
+                params,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+        },
         
     }
 }

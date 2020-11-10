@@ -11,6 +11,7 @@ $routes = [
     ['GET', "/test[/{id:\d+}]", ['Vanderbilt\AdvancedImport\App\Controllers\BaseController/test']],
     ['GET', "settings", ['Vanderbilt\AdvancedImport\App\Controllers\SettingsController/getSettings']],
     ['POST', "import", ['Vanderbilt\AdvancedImport\App\Controllers\ImportController/import']],
+    ['POST', "process", ['Vanderbilt\AdvancedImport\App\Controllers\ImportController/process']],
     ['POST', "parse", ['Vanderbilt\AdvancedImport\App\Controllers\ImportController/parse']], // parse file and get info
     ['POST', "upload", ['Vanderbilt\AdvancedImport\App\Controllers\UploadController/upload']], // parse file and get info
     ['GET', "export", ['Vanderbilt\AdvancedImport\App\Controllers\ExportController/export']],
