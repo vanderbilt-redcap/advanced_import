@@ -64,7 +64,7 @@ class ValidatorsFactory
         // check validation type
         $validation_type = $field_metadata['element_validation_type'];
         if(array_key_exists($validation_type, DateTimeValidator::FORMATS)) {
-            $validators[] = new DateTimeValidator();
+            $validators[] = new DateTimeValidator($validation_type);
         }else {
 
             switch ($validation_type) {

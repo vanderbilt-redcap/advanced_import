@@ -1,6 +1,8 @@
 <template>
   <div class="wizard">
     <FilePreview />
+    <b-card class="mt-2">
+
     <b-tabs class="wizard-tabs" no-nav-style content-class="mt-0" v-model="step_index" >        
         <b-tab v-for="(item, index) in steps" :key="index" :title="``" title-link-class="d-none">
 
@@ -24,6 +26,8 @@
 
         </b-tab>
     </b-tabs>
+        </b-card>
+
 
     
   </div>
@@ -34,12 +38,12 @@ import FilePreview from '@/components/import/FilePreview'
 
 const steps = [
   { component: () => import('@/components/import/SelectFile'), },
-  // { component: () => import('@/components/import/RecordFormat'), },
-  // { component: () => import('@/components/import/FormatOptions'), },
-  // { component: () => import('@/components/import/TargetForm'), },
-  // { component: () => import('@/components/import/SetPrimaryKey'), },
-  // { component: () => import('@/components/import/MapFields'), },
-  // { component: () => import('@/components/import/ImportMode'), },
+  { component: () => import('@/components/import/RecordFormat'), },
+  { component: () => import('@/components/import/FormatOptions'), },
+  { component: () => import('@/components/import/TargetForm'), },
+  { component: () => import('@/components/import/SetPrimaryKey'), },
+  { component: () => import('@/components/import/MapFields'), },
+  { component: () => import('@/components/import/ImportMode'), },
   { component: () => import('@/components/import/Review'), },
 ]
 

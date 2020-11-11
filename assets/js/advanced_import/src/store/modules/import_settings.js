@@ -58,7 +58,10 @@ const module = {
             fields.forEach(async field => {
                 let target = field.field_name
                 if(!target) return
-                let index = csv_fields.indexOf(target)
+                let index = csv_fields.findIndex(csv_field => {
+                    let found = csv_field.toUpperCase() === target.toUpperCase()
+                    return found
+                })
                 if(index>=0) {
                     // let source = columns[index]
                     await dispatch('setMapping', {target, source:index})
@@ -79,7 +82,7 @@ const module = {
                     await dispatch('setMapping', {target, source:index})
                 }
             })
-        }
+        },
     },
 }
 

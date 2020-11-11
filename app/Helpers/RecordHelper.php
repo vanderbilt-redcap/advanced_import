@@ -55,6 +55,7 @@ class RecordHelper
 
     /**
      * get the next available instance number for a form
+     * return 1 if the form is not repeatable
      *
      * @param int $project_id
      * @param int $event_id
@@ -64,7 +65,6 @@ class RecordHelper
      */
     function getAutoInstanceNumber($project_id, $event_id, $record, $form_name)
     {
-
         $form_fields = $this->getProjectFormFields($project_id, $form_name);
         $fields_list = DatabaseQueryHelper::getQueryList($form_fields);
         $query_string = sprintf(

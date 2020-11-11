@@ -5,7 +5,10 @@
                 <b-progress-bar :value="progress" :label="`${(progress*100).toFixed(2)}%`"></b-progress-bar>
             </b-progress>
             <!-- <button class="btn btn-danger" @click="onPause">Pause</button> -->
-            <div v-if="lines && lines>0">Processed {{current_line}}/{{lines}}</div>
+            <div class="text-muted small">
+                <span v-if="total_lines && total_lines>0">Processed {{current_line}}/{{total_lines}}</span>
+                <non-blank-space />
+            </div>
         </div>
         <section class="debug" v-if="false">
             {{progress}}
@@ -23,20 +26,16 @@ export default {
             cancel: null,
             max:1,
             current_line: 0,
-            lines: 0,
             processing: false,
             abort: false,
             progress: 0,
         }
     },
-    props: {
-
-    },
     computed: {
         ...mapState({
-            settings: state => ({...state.import_settings}),
-        })
-
+            settings: state => state.import_settings,
+            total_lines: state => state.csv_data.total_lines,
+        }),
     },
     destroyed() {
         this.reset()
@@ -51,30 +50,38 @@ export default {
             if(this.abort) return
             this.processing = true
             try {
-                const settings = {...this.settings}
-                settings.data_row_start = line
-                const promise = this.$API.dispatch('importData/processCSV',file_name, settings)
-                this.cancel = promise.cancel
-                const response = await promise
-                const {data} = response
-                console.log(data)
-                if(data) {
-                    const {line=1, total_lines} = data
-                    this.updateProgress({line, total_lines})
-                    return this.process(file_name, line)
+
+                const next = async (line) => {
+                    const settings = {...this.settings}
+                    settings.data_row_start = line
+                    const promise = this.$API.dispatch('importData/processCSV',file_name, settings)
+                    this.cancel = promise.cancel
+                    const response = await promise
+                    const {data} = response
+                    if(data) {
+                        const {line=1} = data
+                        let progress = this.updateProgress({line})
+                        this.$emit('progress', {progress})
+                        return next(line)
+                    }
                 }
+                await next(line)
+                this.$emit('completed')
             } catch (error) {
-                console.log(error)
+                this.$emit('error', error)
             }finally {
                 this.processing = false
             }
 
         },
-        updateProgress({line, total_lines}) {
+        updateProgress({line}) {
+            if(this.total_lines<=0) return
             if(line) this.current_line = line
-            if(total_lines) this.lines = total_lines
-            if(isNaN(line) || isNaN(total_lines)) return
-            this.progress = line/total_lines
+            if(isNaN(this.current_line) || isNaN(this.total_lines)) return
+            if(this.current_line>this.total_lines) this.current_line = this.total_lines
+            let progress = this.current_line/this.total_lines
+            this.progress = progress
+            return progress
         },
         reset() {
             if(typeof this.cancel==='function') this.cancel()

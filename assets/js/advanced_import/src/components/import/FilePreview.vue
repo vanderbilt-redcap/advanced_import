@@ -40,18 +40,18 @@
 
 <script>
 import { mapState } from 'vuex'
-import FileParser from '@/libs/FileParser'
 
 export default {
     data() {
         return {
-            counting: false,
-            total_lines: 0,
+
         }
     },
     computed: {
         ...mapState({
             items: state => state.csv_data.data,
+            total_lines: state => state.csv_data.total_lines,
+            counting: state => state.csv_data.counting,
             files: state => state.import_settings.files,
         }),
         title() {
@@ -76,7 +76,7 @@ export default {
         },
     },
     destroyed() {
-        this.stopCount()
+        this.$store.dispatch('csv_data/stopCounting')
     },
     methods: {
         formatNumber(number) {
@@ -100,103 +100,13 @@ export default {
             const {primary_key} = {...this.$store.state.import_settings}
             return redcap_field && redcap_field==primary_key
         },
-        async count(file) {
-            if(!file) return
-
-            let timer_label = 'count lines'
-            try {
-                console.time(timer_label)
-                this.counting = true
-                this.total_lines = 0
-                if(!file) {
-                    this.total_lines = 0
-                }else {
-                    this.stopCount() // stop previous counting if any
-                    let parser = new FileParser
-                    let promise = parser.countLines(file)
-                    this.countCancel = promise.cancel
-                    this.total_lines = await promise
-                }
-            } finally {
-                console.timeEnd(timer_label)
-                this.counting = false 
-            }
-        },
-        stopCount() {
-            if(typeof this.countCancel==='function') {
-                this.countCancel()
-                this.countCancel = null // remove reference
-            }
-        },
-        async countGenerator(file) {
-            this.stopCount() // stop previous counting if any
-            if(!file) return
-            let timer_label = 'count lines'
-            // try {
-                console.time(timer_label)
-                this.counting = true
-                this.total_lines = 0
-                
-                if(!file) {
-                    this.total_lines = 0
-                }else {
-                    let parser = new FileParser
-                    let generator = parser.countLinesGenerator(file)
-
-                    /**
-                     * better memory performance
-                     */
-                    const timeout = () => {
-                        const next = async() => {
-                            let result = await generator.next()
-                            let {value={}} = result
-                            let {partial=false, cancel} = value
-                            if(partial) {
-                                this.countCancel = cancel // set reference to the stopping function
-                                if(partial) this.total_lines += partial
-                                setTimeout(next, 100) //recursive call
-                            }
-                            else {
-                                console.timeEnd(timer_label)
-                                this.counting = false
-                            }
-                        }
-                        next()
-                    }
-                    this.timeout = timeout
-                    timeout()
-                    
-
-                    /**
-                     * faster
-                     */
-                    const asyncGeneratorLoop = async() => {
-                        const loop = async() => {
-                            for await (let {partial, cancel} of generator) {
-                                this.cancel = cancel
-                                if(partial) this.total_lines += partial
-                            }
-                        }
-                        await loop()
-                        console.timeEnd(timer_label)
-                        this.counting = false
-                    }
-                    this.asyncGeneratorLoop = asyncGeneratorLoop
-                    
-                }
-            /*} finally {
-                console.timeEnd(timer_label)
-                this.counting = false
-            } */
-        },
+        
     },
     watch: {
     files: {
       immediate: true,
       handler(file) {
-        //   this.test1()
-        //   if(this.count_promise)
-        this.countGenerator(file)
+          this.$store.dispatch('csv_data/countFileLinesFast', file)
       }
     }
   },

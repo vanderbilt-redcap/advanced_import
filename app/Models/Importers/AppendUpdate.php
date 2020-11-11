@@ -41,11 +41,11 @@ class AppendUpdate extends AbstractImporter
 		 * perform operations on the csv_data: parsing, validation, mapping
 		 */
 		$processCsvData = function($csv_data) use($filterMappedColumns, $assignColumnNames, $parse, $validate) {
-			$boxed_data = ArrayBox::from($csv_data)
-							->filter($filterMappedColumns)
-							->mapKeys($assignColumnNames)
-							->map($parse) // transform dates, numbers...
-							->map($validate); // validate 
+			$boxed_data = ArrayBox::from($csv_data);
+			$boxed_data = $boxed_data->filter($filterMappedColumns);
+			$boxed_data = $boxed_data->mapKeys($assignColumnNames);
+			$boxed_data = $boxed_data->map($parse); // transform dates, numbers...
+			$boxed_data = $boxed_data->map($validate); // validate 
 			return $boxed_data();
 		};
 
@@ -67,19 +67,18 @@ class AppendUpdate extends AbstractImporter
 		}
 
 		$save_response = \REDCap::saveData($project_id, 'array', $record);
-		if($save_response->errors)
-		{
-			$errors = $save_response->errors;
-			$message = "Error saving data #{$record_id}, instance #{$instance_number}:\n".implode("\n", $errors);
-			$this->log("Error saving data #{$record_id}, instance #{$instance_number}.", compact('project_id','record_id', 'instance_number', 'save_response'));
-			return Response::ERROR;
-		}else {
+		if(empty(@$save_response['errors'])) {
 			$saved_ids = $save_response['ids'] ?: [];
 			$ids_string = implode(',', $saved_ids);
 			$saved_fields_count = $save_response['item_count'] ?: 0;
 			$message = "Data saved: record #{$record_id}, instance #{$instance_number} (total fields saved: {$saved_fields_count})";
 			$this->log($message, compact('project_id','record_id', 'instance_number', 'save_response'));
 			return Response::SUCCESS;
+		}else {
+			$errors = @$save_response['errors'];
+			$message = "Error saving data #{$record_id}, instance #{$instance_number}:\n".implode("\n", $errors);
+			$this->log($message, compact('project_id','record_id', 'instance_number', 'save_response'));
+			return Response::ERROR;
 		}
 	}
 
@@ -120,29 +119,42 @@ class AppendUpdate extends AbstractImporter
 		$record_id = $record_helper->getRecordId($project_id, $event_id, $primary_key_name, $primary_key_value);
 		$instance_number = null;
 
-		if($record_id) {
+		$getInstamceNumber = function($record_id) use ($record_helper, $project_id, $event_id, $form_name, $all_data, $static_data) {
 			// check for perfect match
 			if($matching_instance = $record_helper->findInstance($project_id, $event_id, $record_id, $all_data)) {
 				$this->log("Matching data in record {$record_id}, instance {$matching_instance} has been found; skipping entry", compact('line','record_id'));
-				return;
+				return false;
+			}
+
+			$is_repeating = $record_helper->isRepeatingForm($project_id, $event_id, $form_name);
+			if(!$is_repeating) {
+				$this->log("The form '{$form_name}' is not repeatable. Record {$record_id}, instance 1 will be updated.", compact('line','record_id'));
+				return 1;
 			}
 
 			// check for similar match
 			$existing_instance_number = $record_helper->findInstance($project_id, $event_id, $record_id, $static_data);
 			if($existing_instance_number) {
 				// overwrite
-				$instance_number = $existing_instance_number;
 				$this->log("Existing instance in record {$record_id}, number {$existing_instance_number} will be updated.", compact('line','record_id'));
+				return $existing_instance_number;
 			}else {
 				// create new instance
 				$instance_number = $record_helper->getAutoInstanceNumber($project_id, $event_id, $record_id, $form_name); // auto instance if no instance provided
-				$this->log("No instance found in REDCap for record {$record_id}; will insert data using instance number {$instance_number}.", compact('line','record_id','instance_number'));
+				$this->log("No similar instance found in REDCap for record {$record_id}; will insert data using instance number {$instance_number}.", compact('line','record_id','instance_number'));
+				return $instance_number;
 			}
+		};
+
+		if($record_id) {
+			$instance_number = $getInstamceNumber($record_id);
 		}else {	
 			$record_id = $record_id ?: $record_helper->getAutoId($project_id);
 			$instance_number = 1;
 			$this->log("No record found in REDCap; will insert new record #{$record_id}, instance #{$instance_number}.", compact('line','record_id','instance_number'));
 		}
+
+		if(!$instance_number) return; // skip entry
 
 		$record = $record_helper->reduceRecord($project_id, $event_id, $record_id, $primary_key_name, $primary_key_value);
 		foreach ($all_data as $key => $value) {

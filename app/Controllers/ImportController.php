@@ -42,8 +42,7 @@ class ImportController extends BaseController
             return $this->printJSON($results);
         } catch (\Exception $e) {
             $response = ['message'=>$e->getMessage()];
-            $code = $e->getCode();
-            return $this->printJSON($response, $code);
+            return $this->printJSON($response, $code=400);
         }
     }
 

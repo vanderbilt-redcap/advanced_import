@@ -5,13 +5,17 @@
                 <b-progress-bar :value="progress" :label="`${(progress*100).toFixed(2)}%`"></b-progress-bar>
             </b-progress>
             <!-- <button class="btn btn-danger" @click="onPause">Pause</button> -->
-            <div>Processing {{current_part}}/{{parts}}</div>
+            <div class="text-muted small">
+                <span v-if="uploaded_bytes && uploaded_bytes>0">uploaded {{formatBytes(uploaded_bytes)}} of {{formatBytes(file_size)}}</span>
+                <non-blank-space />
+            </div>
         </div>
         <section class="debug" v-if="false">
-            {{file.size}}
             {{progress}}
+            {{uploaded_bytes}}
             {{remote_file_name}}
-            {{chunk_size}}
+            {{file_size}}
+            {{processed}}
         </section>
     </div>
 </template>
@@ -19,6 +23,7 @@
 <script>
 // import { mapState } from 'vuex'
 import FileReaderAsync from '@/libs/FileReaderAsync'
+import {formatBytes} from '@/libs/Utility'
 
 const MIN_CHUNK_SIZE = 1000 * 1024
 const MAX_CHUNK_SIZE = 1000 * 1024 * 10
@@ -36,6 +41,10 @@ export default {
             paused: false,
             abort: false,
             remote_file_name: null, // unique file name used to save the file on the server
+            progress: 0,
+            uploaded_bytes:0,
+            file_size: 0,
+            formatBytes,
         }
     },
     props: {
@@ -56,19 +65,16 @@ export default {
             if(file) return new File([file], file.name)
             else return null
         },
-        current_part() {
-            if(this.start==0) return 0
-            return Math.floor(this.start/this.chunk_size)
-        },
-        parts() {
-            if(!this.file) return 0
-            return Math.ceil(this.file.size/this.chunk_size)
-        },
-        progress() {
-            return this.calculateProgress(this.file, this.start)
-        },
         chunk_size() {
             return this.calcChunkSize(this.file)
+        },
+        processed() {
+            let uploaded_bytes = this.uploaded_bytes || 0
+            let file_size = this.file_size || 0
+            let formatted_uploaded_bytes =  formatBytes(uploaded_bytes)
+            let formatted_file_size =  formatBytes(file_size)
+            console.log(formatted_uploaded_bytes,formatted_file_size)
+            return `${formatted_uploaded_bytes}/${formatted_file_size}`
         }
     },
     destroyed() {
@@ -80,8 +86,9 @@ export default {
                 if(this.abort) return
                 const response = await this.sendChunk(file, chunk)
                 const {data} = response
+                const {uploaded_bytes,file_size} = data
                 if(!data) throw new Error('no response') //exit if no response data
-                const progress = this.calculateProgress(file, this.end)
+                const progress = this.updateProgress(uploaded_bytes, file_size)
                 this.$emit('progress', {file, progress, response}) // notify advancement
                 // advance the start
                 this.start = this.end
@@ -103,15 +110,8 @@ export default {
                 const {response={}} = error
                 const {data={}} = response
                 const {message=''} = data
-                console.log(message)
-                for (const key in error) {
-                    if (key in error) {
-                        const element = error[key]
-                        console.log(element, key)
-                    }
-                }
                 this.reset()
-                return this.$emit('error', {file, error}) // notify error
+                return this.$emit('error', message, {file, error}) // notify error
             }
 
         },
@@ -134,10 +134,18 @@ export default {
             if(!file) return MIN_CHUNK_SIZE
             const {size=0} = file
             let chunk_size = size/TOTAL_CHUNKS
-            console.log("projected chunk size:", chunk_size)
             if(chunk_size<MIN_CHUNK_SIZE) return MIN_CHUNK_SIZE
             if(chunk_size>MAX_CHUNK_SIZE) return MAX_CHUNK_SIZE
             return chunk_size
+        },
+        updateProgress(uploaded_bytes, file_size) {
+            this.uploaded_bytes = uploaded_bytes
+            this.file_size = file_size
+            if(isNaN(uploaded_bytes) || isNaN(file_size)) return
+            if(file_size<=0) return
+            let percentage = uploaded_bytes/file_size
+            this.progress = percentage
+            return percentage
         },
         async upload() {
             if(!this.file) return
@@ -149,7 +157,6 @@ export default {
             const file_reader = new FileReaderAsync()
             const chunk = await file_reader.readAsDataURLAsync(blob)
             return this.processChunk(file, chunk)
-
         },
         stop() {
             if(typeof this.cancel==='function') this.cancel()

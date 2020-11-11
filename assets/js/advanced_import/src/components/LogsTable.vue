@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="overflow-auto">
     <div class="d-flex flex-row justify-content-start align-items-start">
         <b-button variant="info" @click="getLogs" :disabled="loading">
             <font-awesome-icon v-if="loading" icon="spinner" spin/>

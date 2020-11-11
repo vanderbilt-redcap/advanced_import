@@ -28,8 +28,9 @@
             <slot name="right" :validation="$v" ></slot>
         </div>
 
-        <b-modal ref="modal-complete" title="Process completed" ok-only @hidden="onCloseModal">
+        <b-modal ref="modal-success" title="Process completed" ok-only @hidden="onCloseModal" size="xl">
             <p class="my-4">The import proces is completed. Please check the <router-link :to="{name:'logs'}">logs</router-link> for details.</p>
+            <LogsTable ref="logs"/>
         </b-modal>
 
         <b-modal ref="modal-upload" title="Uploading CSV file"
@@ -43,16 +44,20 @@
             <FileUploader ref="uploader" :files="files"/>
         </b-modal>
 
-        <b-modal ref="modal-process" title="Processing CSV file"
+        <b-modal ref="modal-process" id="modal-process" title="Processing CSV file"
             ok-only
             no-close-on-esc
             no-close-on-backdrop
             hide-header-close
             ok-title='cancel'
+            size="xl"
         >
             <p class="my-4">Processing the file</p>
             <FileProcesser ref="processer" />
+            <LogsTable ref="logs"/>
         </b-modal>
+          <b-button v-b-modal.modal-process>Launch demo modal</b-button>
+
 
   </div>
 </template>
@@ -61,9 +66,10 @@
 import { mapState } from 'vuex'
 import FileUploader from '@/components/FileUploader'
 import FileProcesser from '@/components/FileProcesser'
+import LogsTable from '@/components/LogsTable'
 
 export default {
-    components: {FileUploader,FileProcesser},
+    components: {FileUploader,FileProcesser, LogsTable},
     data() {
         return {
             processing: false,
@@ -105,7 +111,6 @@ export default {
                 }
                 modal_element.$on('shown', onShown)
                 modal_element.show()
-                return resolve()
             })
             return promise
         },
@@ -119,7 +124,6 @@ export default {
                 }
                 modal_element.$on('hidden', onShown)
                 modal_element.hide()
-                return resolve()
             })
             return promise
         },
@@ -134,14 +138,32 @@ export default {
             })
             return uploader.upload()
         },
+        updateLogs() {
+            const {getLogs} = this.$refs.logs
+            if(typeof getLogs !=='function') return
+            getLogs()
+        },
+        async showCompleted() {
+            await this.showModal('modal-success')
+        },
         /**
          * process the reomte file
          */
         async process_csv(file_name) {
-            await this.showModal('modal-process')
-            const processer = this.$refs.processer
-            await processer.process(file_name)
-            this.closeModal('modal-process')
+            let processer
+            try {
+                await this.showModal('modal-process')
+                processer = this.$refs.processer
+                processer.$on('progress', this.updateLogs)
+                processer.$on('completed', this.showCompleted)
+                await processer.process(file_name)
+            } catch (error) {
+                console.log(error)
+            }finally {
+                processer.$off('progress', this.updateLogs)
+                processer.$off('completed', this.showCompleted)
+                this.closeModal('modal-process')
+            }
         },
         /**
          * start the process:
@@ -152,7 +174,7 @@ export default {
             try {
                 const {file_name} = await this.upload()
                 if(!file_name) return
-                // let file_name = '5de30e1025f1c5830df97051af2dc37c.csv'
+                // let file_name = 'Data8277.csv'
                 await this.process_csv(file_name)
             } catch (error) {
                 console.log(error)
@@ -161,13 +183,14 @@ export default {
             }
         },
         onCloseModal() {
-            this.$router.push({name: 'logs'})
+            // this.$router.push({name: 'home'})
+            console.log('done')
         },
     },
     validations: {}
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

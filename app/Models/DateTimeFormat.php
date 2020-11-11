@@ -32,4 +32,32 @@ class DateTimeFormat
         DateTimeFormat::DATETIME_SECONDS_MDY,
         DateTimeFormat::DATETIME_SECONDS_DMY,
     ];
+
+    const REDCAP_FORMATS = [
+        'time' => DateTimeFormat::TIME,
+        'date' => DateTimeFormat::DATE,
+        'date_ymd' => DateTimeFormat::DATE_YMD,
+        'date_mdy' => DateTimeFormat::DATE_MDY,
+        'date_dmy' => DateTimeFormat::DATE_DMY,
+        'datetime' => DateTimeFormat::DATETIME,
+        'datetime_ymd' => DateTimeFormat::DATETIME_YMD,
+        'datetime_mdy' => DateTimeFormat::DATETIME_MDY,
+        'datetime_dmy' => DateTimeFormat::DATETIME_DMY,
+        'datetime_seconds' => DateTimeFormat::DATETIME_SECONDS,
+        'datetime_seconds_ymd' => DateTimeFormat::DATETIME_SECONDS_YMD,
+        'datetime_seconds_mdy' => DateTimeFormat::DATETIME_SECONDS_MDY,
+        'datetime_seconds_dmy' => DateTimeFormat::DATETIME_SECONDS_DMY,
+    ];
+
+    /**
+     * returna a date format based on the provided REDCap validation type
+     *
+     * @param string $validation_type
+     * @return string
+     */
+    public static function getRedcapFormat($validation_type)
+    {
+        if(!array_key_exists($validation_type, static::REDCAP_FORMATS)) return false;
+        return static::REDCAP_FORMATS[$validation_type];
+    }
 }

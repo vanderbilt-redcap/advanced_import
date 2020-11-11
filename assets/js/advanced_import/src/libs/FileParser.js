@@ -115,5 +115,4 @@ export default class FileParser {
         return counter
     }
 
-
 }

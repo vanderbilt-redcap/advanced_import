@@ -74,7 +74,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, SplObse
             case 'info':
             case 'debug':
             case 'log':
-                $message = @$data['message'] ?: '';
+                $message =  @$data['message'] ?: '';
                 unset($data['message']);
                 $data['project_id'] = $this->getProjectId(); // this is filled anyway in log_internal
                 $encoded_data = [];

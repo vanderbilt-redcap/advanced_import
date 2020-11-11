@@ -55,9 +55,10 @@ class Import extends BaseModel
             }
         }
         if(empty($results)) return;
-        $total_lines = $this->countLines($file_path);
+        /* $total_lines = $this->countLines($file_path);
         $results['total_lines'] = $total_lines;
-        $results['line'] = $row_index<$total_lines ? $row_index : $total_lines; // do not exceed max number of lines
+        $results['line'] = $row_index<$total_lines ? $row_index : $total_lines; */ // do not exceed max number of lines
+        $results['line'] = $row_index;
 
         return $results;
     }

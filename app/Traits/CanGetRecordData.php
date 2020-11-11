@@ -69,6 +69,7 @@ trait CanGetRecordData
             ksort($data); //sort keys alphabetically
             $key_values_strings = array_map($keyValuesToString, $data, array_keys($data));
             $data_string = implode($record_separator, $key_values_strings);
+            Logging::writeToFile('advanced_import.txt', $data_string);
             return md5($data_string);
         };
 
@@ -112,7 +113,8 @@ trait CanGetRecordData
             $pivot_rotation,
             $project_id, $event_id, checkNull($record), $fields_list, checkNull($data_signature)
         );
-
+        Logging::writeToFile('advanced_import.txt', $data_signature);
+        Logging::writeToFile('advanced_import.txt', $query_string);
         $result = db_query($query_string);
 
         if(!$result) throw new \Exception("Error retrieving the instance from the databse.", 400);
