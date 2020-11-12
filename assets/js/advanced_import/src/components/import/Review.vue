@@ -153,7 +153,6 @@ export default {
                 this.closeModal('modal-upload')
             })
             uploader.$on('error', ({message, file, error})=> {
-                alert(123)
                 console.log({message, file, error})
             })
             return uploader.upload()

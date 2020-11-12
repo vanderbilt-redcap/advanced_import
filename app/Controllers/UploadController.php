@@ -13,7 +13,7 @@ class UploadController extends BaseController
     {
         try {
             $params = $_POST;
-            $upload_dir = APP_PATH_TEMP.'uploads';
+            $upload_dir = APP_PATH_TEMP.'advanced_import';
             $uploader = new ChunkUploader($upload_dir);
             $results = $uploader->upload($params);
             return $this->printJSON($results);

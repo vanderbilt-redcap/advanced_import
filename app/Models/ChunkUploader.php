@@ -24,9 +24,20 @@ class ChunkUploader
             $str = preg_replace('#(.*)/?$#', '$1', $str); // no slash at the end
             return $str;
         };
+        
         $this->upload_dir = $normalizePath($path ?: sys_get_temp_dir());
+        if(!file_exists($this->upload_dir)) mkdir($this->upload_dir, 0777, $recursive=true);
     }
 
+    /**
+     * upload a chunk of data
+     * use 'data' to send the chunk or REDCap will save
+     * it in the logs!
+     * @see REDCap/Classes/Logging.php
+     *
+     * @param array $params
+     * @return array
+     */
     public function upload($params)
     {
         /**
@@ -48,7 +59,7 @@ class ChunkUploader
         // check sent file size against local file
         $checkFileSize($file_path, $file_size);
         
-        $data_chunk = @$params['chunk'];
+        $data_chunk = @$params['data'];
         $file_data = $this->decode_chunk($data_chunk);
         
         if ( false === $file_data ) {
