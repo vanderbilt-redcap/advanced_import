@@ -1,5 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Controllers;
 
+use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\Import;
 
 class ImportController extends BaseController
@@ -33,7 +34,7 @@ class ImportController extends BaseController
         try {
             $project_id = $_GET['pid'];
             $file_name = @$_POST['file_name'];
-            $upload_dir = APP_PATH_TEMP.'uploads';
+            $upload_dir = AdvancedImport::getUploadDirectory();
             $file_path = "{$upload_dir}/{$file_name}";
             $settings = json_decode($_POST['settings'], $assoc=true);
             $background_process = @$settings['background_process'];

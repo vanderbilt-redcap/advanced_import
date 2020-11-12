@@ -1,5 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Controllers;
 
+use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\ChunkUploader;
 
 class UploadController extends BaseController
@@ -13,7 +14,7 @@ class UploadController extends BaseController
     {
         try {
             $params = $_POST;
-            $upload_dir = APP_PATH_TEMP.'advanced_import';
+            $upload_dir = AdvancedImport::getUploadDirectory();
             $uploader = new ChunkUploader($upload_dir);
             $results = $uploader->upload($params);
             return $this->printJSON($results);

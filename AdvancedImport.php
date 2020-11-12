@@ -12,9 +12,15 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, SplObse
 {
     private static $instance;
 
+
     function __construct()
     {
         parent::__construct();
+    }
+
+    public static function getUploadDirectory()
+    {
+        return APP_PATH_TEMP."advanced_import";
     }
 
     /**
