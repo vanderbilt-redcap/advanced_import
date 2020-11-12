@@ -21,7 +21,6 @@
     document.addEventListener('DOMContentLoaded', function(event){
         var navbar_element = document.querySelector('#pagecontent > nav.navbar')
         if(!navbar_element) return
-        console.log(navbar_element)
         resize_observer.observe(navbar_element)
     })
 }(window, document))
