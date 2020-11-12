@@ -2,7 +2,8 @@ import {objectToUrlSearchParams} from '../Utils'
 
 export default {
     actions: {   
-        download(settings) {
+        download(context, settings) {
+            const {$api} = context
             const getFileName = (settings, extension='csv') => {
                 let file_name = 'form'
                 const {event_id='',form_name=''} = settings
@@ -13,11 +14,11 @@ export default {
             }
 
             const getExportUrl = (settings) => {
-                const redcap_params = this.getRedCapQueryParams()
+                const redcap_params = $api.getRedCapQueryParams()
                 const params = {...redcap_params,route: 'export',...settings,}
                 let search_params = objectToUrlSearchParams(params)
                 
-                const exportURL = `${this.baseURL}?`+search_params.toString()
+                const exportURL = `${$api.baseURL}?`+search_params.toString()
                 return exportURL
             }
 

@@ -1,6 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Traits;
 
-use Vanderbilt\AdvancedImport\App\Models\ParsersFactory;
+use Vanderbilt\AdvancedImport\App\Models\ParserFactory;
 use Vanderbilt\AdvancedImport\App\Models\ValidatorsFactory;
 
 trait CanProcessCsvData
@@ -16,7 +16,7 @@ trait CanProcessCsvData
      * @return mixed
      */
     public function applyParsers($project_id, $parsing_settings, $value, $key, $collection=[]) {
-        $parsers_factory = new ParsersFactory($project_id, $parsing_settings);
+        $parsers_factory = new ParserFactory($project_id, $parsing_settings);
 
         $errors = [];
         $parsers = $parsers_factory->create($key);

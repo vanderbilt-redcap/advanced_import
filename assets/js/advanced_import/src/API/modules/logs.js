@@ -2,19 +2,19 @@
 
 export default {
     actions: {
-        get({start, limit}) {
+        get(context, {start, limit}) {
             var params = {
                 route: `logs`,
                 _start: start,
                 _limit: limit,
             }
-            return this.api_client.get('',{params})
+            return context.api_client.get('',{params})
         },
-        delete() {
+        delete(context, ) {
             var params = {
                 route: `logs`,
             }
-            return this.api_client.delete('',{params})
+            return context.api_client.delete('',{params})
         },
     }
 }

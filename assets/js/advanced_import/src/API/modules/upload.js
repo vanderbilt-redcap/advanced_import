@@ -9,7 +9,7 @@ export default {
          * @param {File} file 
          * @param {object} settings 
          */
-        upload(file, chunk) {
+        upload(context, file, chunk) {
             const form_data = new FormData()
             const file_keys = ['name', 'lastModified', 'lastModifiedDate', 'size', 'type', 'unique_name']
             file_keys.forEach(key => {
@@ -19,7 +19,7 @@ export default {
             var params = {
                 route: `upload`,
             }
-            return this.api_client.post('',form_data, {
+            return context.api_client.post('',form_data, {
                 params,
                 headers: {
                     'Content-Type': 'multipart/form-data',

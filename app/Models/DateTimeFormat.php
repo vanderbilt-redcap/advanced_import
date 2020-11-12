@@ -17,6 +17,20 @@ class DateTimeFormat
     const DATETIME_SECONDS_DMY = "d-m-Y H:i:s";
     const DEFAULT = '';
 
+    const REDCAP_TIME = 'time';
+    const REDCAP_DATE = 'date';
+    const REDCAP_DATE_YMD = 'date_ymd';
+    const REDCAP_DATE_MDY = 'date_mdy';
+    const REDCAP_DATE_DMY = 'date_dmy';
+    const REDCAP_DATETIME = 'datetime';
+    const REDCAP_DATETIME_YMD = 'datetime_ymd';
+    const REDCAP_DATETIME_MDY = 'datetime_mdy';
+    const REDCAP_DATETIME_DMY = 'datetime_dmy';
+    const REDCAP_DATETIME_SECONDS = 'datetime_seconds';
+    const REDCAP_DATETIME_SECONDS_YMD = 'datetime_seconds_ymd';
+    const REDCAP_DATETIME_SECONDS_MDY = 'datetime_seconds_mdy';
+    const REDCAP_DATETIME_SECONDS_DMY = 'datetime_seconds_dmy';
+
     const ALL_FORMATS = [
         DateTimeFormat::TIME,
         DateTimeFormat::DATE,
@@ -34,19 +48,19 @@ class DateTimeFormat
     ];
 
     const REDCAP_FORMATS = [
-        'time' => DateTimeFormat::TIME,
-        'date' => DateTimeFormat::DATE,
-        'date_ymd' => DateTimeFormat::DATE_YMD,
-        'date_mdy' => DateTimeFormat::DATE_MDY,
-        'date_dmy' => DateTimeFormat::DATE_DMY,
-        'datetime' => DateTimeFormat::DATETIME,
-        'datetime_ymd' => DateTimeFormat::DATETIME_YMD,
-        'datetime_mdy' => DateTimeFormat::DATETIME_MDY,
-        'datetime_dmy' => DateTimeFormat::DATETIME_DMY,
-        'datetime_seconds' => DateTimeFormat::DATETIME_SECONDS,
-        'datetime_seconds_ymd' => DateTimeFormat::DATETIME_SECONDS_YMD,
-        'datetime_seconds_mdy' => DateTimeFormat::DATETIME_SECONDS_MDY,
-        'datetime_seconds_dmy' => DateTimeFormat::DATETIME_SECONDS_DMY,
+        DateTimeFormat::REDCAP_TIME => DateTimeFormat::TIME,
+        DateTimeFormat::REDCAP_DATE => DateTimeFormat::DATE,
+        DateTimeFormat::REDCAP_DATE_YMD => DateTimeFormat::DATE_YMD,
+        DateTimeFormat::REDCAP_DATE_MDY => DateTimeFormat::DATE_MDY,
+        DateTimeFormat::REDCAP_DATE_DMY => DateTimeFormat::DATE_DMY,
+        DateTimeFormat::REDCAP_DATETIME => DateTimeFormat::DATETIME,
+        DateTimeFormat::REDCAP_DATETIME_YMD => DateTimeFormat::DATETIME_YMD,
+        DateTimeFormat::REDCAP_DATETIME_MDY => DateTimeFormat::DATETIME_MDY,
+        DateTimeFormat::REDCAP_DATETIME_DMY => DateTimeFormat::DATETIME_DMY,
+        DateTimeFormat::REDCAP_DATETIME_SECONDS => DateTimeFormat::DATETIME_SECONDS,
+        DateTimeFormat::REDCAP_DATETIME_SECONDS_YMD => DateTimeFormat::DATETIME_SECONDS_YMD,
+        DateTimeFormat::REDCAP_DATETIME_SECONDS_MDY => DateTimeFormat::DATETIME_SECONDS_MDY,
+        DateTimeFormat::REDCAP_DATETIME_SECONDS_DMY => DateTimeFormat::DATETIME_SECONDS_DMY,
     ];
 
     /**

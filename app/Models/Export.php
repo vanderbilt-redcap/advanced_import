@@ -27,7 +27,8 @@ class Export extends BaseModel
         }
         // get fields data
         $csv_columns = $this->getProjectFormFields($project_id, $form_name);
-        array_unshift($csv_columns, $primary_key);
+        // add primary key if not there already
+        if(!in_array($primary_key, $csv_columns)) array_unshift($csv_columns, $primary_key);
 
         // get the CSV. Note that field names are contained in an array and extract headers is false
         $csv = $this->writeCSV([$csv_columns], $extract_headers=false, $delimiter, $enclosure);

@@ -20,7 +20,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, SplObse
     /**
      * get the singleton
      *
-     * @return void
+     * @return AdvancedImport
      */
     public static function getInstance()
     {

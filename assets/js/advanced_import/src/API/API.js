@@ -81,12 +81,14 @@ export default class API {
         
         // create a cancel function and a cancelToken function
         const {token: cancelToken, cancel} = CancelToken.source()
-        // duplicate the object
-        const context = {}
-        // assign an API client to the duplicated instance
-        context.api_client = this.createClient(cancelToken)
+        
+        // set the context
+        const context = {
+            $api: this,
+            api_client: this.createClient(cancelToken),
+        }
 
-        let promise = this.actions[name][action].call(context, ...params)
+        let promise = this.actions[name][action](context, ...params)
         promise.cancel = cancel // pass the cancel along with the promise
         return promise
     }

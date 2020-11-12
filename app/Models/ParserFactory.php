@@ -1,11 +1,14 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
+use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
 use Vanderbilt\AdvancedImport\App\Models\Parser\AbstractParser;
+use Vanderbilt\AdvancedImport\App\Models\Parser\CheckBoxParser;
 use Vanderbilt\AdvancedImport\App\Models\Parser\DateTimeParser;
+use Vanderbilt\AdvancedImport\App\Models\Parser\PhoneParser;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
 use Vanderbilt\AdvancedImport\App\Models\Validator\DateTimeValidator;
 
-class ParsersFactory
+class ParserFactory
 {
     use CanGetProjectData;
     /* 
@@ -55,17 +58,40 @@ class ParsersFactory
 
         // check validation type
         $validation_type = $field_metadata['element_validation_type'];
-        if(array_key_exists($validation_type, DateTimeValidator::FORMATS)) {
-            $from_format = @$this->parsing_settings['dates_format'] ?: '';
-            $parsers[] = new DateTimeParser($from_format, $validation_type);
+        $element_type = $field_metadata['element_type'];
 
-        }else {
-
-            switch ($validation_type) {
+        // check type
+        $checkElementType = function($element_type) use(&$parsers){
+            switch ($element_type) {
+                case 'checkbox':
+                    $parsers[] = new CheckBoxParser();
+                    break;
                 default:
-                break;
+                    # code...
+                    break;
             }
-        }
+        };
+
+        // check validation
+        $checkValidationType = function($validation_type) use (&$parsers) {
+            if(array_key_exists($validation_type, DateTimeValidator::FORMATS)) {
+                $from_format = @$this->parsing_settings['dates_format'] ?: '';
+                $parsers[] = new DateTimeParser($from_format, $validation_type);
+    
+            }else {
+    
+                switch ($validation_type) {
+                    case 'phone':
+                        $parsers[] = new PhoneParser();
+                        break;
+                    default:
+                    break;
+                }
+            }
+        };
+        $checkElementType($element_type);
+        $checkValidationType($validation_type);
+
         return $parsers;
     }
 

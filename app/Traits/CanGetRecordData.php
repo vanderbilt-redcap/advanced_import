@@ -56,27 +56,44 @@ trait CanGetRecordData
         $getConcat = function($data, $unit_separator=':', $record_separator=',') {
             // 'vitals_label',':',COALESCE(vitals_label, ''), ';',
             $concats = array_map(function($key) use($unit_separator){
-                return sprintf("'%s','%s',COALESCE(%s, '')", $key, $unit_separator, $key);
+                return sprintf("'%s','%s',COALESCE(`%s`, '')", $key, $unit_separator, $key);
             }, array_keys($data));
             return implode(", '$record_separator',\n", $concats);
         };
 
         $createDataSignature = function($data, $unit_separator=':', $record_separator=',') {
-            $keyValuesToString = function($value, $key) use($unit_separator) {
+            /**
+             * if the value is an array then is probably a checkbox
+             * since checkboxes are stored as arrays.
+             * keep the values == 1 and join their keys using a comma
+             */
+            $transformIfCheckBoxValue = function($value) {
+                if(is_array($value)) {
+                    // deal with checkbox: use keys with value=1
+                    $filtered = array_filter($value, function($item) {
+                        return intval($item)==1;
+                    });
+                    $value = implode(',', array_keys($filtered));
+                }
+                return $value;
+            };
+
+            $keyValuesToString = function($value, $key) use($unit_separator, $transformIfCheckBoxValue) {
+                $value = $transformIfCheckBoxValue($value);
                 $value = $value ?: ''; // default to blank string
                 return sprintf("%s%s%s", $key, $unit_separator, $value );
             };
             ksort($data); //sort keys alphabetically
             $key_values_strings = array_map($keyValuesToString, $data, array_keys($data));
             $data_string = implode($record_separator, $key_values_strings);
-            Logging::writeToFile('advanced_import.txt', $data_string);
+            // Logging::writeToFile('advanced_import.txt', $data_string);
             return md5($data_string);
         };
 
         $getPivotRotation = function($data) {
             // MAX(CASE WHEN field_name = 'vitals_label' THEN value ELSE NULL END) AS vitals_label,
             $cases = array_map(function($field) {
-                return sprintf("MAX(CASE WHEN field_name = '%s' THEN value ELSE NULL END) AS %s", $field, $field);
+                return sprintf("GROUP_CONCAT(CASE WHEN `field_name` = '%s' THEN value ELSE NULL END ORDER BY `value` ASC SEPARATOR ',') AS `%s`", $field, $field);
             }, array_keys($data));
             return implode(", \n", $cases);
         };
@@ -92,18 +109,18 @@ trait CanGetRecordData
 
         // pivot rotation query
         $query_string = sprintf(
-            "SELECT record, normalized_instance,
+            "SELECT `record`, `normalized_instance`,
                 MD5(CONCAT(%s)) AS signature,
                 CONCAT(%s) AS reference
                 FROM
                 (
-                    SELECT record, IFNULL(instance, 1) normalized_instance,
+                    SELECT `record`, IFNULL(instance, 1) `normalized_instance`,
                         %s
                     FROM redcap_data 
-                    WHERE project_id=%u
-                    AND event_id=%u
-                    AND record=%s
-                    AND field_name IN (%s)
+                    WHERE `project_id`=%u
+                    AND `event_id`=%u
+                    AND `record`=%s
+                    AND `field_name` IN (%s)
                     GROUP BY record, normalized_instance
                     ORDER BY record, normalized_instance
                 ) AS pivot
@@ -113,8 +130,8 @@ trait CanGetRecordData
             $pivot_rotation,
             $project_id, $event_id, checkNull($record), $fields_list, checkNull($data_signature)
         );
-        Logging::writeToFile('advanced_import.txt', $data_signature);
-        Logging::writeToFile('advanced_import.txt', $query_string);
+        // Logging::writeToFile('advanced_import.txt', $data_signature);
+        // Logging::writeToFile('advanced_import.txt', $query_string);
         $result = db_query($query_string);
 
         if(!$result) throw new \Exception("Error retrieving the instance from the databse.", 400);

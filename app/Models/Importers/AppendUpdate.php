@@ -41,11 +41,11 @@ class AppendUpdate extends AbstractImporter
 		 * perform operations on the csv_data: parsing, validation, mapping
 		 */
 		$processCsvData = function($csv_data) use($filterMappedColumns, $assignColumnNames, $parse, $validate) {
-			$boxed_data = ArrayBox::from($csv_data);
-			$boxed_data = $boxed_data->filter($filterMappedColumns);
-			$boxed_data = $boxed_data->mapKeys($assignColumnNames);
-			$boxed_data = $boxed_data->map($parse); // transform dates, numbers...
-			$boxed_data = $boxed_data->map($validate); // validate 
+			$boxed_data = ArrayBox::from($csv_data)
+							->filter($filterMappedColumns)
+							->mapKeys($assignColumnNames)
+							->map($parse); // transform dates, numbers...
+							//->map($validate); // validate (let REDCap do the validation on save)
 			return $boxed_data();
 		};
 
@@ -72,12 +72,13 @@ class AppendUpdate extends AbstractImporter
 			$ids_string = implode(',', $saved_ids);
 			$saved_fields_count = $save_response['item_count'] ?: 0;
 			$message = "Data saved: record #{$record_id}, instance #{$instance_number} (total fields saved: {$saved_fields_count})";
-			$this->log($message, compact('project_id','record_id', 'instance_number', 'save_response'));
+			$this->log($message, compact('project_id','record_id', 'instance_number', 'save_response', 'line'));
 			return Response::SUCCESS;
 		}else {
 			$errors = @$save_response['errors'];
-			$message = "Error saving data #{$record_id}, instance #{$instance_number}:\n".implode("\n", $errors);
-			$this->log($message, compact('project_id','record_id', 'instance_number', 'save_response'));
+			if(is_array($errors)) $errors = implode("\n", $errors);
+			$message = "Error saving data #{$record_id}, instance #{$instance_number}:\n {$errors}";
+			$this->log($message, compact('project_id','record_id', 'instance_number', 'save_response', 'line'));
 			return Response::ERROR;
 		}
 	}

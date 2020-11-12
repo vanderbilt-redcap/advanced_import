@@ -61,6 +61,7 @@ class DateTimeParser extends AbstractParser
     public function parse($value)
     {
         if(empty($value)) return '';
+        if($this->validation_format == DateTimeFormat::REDCAP_TIME) return $value; // skip parsing for time
         $datetime = \DateTime::createFromFormat($this->from, $value);
         if(!($datetime instanceof \DateTime)) throw new \Exception("The value '{$value}' is not in the expected format '{$this->from}", 1);
         // Dates must be imported here only in "Y-m-d H:i:[s]" format, regardless of the specific date format designated for this field.)

@@ -37,8 +37,6 @@ class Logs extends BaseModel
             'timestamp',
             'line',
             'message',
-            'data',
-            '_data',
             'ip',
         ];
         $query_string = sprintf(

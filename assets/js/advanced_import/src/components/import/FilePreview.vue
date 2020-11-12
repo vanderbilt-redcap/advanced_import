@@ -17,10 +17,12 @@
                     <section>
                         <span class="d-block small" title="REDCap field">
                             <non-blank-space />
-                            <b-badge variant="danger">{{getMappingIndex(data.column)}}</b-badge>
+                            <b-badge variant="info" v-if="Boolean(getMappingIndex(data.column))" >
+                                <span>{{getMappingIndex(data.column)}}</span>
+                                <font-awesome-icon icon="star" v-if="isPrimaryKey(data.column)" class="ml-1 text-warning" title="primary key"/>
+                                <font-awesome-icon icon="level-down-alt" v-if="isDynamic(data.column)" class="ml-1 text-danger" title="dynamic"/>
+                            </b-badge>
                             <!-- <b-badge variant="success" class="ml-1" v-if="isDynamic(data.column)">D</b-badge> -->
-                            <font-awesome-icon icon="level-down-alt" v-if="isDynamic(data.column)" class="ml-1 text-success" title="dynamic"/>
-                            <font-awesome-icon icon="star" v-if="isPrimaryKey(data.column)" class="ml-1 text-warning" title="primary key"/>
                         </span>
                         <!-- <span class="">{{ data.label }}</span> -->
                         <span class="d-block small" title="CSV column">{{ data.column }}</span>

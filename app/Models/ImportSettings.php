@@ -21,20 +21,21 @@ class ImportSettings
     use CanGetProjectData;
 
     const DEFAULT_SETTINGS = [
-        'field_delimiter'   => "\t",
-        'text_qualifier'    => ',',
-        'primary_key'       => '',
-        'dynamic_keys'      => [],
-        'field_name_row'    => 0,
-        'data_row_start'    => 1,
-        'data_row_end'      => null,
-        'mapping'           => [],
-        // 'parsing'           => [], // dates_format
-        'dates_format'      => [], // dates_format
-        'import_mode'       => '',
-        'project_id'        => null,
-        'event_id'          => null,
-        'form_name'         => null,
+        'field_delimiter'       => "\t",
+        'text_qualifier'        => ',',
+        'primary_key'           => '',
+        'dynamic_keys'          => [],
+        'field_name_row'        => 0,
+        'data_row_start'        => 1,
+        'data_row_end'          => null,
+        'mapping'               => [],
+        // 'parsing'               => [], // dates_format
+        'dates_format'          => [], // dates_format
+        'import_mode'           => '',
+        'project_id'            => null,
+        'event_id'              => null,
+        'form_name'             => null,
+        'background_process'    => false,
     ];
 
     /**

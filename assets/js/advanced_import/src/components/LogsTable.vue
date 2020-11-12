@@ -51,7 +51,7 @@ import { mapState } from 'vuex'
 export default {
     data() {
         return {
-            per_page: 100,
+            per_page: 50,
             current_page: 1,
             loading: false,
         }

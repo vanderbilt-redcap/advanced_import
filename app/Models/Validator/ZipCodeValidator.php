@@ -10,11 +10,11 @@ class ZipCodeValidator implements ValidatorInterface
         'us' => self::REGEXP_US,
     ];
 
-    const REGEXP_US = "/^\d{5}(?:[-\s]\d{4})?$/";
+    const REGEXP_US = '/^\d{5}(?:[-\s]\d{4})?$/';
 
     public function __construct($format='us')
     {
         if(!array_key_exists($format, self::REGEXP_LIST)) throw new \Exception("Invalid format provided: '{$format}'", 1);
-        $this->format = self::REGEXP_LIST[$format];
+        $this->regexp = self::REGEXP_LIST[$format];
     }
 }

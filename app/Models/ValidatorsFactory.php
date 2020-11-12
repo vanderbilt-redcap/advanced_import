@@ -1,5 +1,8 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
+use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
+use Vanderbilt\AdvancedImport\App\Models\Validator\BooleanValidator;
+use Vanderbilt\AdvancedImport\App\Models\Validator\CheckBoxValidator;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
 use Vanderbilt\AdvancedImport\App\Models\Validator\RequiredValidator;
 use Vanderbilt\AdvancedImport\App\Models\Validator\MinValidator;
@@ -7,6 +10,7 @@ use Vanderbilt\AdvancedImport\App\Models\Validator\MaxValidator;
 use Vanderbilt\AdvancedImport\App\Models\Validator\DateTimeValidator;
 use Vanderbilt\AdvancedImport\App\Models\Validator\EmailValidator;
 use Vanderbilt\AdvancedImport\App\Models\Validator\IntegerValidator;
+use Vanderbilt\AdvancedImport\App\Models\Validator\MultipleChoiceValidator;
 use Vanderbilt\AdvancedImport\App\Models\Validator\NumberValidator;
 use Vanderbilt\AdvancedImport\App\Models\Validator\PhoneValidator;
 use Vanderbilt\AdvancedImport\App\Models\Validator\ZipCodeValidator;
@@ -50,9 +54,11 @@ class ValidatorsFactory
     {
         $validators = [];
         $field_metadata = $this->getFieldMetadata($this->project_id, $field_name);
-        // check if required
         $required = boolval($field_metadata['field_req']);
-
+        $validation_type = $field_metadata['element_validation_type'];
+        $element_type = $field_metadata['element_type'];
+        
+        // check if required
         if($required) $validators[] = new RequiredValidator();
 
         // check min and max
@@ -61,32 +67,71 @@ class ValidatorsFactory
         $max = is_numeric($field_metadata['element_validation_max']) ? $field_metadata['element_validation_max'] : false;
         if($max) $validators[] = new MaxValidator($max);
 
-        // check validation type
-        $validation_type = $field_metadata['element_validation_type'];
-        if(array_key_exists($validation_type, DateTimeValidator::FORMATS)) {
-            $validators[] = new DateTimeValidator($validation_type);
-        }else {
+        $checkValidationType = function($validation_type, $validators) {
+            if(array_key_exists($validation_type, DateTimeValidator::FORMATS)) {
+                $validators[] = new DateTimeValidator($validation_type);
+            }else {
 
-            switch ($validation_type) {
-                case 'email':
-                    $validators[] = new EmailValidator();
-                break;
-                case 'integer':
-                    $validators[] = new IntegerValidator();
-                break;
-                case 'number':
-                    $validators[] = new NumberValidator();
-                break;
-                case 'phone':
-                    $validators[] = new PhoneValidator();
-                break;
-                case 'zipcode':
-                    $validators[] = new ZipCodeValidator();
-                break;
-                default:
-                break;
+                switch ($validation_type) {
+                    case 'email':
+                        $validators[] = new EmailValidator();
+                    break;
+                    case 'integer':
+                        $validators[] = new IntegerValidator();
+                    break;
+                    case 'number':
+                        $validators[] = new NumberValidator();
+                    break;
+                    case 'phone':
+                        $validators[] = new PhoneValidator();
+                    break;
+                    case 'zipcode':
+                        $validators[] = new ZipCodeValidator();
+                    break;
+                    default:
+                    break;
+                }
             }
-        }
+            return $validators;
+        };
+
+        $checkElementType = function($element_type, $validators) {
+            switch ($element_type) {
+                case 'yesno': // Yes - No
+                case 'truefalse': // True - False
+                    $validators[] = new BooleanValidator();
+                    # code...
+                    break;
+                case 'checkbox': // grid="0" // Checkboxes (Multiple Answers)
+                    $validators[] = new CheckBoxValidator();
+                    break;
+                case 'radio': // grid="0" // Multiple Choice - Radio Buttons (Single Answer)
+                case 'select': // Multiple Choice - Drop-down List (Single Answer)
+                    $validators[] = new MultipleChoiceValidator();
+                    break;
+                case 'text': // Text Box (Short Text, Number, Date/Time, ...)
+                case 'textarea': // Notes Box (Paragraph Text)
+                case 'calc': // Calculated Field
+                case 'file': // sign="1" // Signature (draw signature with mouse or finger)
+                case 'file': // sign="0" // File Upload (for users to upload files)
+                case 'slider': // Slider / Visual Analog Scale
+                case 'descriptive': // Descriptive Text (with optional Image/Video/Audio/File Attachment)
+                case 'section_header': // Begin New Section (with optional text)
+                case 'sql': // Dynamic Query (SQL)
+                default:
+                    # code...
+                    break;
+            }
+            return $validators;
+        };
+
+
+        // check validation type
+        $validators = $checkValidationType($validation_type, $validators);
+        $validators = $checkElementType($element_type, $validators);
+        
+
+        
         return $validators;
     }
 

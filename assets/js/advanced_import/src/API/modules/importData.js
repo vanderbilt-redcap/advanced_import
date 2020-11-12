@@ -9,7 +9,7 @@ export default {
          * @param {File} file 
          * @param {object} settings 
          */
-        parse(text, settings) {
+        parse(context, text, settings) {
             const form_data = new FormData()
             form_data.append('text', text)
             form_data.append('settings', JSON.stringify (settings))
@@ -17,7 +17,7 @@ export default {
             var params = {
                 route: `parse`,
             }
-            return this.api_client.post('',form_data, {
+            return context.api_client.post('',form_data, {
                 params,
             })
         },
@@ -29,7 +29,7 @@ export default {
          * @param {File} file 
          * @param {object} settings 
          */
-        sendCSV(file, settings) {
+        sendCSV(context, file, settings) {
             const form_data = new FormData()
             form_data.append('file', file)
             form_data.append('settings', JSON.stringify (settings))
@@ -37,7 +37,7 @@ export default {
             var params = {
                 route: `import`,
             }
-            return this.api_client.post('',form_data, {
+            return context.api_client.post('',form_data, {
                 params,
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -52,7 +52,7 @@ export default {
          * @param {File} file 
          * @param {object} settings 
          */
-        processCSV(file_name, settings) {
+        processCSV(context, file_name, settings) {
             const form_data = new FormData()
             form_data.append('file_name', file_name)
             form_data.append('settings', JSON.stringify (settings))
@@ -60,7 +60,7 @@ export default {
             var params = {
                 route: `process`,
             }
-            return this.api_client.post('',form_data, {
+            return context.api_client.post('',form_data, {
                 params,
                 headers: {
                     'Content-Type': 'multipart/form-data',

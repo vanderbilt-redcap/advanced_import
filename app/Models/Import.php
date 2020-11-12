@@ -1,10 +1,13 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
+use Opis\Closure\SerializableClosure;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
 use Vanderbilt\AdvancedImport\App\Models\Importers\ImporterFactory;
 use Vanderbilt\AdvancedImport\App\Traits\CanReadCSV;
 use Vanderbilt\AdvancedImport\App\Traits\SubjectTrait;
+use Vanderbilt\REDCap\Classes\Queue\Queue;
+use Vanderbilt\REDCap\Classes\Queue\Worker;
 
 class Import extends BaseModel
 {
@@ -36,7 +39,71 @@ class Import extends BaseModel
         return $results;
     }
 
-    function processCSV($project_id, $file_path, $settings)
+    private function addMessage($key, $data = array()) {
+        $status = Queue::STATUS_READY;
+        if(!$data instanceof SerializableClosure) exit;
+        $serialized_data = serialize($data);
+        $now = date('Y-m-d H:i:s');
+        $query_string = sprintf(
+            "INSERT INTO `%s` (`key`, `status`, `data`, `created_at`, `updated_at`)
+            VALUES ('%s', '%s', '%s', '%s', '%s')",
+            Queue::TABLE_NAME,
+            $key,
+            $status,
+            db_real_escape_string($serialized_data),
+            $now,
+            $now
+        );
+        $result = db_query($query_string);
+        if($result && $id=db_insert_id()) {
+            \Logging::logEvent( $sql=$query_string, Queue::LOG_OOBJECT_TYPE, "MANAGE", "", "", "Message added to the queue.");
+            return true;
+        }else {
+            \Logging::logEvent( $sql=$query_string, Queue::LOG_OOBJECT_TYPE, "MANAGE", "", "", "Error adding message to the queue.");
+            throw new \Exception("Error adding message to queue", 1);
+        }
+    }
+
+    function backgroundProcessCSV($project_id, $file_path, $settings)
+    {
+        $addMessage = function($pid, $file_path, $settings, $row_index) {
+            SerializableClosure::enterContext();
+
+			$key="CSV Import - pid {$pid} - line {$row_index}"; // can use any name for the closure
+			$function = function() use($pid, $file_path, $settings) {
+                require('/var/www/html/modules/advanced_import_v1.0.0/vendor/autoload.php');
+                global $project_id;
+                $project_id = $pid;
+                $import = new Import();
+				$import->processCSV($project_id, $file_path, $settings);
+            };
+            $closure = SerializableClosure::from($function);
+            
+            SerializableClosure::exitContext();
+            $this->addMessage($key, $closure);
+
+        };
+
+        // if(empty($file_path)) throw new \Exception("No file path", 1);
+        $row_index = $settings->data_row_start ?: 1;
+        $max_lines = $settings->max_lines ?: 100;
+        
+        $counter=0;
+        $file = $this->openFile($file_path);
+        while($file->valid()) {
+            $counter++;
+            $addMessage($project_id, $file_path, $settings, $row_index);
+            $row_index += $max_lines;
+            $settings->row_index = $row_index;
+            $file->seek($row_index);
+        };
+        // $worker = new Worker(500,100);
+        // $worker->process();
+        return ['queued_messages'=>$counter];
+    }
+
+
+    public function processCSV($project_id, $file_path, $settings)
     {
         $settings = new ImportSettings($settings);
         $importer = ImporterFactory::create($project_id, $settings);

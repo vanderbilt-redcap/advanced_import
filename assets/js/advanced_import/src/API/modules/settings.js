@@ -1,10 +1,10 @@
 export default {
     actions: {        
-        get() {
+        get(context) {
             var params = {
                 route: `settings`,
             }
-            return this.api_client.get('',{params})
+            return context.api_client.get('',{params})
         },
     }
 }

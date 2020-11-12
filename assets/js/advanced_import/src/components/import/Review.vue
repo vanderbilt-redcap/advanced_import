@@ -19,11 +19,18 @@
         <div class="buttons d-flex flex-row justify-content-between" >
             <slot name="left" ></slot>
             <slot>
-                <button class="btn btn-primary" @click="importCSV" :disabled="processing">
-                   <font-awesome-icon v-if="processing" icon="spinner" spin/>
-                   <font-awesome-icon v-else icon="file-import" />
-                   <span> import</span>
-                </button>
+                <section>
+                    <!-- <button class="btn btn-primary" @click="importCSVBackground" :disabled="processing">
+                        <font-awesome-icon v-if="processing" icon="spinner" spin/>
+                        <font-awesome-icon v-else icon="file-import" />
+                        <span> background import</span>
+                    </button> -->
+                    <button class="btn btn-primary ml-2" @click="importCSV" :disabled="processing">
+                        <font-awesome-icon v-if="processing" icon="spinner" spin/>
+                        <font-awesome-icon v-else icon="file-import" />
+                        <span> import</span>
+                    </button>
+                </section>
             </slot>
             <slot name="right" :validation="$v" ></slot>
         </div>
@@ -39,8 +46,8 @@
             no-close-on-backdrop
             hide-header-close
             ok-title='cancel'
+            @ok="onProcessStopped"
         >
-            <p class="my-4">The import process will start after the file upload</p>
             <FileUploader ref="uploader" :files="files"/>
         </b-modal>
 
@@ -50,13 +57,21 @@
             no-close-on-backdrop
             hide-header-close
             ok-title='cancel'
+            @ok="onProcessStopped"
             size="xl"
         >
-            <p class="my-4">Processing the file</p>
-            <FileProcesser ref="processer" />
+            <FileProcesser ref="processer" :background_process="background_process" />
             <LogsTable ref="logs"/>
         </b-modal>
-          <b-button v-b-modal.modal-process>Launch demo modal</b-button>
+
+        <b-modal ref="modal-abort" id="modal-abort" title="Process stopped"
+            ok-only
+            @ok="onProcessStopped"
+        >
+            <p class="my-4">The process has been stopped by the user</p>
+        </b-modal>
+        
+        <!-- <b-button v-b-modal.modal-process>Launch demo modal</b-button> -->
 
 
   </div>
@@ -73,6 +88,7 @@ export default {
     data() {
         return {
             processing: false,
+            background_process: false,
         }
     },
     computed: {
@@ -136,6 +152,10 @@ export default {
             uploader.$on('completed', () => {
                 this.closeModal('modal-upload')
             })
+            uploader.$on('error', ({message, file, error})=> {
+                alert(123)
+                console.log({message, file, error})
+            })
             return uploader.upload()
         },
         updateLogs() {
@@ -145,6 +165,11 @@ export default {
         },
         async showCompleted() {
             await this.showModal('modal-success')
+        },
+        importCSVBackground() {
+            //set the background flag to true. will be reset after importCSV is complete
+            this.background_process = true
+            this.importCSV()
         },
         /**
          * process the reomte file
@@ -165,6 +190,9 @@ export default {
                 this.closeModal('modal-process')
             }
         },
+        async onProcessStopped() {
+            await this.showModal('modal-abort')
+        },
         /**
          * start the process:
          * - upload the file
@@ -180,6 +208,7 @@ export default {
                 console.log(error)
             }finally {
                 this.processing = false
+                this.background_process = false
             }
         },
         onCloseModal() {

@@ -1,16 +1,17 @@
 <template>
     <div>
-        <div v-if="processing">
+        <div v-if="processing && !background_process">
             <b-progress  :max="max" show-progress animated variant="success" height="2rem">
                 <b-progress-bar :value="progress" :label="`${(progress*100).toFixed(2)}%`"></b-progress-bar>
             </b-progress>
             <!-- <button class="btn btn-danger" @click="onPause">Pause</button> -->
-            <div class="text-muted small">
+            <div class="text-muted small my-2">
                 <span v-if="total_lines && total_lines>0">Processed {{current_line}}/{{total_lines}}</span>
                 <non-blank-space />
             </div>
         </div>
         <section class="debug" v-if="false">
+            {{background_process}}
             {{progress}}
             {{processing}}
         </section>
@@ -37,6 +38,12 @@ export default {
             total_lines: state => state.csv_data.total_lines,
         }),
     },
+    props: {
+        background_process: {
+            type: Boolean,
+            default: false
+        }
+    },
     destroyed() {
         this.reset()
     },
@@ -53,18 +60,23 @@ export default {
 
                 const next = async (line) => {
                     const settings = {...this.settings}
+                    settings.background_process = this.background_process //set the background process flag
                     settings.data_row_start = line
                     const promise = this.$API.dispatch('importData/processCSV',file_name, settings)
                     this.cancel = promise.cancel
                     const response = await promise
                     const {data} = response
                     if(data) {
+                        // exit if background process started
+                        if(this.background_process) return true;
+
                         const {line=1} = data
                         let progress = this.updateProgress({line})
                         this.$emit('progress', {progress})
                         return next(line)
                     }
                 }
+                // await new Promise(resolve=>setTimeout(resolve, 10000))
                 await next(line)
                 this.$emit('completed')
             } catch (error) {

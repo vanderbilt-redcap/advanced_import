@@ -14,12 +14,12 @@
             <tbody>
                 <tr v-for="(field, index) in form_fields" :key="index">
                     <td>
-                        <section v-if="field.field_name===primary_key" class="d-block small" title="primary key">
-                            <font-awesome-icon class="icon text-warning" :icon="['fas', 'star']" />
-                            <span class="text-muted font-italic">Primary key</span>
-                        </section>
-                        <span class="d-block">
-                            {{field.element_label}}
+                        <span class="d-flex flex-row align-items-center">
+                            <span>{{field.element_label}}</span>
+                            <font-awesome-icon v-if="field.field_name===primary_key"
+                            title="primary key"
+                            class="icon text-warning ml-1"
+                            :icon="['fas', 'star']" />
                         </span>
                         <span class="small">({{field.field_name}})</span>
                     </td>
@@ -43,7 +43,10 @@
                         </div>
                     </td>
                     <td>
-                        <b-form-checkbox v-model="dynamic_keys" :disabled="!field.field_name || isNaN(mapping[field.field_name])" :value="field.field_name" switch>
+                        <b-form-checkbox v-if="field.field_name!==primary_key"
+                            v-model="dynamic_keys"
+                            :disabled="!field.field_name || isNaN(mapping[field.field_name])"
+                            :value="field.field_name" switch>
                         </b-form-checkbox>
                         <!-- <input type="checkbox" name="" id="" v-model="dynamic_keys" :disabled="!field.field_name || !mapping[field.field_name]" :value="field.field_name"> -->
                     </td>

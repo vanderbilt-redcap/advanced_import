@@ -26,7 +26,7 @@ import FileReaderAsync from '@/libs/FileReaderAsync'
 import {formatBytes} from '@/libs/Utility'
 
 const MIN_CHUNK_SIZE = 1000 * 1024
-const MAX_CHUNK_SIZE = 1000 * 1024 * 10
+const MAX_CHUNK_SIZE = 1000 * 1024 * 5
 const TOTAL_CHUNKS = 20
 
 export default {
@@ -110,8 +110,9 @@ export default {
                 const {response={}} = error
                 const {data={}} = response
                 const {message=''} = data
+                // console.log(message, file, error)
+                this.$emit('error', {message, file, error}) // notify error
                 this.reset()
-                return this.$emit('error', message, {file, error}) // notify error
             }
 
         },
@@ -174,6 +175,7 @@ export default {
         },
         reset() {
             setTimeout(()=>{
+                this.cancel = null
                 this.start = 0
                 this.end = 0
                 this.processing = false

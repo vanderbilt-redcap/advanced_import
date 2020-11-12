@@ -35,9 +35,14 @@ class ImportController extends BaseController
             $file_name = @$_POST['file_name'];
             $upload_dir = APP_PATH_TEMP.'uploads';
             $file_path = "{$upload_dir}/{$file_name}";
-            $settings = json_decode($_POST['settings']);
+            $settings = json_decode($_POST['settings'], $assoc=true);
+            $background_process = @$settings['background_process'];
             $model = new Import();
-            $results = $model->processCSV($project_id, $file_path, $settings);
+            if($background_process) {
+                $results = $model->backgroundProcessCSV($project_id, $file_path, $settings);
+            }else {
+                $results = $model->processCSV($project_id, $file_path, $settings);
+            }
             
             return $this->printJSON($results);
         } catch (\Exception $e) {
