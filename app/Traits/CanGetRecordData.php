@@ -6,6 +6,17 @@ use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
 
 trait CanGetRecordData
 {
+    /**
+     * ASCII code 30: delimiter character for "End of Record"
+     *
+     * @return void
+     */
+    static function  getRecordSeparator() { return chr(30); }
+    /**
+     * ASCII code 31: delimiter character for "End of Field"
+     */
+    static function  getUnitSeparator() { return chr(31); }
+
 	/**
      * find a record ID using a primary or secondary unique key
      *
@@ -52,8 +63,10 @@ trait CanGetRecordData
         $filter_query = implode("\nOR ", $queries); */
         if(empty($data)) return false;
 
+        $record_separator = static::getRecordSeparator();
+        $unit_separator = static::getUnitSeparator();
 
-        $getConcat = function($data, $unit_separator=':', $record_separator=',') {
+        $getConcat = function($data) use($unit_separator, $record_separator) {
             // 'vitals_label',':',COALESCE(vitals_label, ''), ';',
             $concats = array_map(function($key) use($unit_separator){
                 return sprintf("'%s','%s',COALESCE(`%s`, '')", $key, $unit_separator, $key);
@@ -61,19 +74,20 @@ trait CanGetRecordData
             return implode(", '$record_separator',\n", $concats);
         };
 
-        $createDataSignature = function($data, $unit_separator=':', $record_separator=',') {
+        $createDataSignature = function($data) use($unit_separator, $record_separator) {
             /**
              * if the value is an array then is probably a checkbox
              * since checkboxes are stored as arrays.
              * keep the values == 1 and join their keys using a comma
              */
-            $transformIfCheckBoxValue = function($value) {
+            $transformIfCheckBoxValue = function($value) use($unit_separator){
                 if(is_array($value)) {
                     // deal with checkbox: use keys with value=1
                     $filtered = array_filter($value, function($item) {
                         return intval($item)==1;
                     });
-                    $value = implode(',', array_keys($filtered));
+                     // the separator here must match the one used in GROUP_CONCAT below
+                    $value = implode($unit_separator, array_keys($filtered));
                 }
                 return $value;
             };
@@ -83,6 +97,7 @@ trait CanGetRecordData
                 $value = $value ?: ''; // default to blank string
                 return sprintf("%s%s%s", $key, $unit_separator, $value );
             };
+            
             ksort($data); //sort keys alphabetically
             $key_values_strings = array_map($keyValuesToString, $data, array_keys($data));
             $data_string = implode($record_separator, $key_values_strings);
@@ -90,21 +105,20 @@ trait CanGetRecordData
             return md5($data_string);
         };
 
-        $getPivotRotation = function($data) {
-            // MAX(CASE WHEN field_name = 'vitals_label' THEN value ELSE NULL END) AS vitals_label,
-            $cases = array_map(function($field) {
-                return sprintf("GROUP_CONCAT(CASE WHEN `field_name` = '%s' THEN value ELSE NULL END ORDER BY `value` ASC SEPARATOR ',') AS `%s`", $field, $field);
-            }, array_keys($data));
+        $getPivotRotation = function($data) use($unit_separator) {
+            // GROUP_CONCAT(CASE WHEN field_name = 'vitals_label' THEN value ELSE NULL END) AS vitals_label,
+            $cases = [];
+            foreach ($data as $key => $value) {
+                $cases[] = sprintf("GROUP_CONCAT(CASE WHEN `field_name` = '%s' THEN value ELSE NULL END ORDER BY `value` ASC SEPARATOR '%s') AS `%s`", $key, $unit_separator, $key);
+            }
             return implode(", \n", $cases);
         };
 
-        $record_separator = chr(30); //  ASCII code 30: invisible character used to separate values
-        $unit_separator = chr(31); //  ASCII code 31: delimiting character
         ksort($data); //sort keys alphabetically
-
-        $concat = $getConcat($data, $unit_separator, $record_separator);
+        
+        $concat = $getConcat($data);
         $pivot_rotation = $getPivotRotation($data);
-        $data_signature = $createDataSignature($data, $unit_separator, $record_separator);
+        $data_signature = $createDataSignature($data);
         $fields_list = DatabaseQueryHelper::getQueryList(array_keys($data));
 
         // pivot rotation query
