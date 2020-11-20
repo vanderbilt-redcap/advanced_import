@@ -1,6 +1,8 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
+use Closure;
 use Opis\Closure\SerializableClosure;
+use stdClass;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
 use Vanderbilt\AdvancedImport\App\Models\Importers\ImporterFactory;
@@ -9,6 +11,19 @@ use Vanderbilt\AdvancedImport\App\Traits\SubjectTrait;
 use Vanderbilt\REDCap\Classes\Queue\Queue;
 use Vanderbilt\REDCap\Classes\Queue\Worker;
 
+
+class Test
+{
+    function __construct($closure)
+    {
+        $closure();
+    }
+    function __wakeup()
+    {
+        require('/var/www/html/modules/advanced_import_v1.0.0/vendor/autoload.php');
+
+    }
+}
 class Import extends BaseModel
 {
     use CanReadCSV;
@@ -41,7 +56,7 @@ class Import extends BaseModel
 
     private function addMessage($key, $data = array()) {
         $status = Queue::STATUS_READY;
-        if(!$data instanceof SerializableClosure) exit;
+        // if(!$data instanceof SerializableClosure) exit;
         $serialized_data = serialize($data);
         $now = date('Y-m-d H:i:s');
         $query_string = sprintf(
@@ -67,19 +82,25 @@ class Import extends BaseModel
     function backgroundProcessCSV($project_id, $file_path, $settings)
     {
         $addMessage = function($pid, $file_path, $settings, $row_index) {
-            SerializableClosure::enterContext();
+            // SerializableClosure::enterContext();
 
 			$key="CSV Import - pid {$pid} - line {$row_index}"; // can use any name for the closure
-			$function = function() use($pid, $file_path, $settings) {
+			$function = function() {
                 require('/var/www/html/modules/advanced_import_v1.0.0/vendor/autoload.php');
                 global $project_id;
                 $project_id = $pid;
-                $import = new Import();
-				$import->processCSV($project_id, $file_path, $settings);
+                echo $project_id;
+                // $import = new Import();
+				// $import->processCSV($project_id, $file_path, $settings);
             };
-            $closure = SerializableClosure::from($function);
-            
-            SerializableClosure::exitContext();
+            $module = AdvancedImport::getInstance();
+            $queue = new Queue;
+            $unbound_function = Closure::bind($function, $queue);
+            $object = new Test($unbound_function);
+            $closure = SerializableClosure::from($unbound_function);
+            $test = serialize($closure);
+            $test1 = unserialize($test);
+            // SerializableClosure::exitContext();
             $this->addMessage($key, $closure);
 
         };

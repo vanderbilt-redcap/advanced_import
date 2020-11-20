@@ -1,4 +1,7 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Functional;
+/**
+ * @see https://github.com/lstrojny/functional-php
+ */
 
 /**
  * partial application of arguments to a function

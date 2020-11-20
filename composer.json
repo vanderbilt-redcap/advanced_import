@@ -12,8 +12,7 @@
     ],
     "require": {
         "guzzlehttp/guzzle": "^6.5",
-        "nikic/fast-route": "^1.3",
-        "lstrojny/functional-php": "^1.14"
+        "nikic/fast-route": "^1.3"
     },
     "require-dev": {},
     "autoload": {
