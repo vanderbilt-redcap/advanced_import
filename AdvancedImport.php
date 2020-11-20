@@ -4,11 +4,10 @@ namespace Vanderbilt\AdvancedImport;
 $autoload = join([__DIR__,'vendor','autoload.php'],DIRECTORY_SEPARATOR);
 if(file_exists($autoload)) require_once($autoload);
 
-use SplObserver;
 use ExternalModules\AbstractExternalModule;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
 
-class AdvancedImport extends AbstractExternalModule implements Mediator, SplObserver
+class AdvancedImport extends AbstractExternalModule implements Mediator
 {
     private static $instance;
 
