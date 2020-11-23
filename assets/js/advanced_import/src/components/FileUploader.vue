@@ -73,7 +73,6 @@ export default {
             let file_size = this.file_size || 0
             let formatted_uploaded_bytes =  formatBytes(uploaded_bytes)
             let formatted_file_size =  formatBytes(file_size)
-            console.log(formatted_uploaded_bytes,formatted_file_size)
             return `${formatted_uploaded_bytes}/${formatted_file_size}`
         }
     },

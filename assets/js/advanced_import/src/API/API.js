@@ -11,8 +11,7 @@ export default class API {
     module_prefix = 'advanced_import'
     cancel = null
 
-    constructor({modules}) {
-        this.baseURL = `/api/`
+    constructor({modules}) {        
         /* const redcap_params = this.getRedCapQueryParams()
         
         this.api_client = axios.create({
@@ -32,6 +31,13 @@ export default class API {
         
         this.loadModules(modules)
     }
+
+    get baseURL() {
+        const app_path_webroot = window.app_path_webroot || '/'
+        let baseURL = `${app_path_webroot}/api/`
+        baseURL = baseURL.replace(/\/\//i, '/')
+        return baseURL
+    } 
 
     createClient(cancelToken) {
         const redcap_params = this.getRedCapQueryParams()
@@ -88,9 +94,12 @@ export default class API {
             api_client: this.createClient(cancelToken),
         }
 
-        let promise = this.actions[name][action](context, ...params)
-        promise.cancel = cancel // pass the cancel along with the promise
-        return promise
+        let result = this.actions[name][action](context, ...params)
+        if(typeof result === 'object') {
+            // check if the result if an object (a promise)
+            result.cancel = cancel // pass the cancel along with the promise
+        }
+        return result
     }
 
     /**
