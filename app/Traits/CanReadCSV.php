@@ -14,9 +14,9 @@ trait CanReadCSV {
 	 * @return string
 	 */
 	public function guessDelimiter($line)
-    {
-        $record_separator = chr(30); //  ASCII code 30: invisible character used to separate values
-        $unit_separator = chr(31); //  ASCII code 31: delimiting character
+	{
+		$record_separator = chr(30); //  ASCII code 30: invisible character used to separate values
+		$unit_separator = chr(31); //  ASCII code 31: delimiting character
 		$delimiters = array(",", "\t", "|", ";", "^", $record_separator, $unit_separator);
 		$pattern = sprintf('/[%s]/', implode('', $delimiters));
 		preg_match($pattern, $line, $matches);
@@ -26,18 +26,18 @@ trait CanReadCSV {
 		return $default_delimiter;
 	}
 
-    /**
-     * parse a file and get the csv data as array of lines
-     *
-     * @param string $file_path
+	/**
+	 * parse a file and get the csv data as array of lines
+	 *
+	 * @param string $file_path
 	 * @param string $delimiter the delimiter character or 'auto' to guess the delimiter from the first line of the file
 	 * @param string $enclosure
 	 * @param string $escape_char
-     * @param integer $length Reading ends when length - 1 bytes have been read
-     * @return array interpreted line of text
-     */
-    public function readCSVLine($line, $delimiter='auto', $enclosure='"', $escape_char="\\")
-    {
+	 * @param integer $length Reading ends when length - 1 bytes have been read
+	 * @return array interpreted line of text
+	*/
+	public function readCSVLine($line, $delimiter='auto', $enclosure='"', $escape_char="\\")
+  {
 		if(empty($delimiter) || $delimiter=='auto') {
 			$delimiter = $this->guessDelimiter($line);
 		}
