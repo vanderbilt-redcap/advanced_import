@@ -5,6 +5,7 @@ const CancelToken = axios.CancelToken;
 
 // import {API_BASE_URL} from '@/config'
 
+const default_timeout = 60*1000*10 // 10 minutes
 export default class API {
     route = '' // route name for the CDP Mapping API
     actions = {} // api actions
@@ -44,7 +45,7 @@ export default class API {
         
         return axios.create({
             baseURL: this.baseURL,
-            timeout: 60*1000,
+            timeout: default_timeout,
             headers: {common: {'X-Requested-With': 'XMLHttpRequest'}}, // set header for REDCap ajax
             paramsSerializer: (params) => {
                 params = Object.assign({}, redcap_params, params)

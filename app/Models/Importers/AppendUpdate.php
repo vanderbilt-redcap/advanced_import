@@ -12,15 +12,15 @@ use function Vanderbilt\AdvancedImport\App\Functional\partial;
  */
 class AppendUpdate extends AbstractImporter
 {
-    /**
-     * Undocumented function
-     *
-     * @param array $data
-     * @param ImportSettings $settings
-     * @return void
-     */
-    function process($csv_data, $line)
-    {
+	/**
+	 * Undocumented function
+	 *
+	 * @param array $data_to_process
+	 * @param integer $line
+	 * @return void
+	 */
+	function process($data_to_process, $line)
+	{
 		$project_id = $this->project_id;
 		$this->line = $line;
 
@@ -33,30 +33,30 @@ class AppendUpdate extends AbstractImporter
 		$primary_key_name = $settings->primary_key;
 
 		// create callables to process data
-        $filterMappedColumns = partial([$this, 'filterMappedColumns'], $mapping); // filter data from CSV which is not mapped
-        $assignColumnNames = partial([$this, 'assignColumnNames'], $mapping); // map the csv file using the columns names from the mapping
-        $parse = partial([$this, 'applyParsers'], $project_id, $parsing_settings); // get parse function
+		$filterMappedColumns = partial([$this, 'filterMappedColumns'], $mapping); // filter data from CSV which is not mapped
+		$assignColumnNames = partial([$this, 'assignColumnNames'], $mapping); // map the csv file using the columns names from the mapping
+		$parse = partial([$this, 'applyParsers'], $project_id, $parsing_settings); // get parse function
 		$validate = partial([$this, 'applyValidations'], $project_id); // get validate function
 		/**
-		 * perform operations on the csv_data: parsing, validation, mapping
+		 * perform operations on the data_to_process: parsing, validation, mapping
 		 */
-		$processCsvData = function($csv_data) use($filterMappedColumns, $assignColumnNames, $parse, $validate) {
-			$boxed_data = ArrayBox::from($csv_data)
-							->filter($filterMappedColumns)
-							->mapKeys($assignColumnNames)
-							->map($parse); // transform dates, numbers...
+		$processData = function($data_to_process) use($filterMappedColumns, $assignColumnNames, $parse, $validate) {
+			$boxed_data = ArrayBox::from($data_to_process);
+							$boxed_data = $boxed_data->filter($filterMappedColumns);
+							$boxed_data = $boxed_data->mapKeys($assignColumnNames);
+							$boxed_data = $boxed_data->map($parse); // transform dates, numbers...
 							//->map($validate); // validate (let REDCap do the validation on save)
 			return $boxed_data();
 		};
 
 		try {
-			$data = $processCsvData($csv_data);
+			$data = $processData($data_to_process);
 			// check primary key
 			$primary_key_value = @$data[$primary_key_name];
 			if(!$primary_key_value) throw new \Exception("No primary key found.", 400);
 		}catch (\Exception $e) {
 			$message = "Error processing CSV data:\n".$e->getMessage();
-			$this->log($message, compact('project_id','line'));
+			// $this->log($message, compact('project_id','line'));
 			return Response::ERROR;
 		}
 
@@ -72,7 +72,7 @@ class AppendUpdate extends AbstractImporter
 			$ids_string = implode(',', $saved_ids);
 			$saved_fields_count = $save_response['item_count'] ?: 0;
 			$message = "Data saved: record #{$record_id}, instance #{$instance_number} (total fields saved: {$saved_fields_count})";
-			$this->log($message, compact('project_id','record_id', 'instance_number', 'save_response', 'line'));
+			// $this->log($message, compact('project_id','record_id', 'instance_number', 'save_response', 'line'));
 			return Response::SUCCESS;
 		}else {
 			$errors = @$save_response['errors'];
@@ -99,7 +99,7 @@ class AppendUpdate extends AbstractImporter
 		$primary_key_name = $settings->primary_key;
 		$primary_key_value = @$data[$primary_key_name];
 		if(!$primary_key_value) {
-			$this->log("No primary key found using key '{$primary_key_name}'.", compact('line'));
+			// $this->log("No primary key found using key '{$primary_key_name}'.", compact('line'));
 			return;
 		}
 
@@ -123,13 +123,13 @@ class AppendUpdate extends AbstractImporter
 		$getInstamceNumber = function($record_id) use ($record_helper, $project_id, $event_id, $form_name, $all_data, $static_data) {
 			// check for perfect match
 			if($matching_instance = $record_helper->findInstance($project_id, $event_id, $record_id, $all_data)) {
-				$this->log("Matching data in record {$record_id}, instance {$matching_instance} has been found; skipping entry", compact('line','record_id'));
+				// $this->log("Matching data in record {$record_id}, instance {$matching_instance} has been found; skipping entry", compact('line','record_id'));
 				return false;
 			}
 
 			$is_repeating = $record_helper->isRepeatingForm($project_id, $event_id, $form_name);
 			if(!$is_repeating) {
-				$this->log("The form '{$form_name}' is not repeatable. Record {$record_id}, instance 1 will be updated.", compact('line','record_id'));
+				// $this->log("The form '{$form_name}' is not repeatable. Record {$record_id}, instance 1 will be updated.", compact('line','record_id'));
 				return 1;
 			}
 
@@ -137,12 +137,12 @@ class AppendUpdate extends AbstractImporter
 			$existing_instance_number = $record_helper->findInstance($project_id, $event_id, $record_id, $static_data);
 			if($existing_instance_number) {
 				// overwrite
-				$this->log("Existing instance in record {$record_id}, number {$existing_instance_number} will be updated.", compact('line','record_id'));
+				// $this->log("Existing instance in record {$record_id}, number {$existing_instance_number} will be updated.", compact('line','record_id'));
 				return $existing_instance_number;
 			}else {
 				// create new instance
 				$instance_number = $record_helper->getAutoInstanceNumber($project_id, $event_id, $record_id, $form_name); // auto instance if no instance provided
-				$this->log("No similar instance found in REDCap for record {$record_id}; will insert data using instance number {$instance_number}.", compact('line','record_id','instance_number'));
+				// $this->log("No similar instance found in REDCap for record {$record_id}; will insert data using instance number {$instance_number}.", compact('line','record_id','instance_number'));
 				return $instance_number;
 			}
 		};
@@ -150,9 +150,12 @@ class AppendUpdate extends AbstractImporter
 		if($record_id) {
 			$instance_number = $getInstamceNumber($record_id);
 		}else {	
-			$record_id = $record_id ?: $record_helper->getAutoId($project_id);
+			// $primary_keys = $record_helper->getPrimaryKeys();
+			// $record_id = $record_id ?: $record_helper->getAutoId($project_id);
+			// create a new record with the provided primary key value
+			$record_id = $primary_key_value;
 			$instance_number = 1;
-			$this->log("No record found in REDCap; will insert new record #{$record_id}, instance #{$instance_number}.", compact('line','record_id','instance_number'));
+			// $this->log("No record found in REDCap; will insert new record #{$record_id}, instance #{$instance_number}.", compact('line','record_id','instance_number'));
 		}
 
 		if(!$instance_number) return; // skip entry

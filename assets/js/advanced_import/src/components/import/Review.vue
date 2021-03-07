@@ -20,11 +20,6 @@
             <slot name="left" ></slot>
             <slot>
                 <section>
-                    <!-- <button class="btn btn-primary" @click="importCSVBackground" :disabled="processing">
-                        <font-awesome-icon v-if="processing" icon="spinner" spin/>
-                        <font-awesome-icon v-else icon="file-import" />
-                        <span> background import</span>
-                    </button> -->
                     <button class="btn btn-primary ml-2" @click="importCSV" :disabled="processing">
                         <font-awesome-icon v-if="processing" icon="spinner" spin/>
                         <font-awesome-icon v-else icon="file-import" />
@@ -96,22 +91,22 @@ export default {
             files: state => state.import_settings.files,
             event_id: state => state.import_settings.event_id,
             form_name: state => state.import_settings.form_name,
-            all_settings: state => state.import_settings,
+            import_settings: state => state.import_settings,
         }),
         settings() {
             const {name:file_name=''} = this.files || {}
-            const all_settings = {...this.all_settings}
+            const import_settings = {...this.import_settings}
             const settings = {
                 'file name': file_name,
-                'event ID': all_settings.event_id,
-                'form name': all_settings.form_name,
-                'field delimiter': all_settings.field_delimiter,
-                'text qualifier': all_settings.text_qualifier,
-                'dates format': all_settings.dates_format,
-                'import mode': all_settings.import_mode,
-                'primary key': all_settings.primary_key,
-                'dynamic keys': all_settings.dynamic_keys,
-                'mapping': all_settings.mapping,
+                'event ID': import_settings.event_id,
+                'form name': import_settings.form_name,
+                'field delimiter': import_settings.field_delimiter,
+                'text qualifier': import_settings.text_qualifier,
+                'dates format': import_settings.dates_format,
+                'import mode': import_settings.import_mode,
+                'primary key': import_settings.primary_key,
+                'dynamic keys': import_settings.dynamic_keys,
+                'mapping': import_settings.mapping,
             }
             return settings
         }
@@ -165,29 +160,33 @@ export default {
         async showCompleted() {
             await this.showModal('modal-success')
         },
-        importCSVBackground() {
-            //set the background flag to true. will be reset after importCSV is complete
-            this.background_process = true
-            this.importCSV()
-        },
+
         /**
          * process the reomte file
          */
-        async process_csv(file_name) {
-            let processer
+        async enqueProcess(file_name) {
+
             try {
-                await this.showModal('modal-process')
-                processer = this.$refs.processer
-                processer.$on('progress', this.updateLogs)
-                processer.$on('completed', this.showCompleted)
-                await processer.process(file_name)
+                const settings = {...this.import_settings}
+                const response = await this.$API.dispatch('importData/enqueue',file_name, settings)
+                const {data} = response
+                const message = `Import process created (ID ${data['job_id']}). Please check your logs.`
+                this.$bvModal.msgBoxOk(message, {
+                    title: 'Success',
+                    buttonSize: 'sm',
+                })
             } catch (error) {
-                console.log(error)
-            }finally {
-                processer.$off('progress', this.updateLogs)
-                processer.$off('completed', this.showCompleted)
-                this.closeModal('modal-process')
-            }
+                let error_message = error
+                if(typeof error === 'object') {
+                    const { response: {data} } = error
+                    const {message='error'} = data
+                    error_message = `${message}`
+                }
+                this.$bvModal.msgBoxOk(error_message, {
+                    title: 'Error',
+                    buttonSize: 'sm',
+                })
+            }            
         },
         async onProcessStopped() {
             await this.showModal('modal-abort')
@@ -202,7 +201,7 @@ export default {
                 const {file_name} = await this.upload()
                 if(!file_name) return
                 // let file_name = 'Data8277.csv'
-                await this.process_csv(file_name)
+                await this.enqueProcess(file_name)
             } catch (error) {
                 console.log(error)
             }finally {

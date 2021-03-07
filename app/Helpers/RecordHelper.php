@@ -1,6 +1,7 @@
 <?php
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
+use Project;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetRecordData;
 
@@ -8,6 +9,8 @@ class RecordHelper
  {
     use CanGetProjectData;
     use CanGetRecordData;
+
+    private $project_id;
 
     public function __construct($project_id)
     {
@@ -82,6 +85,20 @@ class RecordHelper
             return intval($next_instance);
         }
         throw new \Exception("Error finding the next instance number in project {$project_id}, record {$record}", 1);    
+    }
+
+    /**
+     * get field name for primary and secondary keys in a project
+     *
+     * @return array ['primary_key', 'secondary_key']
+     */
+    function getPrimaryKeys($project_id=null)
+    {
+        $project_id = $project_id || $this->project_id;
+        $project = new Project($project_id);
+        $primary_key = $project->table_pk;
+        $secondary_key = @$project->project['secondary_pk'];
+        return compact('primary_key', 'secondary_key');
     }
 
  }

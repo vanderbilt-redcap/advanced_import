@@ -16,6 +16,15 @@
          "redcap_module_system_disable",
          "redcap_module_project_enable"
     ],
+    "crons": [
+        {
+           "cron_name": "advanced_import_cron",
+           "cron_description": "AdvancedImport cron jobs",
+           "method": "run_cron_jobs",
+           "cron_frequency": "60",
+           "cron_max_run_time": "3600"
+        }
+    ],
     "links": {
         "project": [
             {

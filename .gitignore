@@ -4,3 +4,4 @@ composer.lock
 app/config.php
 log.txt
 composer.phar
+/uploads

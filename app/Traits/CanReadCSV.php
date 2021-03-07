@@ -27,13 +27,12 @@ trait CanReadCSV {
 	}
 
 	/**
-	 * parse a file and get the csv data as array of lines
+	 * get data from a line of text
 	 *
-	 * @param string $file_path
+	 * @param string $line
 	 * @param string $delimiter the delimiter character or 'auto' to guess the delimiter from the first line of the file
 	 * @param string $enclosure
 	 * @param string $escape_char
-	 * @param integer $length Reading ends when length - 1 bytes have been read
 	 * @return array interpreted line of text
 	*/
 	public function readCSVLine($line, $delimiter='auto', $enclosure='"', $escape_char="\\")

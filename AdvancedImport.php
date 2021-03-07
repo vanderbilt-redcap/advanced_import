@@ -4,12 +4,20 @@ namespace Vanderbilt\AdvancedImport;
 $autoload = join([__DIR__,'vendor','autoload.php'],DIRECTORY_SEPARATOR);
 if(file_exists($autoload)) require_once($autoload);
 
+use DateInterval;
+use DateTime;
 use ExternalModules\AbstractExternalModule;
+use Vanderbilt\AdvancedImport\App\Helpers\Queue\Job;
+use Vanderbilt\AdvancedImport\App\Helpers\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
 
 class AdvancedImport extends AbstractExternalModule implements Mediator
 {
     private static $instance;
+
+    const TABLES_PREFIX = 'advanced_import_';
+    const MAX_CRON_EXECUTION_TIME = '10 minutes';
+    const UPLOAD_FOLDER_NAME = 'uploads';
 
 
     function __construct()
@@ -19,7 +27,18 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
 
     public static function getUploadDirectory()
     {
-        return APP_PATH_TEMP."advanced_import";
+        $upload_dir = dirname(__FILE__).DIRECTORY_SEPARATOR.self::UPLOAD_FOLDER_NAME;
+        return $upload_dir;
+    }
+
+    public static function getUploadedFilePath($filename)
+    {
+        $upload_dir = self::getUploadDirectory();
+        if(!preg_match("#/$#", $upload_dir))
+        {
+            $upload_dir .= DIRECTORY_SEPARATOR;
+        }
+        return $upload_dir.$filename;
     }
 
     /**
@@ -56,6 +75,59 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
             default:
                 # code...
                 break;
+        }
+    }
+
+    /**
+     * process valid jobs in the queue list
+     *
+     * @return void
+     */
+    public function processQueue()
+    {
+        
+        $start = new DateTime();
+        $max_execution = DateInterval::createFromDateString(self::MAX_CRON_EXECUTION_TIME);
+        $max_time = $start->add($max_execution);
+        $queue = new Queue();
+        $jobs_generator = $queue->jobsGenerator();
+        if($job = $jobs_generator->current()) {
+            do {
+                try {
+                    $now = new DateTime();
+                    $too_much = $now > $max_time;
+                    if($too_much) {
+                        $job->putBackInQueue();
+                        $keep_processing = false;
+                    }
+                    else {
+                        $job->process();
+                        $keep_processing = $job->getStatus() == Job::STATUS_PROCESSING;
+                    }
+                } catch (\Exception $e) {
+                    $job->setError($e->getMessage());
+                }
+            } while($keep_processing);
+        }
+    }
+
+    function cleanupUploads()
+    {
+        $queue = new Queue();
+        $status = [JOB::STATUS_COMPLETED];
+        $params = compact('status');
+        // $completed_jobs = $queue->getJobs($params);
+
+    }
+
+    function run_cron_jobs($cronInfo)
+    {
+        try {
+            $this->processQueue();
+            $this->cleanupUploads();
+            return "The AdvancedImport cron job completed successfully.";
+        } catch (\Exception $e) {
+            return sprintf("The AdvancedImport cron job failed. %s", $e->getMessage());
         }
     }
 
@@ -105,10 +177,29 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     function redcap_module_system_enable($version) {
         try {
-            // $this->installDependencies();
+            $this->initTables();
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
+    }
+
+    function redcap_module_system_disable($version)
+    {
+        try {
+            $this->dropTables();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function initTables()
+    {
+        Job::createTable();
+    }
+
+    public function dropTables()
+    {
+        Job::dropTable();
     }
 
     /**

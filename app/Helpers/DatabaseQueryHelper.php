@@ -33,4 +33,9 @@ namespace Vanderbilt\AdvancedImport\App\Helpers;
         }, $field_names);
         return implode(", \n", $cases);
     }
+
+    public static function implodeAndQuote($glue, $array, $quote="'")
+    {
+      return $quote.implode($quote.$glue.$quote, $array).$quote;
+    }
  }

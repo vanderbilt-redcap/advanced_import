@@ -1,12 +1,12 @@
 <template>
     <div class="overflow-auto">
     <div class="d-flex flex-row justify-content-start align-items-start">
-        <b-button variant="info" @click="getLogs" :disabled="loading">
+        <b-button size="sm" variant="info" @click="getLogs" :disabled="loading">
             <font-awesome-icon v-if="loading" icon="spinner" spin/>
             <font-awesome-icon v-else icon="sync" />
             <span> Reload</span>
         </b-button>
-        <b-button variant="danger" class="ml-2" v-b-modal.modal-delete :disabled="loading" v-if="hasLogs">
+        <b-button size="sm" variant="danger" class="ml-2" v-b-modal.modal-delete :disabled="loading" v-if="hasLogs">
             <font-awesome-icon icon="trash" />
             <span> Delete logs</span>
         </b-button>
@@ -20,16 +20,18 @@
         :total-rows="rows"
         :per-page="per_page"
         aria-controls="my-table"
+        size="sm"
         ></b-pagination>
     </div>
 
-     <div v-if="!loading && !hasLogs">
+     <!-- <div v-if="!loading && !hasLogs">
          <span>no logs</span>
-     </div>
+     </div> -->
 
     <b-table
       id="my-table"
-      :items="items"
+      class="my-2"
+      :items="items_proxy"
       _per-page="per_page"
       _current-page="current_page"
       small
@@ -42,12 +44,16 @@
         :total-rows="rows"
         :per-page="per_page"
         aria-controls="my-table"
+        size="sm"
         ></b-pagination>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+
+const empty_value = "\u001E"
+
 export default {
     data() {
         return {
@@ -62,6 +68,25 @@ export default {
         ...mapState({
             items: state => state.logs.list,
         }),
+        items_proxy() {
+            const items = [...this.items]
+            let per_page = this.per_page
+            const min_rows = 5
+            if(per_page>min_rows) per_page = min_rows
+            const remainder = per_page-(items.length%per_page)
+
+            let placeholder = {'no logs': empty_value}
+            if(items.length>0) {
+                placeholder = {}
+                let first_item = items[0]
+                for(let key of Object.keys(first_item)) {
+                    placeholder[key] = empty_value
+                }
+            }
+
+            for(let i=0; i<remainder; i++) items.push(placeholder)
+            return items
+        },
         rows() {
             const total = this.$store.getters['logs/total']
             return total || this.items.length

@@ -1,6 +1,7 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Controllers;
 
-use Vanderbilt\AdvancedImport\AdvancedImport;
+use User;
+use Vanderbilt\AdvancedImport\App\Helpers\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Import;
 
 class ImportController extends BaseController
@@ -29,23 +30,28 @@ class ImportController extends BaseController
         }
     }
 
-    function process()
+    function enqueue()
     {
         try {
             $project_id = $_GET['pid'];
+            $username = defined('USERID') ? USERID : false;
+            $user_id = User::getUIIDByUsername($username);
             $file_name = @$_POST['file_name'];
-            $upload_dir = AdvancedImport::getUploadDirectory();
-            $file_path = "{$upload_dir}/{$file_name}";
             $settings = json_decode($_POST['settings'], $assoc=true);
-            $background_process = @$settings['background_process'];
-            $model = new Import();
-            if($background_process) {
+            $job_id = Job::create($project_id, $user_id, $file_name, $settings);
+            $response = [
+                'message' => 'Job created',
+                'job_id' => $job_id
+            ];
+            // $model = new Import();
+            // $results = $model->processCSV($project_id, $file_path, $settings);
+            /* if($background_process) {
                 $results = $model->backgroundProcessCSV($project_id, $file_path, $settings);
             }else {
                 $results = $model->processCSV($project_id, $file_path, $settings);
-            }
+            } */
             
-            return $this->printJSON($results);
+            return $this->printJSON($response);
         } catch (\Exception $e) {
             $response = ['message'=>$e->getMessage()];
             return $this->printJSON($response, $code=400);
@@ -71,4 +77,5 @@ class ImportController extends BaseController
             return $this->printJSON($response, $code);
         }
     }
+
 }
