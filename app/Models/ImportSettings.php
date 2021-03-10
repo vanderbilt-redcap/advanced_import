@@ -1,5 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
+use Project;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
 
 /**
@@ -45,8 +46,20 @@ class ImportSettings
      */
     private $settings;
 
-    function __construct($settings)
+    /**
+     *
+     * @var Project
+     */
+    private $project;
+
+    /**
+     *
+     * @param array $settings
+     * @param Project $project
+     */
+    function __construct($settings, $project)
     {
+        $this->project = $project;
         $this->settings = $this->filterAllowedSettings($settings);
     }
 
@@ -61,7 +74,7 @@ class ImportSettings
     function getMappedFormFields($include_dynamic=true)
     {
         $mapping = (array)$this->mapping;
-        $form_fields = $this->getProjectFormFields($this->project_id, $this->form_name);
+        $form_fields = $this->getProjectFormFields($this->project, $this->form_name);
         $mapped_fields = array_intersect($form_fields, array_keys($mapping));
         if(!$include_dynamic) $mapped_fields = array_diff($mapped_fields, $this->dynamic_keys);
         return $mapped_fields;
@@ -76,7 +89,7 @@ class ImportSettings
      */
     function getFormData($data, $include_dynamic=false)
     {
-        $static_mapped_form_fields = $this->getMappedFormFields($include_dynamic); // get non-dynamic form fields
+        $static_mapped_form_fields = $this->getMappedFormFields($include_dynamic); // get form fields
         $unique_data = array_intersect_key((array)$data, array_flip($static_mapped_form_fields));
         return $unique_data;
     }

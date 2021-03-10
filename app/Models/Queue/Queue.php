@@ -1,5 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Helpers\Queue;
 
+use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
 
 class Queue
@@ -35,7 +36,7 @@ class Queue
 
         $query_string = sprintf(
             "SELECT * FROM %s WHERE 1 %s %s",
-            Job::tableName(),
+            self::tableName(),
             $where_clause,
             $limit_clause
         );
@@ -50,7 +51,7 @@ class Queue
 
     public function countJobs()
     {
-        $query_string = sprintf("SELECT COUNT(*) AS total FROM %s", Job::tableName());
+        $query_string = sprintf("SELECT COUNT(*) AS total FROM %s", self::tableName());
         $result = $this->module->queryLogs($query_string);
         if($row = db_fetch_object($result)){
             return $row->total;
@@ -72,7 +73,7 @@ class Queue
 
         $query_string = sprintf(
             "SELECT * FROM %s WHERE status NOT IN (%s)",
-            Job::tableName(),
+            self::tableName(),
             DatabaseQueryHelper::getQueryList($skip_status)
         );
         $result = db_query($query_string);
@@ -80,6 +81,43 @@ class Queue
             $job = new Job($row);
             yield $job;
         }
+    }
+
+    public static function tableName()
+    {
+        return  AdvancedImport::TABLES_PREFIX.'import_queue';
+    }
+
+    public static function createTable()
+    {
+        $query_string = sprintf(
+            "CREATE TABLE IF NOT EXISTS `%s`
+             (
+                `id` int(11) NOT NULL AUTO_INCREMENT,
+                PRIMARY KEY (`id`),
+                `project_id` int(11) NOT NULL,
+                `user_id` int(11) NOT NULL,
+                `filename` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'path to the uploaded CSV file',
+                `settings` blob,
+                `processed_lines` int(11) NOT NULL DEFAULT 0,
+                `error` text COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'error if any',
+                `status` ENUM('ready', 'error', 'completed', 'processing', 'paused') DEFAULT 'ready' COMMENT 'status of the job',
+                `created_at` datetime DEFAULT NULL,
+                `updated_at` datetime DEFAULT NULL,
+                `completed_at` datetime DEFAULT NULL
+            )
+            ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
+            self::tableName()
+        );
+        $result = db_query($query_string);
+        return $result;
+    }
+
+    public static function dropTable()
+    {
+        $query_string = sprintf("DROP TABLE IF EXISTS `%s`", self::tableName());
+        $result = db_query($query_string);
+        return $result;
     }
 
 

@@ -2,9 +2,8 @@
 
 trait CanGetProjectData {
 
-	function getProjectData($project_id)
+	function getProjectData($project)
     {
-        $project = new \Project($project_id);
         $repeating_forms_events = $project->getRepeatingFormsEvents(); // list of repeating forms with custom label
         $data = [
             'project_info' => $project->project,
@@ -18,9 +17,8 @@ trait CanGetProjectData {
         return (object)$data;
     }
 
-    function getPrimaryKeys($project_id)
+    function getPrimaryKeys($project)
     {
-        $project = new \Project($project_id);
         $primary_key = $project->table_pk;
         $secondary_key = $project->project['secondary_pk'];
         $primary_keys = [$primary_key];
@@ -28,9 +26,8 @@ trait CanGetProjectData {
         return $primary_keys;
     }
 
-    function getProjectMetadata($project_id)
+    function getProjectMetadata($project)
     {
-        $project = new \Project($project_id);
         return $project->metadata;
     }
 
@@ -40,34 +37,34 @@ trait CanGetProjectData {
 	 * @param object $project
 	 * @return array
 	 */
-    function getProjectFormFields($project_id, $form_name)
+    function getProjectFormFields($project, $form_name)
     {
-		$data = $this->getProjectData($project_id);
+		$data = $this->getProjectData($project);
 		$forms = $data->forms;
 		$form = $forms[$form_name];
 		return array_keys($form['fields']);
     }
 
-    function isRepeatingForm($project_id, $event_id, $form_name)
+    function isRepeatingForm($project, $event_id, $form_name)
     {
-        $data = $this->getProjectData($project_id);
+        $data = $this->getProjectData($project);
         $repeating_forms_events = $data->repeating_forms_events;
         if(!array_key_exists($event_id, $repeating_forms_events)) return false;
         if(!array_key_exists($form_name, $repeating_forms_events[$event_id])) return false;
         return true;
     }
 
-    function getFieldMetadata($project_id, $field_name)
+    function getFieldMetadata($project, $field_name)
     {
-        if(!$this->project_metadata) $this->project_metadata = $this->getProjectMetadata($project_id);
+        if(!$this->project_metadata) $this->project_metadata = $this->getProjectMetadata($project);
         if(!array_key_exists($field_name, $this->project_metadata)) throw new \Exception("Error: no metadata found for the field '{$field_name}' in the project {$this->project_id}", 1);
         $field_metadata = $this->project_metadata[$field_name];
         return $field_metadata;
     }
 
-    function getFormNameForField($project_id, $field_name)
+    function getFormNameForField($project, $field_name)
     {
-        $field_metadata = $this->getFieldMetadata($project_id, $field_name);
+        $field_metadata = $this->getFieldMetadata($project, $field_name);
         return @$field_metadata['form_name'] ?: false;
     }
 	

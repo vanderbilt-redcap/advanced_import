@@ -1,6 +1,9 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Importers;
 
+use Project;
 use Vanderbilt\AdvancedImport\AdvancedImport;
+use Vanderbilt\AdvancedImport\App\Helpers\RecordHelper;
+use Vanderbilt\AdvancedImport\App\Helpers\TemporaryTable;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 use Vanderbilt\AdvancedImport\App\Traits\CanLog;
 use Vanderbilt\AdvancedImport\App\Traits\CanProcessCsvData;
@@ -16,6 +19,11 @@ abstract class AbstractImporter implements ImporterInterface
      * @var int
      */
     protected $project_id;
+    /**
+     *
+     * @var Project
+     */
+    protected $project;
     
     /**
      *
@@ -29,13 +37,29 @@ abstract class AbstractImporter implements ImporterInterface
     protected $settings;
 
     /**
-     * @param int $project_id
-     * @param ImportSettings $settings
+     *
+     * @var TemporaryTable
      */
-    public function __construct($project_id, $settings)
+    protected $temporary_table;
+    /**
+     *
+     * @var RecordHelper
+     */
+    protected $record_helper;
+
+    /**
+     * @param Project $project_id
+     * @param ImportSettings $settings
+     * @param TemporaryTable
+     * @param RecordHelper
+     */
+    public function __construct($project, $settings, $temporary_table, $record_helper)
     {
-        $this->project_id = $project_id;
+        $this->project = $project;
+        $this->project_id = $project->project_id;
         $this->settings = $settings;
+        $this->temporary_table = $temporary_table;
+        $this->record_helper = $record_helper;
         $module = AdvancedImport::getInstance();
         $this->attach($module, '*'); // attach the module as a subscriber
     }

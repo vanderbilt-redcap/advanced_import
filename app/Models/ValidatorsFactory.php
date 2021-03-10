@@ -42,18 +42,18 @@ class ValidatorsFactory
     video_url:null
     video_display_inline:"0" */
 
-    private $project_id;
+    private $project;
     private $project_metadata;
 
-    public function __construct($project_id)
+    public function __construct($project)
     {
-        $this->project_id = $project_id;
+        $this->project = $project;
     }
 
     public function create($field_name)
     {
         $validators = [];
-        $field_metadata = $this->getFieldMetadata($this->project_id, $field_name);
+        $field_metadata = $this->getFieldMetadata($this->project, $field_name);
         $required = boolval($field_metadata['field_req']);
         $validation_type = $field_metadata['element_validation_type'];
         $element_type = $field_metadata['element_type'];

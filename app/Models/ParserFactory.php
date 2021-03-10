@@ -35,13 +35,13 @@ class ParserFactory
     video_url:null
     video_display_inline:"0" */
 
-    private $project_id;
+    private $project;
 
     private $parsing_settings;
 
-    public function __construct($project_id, $parsing_settings)
+    public function __construct($project, $parsing_settings)
     {
-        $this->project_id = $project_id;
+        $this->project = $project;
         $this->parsing_settings = $parsing_settings;
     }
 
@@ -54,7 +54,7 @@ class ParserFactory
     public function create($field_name)
     {
         $parsers = [];
-        $field_metadata = $this->getFieldMetadata($this->project_id, $field_name);
+        $field_metadata = $this->getFieldMetadata($this->project, $field_name);
 
         // check validation type
         $validation_type = $field_metadata['element_validation_type'];

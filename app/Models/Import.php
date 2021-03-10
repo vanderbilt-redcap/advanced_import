@@ -1,5 +1,8 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
+use Project;
+use Vanderbilt\AdvancedImport\App\Helpers\RecordHelper;
+use Vanderbilt\AdvancedImport\App\Helpers\TemporaryTable;
 use Vanderbilt\AdvancedImport\App\Models\Importers\ImporterFactory;
 use Vanderbilt\AdvancedImport\App\Traits\CanReadCSV;
 use Vanderbilt\AdvancedImport\App\Traits\SubjectTrait;
@@ -15,7 +18,7 @@ class Import extends BaseModel
 		parent::__construct();
     }
     
-    function importCSV($project_id, $file_path, $settings)
+    /* function importCSV($project_id, $file_path, $settings)
     {
         $settings = new ImportSettings($settings);
         $importer = ImporterFactory::create($project_id, $settings);
@@ -33,16 +36,19 @@ class Import extends BaseModel
         }
 
         return $results;
-    }
+    } */
 
     public function processCSV($project_id, $file_path, $settings)
     {
-        $settings = new ImportSettings($settings);
-        $importer = ImporterFactory::create($project_id, $settings);
-
+        $project = new Project($project_id);
+        $settings = new ImportSettings($settings, $project);
+        $temporary_table = new TemporaryTable($project, $file_path, $settings);
+        $record_helper = new RecordHelper($project, $file_path, $settings);
+        $importer = ImporterFactory::create($project, $settings, $temporary_table, $record_helper);
+        
         // if(empty($file_path)) throw new \Exception("No file path", 1);
         $row_index = $settings->data_row_start ?: 1;
-        $max_lines = $settings->max_lines ?: 100;
+        $max_lines = $settings->max_lines ?: 10;
 
         $counter = 0;
         $results = [];

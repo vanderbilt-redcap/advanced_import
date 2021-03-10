@@ -1,219 +1,268 @@
 <?php
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
+use Logging;
+use Project;
 use Vanderbilt\AdvancedImport\AdvancedImport;
+use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
+use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
+use Vanderbilt\AdvancedImport\App\Traits\CanGetRecordData;
 use Vanderbilt\AdvancedImport\App\Traits\CanReadCSV;
 
 class TemporaryTable
 {
-  use CanReadCSV;
+    use CanGetProjectData;
+    use CanGetRecordData;
+    use CanReadCSV;
 
-  private $table_name;
-  private $file_path;
+    private $project;
+    private $project_id;
+    private $settings;
+    private $file_path;
+    private $csv_to_redcap_mapping;
 
-  public function __construct($file_path=null)
-  {
-    $this->file_path = $file_path; // not realy used
-    $this->table_name = $this->getTableName($file_path); // not realy used
-  }
+    public static function unit_separator() { return chr(31); }
+    public static function record_separator() { return chr(30); }
 
-  public function createTempTable($columns, $table_name, $temporary = false, $connection=null)
-  {
-    $random_name = function() {
-      $random_string = time();
-      for ($i=0; $i < 10; $i++) {
-        $random_string .= rand(0,9);
-      }
-      return $random_string;
-    };
-
-    $getColumnsStatement = function($columns) {
-      $statements = array_map(function($column_name) {
-        return sprintf("`%s` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL", $column_name);
-      }, $columns); 
-      return implode(",\n", $statements);
-    };
-
-    $temporary_modifier = $temporary ? 'TEMPORARY' : ''; // should the table be temporary?
-
-    $query_string = sprintf(
-      "CREATE %s TABLE %s
-      (
-        %s,
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        PRIMARY KEY (`id`)
-      )
-      ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
-      ", $temporary_modifier, $table_name, $getColumnsStatement($columns)
-    );
-    $result = db_query($query_string);
-    if($error = db_error()) throw new \Exception(sprintf("Error creating temporary table `%s` - %s", $table_name, $error), 400);
-    return $result;
-  }
-
-  public function loadDataInfile($file_path, $settings)
-  {
-      global $rc_connection;
-      $connection = $rc_connection;
-
-      $tableExists = function($table_name) {
-          $result = db_query(sprintf("SELECT 1 from `%s` LIMIT 1", $table_name));
-          return $result;
-      };
-
-      $path_parts = pathinfo($file_path);
-      $filename = @$path_parts['filename'];
-      $table_name = AdvancedImport::TABLES_PREFIX.$filename;
-      if($tableExists($table_name)) {
-        $this->table_name = $table_name;
-        return $table_name; // exit if table exists
-      }
-
-      $first_line = $this->readFileAtLine($file_path, 0);
-      $column_names = $this->readCSVLine($first_line, $settings->field_delimiter, $settings->text_qualifier);
-      $created = $this->createTempTable($column_names, $table_name, $temporary=false, $connection);
-      if(!$created) return;
-      $field_delimiter = addcslashes($settings->field_delimiter, "'");
-      $text_qualifier = addcslashes($settings->text_qualifier, "'");
-      $query_string = sprintf(
-          "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s
-          FIELDS
-          TERMINATED BY '%s'
-          -- OPTIONALLY ENCLOSED BY '%s'
-          IGNORE 1 LINES
-          (%s)
-          SET id = NULL", // for auto increment
-          $file_path, $table_name, $field_delimiter, $text_qualifier, implode(',', $column_names)
-      );
-      // mysqli_free_result($connection);
-      $option_ok = mysqli_options($connection, MYSQLI_OPT_LOCAL_INFILE, true);
-      $result = db_query($query_string, $connection);
-      $error = db_error($connection);
-      if(!$result) return false;
-      $loaded_rows = db_affected_rows($connection);
-      $this->table_name = $table_name;
-      return $table_name;
-  }
-
-
-  private static function implodeAndQuote($glue, $array, $quote="'")
-  {
-    return $quote.implode($quote.$glue.$quote, $array).$quote;
-  }
-
-  /**
-   * Undocumented function
-   *
-   * @param string $file_path
-   * @param mixed $settings
-   * @param integer $start starting line in the file. start at 1 to skip column names
-   * @return integer total imported lines
-   */
-  function loadData($file_path, $settings, $start=0)
-  {
     /**
-     * mass insert a list of values in a temp table
      *
-     * @param string $table_name
-     * @param string $column_list_statement
-     * @param array $values_statements
+     * @param Project $project_
+     * @param ImportSettings $settings
+     */
+    public function __construct($project, $file_path, $settings)
+    {
+        $this->project = $project;
+        $this->project_id = $project->project_id;
+        $this->file_path = $file_path;
+        $this->settings = $settings;
+        $this->init();
+    }
+
+    private function init()
+    {
+        $first_line = $this->readFileAtLine($this->file_path, 0);
+        // $form_name = $this->settings->form_name;
+        $event_id = $this->settings->event_id;
+        $primary_key = $this->settings->primary_key;
+        $all_fields = $this->settings->getMappedFormFields($dynamic=true);
+        // $static_fields = $this->settings->getMappedFormFields($dynamic=false);
+        $this->makeTemporaryTable($this->project_id, $event_id, $all_fields);
+    }
+
+    public function getTemporaryTableName()
+    {
+        $filename = pathinfo($this->file_path, PATHINFO_FILENAME);
+        return AdvancedImport::TABLES_PREFIX."TEMP_".$filename;
+    }
+
+    /**
+     * create a rotated temporary table with
+     * all fields selected in the mapping process (both dynamic and static)
+     *
+     * @param int $project_id
+     * @param int $event_id
+     * @param array $fields
      * @return void
      */
-    $insert = function($table_name, $column_list_statement, $values_statements)
+    private function makeTemporaryTable($project_id, $event_id, $fields)
     {
+        // helper to perform a table rotation
+        $getPivotRotation = function($fields, $unit_separator) {
+                // GROUP_CONCAT(CASE WHEN field_name = 'vitals_label' THEN value ELSE NULL END) AS vitals_label,
+                $cases = [];
+                foreach ($fields as $field) {
+                        $cases[] = sprintf("GROUP_CONCAT(CASE WHEN `field_name` = '%s' THEN value ELSE NULL END ORDER BY `value` ASC SEPARATOR '%s') AS `%s`", $field, $unit_separator, $field);
+                }
+                return implode(", \n", $cases);
+        };
+        $pivot = $getPivotRotation($fields, self::unit_separator());
+
+        $fields_list = DatabaseQueryHelper::getQueryList($fields);
+        $pivot_query_string = sprintf(
+            "SELECT `record`, IFNULL(instance, 1) `normalized_instance`,
+                %s
+            FROM redcap_data 
+            WHERE `project_id` = %u
+            AND `event_id` = %u
+            AND `field_name` IN (%s)
+            GROUP BY record, normalized_instance
+            ORDER BY record, normalized_instance",
+            $pivot,
+            $project_id, $event_id,
+            $fields_list
+        );
+
+        /* $unique_keys = array_map(function($key) {
+            return sprintf("`%s`(255)", $key); // must specify alength for TEXT/BLOB keys (in redcap_data `value` is a TEXT)
+        }, $fields);
+        $unique_keys_string = implode(",", $unique_keys);
+        $create_table_query_string = sprintf(
+            "CREATE TEMPORARY TABLE IF NOT EXISTS `%s` 
+            ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci",
+            $this->getTemporaryTableName(), $unique_keys_string
+        ); */
+
+        $query_string = sprintf(
+            "CREATE TEMPORARY TABLE IF NOT EXISTS `%s` 
+            ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+            AS ( %s )",
+            $this->getTemporaryTableName(), $pivot_query_string
+        );
+        $result = db_query($query_string);
+        // Logging::writeToFile('extra_query.txt', $query_string);
+        // $error = db_error();
+        if(!$result) throw new \Exception("Error creating the temporary table", 1);
+    }
+
+    public function insert($record, $normalized_instance, $data)
+    {
+      $valid_keys = array_flip($this->settings->getMappedFormFields($dynamic=true));
+      $valid_data = array_intersect_key($valid_keys, $data); //the temp table only contains mapped data (primary keys could be exluded)
+      $all_data = array_merge(compact('record', 'normalized_instance'), $valid_data);
+      $fields_list = DatabaseQueryHelper::implodeAndQuote(",", array_keys($all_data), $quote="`");
+      $values_list = DatabaseQueryHelper::implodeAndQuote(",", $all_data, $quote="'");
       $query_string = sprintf(
-        "INSERT INTO `%s`
-        %s VALUES %s",
-        $table_name, $column_list_statement, implode(",\n", $values_statements)
+        "INSERT INTO `%s` (%s) VALUES (%s)",
+        $this->getTemporaryTableName(), $fields_list, $values_list
       );
-
       $result = db_query($query_string);
-      if($error = db_error()) throw new \Exception(sprintf("Error importing data in the database table `%s` - %s", $table_name, $error), 400);
-      return $result;
-    };
-
-    $file = $this->openFile($file_path);
-    $file->seek($start);
-    $table_name = $this->getTableName($file_path);
-
-    $mapping = $settings->mapping;
-    $delimiter = $settings->field_delimiter;
-    $enclosure = $settings->text_qualifier;
-
-    $column_list_statement = "(".self::implodeAndQuote(',', array_keys($mapping), '`').")";
-    $values_statements = [];
-    
-    $total_inserted = 0;
-    $max = 10000;
-    $counter = 0;
-    while($line = $file->current()) {
-      $data = $this->readCSVLine($line, $delimiter, $enclosure);
-      // extract the data using the mapping indexs
-      $mapped_data = array_map(function($index) use ($data) {
-        return db_escape($data[$index]);
-      },$mapping);
-      $values_statements[] = "(".self::implodeAndQuote(',', $mapped_data).")";
-      $file->next();
-      // check if we are at end of file or we are at max lines
-      if(++$counter>=$max || !$file->current()) {
-        $insert($table_name, $column_list_statement, $values_statements);
-        $total_inserted += $counter;
-        $counter = 0; //reset the counter
-        $values_statements = []; // reset the container
+      $error = db_error();
+      if($result==false) {
+        throw new \Exception(sprintf("Error inserting data in the temporary table -record: %s, instance: %u", $record, $normalized_instance), 1);
+        
       }
     }
 
-    return $total_inserted;
-  }
+    /**
+     * create a data signature of the data
+     * used to retrieve duplicates in the temporary table
+     *
+     * @param array $data
+     * @return string
+     */
+    private function makeDataSignature($data)
+    {
+        /**
+         * if the value is an array then is probably a checkbox
+         * since checkboxes are stored as arrays.
+         * keep the values == 1 and join their keys using a comma
+         */
+        $transformIfCheckBoxValue = function($value){
+            if(is_array($value)) {
+                // deal with checkbox: use keys with value=1
+                $filtered = array_filter($value, function($item) {
+                    return intval($item)==1;
+                });
+                 // the separator here must match the one used in GROUP_CONCAT below
+                $value = implode(self::unit_separator(), array_keys($filtered));
+            }
+            return $value;
+        };
+
+        $keyValuesToString = function($value, $key) use($transformIfCheckBoxValue) {
+            $value = $transformIfCheckBoxValue($value);
+            $value = $value ?: ''; // default to blank string
+            return sprintf("%s%s%s", $key, self::unit_separator(), $value );
+        };
+        
+        ksort($data); //sort keys alphabetically
+        $key_values_strings = array_map($keyValuesToString, $data, array_keys($data));
+        $data_string = implode(self::record_separator(), $key_values_strings);
+        // Logging::writeToFile('advanced_import.txt', $data_string);
+        return md5($data_string);
+    }
+
+    /**
+     * find record and istance of a set of data
+     * from the temporary table using a md5 signature
+     *
+     * @param string $primary_key
+     * @param array $data
+     * @return array [record, normalized_instance]
+     */
+    public function findInstance($record, $data)
+    {
+        // helper to create an MD5 signature in the create table query
+        $getConcat = function($fields, $unit_separator, $record_separator) {
+            // 'vitals_label',':',COALESCE(vitals_label, ''), ';',
+            $concats = array_map(function($key) use($unit_separator){
+                return sprintf("'%s','%s',COALESCE(`%s`, '')", $key, $unit_separator, $key);
+            }, $fields);
+            return implode(", '$record_separator',\n", $concats);
+        };
+        $fields = array_keys($data);
+        $concat = $getConcat($fields, self::unit_separator(), self::record_separator());
+        $data_signature = $this->makeDataSignature($data);
+        $query_string = sprintf(
+            "SELECT `record`, `normalized_instance`,
+                MD5(CONCAT(%s)) AS signature
+                FROM %s
+                WHERE `record`=%s
+                HAVING signature=%s",
+            $concat,
+            $this->getTemporaryTableName(),
+            checkNull($record),
+            checkNull($data_signature)
+        );
+        $result = db_query($query_string);
+        if($row = db_fetch_assoc($result)) {
+          return @$row['normalized_instance'];
+        }
+        return false;
+    }
+
+    public function findMatches($record, $data, $full_match=true)
+    {
+      $buildWhereClause = function($fields, $data) {
+        $wheres = array_map(function($key, $value) {
+          return sprintf("`%s`=%s", $key, checkNull($value));
+        }, array_keys($data), $data);
+        return implode(' AND ', $wheres);
+      };
+
+      if($full_match) {
+        $fields = $this->settings->getMappedFormFields($dynamic=true);
+      }else {
+        $fields = $this->settings->getMappedFormFields($dynamic=false);
+      }
+
+      $query_string = sprintf(
+        "SELECT * FROM %s WHERE record=%s AND %s",
+        $this->getTemporaryTableName(), checkNull($record), $buildWhereClause($fields, $data)
+      );
+      $result = db_query($query_string);
+      if($row=db_fetch_assoc($result)) {
+        return @$row['normalized_instance'];
+      }
+      return false;
+    }
+
+    /**
+     * get the next available instance number for a form
+     * return 1 if the form is not repeatable
+     *
+     * @param int $project_id
+     * @param int $event_id
+     * @param string $record
+     * @param string $form_name
+     * @return int
+     */
+    function getAutoInstanceNumber($record_id)
+    {
+
+      $query_string = sprintf(
+        "SELECT COALESCE(MAX(IFNULL(normalized_instance,1)),0)+1 AS next_instance
+        FROM %s WHERE record=%s",
+        $this->getTemporaryTableName(), checkNull($record_id)
+      );
+      $result = db_query($query_string);
+      if($row=db_fetch_assoc($result)) {
+          $next_instance = @$row['next_instance'];
+          return intval($next_instance);
+      }
+      throw new \Exception("Error finding the next instance number in project {$this->project_id}, record {$record_id}", 1);
+    }
 
 
-  /**
-   * get the name of the temporary table created for a file
-   *
-   * @param string $file_path
-   * @return string
-   */
-  public function getTableName($file_path)
-  {
-    $path_parts = pathinfo($file_path);
-    $filename = @$path_parts['filename'];
-    $table_name = AdvancedImport::TABLES_PREFIX.$filename;
-    return $table_name;
-  }
 
-  public function tableExists($table_name) {
-    $result = db_query(sprintf("SELECT 1 from `%s` LIMIT 1", $table_name));
-    return $result;
-  }
-
-  /**
-   * Undocumented function
-   *
-   * @param string $table_name
-   * @param integer $line the line is actually the id of the row since we use auto increment to populate the table
-   * @return array
-   */
-  public function getLine($table_name, $fields, $line)
-  {
-    $fields_statement = $this->implodeAndQuote(', ', $fields, '`');
-    $query_string = sprintf(
-      "SELECT %s FROM `%s` WHERE id=%u",
-      $fields_statement, $table_name, $line
-    );
-    $result = db_query($query_string);
-    if($row=db_fetch_assoc($result)) return $row;
-  }
-
-  public function dropTable($file_path)
-  {
-    $table_name = $this->getTableName($file_path);
-    $query_string = sprintf(
-      "DROP TABLE IF EXISTS `%s`",
-      $table_name
-    );
-    $result = db_query($query_string);
-    if($error = db_error()) throw new \Exception(sprintf("Error dropping the temporary table `%s` - %s", $table_name, $error), 400);
-    return $result;
-
-  }
-}
+ }

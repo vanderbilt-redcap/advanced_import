@@ -15,8 +15,8 @@ trait CanProcessCsvData
      * @param ParsersFactory $parsersFactory
      * @return mixed
      */
-    public function applyParsers($project_id, $parsing_settings, $value, $key, $collection=[]) {
-        $parsers_factory = new ParserFactory($project_id, $parsing_settings);
+    public function applyParsers($project, $parsing_settings, $value, $key, $collection=[]) {
+        $parsers_factory = new ParserFactory($project, $parsing_settings);
 
         $errors = [];
         $parsers = $parsers_factory->create($key);
@@ -42,8 +42,8 @@ trait CanProcessCsvData
      * @param ValidatorsFactory $validators_factory
      * @return mixed
      */
-    public function applyValidations($project_id, $value, $key, $collection=[]) {
-        $validators_factory = new ValidatorsFactory($project_id);
+    public function applyValidations($project, $value, $key, $collection=[]) {
+        $validators_factory = new ValidatorsFactory($project);
 
         $errors = [];
         $validators = $validators_factory->create($key);

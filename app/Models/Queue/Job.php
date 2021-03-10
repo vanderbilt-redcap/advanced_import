@@ -1,6 +1,7 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Helpers\Queue;
 
 use DateTime;
+use Logging;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
 use Vanderbilt\AdvancedImport\App\Models\Import;
@@ -33,17 +34,23 @@ class Job
         ];
     }
 
+    private static function getNow()
+    {
+        return date('Y-m-d H:i:s');
+    }
+
     public function getStatus()
     {
         $query_string = sprintf(
             "SELECT `status` FROM `%s` WHERE id=%u",
-            self::tableName(),
+            Queue::tableName(),
             $this->id
         );
         $result = db_query($query_string);
         if($error = db_error()) throw new \Exception(sprintf("Error getting the status of job id %u- %s", $this->id, $error), 400);
         if($row = db_fetch_assoc($result)) {
-            $this->status = @$row['status']; // also update the local one
+            $this->status = $status = @$row['status']; // also update the local one
+            Logging::writeToFile('job_status.txt', "getStatus(): ".$status);
             return $this->status;
         }
         return false;
@@ -87,27 +94,6 @@ class Job
         }   
     }
 
-    public function save()
-    {
-        $table = self::tableName();
-        $fields_to_skip = ['id', 'project_id', 'user_id', 'settings', 'filename', 'created_at'];
-        $job_id = $this->id;
-
-        $fields_to_update = array_filter($this->properties, function($key) use($fields_to_skip) {
-            return !in_array($key, $fields_to_skip);
-        }, ARRAY_FILTER_USE_KEY);
-        $update_statements = array_map(function($value, $key) {
-            return sprintf("`%s`=%s", $key, checkNull($value));
-        }, $fields_to_update, array_keys($fields_to_update));
-        $query_string = sprintf(
-            "UPDATE `%s` SET %s
-            WHERE `id`=%u",
-            $table, implode(",\n", $update_statements), $job_id
-        );
-        $result = db_query($query_string);
-        if($error = db_error()) throw new \Exception(sprintf("Error updating job id %u- %s", $job_id, $error), 400);
-        return $result;
-    }
 
     private function getDate($date_string)
     {
@@ -115,20 +101,15 @@ class Job
         return DateTime::createFromFormat( 'Y-m-d H:i:s', $date_string );
     }
 
-    public static function tableName()
-    {
-        return  AdvancedImport::TABLES_PREFIX.'in_jobs';
-    }
-
     public static function create($project_id, $user_id, $filename, $settings)
     {
-        $table = self::tableName();
+        $table = Queue::tableName();
         $data = [
             'project_id' => $project_id,
             'user_id' => $user_id,
             'filename' => $filename,
             'settings' => serialize($settings),
-            'created_at' => $created_at = NOW,
+            'created_at' => $created_at = self::getNow(),
             'updated_at' => $created_at,
         ];
         $query_string = sprintf(
@@ -144,35 +125,59 @@ class Job
     }
 
     function markProcessing() {
-        $this->status = self::STATUS_PROCESSING;
-        $this->updated_at = NOW;
-        $this->save();
+        $params = [
+            'status' => self::STATUS_PROCESSING,
+        ];
+        $this->update($params);
     }
 
     public function setError($message)
     {
-        $this->status = self::STATUS_ERROR;
-        $this->updated_at = $updated_at = NOW;
-        $this->completed_at = $updated_at;
-        $this->error = $message;
-        $this->save();
+        $params = [
+            'status' => self::STATUS_ERROR,
+            'completed_at' => self::getNow(),
+            'error' => $message,
+        ];
+        $this->update($params);
     }
 
     public function markCompleted()
     {
-        $this->status = self::STATUS_COMPLETED;
-        $this->updated_at = $updated_at = NOW;
-        $this->completed_at = $updated_at;
-        $this->save();
+        $params = [
+            'status' => self::STATUS_COMPLETED,
+            'completed_at' => self::getNow(),
+        ];
+        $this->update($params);
     }
 
     public function update($params)
     {
-        foreach ($params as $key => $value) {
+        $params['updated_at'] = self::getNow();
+
+        $table = Queue::tableName();
+        $fields_to_skip = ['id', 'project_id', 'user_id', 'settings', 'filename', 'created_at'];
+        $job_id = $this->id;
+
+        $data = array_filter($params, function($key) use($fields_to_skip) {
+            return !(in_array($key, $fields_to_skip));
+        }, ARRAY_FILTER_USE_KEY);
+        $update_statements = array_map(function($key, $value) {
+            return sprintf("`%s`=%s", $key, checkNull($value));
+        }, array_keys($data), $data);
+        $update_statement_string = implode(",\n", $update_statements);
+
+        $query_string = sprintf(
+            "UPDATE `%s` SET %s
+            WHERE `id`=%u",
+            $table, $update_statement_string, $job_id
+        );
+        $result = db_query($query_string);
+        if($error = db_error()) throw new \Exception(sprintf("Error updating job id %u- %s", $job_id, $error), 400);
+        // also update the current instance values
+        foreach ($data as $key => $value) {
             $this->{$key} = $value;
         }
-        $this->updated_at = NOW;
-        $this->save();
+        return $result;
     }
     /**
      * reset the status to ready so the job will be further procesed
@@ -182,9 +187,10 @@ class Job
      */
     public function putBackInQueue()
     {
-        $this->status = self::STATUS_READY;
-        $this->updated_at = NOW;
-        $this->save();
+        $params = [
+            'status' => self::STATUS_READY,
+        ];
+        $this->update($params);
     }
 
     public function __get($name)
@@ -206,38 +212,6 @@ class Job
     {
         if (!array_key_exists($name, $this->properties)) return;
         $this->properties[$name] = $value;
-    }
-
-    public static function createTable()
-    {
-        $query_string = sprintf(
-            "CREATE TABLE IF NOT EXISTS `%s`
-             (
-                `id` int(11) NOT NULL AUTO_INCREMENT,
-                PRIMARY KEY (`id`),
-                `project_id` int(11) NOT NULL,
-                `user_id` int(11) NOT NULL,
-                `filename` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'path to the uploaded CSV file',
-                `settings` blob,
-                `processed_lines` int(11) NOT NULL DEFAULT 0,
-                `error` text COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'error if any',
-                `status` ENUM('ready', 'error', 'completed', 'processing', 'paused') DEFAULT 'ready' COMMENT 'status of the job',
-                `created_at` datetime DEFAULT NULL,
-                `updated_at` datetime DEFAULT NULL,
-                `completed_at` datetime DEFAULT NULL
-            )
-            ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
-            self::tableName()
-        );
-        $result = db_query($query_string);
-        return $result;
-    }
-
-    public static function dropTable()
-    {
-        $query_string = sprintf("DROP TABLE IF EXISTS `%s`", self::tableName());
-        $result = db_query($query_string);
-        return $result;
     }
 
 }

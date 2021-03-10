@@ -2,19 +2,38 @@
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use Project;
+use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetRecordData;
+use Vanderbilt\AdvancedImport\App\Traits\CanReadCSV;
 
 class RecordHelper
  {
     use CanGetProjectData;
     use CanGetRecordData;
+    use CanReadCSV;
 
+    private $project;
     private $project_id;
+    private $settings;
+    private $file_path;
+    private $csv_to_redcap_mapping;
 
-    public function __construct($project_id)
+    static function unit_separator() { return chr(31); }
+    static function record_separator() { return chr(30); }
+
+    /**
+     *
+     * @param Project $project
+     * @param ImportSettings $settings
+     */
+    public function __construct($project, $file_path, $settings)
     {
-        $this->project_id = $project_id;
+        $this->project = $project;
+        $this->project_id = $project->project_id;
+        $this->file_path = $file_path;
+        $this->settings = $settings;
+
     }
 
     public function setProjectId($project_id)
@@ -34,8 +53,9 @@ class RecordHelper
      * @param array $record_seed
      * @return array
      */
-    function reduceRecord($project_id, $event_id, $record_id, $field_name, $value, $instance_number=null, $record_seed=[])
+    function reduceRecord($record_id, $field_name, $value, $instance_number=null, $record_seed=[])
     {
+        $event_id = $this->settings->event_id;
         $addRepeatingData = function($form_name, $field_name, $value) use($record_id, $event_id, $instance_number, &$record_seed) {
             @$record_seed[$record_id]['repeat_instances'][$event_id][$form_name][$instance_number][$field_name] = $value;
         };
@@ -43,8 +63,8 @@ class RecordHelper
             @$record_seed[$record_id][$event_id][$field_name] = $value;
         };
         
-        $form_name = $this->getFormNameForField($project_id, $field_name);
-        $is_repeating = $this->isRepeatingForm($project_id, $event_id, $form_name);
+        $form_name = $this->getFormNameForField($this->project, $field_name);
+        $is_repeating = $this->isRepeatingForm($this->project, $event_id, $form_name);
         if($is_repeating) $addRepeatingData($form_name, $field_name, $value);
         else $addData($field_name, $value);
 
@@ -54,6 +74,21 @@ class RecordHelper
     function getAutoId($project_id)
     {
         return \DataEntry::getAutoId($project_id);
+    }
+
+    public function getRecordId($primary_key_field, $primary_key_value)
+    {
+      $query_string = sprintf(
+        "SELECT record FROM redcap_data
+        WHERE `field_name`='%s'
+        AND `value`=%s",
+        $primary_key_field, checkNull($primary_key_value)
+      );
+      $result = db_query($query_string);
+      if($row=db_fetch_assoc($result)) {
+        return @$row['record'];
+      }
+      return false;
     }
 
     /**
@@ -66,9 +101,11 @@ class RecordHelper
      * @param string $form_name
      * @return int
      */
-    function getAutoInstanceNumber($project_id, $event_id, $record, $form_name)
+    function getAutoInstanceNumber($record, $form_name)
     {
-        $form_fields = $this->getProjectFormFields($project_id, $form_name);
+        $project_id = $this->settings->project_id;
+        $event_id = $this->settings->event_id;
+        $form_fields = $this->getProjectFormFields($this->project, $form_name);
         $fields_list = DatabaseQueryHelper::getQueryList($form_fields);
         $query_string = sprintf(
             "SELECT COALESCE(MAX(IFNULL(instance,1)),0)+1 AS next_instance
@@ -92,13 +129,11 @@ class RecordHelper
      *
      * @return array ['primary_key', 'secondary_key']
      */
-    function getPrimaryKeys($project_id=null)
+    function getPrimaryKeys()
     {
-        $project_id = $project_id || $this->project_id;
-        $project = new Project($project_id);
-        $primary_key = $project->table_pk;
-        $secondary_key = @$project->project['secondary_pk'];
-        return compact('primary_key', 'secondary_key');
+        $primary_key = $this->project->table_pk;
+        $secondary_key = @$this->project->project['secondary_pk'];
+        return [$primary_key, $secondary_key];
     }
 
  }

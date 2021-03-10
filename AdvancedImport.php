@@ -7,6 +7,7 @@ if(file_exists($autoload)) require_once($autoload);
 use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
+use Logging;
 use Vanderbilt\AdvancedImport\App\Helpers\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Helpers\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
@@ -15,7 +16,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
 {
     private static $instance;
 
-    const TABLES_PREFIX = 'advanced_import_';
+    const TABLES_PREFIX = 'advanced_ie_';
     const MAX_CRON_EXECUTION_TIME = '10 minutes';
     const UPLOAD_FOLDER_NAME = 'uploads';
 
@@ -102,7 +103,9 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
                     }
                     else {
                         $job->process();
-                        $keep_processing = $job->getStatus() == Job::STATUS_PROCESSING;
+                        $status = $job->getStatus();
+                        $keep_processing = $status == Job::STATUS_PROCESSING;
+                        Logging::writeToFile('job_status.txt', $status);
                     }
                 } catch (\Exception $e) {
                     $job->setError($e->getMessage());
@@ -194,12 +197,12 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
 
     public function initTables()
     {
-        Job::createTable();
+        Queue::createTable();
     }
 
     public function dropTables()
     {
-        Job::dropTable();
+        Queue::dropTable();
     }
 
     /**
