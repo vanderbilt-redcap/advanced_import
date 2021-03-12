@@ -1,19 +1,48 @@
-<?php namespace Vanderbilt\AdvancedImport\App\Helpers\Queue;
+<?php namespace Vanderbilt\AdvancedImport\App\Models\Queue;
 
 use DateTime;
+use JsonSerializable;
 use Logging;
+use SplSubject;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
 use Vanderbilt\AdvancedImport\App\Models\Import;
 use Vanderbilt\AdvancedImport\App\Models\Response;
 
-class Job
+/**
+ * 
+ * @var int id
+ * @var int project_id
+ * @var int user_id
+ * @var string filename
+ * @var array settings
+ * @var int processed_lines
+ * @var string status
+ * @var string type
+ * @var DateTime created_at
+ * @var DateTime updated_at
+ * @var DateTime completed_at
+ * @var string error
+ * @var string error
+ */
+abstract class Job implements JobInterface, JsonSerializable
 {
+    const TYPE_IMPORT = 'import';
+    const TYPE_EXPORT = 'export';
+
     const STATUS_READY = 'ready';
     const STATUS_ERROR = 'error';
     const STATUS_COMPLETED = 'completed';
     const STATUS_PROCESSING = 'processing';
-    const STATUS_PAUSED = 'paused';
+    const STATUS_STOPPED = 'stopped';
+    const STATUS_DELETED = 'deleted';
+
+    /**
+     * list of fields to skip in mass assignment (update)
+     *
+     * @var array
+     */
+    private $guarded = ['id', 'project_id', 'user_id', 'filename', 'settings', 'type', 'created_at'];
 
     private $properties = [];
 
@@ -27,6 +56,7 @@ class Job
             'settings' => unserialize(@$params['settings']),
             'processed_lines' => intval(@$params['processed_lines']),
             'status' => @$params['status'],
+            'type' => @$params['type'],
             'created_at' => $this->getDate(@$params['created_at']),
             'updated_at' => $this->getDate(@$params['updated_at']),
             'completed_at' => $this->getDate(@$params['completed_at']),
@@ -56,43 +86,7 @@ class Job
         return false;
     }
 
-    public function process()
-    {
-        $calcTotal = function($results) {
-            $summable_types = [Response::SUCCESS,  Response::NO_CHANGE, Response::ERROR];
-            $total = 0;
-            foreach ($results as $key => $value) {
-                if(in_array($key, $summable_types)) $total += $value;
-            }
-            return $total;
-        };
-
-        $this->markProcessing(); // update the status of the job
-
-        $project_id = $this->project_id;
-        $csv_path = AdvancedImport::getUploadedFilePath($this->filename);
-        $settings = $this->settings;
-        $processed_lines = $this->processed_lines;
-        $start = $processed_lines+1;
-        $settings['project_id'] = $project_id;
-        $settings['data_row_start'] = $start;
-        $importer = new Import();
-        try {
-            $results = $importer->processCSV($project_id, $csv_path, $settings);
-            if(!$results) {
-                $this->markCompleted();
-            }else {
-                $processed_lines = $this->processed_lines + $calcTotal($results);
-                $update_params = [
-                    'processed_lines' => $processed_lines,
-                ];
-                $this->update($update_params);
-            }
-        } catch (\Exception $e) {
-            $message = sprintf("Error processing the CSV file - %s - (code %u)", $e->getMessage(), $e->getCode());
-            $this->setError($message);
-        }   
-    }
+    public function process() {}
 
 
     private function getDate($date_string)
@@ -101,7 +95,7 @@ class Job
         return DateTime::createFromFormat( 'Y-m-d H:i:s', $date_string );
     }
 
-    public static function create($project_id, $user_id, $filename, $settings)
+    public static function create($project_id, $user_id, $filename, $settings, $type)
     {
         $table = Queue::tableName();
         $data = [
@@ -109,6 +103,7 @@ class Job
             'user_id' => $user_id,
             'filename' => $filename,
             'settings' => serialize($settings),
+            'type' => $type,
             'created_at' => $created_at = self::getNow(),
             'updated_at' => $created_at,
         ];
@@ -128,7 +123,7 @@ class Job
         $params = [
             'status' => self::STATUS_PROCESSING,
         ];
-        $this->update($params);
+        $this->updateProperties($params);
     }
 
     public function setError($message)
@@ -138,7 +133,7 @@ class Job
             'completed_at' => self::getNow(),
             'error' => $message,
         ];
-        $this->update($params);
+        $this->updateProperties($params);
     }
 
     public function markCompleted()
@@ -147,19 +142,18 @@ class Job
             'status' => self::STATUS_COMPLETED,
             'completed_at' => self::getNow(),
         ];
-        $this->update($params);
+        $this->updateProperties($params);
     }
 
-    public function update($params)
+    protected function updateProperties($params)
     {
         $params['updated_at'] = self::getNow();
 
         $table = Queue::tableName();
-        $fields_to_skip = ['id', 'project_id', 'user_id', 'settings', 'filename', 'created_at'];
         $job_id = $this->id;
 
-        $data = array_filter($params, function($key) use($fields_to_skip) {
-            return !(in_array($key, $fields_to_skip));
+        $data = array_filter($params, function($key) {
+            return !(in_array($key, $this->guarded));
         }, ARRAY_FILTER_USE_KEY);
         $update_statements = array_map(function($key, $value) {
             return sprintf("`%s`=%s", $key, checkNull($value));
@@ -190,7 +184,7 @@ class Job
         $params = [
             'status' => self::STATUS_READY,
         ];
-        $this->update($params);
+        $this->updateProperties($params);
     }
 
     public function __get($name)
@@ -212,6 +206,12 @@ class Job
     {
         if (!array_key_exists($name, $this->properties)) return;
         $this->properties[$name] = $value;
+    }
+
+    public function jsonSerialize()
+    {
+        $data =  $this->properties;
+        return $data;
     }
 
 }

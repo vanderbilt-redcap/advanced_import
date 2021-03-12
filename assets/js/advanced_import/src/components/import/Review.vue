@@ -171,10 +171,11 @@ export default {
                 const response = await this.$API.dispatch('importData/enqueue',file_name, settings)
                 const {data} = response
                 const message = `Import process created (ID ${data['job_id']}). Please check your logs.`
-                this.$bvModal.msgBoxOk(message, {
+                await this.$bvModal.msgBoxOk(message, {
                     title: 'Success',
                     buttonSize: 'sm',
                 })
+                this.$router.push({name: 'home'})
             } catch (error) {
                 let error_message = error
                 if(typeof error === 'object') {

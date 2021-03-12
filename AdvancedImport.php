@@ -8,8 +8,8 @@ use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
 use Logging;
-use Vanderbilt\AdvancedImport\App\Helpers\Queue\Job;
-use Vanderbilt\AdvancedImport\App\Helpers\Queue\Queue;
+use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
+use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
 
 class AdvancedImport extends AbstractExternalModule implements Mediator
@@ -34,12 +34,13 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
 
     public static function getUploadedFilePath($filename)
     {
+        $basename = pathinfo($filename, PATHINFO_BASENAME); //make sure it's just the file name (no subdirectories)
         $upload_dir = self::getUploadDirectory();
         if(!preg_match("#/$#", $upload_dir))
         {
             $upload_dir .= DIRECTORY_SEPARATOR;
         }
-        return $upload_dir.$filename;
+        return $upload_dir.$basename;
     }
 
     /**
@@ -86,7 +87,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public function processQueue()
     {
-        
         $start = new DateTime();
         $max_execution = DateInterval::createFromDateString(self::MAX_CRON_EXECUTION_TIME);
         $max_time = $start->add($max_execution);
@@ -105,7 +105,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
                         $job->process();
                         $status = $job->getStatus();
                         $keep_processing = $status == Job::STATUS_PROCESSING;
-                        Logging::writeToFile('job_status.txt', $status);
                     }
                 } catch (\Exception $e) {
                     $job->setError($e->getMessage());
@@ -114,23 +113,40 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         }
     }
 
+    /**
+     * check jobs marked as 'deleted' and remove them from the database
+     * along with it's associated file
+     *
+     * @return void
+     */
     function cleanupUploads()
     {
         $queue = new Queue();
-        $status = [JOB::STATUS_COMPLETED];
-        $params = compact('status');
+        $queue->attach($this); // listen for all events
+        $queue->cleanup();
         // $completed_jobs = $queue->getJobs($params);
 
     }
 
-    function run_cron_jobs($cronInfo)
+    function cron_processQueue($cronInfo)
     {
         try {
+            $cron_name = @$cronInfo['cron_name'] ?: 'AdvancedImport';
             $this->processQueue();
-            $this->cleanupUploads();
-            return "The AdvancedImport cron job completed successfully.";
+            return sprintf("%s - all jobs have been processed", $cron_name);
         } catch (\Exception $e) {
-            return sprintf("The AdvancedImport cron job failed. %s", $e->getMessage());
+            return sprintf("%s -  error processing the jobs ( %s )", $cron_name, $e->getMessage());
+        }
+    }
+
+    function cron_Cleanup($cronInfo)
+    {
+        try {
+            $cron_name = @$cronInfo['cron_name'] ?: 'AdvancedImport';
+            $this->cleanupUploads();
+            return sprintf("%s - all data has been cleaned up", $cron_name);
+        } catch (\Exception $e) {
+            return sprintf("%s -  error cleaning up ( %s )", $cron_name, $e->getMessage());
         }
     }
 
@@ -186,10 +202,23 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         }
     }
 
+    function cleanupUploadDirectory()
+    {
+        $uploadDirectory = self::getUploadDirectory();
+        $files = glob($uploadDirectory."/*", GLOB_BRACE); // get all file names
+        foreach($files as $file){ // iterate files
+            if(is_file($file)) {
+                unlink($file); // delete file
+            }
+        }
+
+    }
+
     function redcap_module_system_disable($version)
     {
         try {
             $this->dropTables();
+            $this->cleanupUploadDirectory();
         } catch (\Exception $e) {
             echo $e->getMessage();
         }

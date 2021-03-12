@@ -15,8 +15,9 @@ class SettingsController extends BaseController
     {
         global $lang;
         $project_id = $_GET['pid'];
-        $model = new Settings();
-        $data = $model->getSettings($project_id);
+        $project = new Project($project_id);
+        $model = new Settings($project);
+        $data = $model->getSettings();
         return $this->printJSON($data);
     }
 }

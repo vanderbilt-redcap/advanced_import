@@ -1,7 +1,7 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
 use Vanderbilt\AdvancedImport\AdvancedImport;
-use Vanderbilt\AdvancedImport\App\Traits\SubjectTrait;
+use Vanderbilt\AdvancedImport\App\Traits\Observer\SubjectTrait;
 
 class Logs extends BaseModel
 {

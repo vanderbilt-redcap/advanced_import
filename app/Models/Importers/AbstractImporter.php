@@ -7,7 +7,7 @@ use Vanderbilt\AdvancedImport\App\Helpers\TemporaryTable;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 use Vanderbilt\AdvancedImport\App\Traits\CanLog;
 use Vanderbilt\AdvancedImport\App\Traits\CanProcessCsvData;
-use Vanderbilt\AdvancedImport\App\Traits\SubjectTrait;
+use Vanderbilt\AdvancedImport\App\Traits\Observer\SubjectTrait;
 
 abstract class AbstractImporter implements ImporterInterface
 {

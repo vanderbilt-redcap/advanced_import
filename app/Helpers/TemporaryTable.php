@@ -1,25 +1,16 @@
 <?php
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
-use Logging;
 use Project;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
-use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
-use Vanderbilt\AdvancedImport\App\Traits\CanGetRecordData;
-use Vanderbilt\AdvancedImport\App\Traits\CanReadCSV;
 
 class TemporaryTable
 {
-    use CanGetProjectData;
-    use CanGetRecordData;
-    use CanReadCSV;
-
     private $project;
     private $project_id;
     private $settings;
     private $file_path;
-    private $csv_to_redcap_mapping;
 
     public static function unit_separator() { return chr(31); }
     public static function record_separator() { return chr(30); }
@@ -40,12 +31,8 @@ class TemporaryTable
 
     private function init()
     {
-        $first_line = $this->readFileAtLine($this->file_path, 0);
-        // $form_name = $this->settings->form_name;
         $event_id = $this->settings->event_id;
-        $primary_key = $this->settings->primary_key;
         $all_fields = $this->settings->getMappedFormFields($dynamic=true);
-        // $static_fields = $this->settings->getMappedFormFields($dynamic=false);
         $this->makeTemporaryTable($this->project_id, $event_id, $all_fields);
     }
 
@@ -180,42 +167,100 @@ class TemporaryTable
      * @param array $data
      * @return array [record, normalized_instance]
      */
-    public function findInstance($record, $data)
-    {
-        // helper to create an MD5 signature in the create table query
-        $getConcat = function($fields, $unit_separator, $record_separator) {
-            // 'vitals_label',':',COALESCE(vitals_label, ''), ';',
-            $concats = array_map(function($key) use($unit_separator){
-                return sprintf("'%s','%s',COALESCE(`%s`, '')", $key, $unit_separator, $key);
-            }, $fields);
-            return implode(", '$record_separator',\n", $concats);
-        };
-        $fields = array_keys($data);
-        $concat = $getConcat($fields, self::unit_separator(), self::record_separator());
-        $data_signature = $this->makeDataSignature($data);
-        $query_string = sprintf(
-            "SELECT `record`, `normalized_instance`,
-                MD5(CONCAT(%s)) AS signature
-                FROM %s
-                WHERE `record`=%s
-                HAVING signature=%s",
-            $concat,
-            $this->getTemporaryTableName(),
-            checkNull($record),
-            checkNull($data_signature)
-        );
-        $result = db_query($query_string);
-        if($row = db_fetch_assoc($result)) {
-          return @$row['normalized_instance'];
-        }
-        return false;
-    }
+    // public function findInstance($record, $data)
+    // {
+    //     // helper to create an MD5 signature in the create table query
+    //     $getConcat = function($fields, $unit_separator, $record_separator) {
+    //         // 'vitals_label',':',COALESCE(vitals_label, ''), ';',
+    //         $concats = array_map(function($key) use($unit_separator){
+    //             return sprintf("'%s','%s',COALESCE(`%s`, '')", $key, $unit_separator, $key);
+    //         }, $fields);
+    //         return implode(", '$record_separator',\n", $concats);
+    //     };
+    //     $fields = array_keys($data);
+    //     $concat = $getConcat($fields, self::unit_separator(), self::record_separator());
+    //     $data_signature = $this->makeDataSignature($data);
+    //     $query_string = sprintf(
+    //         "SELECT `record`, `normalized_instance`,
+    //             MD5(CONCAT(%s)) AS signature
+    //             FROM %s
+    //             WHERE `record`=%s
+    //             HAVING signature=%s",
+    //         $concat,
+    //         $this->getTemporaryTableName(),
+    //         checkNull($record),
+    //         checkNull($data_signature)
+    //     );
+    //     $result = db_query($query_string);
+    //     if($row = db_fetch_assoc($result)) {
+    //       return @$row['normalized_instance'];
+    //     }
+    //     return false;
+    // }
+
+    /**
+     * tried to use the standard horizonatl approach of redcap_data,
+     * but is not working
+     *
+     * @param string $record
+     * @param array $data
+     * @param boolean $full_match
+     * @return void
+     */
+    // public function findMatchesAltTest($record, $data, $full_match=true)
+    // {
+    //   /* SELECT * FROM redcap_data
+    //   WHERE project_id = 14
+    //   AND event_id= 41
+    //   AND record = '003'
+    //   AND (
+    //     (field_name='first_name' AND value='Kaipara District')
+    //     OR (field_name='last_name' AND value='24')
+    //   ) */
+    //   $buildFieldsClause = function($data) {
+    //     $wheres = array_map(function($key, $value) {
+    //       return sprintf("(`field_name`='%s' AND `value`=%s)", $key, checkNull($value));
+    //     }, array_keys($data), $data);
+    //     return implode(" OR \n", $wheres);
+    //   };
+
+    //   $project_id = $this->project_id;
+    //   $event_id = $this->settings->event_id;
+    //   if($full_match) {
+    //     $fields = $this->settings->getMappedFormFields($dynamic=true);
+    //   }else {
+    //     $fields = $this->settings->getMappedFormFields($dynamic=false);
+    //   }
+    //   // only use keys for the form (skip record_id or other unwanted)
+    //   $valid_data = array_intersect_key($data, array_flip($fields));
+
+    //   $query_string = sprintf(
+    //     "SELECT *, IFNULL(instance, 1) `normalized_instance`
+    //     FROM redcap_data
+    //     WHERE record = %s
+    //     AND project_id = %u
+    //     AND event_id = %u
+    //     AND (%s)
+    //     ",
+    //     checkNull($record), $project_id, $event_id,
+    //     $buildFieldsClause($valid_data)
+    //   );
+    //   $result = db_query($query_string);
+    //   if($result==false) return false;
+    //   // for a match, the resulting rows should match the fields we are looking for
+    //   $match = db_num_rows($result)>=count($valid_data); // check for duplicates
+    //   if($match==false) return false;
+    //   if($row=db_fetch_assoc($result)) {
+    //     return @$row['normalized_instance'];
+    //   }
+    //   return false;
+    // }
 
     public function findMatches($record, $data, $full_match=true)
     {
-      $buildWhereClause = function($fields, $data) {
+      $buildWhereClause = function($data) {
         $wheres = array_map(function($key, $value) {
-          return sprintf("`%s`=%s", $key, checkNull($value));
+          return sprintf("`%s`<=>%s", $key, checkNull($value));
         }, array_keys($data), $data);
         return implode(' AND ', $wheres);
       };
@@ -225,13 +270,20 @@ class TemporaryTable
       }else {
         $fields = $this->settings->getMappedFormFields($dynamic=false);
       }
+      // only use keys for the form (skip record_id or other unwanted)
+      $valid_data = array_intersect_key($data, array_flip($fields));
 
       $query_string = sprintf(
         "SELECT * FROM %s WHERE record=%s AND %s",
-        $this->getTemporaryTableName(), checkNull($record), $buildWhereClause($fields, $data)
+        $this->getTemporaryTableName(), checkNull($record), $buildWhereClause($valid_data)
       );
       $result = db_query($query_string);
+      $total_matches = db_num_rows($result);
+      if($full_match && $total_matches>1) {
+        // log a warning
+      }
       if($row=db_fetch_assoc($result)) {
+        // return the first valid match
         return @$row['normalized_instance'];
       }
       return false;

@@ -1,7 +1,8 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Controllers;
 
 use User;
-use Vanderbilt\AdvancedImport\App\Helpers\Queue\Job;
+use Vanderbilt\AdvancedImport\App\Models\Queue\ImportJob;
+use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Import;
 
 class ImportController extends BaseController
@@ -12,7 +13,7 @@ class ImportController extends BaseController
         parent::__construct();
     }
     
-    function import()
+    /* function import()
     {
         try {
             $project_id = $_GET['pid'];
@@ -28,7 +29,7 @@ class ImportController extends BaseController
             $code = $e->getCode();
             return $this->printJSON($response, $code);
         }
-    }
+    } */
 
     function enqueue()
     {
@@ -37,19 +38,18 @@ class ImportController extends BaseController
             $username = defined('USERID') ? USERID : false;
             $user_id = User::getUIIDByUsername($username);
             $file_name = @$_POST['file_name'];
+            $type = @$_POST['type'];
             $settings = json_decode($_POST['settings'], $assoc=true);
-            $job_id = Job::create($project_id, $user_id, $file_name, $settings);
-            $response = [
-                'message' => 'Job created',
-                'job_id' => $job_id
-            ];
-            // $model = new Import();
-            // $results = $model->processCSV($project_id, $file_path, $settings);
-            /* if($background_process) {
-                $results = $model->backgroundProcessCSV($project_id, $file_path, $settings);
+            // manage only import for now
+            if($type==Job::TYPE_IMPORT) {
+                $job_id = ImportJob::create($project_id, $user_id, $file_name, $settings, $type);
+                $response = [
+                    'message' => 'Job created',
+                    'job_id' => $job_id
+                ];
             }else {
-                $results = $model->processCSV($project_id, $file_path, $settings);
-            } */
+                throw new \Exception("Error adding the job to the que. Invalid parameters", 400);
+            }
             
             return $this->printJSON($response);
         } catch (\Exception $e) {

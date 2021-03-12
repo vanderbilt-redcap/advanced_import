@@ -18,10 +18,17 @@
     ],
     "crons": [
         {
-           "cron_name": "advanced_import_cron",
-           "cron_description": "AdvancedImport cron jobs",
-           "method": "run_cron_jobs",
+           "cron_name": "advanced_import_process_jobs",
+           "cron_description": "Process jobs registered in the queue",
+           "method": "cron_processQueue",
            "cron_frequency": "60",
+           "cron_max_run_time": "3600"
+        },
+        {
+           "cron_name": "advanced_import_cleanup",
+           "cron_description": "Clean up unused data",
+           "method": "cron_Cleanup",
+           "cron_frequency": "86400",
            "cron_max_run_time": "3600"
         }
     ],

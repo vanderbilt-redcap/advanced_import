@@ -71,7 +71,7 @@ export default {
         items_proxy() {
             let files = this.files
             if(!files) {
-                const dummy_items = [...Array(5).keys()].map(() => ({'no data':"\u001E"}))
+                const dummy_items = [...Array(5).keys()].map(() => ({'no data':""}))
                 return dummy_items
             }
             return this.items
@@ -119,4 +119,15 @@ export default {
 #table-container {
     overflow-x: scroll;
 }
+
+#my-table >>> tbody td::before {
+    content: '';
+    display: block;
+    min-height: 10px;
+    float: left;
+}
+#my-table >>> tbody td {
+    vertical-align: middle;;
+}
+
 </style>

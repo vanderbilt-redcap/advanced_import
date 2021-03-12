@@ -16,6 +16,10 @@
             <font-awesome-icon icon="clipboard-list" />
             <span> Logs</span>
         </router-link>
+        <router-link :to="{name:'jobs'}">
+            <font-awesome-icon icon="tasks" />
+            <span> Jobs</span>
+        </router-link>
         <a :href="project_dashboard_url">
             <font-awesome-icon icon="th" />
             <span> Record status dashboard</span>

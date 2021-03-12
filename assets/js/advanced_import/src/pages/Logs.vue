@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p>Check the logs for errors or warnings.</p>
     <LogsTable />
   </div>
 </template>
@@ -14,17 +15,5 @@ export default {
 </script>
 
 <style scoped>
-.title {
-  font-size: 2rem;
-}
-.import a {
-  color:#5BC3EB;
-}
-.export a {
-  color:#F06449;
-}
-.import a:hover,
-.export a:hover {
-  color: #0056b3;
-}
+
 </style>

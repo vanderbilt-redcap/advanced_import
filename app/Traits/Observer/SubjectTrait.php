@@ -1,4 +1,4 @@
-<?php namespace Vanderbilt\AdvancedImport\App\Traits;
+<?php namespace Vanderbilt\AdvancedImport\App\Traits\Observer;
 
 use SplObjectStorage;
 
