@@ -7,8 +7,9 @@ class ImportJob extends Job
 {
     public function process()
     {
-        $this->markProcessing(); // update the status of the job
+        
         $importer = new Import();
+        $importer->attach($this, "data:process_started");
         $importer->attach($this, "data:line_processed");
         $importer->attach($this, "data:completed");
         $importer->attach($this, "data:chunk_completed");
@@ -32,6 +33,9 @@ class ImportJob extends Job
     public function update($importManager, string $event = null, $data = null)
     {
         switch ($event) {
+            case 'data:process_started':
+                $this->markProcessing(); // update the status of the job
+                break;
             case 'data:line_processed':
                 $processed_lines = @$data['processed_line'];
                 $update_params = [

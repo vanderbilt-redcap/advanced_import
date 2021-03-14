@@ -2,6 +2,7 @@
 
 use Project;
 use Vanderbilt\AdvancedImport\AdvancedImport;
+use Vanderbilt\AdvancedImport\App\Helpers\InstanceSeeker;
 use Vanderbilt\AdvancedImport\App\Helpers\RecordHelper;
 use Vanderbilt\AdvancedImport\App\Helpers\TemporaryTable;
 use Vanderbilt\AdvancedImport\App\Models\Importers\ImporterFactory;
@@ -57,15 +58,16 @@ class Import extends BaseModel
         
         $project = new Project($project_id);
         $settings = new ImportSettings($job_settings, $project);
-        $temporary_table = new TemporaryTable($project, $file_path, $settings);
+        $instanceSeeker = new InstanceSeeker($project, $settings);
         $record_helper = new RecordHelper($project, $file_path, $settings);
-        $importer = ImporterFactory::create($project, $settings, $temporary_table, $record_helper);
+        $importer = ImporterFactory::create($project, $settings, $instanceSeeker, $record_helper);
         
         $row_index = $processed_lines + 1; // start after the last processd line. when starting from 0 also skips the `fields` row
         $max_lines = $settings->max_lines ?: self::MAX_LINES_PER_PROCESS;
 
         $counter = 0;
         $results = [];
+        $this->notify("data:process_started", []);
         while($counter++<$max_lines && $line = $this->readFileAtLine($file_path, $row_index)) {
             $job_status = $job->getStatus();
             if($job_status==Job::STATUS_STOPPED) {

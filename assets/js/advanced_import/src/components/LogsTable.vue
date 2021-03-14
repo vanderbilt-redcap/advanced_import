@@ -49,12 +49,11 @@
 <script>
 import { mapState } from 'vuex'
 
-const empty_value = ""
 
 export default {
     data() {
         return {
-            per_page: 50,
+            per_page: 20,
             current_page: 1,
             loading: false,
         }
@@ -68,10 +67,11 @@ export default {
         items_proxy() {
             const items = [...this.items]
             let per_page = this.per_page
-            const min_rows = 5
-            if(per_page>min_rows) per_page = min_rows
-            const remainder = per_page-(items.length%per_page)
 
+            let remainder = (this.current_page*per_page)-items.length
+            if(remainder<0) remainder = 0
+
+            const empty_value = ""
             let placeholder = {'no logs': empty_value}
             if(items.length>0) {
                 placeholder = {}
@@ -133,7 +133,7 @@ export default {
 #my-table >>> tbody td::before {
     content: '';
     display: block;
-    min-height: 10px;
+    min-height: 20px;
     float: left;
 }
 #my-table >>> tbody td {

@@ -15,7 +15,7 @@
             <p class="my-4">Are you sure you want to delete all tasks for the current project?</p>
         </b-modal>
 
-        <b-pagination class="ml-2" v-if="hasItems"
+        <b-pagination class="ml-2 mb-0" v-if="hasItems"
         v-model="current_page"
         :total-rows="rows"
         :per-page="per_page"
@@ -27,7 +27,7 @@
      <!-- <div v-if="!loading && !hasItems">
          <span>no logs</span>
      </div> -->
-
+    <div class="table-wrapper">
     <b-table
       id="my-table"
       class="my-2"
@@ -77,13 +77,14 @@
             </div>
         </template>
     </b-table>
-    
+    </div>
     <b-pagination v-if="hasItems"
         v-model="current_page"
         :total-rows="rows"
         :per-page="per_page"
         aria-controls="my-table"
         size="sm"
+        class="mb-2"
         ></b-pagination>
   </div>
 </template>
@@ -91,8 +92,6 @@
 <script>
 import { mapState } from 'vuex'
 import moment from 'moment'
-
-const empty_value = ""
 
 const statusList = Object.freeze({
     READY: 'ready',
@@ -122,7 +121,7 @@ export default {
                 {key: 'type', lable: 'Type'},
                 {key: 'actions', lable: 'Actions'},
             ],
-            per_page: 50,
+            per_page: 10,
             current_page: 1,
             loading: false,
         }
@@ -144,26 +143,14 @@ export default {
         },
         items_proxy() {
             const items = [...this.items]
-            let per_page = this.per_page
-            const min_rows = 5
-            if(per_page>min_rows) per_page = min_rows
-            const remainder = per_page-(items.length%per_page)
-
-            let placeholder = {'no data': empty_value}
-            if(items.length>0) {
-                placeholder = {}
-                let first_item = items[0]
-                for(let key of Object.keys(first_item)) {
-                    placeholder[key] = empty_value
-                }
-            }
-
-            for(let i=0; i<remainder; i++) items.push(placeholder)
+            let remainder =  this.per_page-items.length
+            if(remainder<0) remainder = 0
+            for(let i=0; i<remainder; i++) items.push({})
             return items
         },
         rows() {
-            const total = this.$store.getters['logs/total']
-            return total || this.items.length
+            const {total=0} = this.metadata
+            return total
         },
         hasItems() {
             try {
@@ -255,23 +242,22 @@ export default {
             if(response) this.stopTask(id)
         },
         async stopTask(id) {
-            let message, title
+            let message, title, variant
             try {
                 await this.$API.dispatch('jobs/stop', {id})
-                message = `The job will be stopped`
+                message = `The job id ${id} has been stopped.`
                 title = 'Success'
+                variant = 'success'
             } catch (error) {
-                message = `There was an error. The job will not be stopped`
+                message = `There was an error stopping the job ID ${id}.`
                 title = 'Error'
+                variant = 'danger'
             }finally {
-                await this.$bvModal.msgBoxOk(message, {
+                this.$bvToast.toast(message, {
                     title: title,
-                    size: 'sm',
-                    buttonSize: 'sm',
-                    okVariant: 'primary',
-                    headerClass: 'p-2 border-bottom-0',
-                    footerClass: 'p-2 border-top-0',
-                    centered: true
+                    autoHideDelay: 1500,
+                    appendToast: true,
+                    variant,
                 })
                 this.getItems()
             }
@@ -291,23 +277,22 @@ export default {
             if(response) this.deleteTask(id)
         },
         async deleteTask(id) {
-            let message, title
+            let message, title, variant
             try {
                 await this.$API.dispatch('jobs/delete', {id})
-                message = `The job will be deleted`
+                message = `The job ID ${id} has been deleted.`
                 title = 'Success'
+                variant = 'success'
             } catch (error) {
-                message = `There was an error. The job will not be deleted`
+                message = `There was an error deleting the job ID ${id}.`
                 title = 'Error'
+                variant = 'danger'
             }finally {
-                await this.$bvModal.msgBoxOk(message, {
+                this.$bvToast.toast(message, {
                     title: title,
-                    size: 'sm',
-                    buttonSize: 'sm',
-                    okVariant: 'primary',
-                    headerClass: 'p-2 border-bottom-0',
-                    footerClass: 'p-2 border-top-0',
-                    centered: true
+                    autoHideDelay: 1500,
+                    appendToast: true,
+                    variant,
                 })
                 this.getItems()
             }
@@ -320,11 +305,15 @@ export default {
 #my-table >>> tbody td::before {
     content: '';
     display: block;
-    min-height: 10px;
+    min-height: 20px;
     float: left;
 }
 #my-table >>> tbody td {
     vertical-align: middle;;
+}
+
+.table-wrapper {
+    overflow-x:scroll;
 }
 
 </style>

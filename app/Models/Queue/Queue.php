@@ -1,5 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Queue;
 
+use PDO;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
 use Vanderbilt\AdvancedImport\App\Traits\Observer\SubjectTrait;
@@ -40,16 +41,15 @@ class Queue
         $query_string = sprintf(
             "SELECT * FROM %s
             WHERE 1
-            AND project_id=%u
+            AND project_id=?
             %s %s",
-            self::tableName(),
-            $project_id,
+            Job::TABLE_NAME,
             $where_clause,
             $limit_clause
         );
-        $result = db_query($query_string);
+        $stmt = AdvancedImport::db()->query($query_string, [$project_id]);
         $jobs = [];
-        while($row = db_fetch_assoc($result)) {
+        while($row = $stmt->fetch()) {
             $type = @$row['type'];
             if($type==Job::TYPE_IMPORT) {
                 $job = new ImportJob($row);
@@ -63,10 +63,10 @@ class Queue
 
     public function countJobs()
     {
-        $query_string = sprintf("SELECT COUNT(*) AS total FROM %s", self::tableName());
-        $result = db_query($query_string);
-        if($row = db_fetch_object($result)){
-            return $row->total;
+        $query_string = sprintf("SELECT COUNT(*) AS total FROM %s", Job::TABLE_NAME);
+        $stmt = AdvancedImport::db()->query($query_string);
+        if($row = $stmt->fetch()){
+            return @$row['total'];
         }
         return 0;
     }
@@ -87,11 +87,11 @@ class Queue
 
         $query_string = sprintf(
             "SELECT * FROM %s WHERE status NOT IN (%s)",
-            self::tableName(),
+            Job::TABLE_NAME,
             DatabaseQueryHelper::getQueryList($skip_status)
         );
-        $result = db_query($query_string);
-        while($row = db_fetch_assoc($result)) {
+        $stmt = AdvancedImport::db()->query($query_string);
+        while($row = $stmt->fetch()) {
             $type = @$row['type'];
             if($type==Job::TYPE_IMPORT) {
                 $job = new ImportJob($row);
@@ -105,113 +105,104 @@ class Queue
     public function updateJobStatus($project_id, $job_id, $status)
     {
         $query_string = sprintf(
-            "UPDATE `%s` SET `status`='%s' WHERE project_id=%u AND id=%u",
-            self::tableName(),  $status, $project_id, $job_id
+            "UPDATE `%s` SET `status`=? WHERE project_id=? AND id=?",
+            Job::TABLE_NAME
         );
-        $result = db_query($query_string);
-        if($result==false) return false;
+        $stmt = AdvancedImport::db()->query($query_string, [$status, $project_id, $job_id]);
+        if($stmt==false) return false;
         return true;
     }
 
-    public function deleteJob( $job_id)
+    /**
+     * delete a job
+     * use both id and project_id to prevent
+     * abuse from the API
+     * the project ID is created in the controller and cannot be forged
+     * by a user
+     *
+     * @param int $project_id
+     * @param int $job_id
+     * @return int|bool
+     */
+    public function deleteJob($project_id, $job_id)
     {
+        $isFileUsedInOtherJobs = function($job_id, $filename) {
+            $query_string = sprintf("SELECT * FROM %s WHERE id!=:id AND filename=:filename", Job::TABLE_NAME);
+            $stmt = AdvancedImport::db()->query($query_string, ['id'=>$job_id, 'filename'=>$filename]); 
+            if($stmt==false) throw new \Exception("Error checkingif file is used in other jobs", 1);
+            $results = $stmt->fetchAll();
+            $count = $stmt->rowCount();
+            return count($results)>0;
+        };
         $query_string = sprintf(
-            "DELETE FROM `%s` WHERE id=%u",
-            self::tableName(), $job_id
+            "SELECT * FROM `%s` WHERE `id`=:id AND `project_id`=:project_id",
+            Job::TABLE_NAME
         );
-        $result = db_query($query_string);
-        if($result==false) return false;
-        return true;
-    }
+        $stmt = AdvancedImport::db()->query($query_string, ['id'=>$job_id, 'project_id'=>$project_id]);
+        if ($row = $stmt->fetch()) {
 
-    public function cleanup()
-    {
-        $query_string = sprintf(
-            "SELECT * FROM `%s` WHERE `status`=%s",
-            self::tableName(), checkNull(Job::STATUS_DELETED)
-        );
-        $result = db_query($query_string);
-        while ($row=db_fetch_assoc($result)) {
-            db_query("SET AUTOCOMMIT=0");
-            db_query("BEGIN");
-            $deleted_file = false;
-            $id = @$row['id'];
+            $db = AdvancedImport::db();
+            $db->beginTransaction();
+
+            $file_ok = false; // check if file has been deleted or is used by other jobs
             $filename = @$row['filename'];
-            $deleted_job = $this->deleteJob($id);
+            $deleted_job = $db->delete(Job::TABLE_NAME, ['id'=> $job_id]);
+            $message = '';
             if($deleted_job) {
-                $message = sprintf("The job ID %u and its associated file have been deleted", $id);
-                $file_path = AdvancedImport::getUploadedFilePath($filename);
-                $file_exists = is_file($file_path);
-                if(!$file_exists) {
-                    // file not found; consider it deleted
-                    $deleted_file = true;
+                if(!$isFileUsedInOtherJobs($job_id, $filename)) {
+                    $file_path = AdvancedImport::getUploadedFilePath($filename);
+                    $file_exists = is_file($file_path);
+                    if(!$file_exists) {
+                        // file not found; consider it deleted
+                        $file_ok = true;
+                    }else {
+                        $file_ok = unlink($file_path);
+                    }
+                    $message = sprintf("The job ID %u and its associated file have been deleted", $job_id);
                 }else {
-                    $deleted_file = unlink($file_path);
+                    $file_ok = true;
+                    $message = sprintf("The job ID %u has been deleted", $job_id);
                 }
-                if($deleted_file) $this->notify('log', compact('message'));
             }
-            if(!$deleted_job || !$deleted_file) {
-                db_query("ROLLBACK");
-		        db_query("SET AUTOCOMMIT=1");
-                $message = sprintf("There was ann error deleting the job ID %u and its associated file", $id);
+            if($deleted_job && $file_ok) {
+                $db->commit();
                 $this->notify('log', compact('message'));
+                return $deleted_job;
+            }else {
+                $db->rollBack();
+                $message = sprintf("There was ann error deleting the job ID %u", $job_id);
+                $this->notify('log', compact('message'));
+                return false;
             }
-
-            db_query("COMMIT");
-            db_query("SET AUTOCOMMIT=1");
         }
+        return false;
     }
 
-
-    public static function tableName()
+    public function createJobsTable()
     {
-        return  AdvancedImport::TABLES_PREFIX.'import_queue';
-    }
-
-    public static function createTable()
-    {
-        $status = [
-            Job::STATUS_READY,
-            Job::STATUS_ERROR,
-            Job::STATUS_COMPLETED,
-            Job::STATUS_PROCESSING,
-            Job::STATUS_STOPPED,
-            Job::STATUS_DELETED,
-        ];
-        $status_string = DatabaseQueryHelper::implodeAndQuote(', ', $status, "'");
-        $types = [Job::TYPE_IMPORT, Job::TYPE_EXPORT];
-        $typess_string = DatabaseQueryHelper::implodeAndQuote(', ', $types, "'");
         $query_string = sprintf(
             "CREATE TABLE IF NOT EXISTS `%s`
              (
-                `id` int(11) NOT NULL AUTO_INCREMENT,
-                PRIMARY KEY (`id`),
-                `project_id` int(11) NOT NULL,
-                `user_id` int(11) NOT NULL,
-                `filename` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'path to the uploaded CSV file',
-                `settings` blob,
-                `processed_lines` int(11) NOT NULL DEFAULT 0,
-                `error` text COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'error if any',
-                `status` ENUM(%s) DEFAULT '%s' COMMENT 'status of the job',
-                `type` ENUM(%s) DEFAULT NULL COMMENT 'type of job',
-                `created_at` datetime DEFAULT NULL,
-                `updated_at` datetime DEFAULT NULL,
-                `completed_at` datetime DEFAULT NULL
-            )
-            ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
-            self::tableName(),
-            $status_string, $status[0], $typess_string
+                `id` INTEGER PRIMARY KEY,
+                `project_id` INTEGER NOT NULL,
+                `user_id` INTEGER NOT NULL,
+                `filename` TEXT,
+                `settings` BLOB,
+                `processed_lines` INTEGER NOT NULL DEFAULT 0,
+                `error` TEXT DEFAULT NULL,
+                `status` TEXT DEFAULT '%s',
+                `type` TEXT DEFAULT NULL,
+                `created_at` TEXT DEFAULT NULL,
+                `updated_at` TEXT DEFAULT NULL,
+                `completed_at` TEXT DEFAULT NULL
+            )",
+            Job::TABLE_NAME, Job::STATUS_READY
         );
-        $result = db_query($query_string);
+        $result = AdvancedImport::db()->query($query_string);
+        if(!$result) {
+            throw new \Exception("Error creating the Jobs table", 1);
+            return false;
+        }
         return $result;
     }
-
-    public static function dropTable()
-    {
-        $query_string = sprintf("DROP TABLE IF EXISTS `%s`", self::tableName());
-        $result = db_query($query_string);
-        return $result;
-    }
-
-
 }

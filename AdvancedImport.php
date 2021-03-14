@@ -8,6 +8,9 @@ use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
 use Logging;
+use PDO;
+use SQLite3;
+use Vanderbilt\AdvancedImport\App\Helpers\Database;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
@@ -15,23 +18,52 @@ use Vanderbilt\AdvancedImport\App\Models\Mediator;
 class AdvancedImport extends AbstractExternalModule implements Mediator
 {
     private static $instance;
+    /**
+     * name of the SQLite database
+     */
+    const DB_NAME = 'advanced_import.db';
 
     const TABLES_PREFIX = 'advanced_ie_';
     const MAX_CRON_EXECUTION_TIME = '10 minutes';
     const UPLOAD_FOLDER_NAME = 'uploads';
-
 
     function __construct()
     {
         parent::__construct();
     }
 
+    /**
+     * path to the data directory:
+     * contains the 'uploads' folder and the SQLite database
+     *
+     * @return string
+     */
+    public static function getDataDirectory()
+    {
+        $data_directrory = EDOC_PATH."advanced_import";
+        return $data_directrory;
+    }
+    
+    /**
+     * path to the folder where the
+     * CSV files are stored before being processed
+     *
+     * @return string
+     */
     public static function getUploadDirectory()
     {
-        $upload_dir = dirname(__FILE__).DIRECTORY_SEPARATOR.self::UPLOAD_FOLDER_NAME;
+        // $upload_dir = dirname(__FILE__).DIRECTORY_SEPARATOR.self::UPLOAD_FOLDER_NAME;
+        $data_directory = self::getDataDirectory();
+        $upload_dir = $data_directory."/uploads";
         return $upload_dir;
     }
 
+    /**
+     * path to a file insiede the uploads directory
+     *
+     * @param string $filename
+     * @return string
+     */
     public static function getUploadedFilePath($filename)
     {
         $basename = pathinfo($filename, PATHINFO_BASENAME); //make sure it's just the file name (no subdirectories)
@@ -92,7 +124,8 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $max_time = $start->add($max_execution);
         $queue = new Queue();
         $jobs_generator = $queue->jobsGenerator();
-        if($job = $jobs_generator->current()) {
+        $job = $jobs_generator->current();
+        while($job) {
             do {
                 try {
                     $now = new DateTime();
@@ -110,6 +143,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
                     $job->setError($e->getMessage());
                 }
             } while($keep_processing);
+            $job = $jobs_generator->next();
         }
     }
 
@@ -119,14 +153,13 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      *
      * @return void
      */
-    function cleanupUploads()
+    /* function cleanupUploads()
     {
         $queue = new Queue();
         $queue->attach($this); // listen for all events
         $queue->cleanup();
         // $completed_jobs = $queue->getJobs($params);
-
-    }
+    } */
 
     function cron_processQueue($cronInfo)
     {
@@ -136,17 +169,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
             return sprintf("%s - all jobs have been processed", $cron_name);
         } catch (\Exception $e) {
             return sprintf("%s -  error processing the jobs ( %s )", $cron_name, $e->getMessage());
-        }
-    }
-
-    function cron_Cleanup($cronInfo)
-    {
-        try {
-            $cron_name = @$cronInfo['cron_name'] ?: 'AdvancedImport';
-            $this->cleanupUploads();
-            return sprintf("%s - all data has been cleaned up", $cron_name);
-        } catch (\Exception $e) {
-            return sprintf("%s -  error cleaning up ( %s )", $cron_name, $e->getMessage());
         }
     }
 
@@ -196,42 +218,83 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     function redcap_module_system_enable($version) {
         try {
-            $this->initTables();
+            $this->onModuleSystemEnable();
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }
 
-    function cleanupUploadDirectory()
+
+    /**
+     * get a reference to the sqlite3 DB
+     * create the database if not exists
+     *
+     * @return Database
+     */
+    public static function db()
     {
-        $uploadDirectory = self::getUploadDirectory();
-        $files = glob($uploadDirectory."/*", GLOB_BRACE); // get all file names
+        $db_path = self::getDataDirectory().DIRECTORY_SEPARATOR.self::DB_NAME;
+        $database = new Database($db_path);
+        return $database;
+    }
+
+    /**
+     * helper method to delete all files from a folder
+     *
+     * @param string $path
+     * @return void
+     */
+    private function cleanupDirectory($path)
+    {
+        $files = glob($path."/*", GLOB_BRACE); // get all file names
         foreach($files as $file){ // iterate files
             if(is_file($file)) {
                 unlink($file); // delete file
             }
         }
+    }
 
+    /**
+     * delete all created files and folders
+     *
+     * @return void
+     */
+    function onModuleSystemDisable()
+    {
+        $upload_directory = self::getUploadDirectory();
+        $this->cleanupDirectory($upload_directory);
+        unlink($upload_directory);
+
+        $data_directory = self::getDataDirectory();
+        $this->cleanupDirectory($data_directory);
+        unlink($data_directory);
     }
 
     function redcap_module_system_disable($version)
     {
         try {
-            $this->dropTables();
-            $this->cleanupUploadDirectory();
+            $this->onModuleSystemDisable();
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }
 
-    public function initTables()
+    /**
+     * create the data and uploads directory
+     * and the SQLite database with the jobs table
+     *
+     * @return void
+     */
+    public function onModuleSystemEnable()
     {
-        Queue::createTable();
-    }
-
-    public function dropTables()
-    {
-        Queue::dropTable();
+        $dataDir = self::getDataDirectory();
+        $uploadDir = self::getUploadDirectory();
+        $dirs = [$dataDir, $uploadDir];
+        foreach ($dirs as $dir) {
+            if(!file_exists($dir)) mkdir($dir, 0777, $recursive=true);
+        }
+        $queue = new Queue();
+        $queue->createJobsTable();
     }
 
     /**
