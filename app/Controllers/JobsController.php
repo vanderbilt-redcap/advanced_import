@@ -79,7 +79,7 @@ class JobsController extends BaseController
         try {
             $project_id = $_GET['pid'];
             $queue = new Queue();
-            $response = $queue->updateJobStatus($project_id, $id, JOB::STATUS_DELETED);
+            $response = $queue->deleteJob($project_id, $id);
             $this->printJSON($response, $code=200);
         } catch (\Throwable $th) {
             $message = $th->getMessage();

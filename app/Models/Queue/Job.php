@@ -4,6 +4,7 @@ use DateTime;
 use JsonSerializable;
 use Logging;
 use SplSubject;
+use SQLite3;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
 use Vanderbilt\AdvancedImport\App\Models\Import;
@@ -37,6 +38,8 @@ abstract class Job implements JobInterface, JsonSerializable
     const STATUS_STOPPED = 'stopped';
     const STATUS_DELETED = 'deleted';
 
+    const TABLE_NAME = "jobs";
+
     /**
      * list of fields to skip in mass assignment (update)
      *
@@ -53,7 +56,7 @@ abstract class Job implements JobInterface, JsonSerializable
             'project_id' => intval(@$params['project_id']),
             'user_id' => intval(@$params['user_id']),
             'filename' => @$params['filename'],
-            'settings' => unserialize(@$params['settings']),
+            'settings' => json_decode(@$params['settings'], $assoc=true),
             'processed_lines' => intval(@$params['processed_lines']),
             'status' => @$params['status'],
             'type' => @$params['type'],
@@ -72,13 +75,12 @@ abstract class Job implements JobInterface, JsonSerializable
     public function getStatus()
     {
         $query_string = sprintf(
-            "SELECT `status` FROM `%s` WHERE id=%u",
-            Queue::tableName(),
-            $this->id
+            "SELECT `status` FROM `%s` WHERE id=?",
+            self::TABLE_NAME
         );
-        $result = db_query($query_string);
-        if($error = db_error()) throw new \Exception(sprintf("Error getting the status of job id %u- %s", $this->id, $error), 400);
-        if($row = db_fetch_assoc($result)) {
+        $stmt = AdvancedImport::db()->query($query_string, [$this->id]);
+        if($stmt==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 400);
+        if($row = $stmt->fetch()) {
             $this->status = $status = @$row['status']; // also update the local one
             Logging::writeToFile('job_status.txt', "getStatus(): ".$status);
             return $this->status;
@@ -97,26 +99,18 @@ abstract class Job implements JobInterface, JsonSerializable
 
     public static function create($project_id, $user_id, $filename, $settings, $type)
     {
-        $table = Queue::tableName();
         $data = [
             'project_id' => $project_id,
             'user_id' => $user_id,
             'filename' => $filename,
-            'settings' => serialize($settings),
+            'settings' => json_encode($settings),
             'type' => $type,
             'created_at' => $created_at = self::getNow(),
             'updated_at' => $created_at,
         ];
-        $query_string = sprintf(
-            "INSERT INTO %s (%s) VALUES (%s)",
-            $table,
-            DatabaseQueryHelper::implodeAndQuote(',', array_keys($data), '`'),
-            DatabaseQueryHelper::getQueryList($data)
-        );
-        $result = db_query($query_string);
-        if($error = db_error()) throw new \Exception(sprintf("Error creating job - %s", $error), 400);
-        $job_id = db_insert_id();
-        return $job_id;
+        $id = AdvancedImport::db()->insert(self::TABLE_NAME, $data);
+        if($id==false) throw new \Exception("Error creating job", 400);
+        return $id;
     }
 
     function markProcessing() {
@@ -149,24 +143,14 @@ abstract class Job implements JobInterface, JsonSerializable
     {
         $params['updated_at'] = self::getNow();
 
-        $table = Queue::tableName();
         $job_id = $this->id;
 
         $data = array_filter($params, function($key) {
             return !(in_array($key, $this->guarded));
         }, ARRAY_FILTER_USE_KEY);
-        $update_statements = array_map(function($key, $value) {
-            return sprintf("`%s`=%s", $key, checkNull($value));
-        }, array_keys($data), $data);
-        $update_statement_string = implode(",\n", $update_statements);
 
-        $query_string = sprintf(
-            "UPDATE `%s` SET %s
-            WHERE `id`=%u",
-            $table, $update_statement_string, $job_id
-        );
-        $result = db_query($query_string);
-        if($error = db_error()) throw new \Exception(sprintf("Error updating job id %u- %s", $job_id, $error), 400);
+        $result = AdvancedImport::db()->update(self::TABLE_NAME, $data, ['id'=>$job_id]);
+        if($result==false) throw new \Exception(sprintf("Error updating job id %u", $job_id), 400);
         // also update the current instance values
         foreach ($data as $key => $value) {
             $this->{$key} = $value;
