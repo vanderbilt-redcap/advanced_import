@@ -40,11 +40,16 @@
       striped
       hover
     >
+        <template #cell(error)="data">
+            <div v-if="data.value"><div class="job-error text-muted small">{{data.value}}</div></div>
+        </template>
         <template #cell(settings)="data">
-            <details v-if="data.value">
-                <summary>Show...</summary>
-                <pre><span class="">{{ data.value }}</span></pre>
-            </details>
+            <div v-if="data.value">
+                <b-button size="sm" variant="outline-secondary" @click="showSettings(data.value)">
+                    <font-awesome-icon :title="data.value" :icon="['fas','eye']" />
+                    <span class="ml-2">Show</span>
+                </b-button>
+            </div>
         </template>
         <template #cell(status)="data">
             <div v-if="data.value" :set="params=getStatusIcon(data.value)" class="d-flex justify-content-center align-items-center">
@@ -52,13 +57,13 @@
             </div>
         </template>
         <template #cell(created_at)="data">
-            <div v-if="data.value.date">{{moment(data.value.date).format('YYYY/MM/DD hh:mm:ss')}}</div>
+            <div v-if="data.value">{{data.value}}</div>
         </template>
         <template #cell(updated_at)="data">
-            <div v-if="data.value.date">{{moment(data.value.date).format('YYYY/MM/DD hh:mm:ss')}}</div>
+            <div v-if="data.value">{{data.value}}</div>
         </template>
         <template #cell(completed_at)="data">
-            <div v-if="data.value.date">{{moment(data.value.date).format('YYYY/MM/DD hh:mm:ss')}}</div>
+            <div v-if="data.value">{{data.value}}</div>
         </template>
          <template #cell(type)="data">
             <div v-if="data.value" class="d-flex justify-content-center align-items-center">
@@ -74,6 +79,9 @@
                 <b-button class="ml-2" variant="outline-danger" size="sm" @click="confirmDeleteTask(data.item.id)" :disabled="getDeleteDisabled(data.item.status)">
                     <font-awesome-icon  :icon="['fas', 'trash']" />
                 </b-button>
+                <b-button v-if="debugMode" class="ml-2" variant="outline-success" size="sm" @click="showEdit(data.item)">
+                    <font-awesome-icon  :icon="['fas', 'edit']" />
+                </b-button>
             </div>
         </template>
     </b-table>
@@ -86,12 +94,25 @@
         size="sm"
         class="mb-2"
         ></b-pagination>
+    <b-modal ref="modal-settings" title="Settings" ok-only>
+        <pre>{{current_settings}}</pre>
+    </b-modal>
+    <b-modal ref="modal-edit" title="Edit" hide-footer>
+        <EditJob :job="editing_data">
+            <template v-slot:footer="{form}" >
+                <div class="d-flex justify-content-end">
+                    <b-button class="mr-2" size="sm" variant="secondary" @click="$refs['modal-edit'].hide()">Cancel</b-button>
+                    <b-button size="sm" variant="success" @click="editJob(form)" >OK</b-button>
+                </div>
+            </template>
+        </EditJob>
+    </b-modal>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import moment from 'moment'
+import EditJob from '@/components/EditJob'
 
 const statusList = Object.freeze({
     READY: 'ready',
@@ -103,14 +124,14 @@ const statusList = Object.freeze({
 })
 
 export default {
+    components: {EditJob},
     data() {
         return {
-            moment,
             items: [],
             metadata: {},
             fields: [
                 {key: 'id', lable: 'ID'},
-                {key: 'filename', lable: 'Filename'},
+                // {key: 'filename', lable: 'Filename'},
                 {key: 'processed_lines', lable: 'Processed Lines'},
                 {key: 'status', lable: 'Status'},
                 {key: 'error', lable: 'Error'},
@@ -124,13 +145,15 @@ export default {
             per_page: 10,
             current_page: 1,
             loading: false,
+            current_settings: null,
+            editing_data: null,
         }
     },
     async created() {
     },
     computed: {
         ...mapState({
-            // items: state => state.logs.list,
+            debugMode: state => state.app.debugMode,
         }),
         fields_proxy() {
             const items = [...this.items]
@@ -238,7 +261,6 @@ export default {
                 footerClass: 'p-2 border-top-0',
                 centered: true
             })
-            console.log(response)
             if(response) this.stopTask(id)
         },
         async stopTask(id) {
@@ -297,6 +319,28 @@ export default {
                 this.getItems()
             }
         },
+        showSettings(settings) {
+            const modal = this.$refs['modal-settings']
+            if(!modal) return
+            const pretty_settings = JSON.stringify(JSON.parse(settings), null, 2)
+            this.current_settings = pretty_settings
+            modal.show()
+        },
+        showEdit(data) {
+            const modal = this.$refs['modal-edit']
+            if(!modal) return
+            this.editing_data = data
+            modal.show()
+        },
+        async editJob(data) {
+            const {id} = data
+            await this.$API.dispatch('jobs/update', {id, data: {...data}})
+            const modal = this.$refs['modal-edit']
+            if(!modal) return
+            this.getItems()
+            modal.hide()
+
+        }
     }
 }
 </script>
@@ -314,6 +358,9 @@ export default {
 
 .table-wrapper {
     overflow-x:scroll;
+}
+.job-error {
+    max-width: 200px;
 }
 
 </style>

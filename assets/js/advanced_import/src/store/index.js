@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 Vue.use(Vuex);
 
+import app from '@/store/modules/app'
 import settings from '@/store/modules/settings'
 import logs from '@/store/modules/logs'
 import import_settings from '@/store/modules/import_settings'
@@ -16,6 +17,7 @@ var initialState = {}
 const store = new Vuex.Store({
     state: {...initialState},
     modules: {
+        app,
         settings,
         logs,
         import_settings,

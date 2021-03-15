@@ -88,13 +88,12 @@ class Import extends BaseModel
             }
             $row_index++;
         }
-        if(empty($results)) {
-            $this->notify("data:completed", ['processed_line' => $row_index]);
+        if(!$line || empty($results)) {
+            $this->notify("data:completed", []);
             return;
         }
         $results['line'] = $row_index;
         $this->notify("data:chunk_completed", [
-            'processed_line' => $row_index,
             'chunk_size' => $max_lines,
         ]);
 

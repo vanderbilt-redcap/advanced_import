@@ -18,6 +18,7 @@ $routes = [
     ['GET', "logs", ['Vanderbilt\AdvancedImport\App\Controllers\LogsController/index']],
     ['DELETE', "logs", ['Vanderbilt\AdvancedImport\App\Controllers\LogsController/delete']],
     ['GET', "jobs", ['Vanderbilt\AdvancedImport\App\Controllers\JobsController/index']],
+    ['POST', "jobs/{id:\d+}", ['Vanderbilt\AdvancedImport\App\Controllers\JobsController/updateJob']],
     ['POST', "jobs/{id:\d+}/stop", ['Vanderbilt\AdvancedImport\App\Controllers\JobsController/stopJob']],
     ['DELETE', "jobs/{id:\d+}", ['Vanderbilt\AdvancedImport\App\Controllers\JobsController/deleteJob']],
 ];

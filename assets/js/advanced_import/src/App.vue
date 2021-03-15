@@ -1,6 +1,9 @@
 <template>
   <div id="app" v-if="status==status_list.READY">
-    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+    <div class="d-block">
+      <b-badge v-if="debugMode" variant="warning">Debug mode on</b-badge>
+    </div>
+    <!-- <button @click="toggleDebug">Toggle debug</button> -->
     <router-view/>
   </div>
 </template>
@@ -50,7 +53,11 @@ export default {
       status_list,
     }
   },
-  components: {},
+  computed: {
+    debugMode() {
+      return this.$store.state.app.debugMode
+    }
+  },
   async created() {
     this.status = status_list.LOADING
     const response =  await this.$API.dispatch('settings/get')
@@ -58,6 +65,11 @@ export default {
     await this.$store.dispatch('settings/setState', settings)
     this.status = status_list.READY
   },
+  methods: {
+    toggleDebug() {
+      this.$store.dispatch('app/setState', {debugMode: !this.debugMode})
+    }
+  }
 }
 </script>
 

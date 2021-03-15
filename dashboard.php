@@ -19,12 +19,15 @@ include($module_path.'header.php');
 </div>
 
 <script>
-new Vue({
-  components: {
-    'advanced-import': advanced_import
-  }
-}).$mount('#advanced-import-container')
-</script>
+  (function() {
+      const app = new Vue({
+        components: {
+          'advanced-import': advanced_import
+        }
+      }).$mount('#advanced-import-container')
+      window.advancedImportComponent = app.$children[0]
+  }(window.advancedImportComponent = window.advancedImportComponent || {}))
+  </script>
 
 <?php 
 $page->PrintFooterExt();

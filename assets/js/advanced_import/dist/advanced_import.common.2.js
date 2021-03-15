@@ -304,6 +304,175 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "5a78":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/RecordFormat.vue?vue&type=template&id=51da2bac&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Select the field delimiter and the text qualifier.")]),_c('div',{staticClass:"d-flex flex-row align-items-center"},[_c('FieldDelimiter',{staticClass:"col pl-0",on:{"input":_vm.onChange},model:{value:(_vm.field_delimiter),callback:function ($$v) {_vm.field_delimiter=$$v},expression:"field_delimiter"}}),_c('TextQualifier',{staticClass:"col px-0",on:{"input":_vm.onChange},model:{value:(_vm.text_qualifier),callback:function ($$v) {_vm.text_qualifier=$$v},expression:"text_qualifier"}})],1),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)])}
+var staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/import/RecordFormat.vue?vue&type=template&id=51da2bac&
+
+// EXTERNAL MODULE: ./node_modules/vuelidate/lib/validators/index.js
+var validators = __webpack_require__("b5ae");
+
+// EXTERNAL MODULE: ./src/components/FieldDelimiter.vue + 4 modules
+var FieldDelimiter = __webpack_require__("31db");
+
+// EXTERNAL MODULE: ./src/components/TextQualifier.vue + 4 modules
+var TextQualifier = __webpack_require__("de3d");
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/RecordFormat.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+/* harmony default export */ var RecordFormatvue_type_script_lang_js_ = ({
+  components: {
+    FieldDelimiter: FieldDelimiter["a" /* default */],
+    TextQualifier: TextQualifier["a" /* default */]
+  },
+  data: function data() {
+    return {};
+  },
+  computed: {
+    field_delimiter: {
+      get: function get() {
+        return this.$store.state.import_settings.field_delimiter;
+      },
+      set: function set(value) {
+        this.$store.dispatch('import_settings/setStateProperty', {
+          key: 'field_delimiter',
+          value: value
+        });
+      }
+    },
+    text_qualifier: {
+      get: function get() {
+        return this.$store.state.import_settings.text_qualifier;
+      },
+      set: function set(value) {
+        this.$store.dispatch('import_settings/setStateProperty', {
+          key: 'text_qualifier',
+          value: value
+        });
+      }
+    },
+    record_delimiter: {
+      get: function get() {
+        return this.$store.state.import_settings.record_delimiter;
+      },
+      set: function set(value) {
+        this.$store.dispatch('import_settings/setStateProperty', {
+          key: 'record_delimiter',
+          value: value
+        });
+      }
+    }
+  },
+  validations: function validations() {
+    return {
+      field_delimiter: {
+        required: Object(validators["requiredIf"])(function (value) {
+          return !Object(FieldDelimiter["b" /* isStandardDelimiter */])(value);
+        })
+        /* allowedDelimiter: (value) => {
+          const allowed_delimiters = Object.values(FIELD_DELIMITERS).map(delimiter => delimiter.value)
+          return allowed_delimiters.indexOf(value) >= 0
+        } */
+
+      },
+      text_qualifier: {
+        required: validators["required"]
+      } // custom_field_delimiter: {
+      //   alphaNum,
+      //   required: requiredIf(() => this.field_delimiter=='other'),
+      //   /* also_check_field_delimiter: async (value, vm) => {
+      //     if(vm.field_delimiter!=='other') return true
+      //       else return await String(value).match(/[^\s]/)
+      //   } */
+      // }
+
+    };
+  },
+  methods: {
+    // parse the text whenever the delimiter or text qualifier are changed
+    onChange: function onChange() {
+      var config = {
+        delimiter: this.field_delimiter,
+        quoteChar: this.text_qualifier
+      }; // exit if FieldDelimiter element is set to 'other' (value is empty string)
+
+      if (config.delimiter == '') return;
+      var text = this.$store.state.csv_data.text;
+      this.$store.dispatch('csv_data/parse', {
+        text: text,
+        config: config
+      });
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/import/RecordFormat.vue?vue&type=script&lang=js&
+ /* harmony default export */ var import_RecordFormatvue_type_script_lang_js_ = (RecordFormatvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
+var componentNormalizer = __webpack_require__("2877");
+
+// CONCATENATED MODULE: ./src/components/import/RecordFormat.vue
+
+
+
+
+
+/* normalize component */
+
+var component = Object(componentNormalizer["a" /* default */])(
+  import_RecordFormatvue_type_script_lang_js_,
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var RecordFormat = __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
 /***/ "5d75":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -494,126 +663,6 @@ var regex = function regex(type, expr) {
 };
 
 exports.regex = regex;
-
-/***/ }),
-
-/***/ "8652":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/export/RecordFormat.vue?vue&type=template&id=7a3be3d4&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Select the field delimiter and the text qualifier.")]),_c('div',{staticClass:"d-flex flex-row align-items-center"},[_c('FieldDelimiter',{staticClass:"col pl-0",model:{value:(_vm.field_delimiter),callback:function ($$v) {_vm.field_delimiter=$$v},expression:"field_delimiter"}}),_c('TextQualifier',{staticClass:"col px-0",model:{value:(_vm.text_qualifier),callback:function ($$v) {_vm.text_qualifier=$$v},expression:"text_qualifier"}})],1),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)])}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/export/RecordFormat.vue?vue&type=template&id=7a3be3d4&
-
-// EXTERNAL MODULE: ./node_modules/vuelidate/lib/validators/index.js
-var validators = __webpack_require__("b5ae");
-
-// EXTERNAL MODULE: ./src/components/FieldDelimiter.vue + 4 modules
-var FieldDelimiter = __webpack_require__("31db");
-
-// EXTERNAL MODULE: ./src/components/TextQualifier.vue + 4 modules
-var TextQualifier = __webpack_require__("de3d");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/export/RecordFormat.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-/* harmony default export */ var RecordFormatvue_type_script_lang_js_ = ({
-  components: {
-    FieldDelimiter: FieldDelimiter["a" /* default */],
-    TextQualifier: TextQualifier["a" /* default */]
-  },
-  data: function data() {
-    return {};
-  },
-  computed: {
-    field_delimiter: {
-      get: function get() {
-        return this.$store.state.export_settings.field_delimiter;
-      },
-      set: function set(value) {
-        this.$store.dispatch('export_settings/setStateProperty', {
-          key: 'field_delimiter',
-          value: value
-        });
-      }
-    },
-    text_qualifier: {
-      get: function get() {
-        return this.$store.state.export_settings.text_qualifier;
-      },
-      set: function set(value) {
-        this.$store.dispatch('export_settings/setStateProperty', {
-          key: 'text_qualifier',
-          value: value
-        });
-      }
-    }
-  },
-  validations: function validations() {
-    return {
-      field_delimiter: {
-        required: Object(validators["requiredIf"])(function (value) {
-          return !Object(FieldDelimiter["b" /* isStandardDelimiter */])(value);
-        })
-      },
-      text_qualifier: {
-        required: validators["required"]
-      }
-    };
-  }
-});
-// CONCATENATED MODULE: ./src/components/export/RecordFormat.vue?vue&type=script&lang=js&
- /* harmony default export */ var export_RecordFormatvue_type_script_lang_js_ = (RecordFormatvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
-
-// CONCATENATED MODULE: ./src/components/export/RecordFormat.vue
-
-
-
-
-
-/* normalize component */
-
-var component = Object(componentNormalizer["a" /* default */])(
-  export_RecordFormatvue_type_script_lang_js_,
-  render,
-  staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var RecordFormat = __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 

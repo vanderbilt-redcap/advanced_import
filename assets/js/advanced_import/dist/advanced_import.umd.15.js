@@ -1,97 +1,72 @@
 ((typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] || []).push([[15],{
 
-/***/ "83c4":
+/***/ "2532":
 /***/ (function(module, exports, __webpack_require__) {
 
-// extracted by mini-css-extract-plugin
+"use strict";
+
+var $ = __webpack_require__("23e7");
+var notARegExp = __webpack_require__("5a34");
+var requireObjectCoercible = __webpack_require__("1d80");
+var correctIsRegExpLogic = __webpack_require__("ab13");
+
+// `String.prototype.includes` method
+// https://tc39.github.io/ecma262/#sec-string.prototype.includes
+$({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, {
+  includes: function includes(searchString /* , position = 0 */) {
+    return !!~String(requireObjectCoercible(this))
+      .indexOf(notARegExp(searchString), arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
 
 /***/ }),
 
-/***/ "e19e":
+/***/ "5a34":
+/***/ (function(module, exports, __webpack_require__) {
+
+var isRegExp = __webpack_require__("44e7");
+
+module.exports = function (it) {
+  if (isRegExp(it)) {
+    throw TypeError("The method doesn't accept regular expressions");
+  } return it;
+};
+
+
+/***/ }),
+
+/***/ "ab0f":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/pages/Logs.vue?vue&type=template&id=2ca240f8&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Check the logs for errors or warnings.")]),_c('LogsTable')],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/MapFields.vue?vue&type=template&id=76d310d2&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("The wizard guessed the mapping for you but you can adjust the mapping as needed and select the dynamic fields.")]),_c('table',{staticClass:"table table-striped table-bordered"},[_c('thead',[_c('tr',[_c('th',[_vm._v("Destination Field (REDCap)")]),_c('th',[_vm._v("Source Field (CSV file)")]),_c('th',[_vm._v("Dynamic "),_c('b-button',{directives:[{name:"b-modal",rawName:"v-b-modal.modal-dynamic-fields",modifiers:{"modal-dynamic-fields":true}}],attrs:{"size":"sm","variant":"outline-info"}},[_c('font-awesome-icon',{staticClass:"icon",attrs:{"icon":['fas', 'question-circle']}})],1)],1)])]),_c('tbody',_vm._l((_vm.form_fields),function(field,index){return _c('tr',{key:index},[_c('td',[_c('span',{staticClass:"d-flex flex-row align-items-center"},[_c('span',[_vm._v(_vm._s(field.element_label))]),(field.field_name===_vm.primary_key)?_c('font-awesome-icon',{staticClass:"icon text-warning ml-1",attrs:{"title":"primary key","icon":['fas', 'star']}}):_vm._e()],1),_c('span',{staticClass:"small"},[_vm._v("("+_vm._s(field.field_name)+")")])]),_c('td',[_c('select',{staticClass:"form-control",domProps:{"value":_vm.mapping[field.field_name]},on:{"change":function($event){_vm.onInput(field.field_name)($event)}}},[_c('option',{attrs:{"value":""}},[_vm._v("--- skip ---")]),_vm._l((_vm.csv_fields),function(csv_field,index){return _c('option',{key:index,attrs:{"disabled":Object.values(_vm.mapping).includes(index)},domProps:{"value":index}},[_vm._v(_vm._s(csv_field))])})],2),_c('div')]),_c('td',[(field.field_name!==_vm.primary_key)?_c('b-form-checkbox',{attrs:{"disabled":!field.field_name || isNaN(_vm.mapping[field.field_name]),"value":field.field_name,"switch":""},model:{value:(_vm.dynamic_keys),callback:function ($$v) {_vm.dynamic_keys=$$v},expression:"dynamic_keys"}}):_vm._e()],1)])}),0)]),_c('b-modal',{attrs:{"id":"modal-dynamic-fields","title":"Dynamic fields","ok-only":""}},[_c('div',{staticClass:"my-4"},[_c('p',[_vm._v("Mark as \"dynamic\" the fields that could change in an entry.")]),_c('p',[_vm._v("If you are importing \"medications\" in a repeated form, for example, you may want to mark the \"status\" field as dynamic since it could change in time.")]),_c('p',[_vm._v("Dynamic fields will be ignored when the wizard will try to determine the uniqueness of a row.")])])]),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/pages/Logs.vue?vue&type=template&id=2ca240f8&scoped=true&
+// CONCATENATED MODULE: ./src/components/import/MapFields.vue?vue&type=template&id=76d310d2&
 
-// EXTERNAL MODULE: ./src/components/LogsTable.vue + 4 modules
-var LogsTable = __webpack_require__("fb4a");
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
+var es_array_filter = __webpack_require__("4de4");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/pages/Logs.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
+var es_array_includes = __webpack_require__("caad");
 
-/* harmony default export */ var Logsvue_type_script_lang_js_ = ({
-  components: {
-    LogsTable: LogsTable["a" /* default */]
-  },
-  computed: {}
-});
-// CONCATENATED MODULE: ./src/pages/Logs.vue?vue&type=script&lang=js&
- /* harmony default export */ var pages_Logsvue_type_script_lang_js_ = (Logsvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
+var es_array_map = __webpack_require__("d81d");
 
-// CONCATENATED MODULE: ./src/pages/Logs.vue
-
-
-
-
-
-/* normalize component */
-
-var component = Object(componentNormalizer["a" /* default */])(
-  pages_Logsvue_type_script_lang_js_,
-  render,
-  staticRenderFns,
-  false,
-  null,
-  "2ca240f8",
-  null
-  
-)
-
-/* harmony default export */ var Logs = __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "f6c6":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogsTable_vue_vue_type_style_index_0_id_d102da56_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("83c4");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogsTable_vue_vue_type_style_index_0_id_d102da56_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogsTable_vue_vue_type_style_index_0_id_d102da56_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogsTable_vue_vue_type_style_index_0_id_d102da56_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "fb4a":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/LogsTable.vue?vue&type=template&id=d102da56&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"overflow-auto"},[_c('div',{staticClass:"d-flex flex-row justify-content-start align-items-start"},[_c('b-button',{attrs:{"size":"sm","variant":"info","disabled":_vm.loading},on:{"click":_vm.getLogs}},[(_vm.loading)?_c('font-awesome-icon',{attrs:{"icon":"spinner","spin":""}}):_c('font-awesome-icon',{attrs:{"icon":"sync"}}),_c('span',[_vm._v(" Reload")])],1),(_vm.hasItems)?_c('b-button',{directives:[{name:"b-modal",rawName:"v-b-modal.modal-delete",modifiers:{"modal-delete":true}}],staticClass:"ml-2",attrs:{"size":"sm","variant":"danger","disabled":_vm.loading}},[_c('font-awesome-icon',{attrs:{"icon":"trash"}}),_c('span',[_vm._v(" Delete logs")])],1):_vm._e(),_c('b-modal',{attrs:{"id":"modal-delete","title":"Delete logs"},on:{"ok":_vm.handleOkDelete}},[_c('p',{staticClass:"my-4"},[_vm._v("Are you sure you want to delete all logs for the current project?")])]),(_vm.hasItems)?_c('b-pagination',{staticClass:"ml-2",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1),_c('b-table',{staticClass:"my-2",attrs:{"id":"my-table","items":_vm.items_proxy,"_per-page":"per_page","_current-page":"current_page","small":"","bordered":"","striped":"","hover":""}}),(_vm.hasItems)?_c('b-pagination',{attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1)}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/LogsTable.vue?vue&type=template&id=d102da56&scoped=true&
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
+var es_number_constructor = __webpack_require__("a9e3");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
 var es_object_keys = __webpack_require__("b64b");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
+var es_string_includes = __webpack_require__("2532");
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
 var toConsumableArray = __webpack_require__("2909");
@@ -99,21 +74,42 @@ var toConsumableArray = __webpack_require__("2909");
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
 var objectSpread2 = __webpack_require__("5530");
 
-// EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
-var runtime = __webpack_require__("96cf");
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__("1da1");
-
 // EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
 var vuex_esm = __webpack_require__("2f62");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/LogsTable.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/MapFields.vue?vue&type=script&lang=js&
 
 
 
 
 
+
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -163,170 +159,86 @@ var vuex_esm = __webpack_require__("2f62");
 //
 //
 
-/* harmony default export */ var LogsTablevue_type_script_lang_js_ = ({
+/* harmony default export */ var MapFieldsvue_type_script_lang_js_ = ({
   data: function data() {
-    return {
-      per_page: 20,
-      current_page: 1,
-      loading: false
-    };
-  },
-  created: function created() {
-    return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      return regeneratorRuntime.wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-            case "end":
-              return _context.stop();
-          }
-        }
-      }, _callee);
-    }))();
+    return {};
   },
   computed: Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, Object(vuex_esm["b" /* mapState */])({
-    items: function items(state) {
-      return state.logs.list;
+    csv_fields: function csv_fields(state) {
+      return state.csv_data.fields;
+    },
+    mapping: function mapping(state) {
+      return state.import_settings.mapping;
+    },
+    primary_key: function primary_key(state) {
+      return state.import_settings.primary_key;
     }
   })), {}, {
-    items_proxy: function items_proxy() {
-      var items = Object(toConsumableArray["a" /* default */])(this.items);
-
-      var per_page = this.per_page;
-      var remainder = this.current_page * per_page - items.length;
-      if (remainder < 0) remainder = 0;
-      var empty_value = "";
-      var placeholder = {
-        'no logs': empty_value
-      };
-
-      if (items.length > 0) {
-        placeholder = {};
-        var first_item = items[0];
-
-        for (var _i = 0, _Object$keys = Object.keys(first_item); _i < _Object$keys.length; _i++) {
-          var key = _Object$keys[_i];
-          placeholder[key] = empty_value;
-        }
+    dynamic_keys: {
+      get: function get() {
+        return this.$store.state.import_settings.dynamic_keys;
+      },
+      set: function set(value) {
+        this.$store.dispatch('import_settings/setStateProperty', {
+          key: 'dynamic_keys',
+          value: value
+        });
       }
-
-      for (var i = 0; i < remainder; i++) {
-        items.push(placeholder);
-      }
-
-      return items;
     },
-    rows: function rows() {
-      var total = this.$store.getters['logs/total'];
-      return total || this.items.length;
-    },
-    hasItems: function hasItems() {
-      try {
-        return this.items.length > 0;
-      } catch (error) {
-        return false;
-      }
+    form_fields: function form_fields() {
+      var form_name = this.$store.state.import_settings.form_name;
+      var fields = this.$store.getters['settings/form_fields'](form_name);
+      return fields;
     }
   }),
-  watch: {
-    current_page: {
-      immediate: true,
-      handler: function handler() {
-        this.getLogs();
-      }
-    }
-  },
   methods: {
-    getLogs: function getLogs() {
+    onInput: function onInput(field_name) {
       var _this = this;
 
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var limit, start, response, _response$data, data, _data$data, list, _data$metadata, metadata;
+      return function (event) {
+        var value = Number(event.target.value);
 
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.prev = 0;
-                _this.loading = true;
-                limit = _this.per_page;
-                start = _this.per_page * (_this.current_page - 1);
-                _context2.next = 6;
-                return _this.$API.dispatch('logs/get', {
-                  start: start,
-                  limit: limit
-                });
+        if (!field_name || isNaN(value)) {
+          console.log("error mapping the field ".concat(field_name));
+          return;
+        }
 
-              case 6:
-                response = _context2.sent;
-                _response$data = response.data, data = _response$data === void 0 ? {} : _response$data;
-                _data$data = data.data, list = _data$data === void 0 ? {} : _data$data, _data$metadata = data.metadata, metadata = _data$metadata === void 0 ? {} : _data$metadata;
-                _context2.next = 11;
-                return _this.$store.dispatch('logs/setState', {
-                  list: list,
-                  metadata: metadata
-                });
-
-              case 11:
-                _context2.next = 16;
-                break;
-
-              case 13:
-                _context2.prev = 13;
-                _context2.t0 = _context2["catch"](0);
-                console.log(_context2.t0);
-
-              case 16:
-                _context2.prev = 16;
-                _this.loading = false;
-                return _context2.finish(16);
-
-              case 19:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, null, [[0, 13, 16, 19]]);
-      }))();
-    },
-    handleOkDelete: function handleOkDelete() {
-      var _this2 = this;
-
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-        var response;
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return _this2.$API.dispatch('logs/delete');
-
-              case 2:
-                response = _context3.sent;
-                console.log(response);
-
-                _this2.getLogs();
-
-              case 5:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3);
-      }))();
+        _this.$store.dispatch('import_settings/setMapping', {
+          target: field_name,
+          source: value
+        });
+      };
     }
+  },
+  validations: function validations() {
+    var form_field_names = Object(toConsumableArray["a" /* default */])(this.form_fields).map(function (field) {
+      return field.field_name;
+    });
+
+    return {
+      mapping: {
+        required: function required(mapping) {
+          var mapping_keys = Object.keys(mapping);
+          var mapped_form_fields = form_field_names.filter(function (value) {
+            return mapping_keys.includes(value);
+          });
+          return mapped_form_fields.length >= 1;
+        },
+        primaryKeyIsMapped: function primaryKeyIsMapped(mapping) {
+          var mapping_keys = Object.keys(mapping);
+          var primary_key = this.primary_key;
+          return mapping_keys.includes(primary_key);
+        }
+      }
+    };
   }
 });
-// CONCATENATED MODULE: ./src/components/LogsTable.vue?vue&type=script&lang=js&
- /* harmony default export */ var components_LogsTablevue_type_script_lang_js_ = (LogsTablevue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/LogsTable.vue?vue&type=style&index=0&id=d102da56&scoped=true&lang=css&
-var LogsTablevue_type_style_index_0_id_d102da56_scoped_true_lang_css_ = __webpack_require__("f6c6");
-
+// CONCATENATED MODULE: ./src/components/import/MapFields.vue?vue&type=script&lang=js&
+ /* harmony default export */ var import_MapFieldsvue_type_script_lang_js_ = (MapFieldsvue_type_script_lang_js_); 
 // EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 var componentNormalizer = __webpack_require__("2877");
 
-// CONCATENATED MODULE: ./src/components/LogsTable.vue
-
+// CONCATENATED MODULE: ./src/components/import/MapFields.vue
 
 
 
@@ -335,17 +247,65 @@ var componentNormalizer = __webpack_require__("2877");
 /* normalize component */
 
 var component = Object(componentNormalizer["a" /* default */])(
-  components_LogsTablevue_type_script_lang_js_,
+  import_MapFieldsvue_type_script_lang_js_,
   render,
   staticRenderFns,
   false,
   null,
-  "d102da56",
+  null,
   null
   
 )
 
-/* harmony default export */ var LogsTable = __webpack_exports__["a"] = (component.exports);
+/* harmony default export */ var MapFields = __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "ab13":
+/***/ (function(module, exports, __webpack_require__) {
+
+var wellKnownSymbol = __webpack_require__("b622");
+
+var MATCH = wellKnownSymbol('match');
+
+module.exports = function (METHOD_NAME) {
+  var regexp = /./;
+  try {
+    '/./'[METHOD_NAME](regexp);
+  } catch (e) {
+    try {
+      regexp[MATCH] = false;
+      return '/./'[METHOD_NAME](regexp);
+    } catch (f) { /* empty */ }
+  } return false;
+};
+
+
+/***/ }),
+
+/***/ "caad":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__("23e7");
+var $includes = __webpack_require__("4d64").includes;
+var addToUnscopables = __webpack_require__("44d2");
+var arrayMethodUsesToLength = __webpack_require__("ae40");
+
+var USES_TO_LENGTH = arrayMethodUsesToLength('indexOf', { ACCESSORS: true, 1: 0 });
+
+// `Array.prototype.includes` method
+// https://tc39.github.io/ecma262/#sec-array.prototype.includes
+$({ target: 'Array', proto: true, forced: !USES_TO_LENGTH }, {
+  includes: function includes(el /* , fromIndex = 0 */) {
+    return $includes(this, el, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
+
+// https://tc39.github.io/ecma262/#sec-array.prototype-@@unscopables
+addToUnscopables('includes');
+
 
 /***/ })
 

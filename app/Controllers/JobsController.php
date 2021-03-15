@@ -29,7 +29,7 @@ class JobsController extends BaseController
     function index()
     {
         try {
-            $project_id = $_GET['pid'];
+            $project_id = @$_GET['pid'];
             $project = new Project($project_id);
             $start = @$_GET['_start'];
             $limit =  @$_GET['_limit'];
@@ -42,7 +42,7 @@ class JobsController extends BaseController
                 'status' => $status,
             ];
             $entries = $queue->getJobs($params);
-            $total = $queue->countJobs();
+            $total = $queue->countJobs($project_id);
             $response = array(
                 'data' => $entries,
                 'metadata' => [
@@ -59,7 +59,7 @@ class JobsController extends BaseController
     function stopJob($id)
     {
         try {
-            $project_id = $_GET['pid'];
+            $project_id = @$_GET['pid'];
             $queue = new Queue();
             $response = $queue->updateJobStatus($project_id, $id, Job::STATUS_STOPPED);
             $this->printJSON($response, $code=200);
@@ -77,9 +77,28 @@ class JobsController extends BaseController
     function deleteJob($id)
     {
         try {
-            $project_id = $_GET['pid'];
+            $project_id = @$_GET['pid'];
             $queue = new Queue();
             $response = $queue->deleteJob($project_id, $id);
+            $this->printJSON($response, $code=200);
+        } catch (\Throwable $th) {
+            $message = $th->getMessage();
+            $code = $th->getCode();
+            $response = [
+                'error' => true,
+                'message' => $message,
+            ];
+            $this->printJSON($response, $code);
+        }
+    }
+
+    function updateJob($id)
+    {
+        try {
+            $project_id = @$_GET['pid'];
+            $data = json_decode(@$_POST['data'], $assoc=true);
+            $queue = new Queue();
+            $response = $queue->updateJob($project_id, $id, $data);
             $this->printJSON($response, $code=200);
         } catch (\Throwable $th) {
             $message = $th->getMessage();

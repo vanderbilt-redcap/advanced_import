@@ -39,6 +39,7 @@ abstract class Job implements JobInterface, JsonSerializable
     const STATUS_DELETED = 'deleted';
 
     const TABLE_NAME = "jobs";
+    const STORE_NAME = "jobs";
 
     /**
      * list of fields to skip in mass assignment (update)
@@ -51,20 +52,24 @@ abstract class Job implements JobInterface, JsonSerializable
 
     public function __construct($params)
     {
+        // define the allowed keys for properties
         $this->properties = [
-            'id' => intval(@$params['id']),
-            'project_id' => intval(@$params['project_id']),
-            'user_id' => intval(@$params['user_id']),
-            'filename' => @$params['filename'],
-            'settings' => json_decode(@$params['settings'], $assoc=true),
-            'processed_lines' => intval(@$params['processed_lines']),
-            'status' => @$params['status'],
-            'type' => @$params['type'],
-            'created_at' => $this->getDate(@$params['created_at']),
-            'updated_at' => $this->getDate(@$params['updated_at']),
-            'completed_at' => $this->getDate(@$params['completed_at']),
-            'error' => @$params['error'],
+            'id' =>null,
+            'project_id' =>null,
+            'user_id' =>null,
+            'filename' =>null,
+            'settings' =>null,
+            'processed_lines' =>null,
+            'status' =>null,
+            'type' =>null,
+            'created_at' =>null,
+            'updated_at' =>null,
+            'completed_at' =>null,
+            'error' =>null,
         ];
+        foreach ($params as $key => $value) {
+            $this->{$key} = $value;
+        }
     }
 
     private static function getNow()
@@ -74,18 +79,10 @@ abstract class Job implements JobInterface, JsonSerializable
 
     public function getStatus()
     {
-        $query_string = sprintf(
-            "SELECT `status` FROM `%s` WHERE id=?",
-            self::TABLE_NAME
-        );
-        $stmt = AdvancedImport::db()->query($query_string, [$this->id]);
-        if($stmt==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 400);
-        if($row = $stmt->fetch()) {
-            $this->status = $status = @$row['status']; // also update the local one
-            Logging::writeToFile('job_status.txt', "getStatus(): ".$status);
-            return $this->status;
-        }
-        return false;
+        $job = AdvancedImport::dbStore(self::STORE_NAME)->findById($this->id);
+        if($job==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 500);
+        $this->status = $status = @$job['status'];
+        return $status;
     }
 
     public function process() {}
@@ -103,12 +100,18 @@ abstract class Job implements JobInterface, JsonSerializable
             'project_id' => $project_id,
             'user_id' => $user_id,
             'filename' => $filename,
+            'processed_lines' => 0,
             'settings' => json_encode($settings),
             'type' => $type,
+            'status' => Job::STATUS_READY,
+            'error' => null,
             'created_at' => $created_at = self::getNow(),
             'updated_at' => $created_at,
+            'completed_at' => null,
         ];
-        $id = AdvancedImport::db()->insert(self::TABLE_NAME, $data);
+        $store = AdvancedImport::dbStore(Job::STORE_NAME);
+        $job = $store->insert($data);
+        $id = @$job['id'];
         if($id==false) throw new \Exception("Error creating job", 400);
         return $id;
     }
@@ -139,23 +142,18 @@ abstract class Job implements JobInterface, JsonSerializable
         $this->updateProperties($params);
     }
 
-    protected function updateProperties($params)
+    public function updateProperties($params)
     {
         $params['updated_at'] = self::getNow();
-
-        $job_id = $this->id;
-
-        $data = array_filter($params, function($key) {
-            return !(in_array($key, $this->guarded));
-        }, ARRAY_FILTER_USE_KEY);
-
-        $result = AdvancedImport::db()->update(self::TABLE_NAME, $data, ['id'=>$job_id]);
-        if($result==false) throw new \Exception(sprintf("Error updating job id %u", $job_id), 400);
-        // also update the current instance values
-        foreach ($data as $key => $value) {
+        $data = array_filter($params, function($value, $key) {
+            $guarded = in_array($key, $this->guarded);
+            if($guarded) return false;
             $this->{$key} = $value;
-        }
-        return $result;
+            return true;
+        }, ARRAY_FILTER_USE_BOTH);
+        $store = AdvancedImport::dbStore(Job::STORE_NAME);
+        $job = $store->updateById($this->id, $data);
+        return $job;
     }
     /**
      * reset the status to ready so the job will be further procesed
@@ -189,7 +187,44 @@ abstract class Job implements JobInterface, JsonSerializable
     protected function __set($name, $value)
     {
         if (!array_key_exists($name, $this->properties)) return;
-        $this->properties[$name] = $value;
+        switch ($name) {
+            case 'id':
+                $this->properties['id'] = intval($value);
+                break;
+            case 'project_id':
+                $this->properties['project_id'] = intval($value);
+                break;
+            case 'user_id':
+                $this->properties['user_id'] = intval($value);
+                break;
+            case 'filename':
+                $this->properties['filename'] = $value;
+                break;
+            case 'settings':
+                $this->properties['settings'] = json_decode($value, $assoc=true);
+                break;
+            case 'processed_lines':
+                $this->properties['processed_lines'] = intval($value);
+                break;
+            case 'status':
+                $this->properties['status'] = $value;
+                break;
+            case 'type':
+                $this->properties['type'] = $value;
+                break;
+            case 'created_at':
+                $this->properties['created_at'] = $this->getDate($value);
+                break;
+            case 'updated_at':
+                $this->properties['updated_at'] = $this->getDate($value);
+                break;
+            case 'completed_at':
+                $this->properties['completed_at'] = $this->getDate($value);
+                break;
+            case 'error':
+                $this->properties['error'] = $value;
+                break;
+        }
     }
 
     public function jsonSerialize()

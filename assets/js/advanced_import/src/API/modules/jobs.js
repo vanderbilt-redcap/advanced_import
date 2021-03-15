@@ -33,5 +33,19 @@ export default {
                 },
             })
         },
+        update(context, {id, data}) {
+            var params = {
+                route: `jobs/${id}`,
+            }
+            const form_data = new FormData()
+            const string_data = JSON.stringify(data)
+            form_data.append('data',  string_data)
+            return context.api_client.post('',form_data, {
+                params,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+        },
     }
 }

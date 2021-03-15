@@ -7,6 +7,8 @@ if(file_exists($autoload)) require_once($autoload);
 use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
+use SleekDB\Query;
+use SleekDB\Store;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
@@ -134,8 +136,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $max_time = $start->add($max_execution);
         $queue = new Queue();
         $jobs_generator = $queue->jobsGenerator();
-        $job = $jobs_generator->current();
-        while($job) {
+        while($job = $jobs_generator->current()) {
             do {
                 try {
                     $now = new DateTime();
@@ -153,7 +154,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
                     $job->setError($e->getMessage());
                 }
             } while($keep_processing);
-            $job = $jobs_generator->next();
+            $jobs_generator->next();
         }
     }
 
@@ -246,6 +247,32 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $db_path = self::getDataDirectory().DIRECTORY_SEPARATOR.self::DB_NAME;
         $database = new Database($db_path);
         return $database;
+    }
+
+
+    /**
+     * get a SleekDB Store
+     *
+     * @param string $store_name
+     * @return \SleekDB\Store
+     */
+    public static function dbStore($store_name)
+    {
+        $configuration = [
+            "auto_cache" => true,
+            "cache_lifetime" => null,
+            "timeout" => 120,
+            "primary_key" => "id",
+            "search" => [
+                "min_length" => 1,
+                "mode" => "or",
+                // "score_key" => null,
+                // "algorithm" => Query::SEARCH_ALGORITHM["hits"]
+            ]
+        ];
+        $db_path = self::getDatabaseDirectory();
+        $store = new \SleekDB\Store($store_name, $db_path, $configuration);
+        return $store;
     }
 
     /**

@@ -83,11 +83,11 @@ module.exports =
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"10":1,"11":1,"13":1,"14":1,"15":1,"17":1,"18":1};
+/******/ 		var cssChunks = {"9":1,"11":1,"12":1,"13":1,"14":1,"16":1,"17":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"d5f8d629","11":"182480b1","12":"31d6cfe0","13":"33d9679d","14":"a25f28c8","15":"a25f28c8","16":"31d6cfe0","17":"d7180cb5","18":"1aec68ba","19":"31d6cfe0","20":"31d6cfe0","21":"31d6cfe0"}[chunkId] + ".css";
+/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"d5f8d629","10":"31d6cfe0","11":"33d9679d","12":"37f917f4","13":"a25f28c8","14":"a25f28c8","15":"31d6cfe0","16":"d7180cb5","17":"1aec68ba","18":"31d6cfe0","19":"31d6cfe0","20":"31d6cfe0"}[chunkId] + ".css";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
@@ -20471,12 +20471,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=template&id=8366b00e&
-var Appvue_type_template_id_8366b00e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.status==_vm.status_list.READY)?_c('div',{attrs:{"id":"app"}},[_c('router-view')],1):_vm._e()}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/App.vue?vue&type=template&id=3fa46103&
+var Appvue_type_template_id_3fa46103_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.status==_vm.status_list.READY)?_c('div',{attrs:{"id":"app"}},[_c('div',{staticClass:"d-block"},[(_vm.debugMode)?_c('b-badge',{attrs:{"variant":"warning"}},[_vm._v("Debug mode on")]):_vm._e()],1),_c('router-view')],1):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=8366b00e&
+// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=3fa46103&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.freeze.js
 var es_object_freeze = __webpack_require__("dca8");
@@ -20497,17 +20497,61 @@ var objectSpread2 = __webpack_require__("5530");
 // EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
 var vuex_esm = __webpack_require__("2f62");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
-var es_number_constructor = __webpack_require__("a9e3");
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
+var es_array_index_of = __webpack_require__("c975");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.entries.js
 var es_object_entries = __webpack_require__("4fad");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.values.js
-var es_object_values = __webpack_require__("07ac");
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
+var es_object_keys = __webpack_require__("b64b");
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
 var slicedToArray = __webpack_require__("3835");
+
+// CONCATENATED MODULE: ./src/store/modules/app.js
+
+
+
+
+
+var initialState = {
+  debugMode: false
+};
+var app_module = {
+  namespaced: true,
+  state: Object(objectSpread2["a" /* default */])({}, initialState),
+  mutations: {
+    SET_STATE: function SET_STATE(state, payload) {
+      for (var _i = 0, _Object$entries = Object.entries(payload); _i < _Object$entries.length; _i++) {
+        var _Object$entries$_i = Object(slicedToArray["a" /* default */])(_Object$entries[_i], 2),
+            key = _Object$entries$_i[0],
+            value = _Object$entries$_i[1];
+
+        if (Object.keys(initialState).indexOf(key) < 0) continue;
+        state[key] = value;
+      }
+    }
+  },
+  actions: {
+    setState: function setState(context, params) {
+      context.commit('SET_STATE', params);
+    }
+  },
+  getters: {
+    total: function total(state) {
+      var _state$metadata$total = state.metadata.total,
+          total = _state$metadata$total === void 0 ? 0 : _state$metadata$total;
+      return total;
+    }
+  }
+};
+/* harmony default export */ var app = (app_module);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
+var es_number_constructor = __webpack_require__("a9e3");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.values.js
+var es_object_values = __webpack_require__("07ac");
 
 // CONCATENATED MODULE: ./src/store/modules/settings.js
 
@@ -20515,7 +20559,7 @@ var slicedToArray = __webpack_require__("3835");
 
 
 
-var initialState = {
+var settings_initialState = {
   language: {},
   // translations
   project: {},
@@ -20526,7 +20570,7 @@ var initialState = {
 };
 var settings_module = {
   namespaced: true,
-  state: Object(objectSpread2["a" /* default */])({}, initialState),
+  state: Object(objectSpread2["a" /* default */])({}, settings_initialState),
   mutations: {
     SET_STATE: function SET_STATE(state, payload) {
       for (var _i = 0, _Object$entries = Object.entries(payload); _i < _Object$entries.length; _i++) {
@@ -20621,9 +20665,6 @@ var es_array_find_index = __webpack_require__("c740");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
 var es_array_for_each = __webpack_require__("4160");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
-var es_array_index_of = __webpack_require__("c975");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
 var web_dom_collections_for_each = __webpack_require__("159b");
@@ -21398,6 +21439,7 @@ external_commonjs_vue_commonjs2_vue_root_Vue_default.a.use(vuex_esm["a" /* defau
 
 
 
+
 /**
  * state management
  */
@@ -21406,6 +21448,7 @@ var store_initialState = {};
 var store = new vuex_esm["a" /* default */].Store({
   state: Object(objectSpread2["a" /* default */])({}, store_initialState),
   modules: {
+    app: app,
     settings: modules_settings,
     logs: logs,
     import_settings: import_settings,
@@ -24391,49 +24434,49 @@ var es_promise = __webpack_require__("e6cf");
 var routes = [{
   path: '/',
   component: function component() {
-    return __webpack_require__.e(/* import() */ 13).then(__webpack_require__.bind(null, "713b"));
+    return __webpack_require__.e(/* import() */ 11).then(__webpack_require__.bind(null, "713b"));
   },
   children: [{
     path: '',
     name: 'home',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 17).then(__webpack_require__.bind(null, "bc13"));
+      return __webpack_require__.e(/* import() */ 16).then(__webpack_require__.bind(null, "bc13"));
     }
   }, {
     path: 'logs',
     name: 'logs',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 15).then(__webpack_require__.bind(null, "e19e"));
+      return __webpack_require__.e(/* import() */ 14).then(__webpack_require__.bind(null, "e19e"));
     }
   }, {
     path: 'jobs',
     name: 'jobs',
     component: function component() {
-      return Promise.all(/* import() */[__webpack_require__.e(1), __webpack_require__.e(11)]).then(__webpack_require__.bind(null, "cf20"));
+      return __webpack_require__.e(/* import() */ 12).then(__webpack_require__.bind(null, "cf20"));
     }
   }, {
     path: 'test',
     name: 'test',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 12).then(__webpack_require__.bind(null, "c961"));
+      return __webpack_require__.e(/* import() */ 10).then(__webpack_require__.bind(null, "c961"));
     }
   }, {
     path: 'import',
     name: 'import',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 10).then(__webpack_require__.bind(null, "a955"));
+      return __webpack_require__.e(/* import() */ 9).then(__webpack_require__.bind(null, "a955"));
     }
   }, {
     path: 'export',
     name: 'export',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 18).then(__webpack_require__.bind(null, "cc3e"));
+      return __webpack_require__.e(/* import() */ 17).then(__webpack_require__.bind(null, "cc3e"));
     }
   }, {
     path: "*",
     name: 'not_found',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 21).then(__webpack_require__.bind(null, "bb99"));
+      return __webpack_require__.e(/* import() */ 20).then(__webpack_require__.bind(null, "bb99"));
     }
   }]
 }];
@@ -24769,6 +24812,22 @@ var API_API = /*#__PURE__*/function () {
         route: "jobs/".concat(id, "/stop")
       };
       var form_data = new FormData();
+      return context.api_client.post('', form_data, {
+        params: params,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    },
+    update: function update(context, _ref4) {
+      var id = _ref4.id,
+          data = _ref4.data;
+      var params = {
+        route: "jobs/".concat(id)
+      };
+      var form_data = new FormData();
+      var string_data = JSON.stringify(data);
+      form_data.append('data', string_data);
       return context.api_client.post('', form_data, {
         params: params,
         headers: {
@@ -65428,6 +65487,9 @@ var component = Object(componentNormalizer["a" /* default */])(
 //
 //
 //
+//
+//
+//
 
  // store
 
@@ -65472,7 +65534,11 @@ var status_list = Object.freeze({
       status_list: status_list
     };
   },
-  components: {},
+  computed: {
+    debugMode: function debugMode() {
+      return this.$store.state.app.debugMode;
+    }
+  },
   created: function created() {
     var _this = this;
 
@@ -65503,6 +65569,13 @@ var status_list = Object.freeze({
         }
       }, _callee);
     }))();
+  },
+  methods: {
+    toggleDebug: function toggleDebug() {
+      this.$store.dispatch('app/setState', {
+        debugMode: !this.debugMode
+      });
+    }
   }
 });
 // CONCATENATED MODULE: ./src/App.vue?vue&type=script&lang=js&
@@ -65521,7 +65594,7 @@ var Appvue_type_style_index_0_lang_css_ = __webpack_require__("034f");
 
 var App_component = Object(componentNormalizer["a" /* default */])(
   src_Appvue_type_script_lang_js_,
-  Appvue_type_template_id_8366b00e_render,
+  Appvue_type_template_id_3fa46103_render,
   staticRenderFns,
   false,
   null,
