@@ -11,7 +11,8 @@
         }
     ],
     "require": {
-        "nikic/fast-route": "^1.3"
+        "nikic/fast-route": "^1.3",
+        "rakibtg/sleekdb": "^2.8"
     },
     "require-dev": {},
     "autoload": {

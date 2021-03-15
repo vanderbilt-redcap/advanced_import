@@ -8,6 +8,9 @@ use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
 use Logging;
+use PDO;
+use SQLite3;
+use Vanderbilt\AdvancedImport\App\Helpers\Database;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
@@ -15,23 +18,65 @@ use Vanderbilt\AdvancedImport\App\Models\Mediator;
 class AdvancedImport extends AbstractExternalModule implements Mediator
 {
     private static $instance;
+    /**
+     * name of the SQLite database
+     */
+    const DB_NAME = 'advanced_import.db';
 
     const TABLES_PREFIX = 'advanced_ie_';
     const MAX_CRON_EXECUTION_TIME = '10 minutes';
     const UPLOAD_FOLDER_NAME = 'uploads';
-
 
     function __construct()
     {
         parent::__construct();
     }
 
+    /**
+     * path to the data directory:
+     * contains the 'uploads' folder and the SQLite database
+     *
+     * @return string
+     */
+    public static function getDataDirectory()
+    {
+        $data_directrory = EDOC_PATH."advanced_import";
+        return $data_directrory;
+    }
+
+    /**
+     * path to the data directory:
+     * contains the 'uploads' folder and the SQLite database
+     *
+     * @return string
+     */
+    public static function getDatabaseDirectory()
+    {
+        $base_path = self::getDataDirectory();
+        $upload_dir = $base_path."/database";
+        return $upload_dir;
+    }
+    
+    /**
+     * path to the folder where the
+     * CSV files are stored before being processed
+     *
+     * @return string
+     */
     public static function getUploadDirectory()
     {
-        $upload_dir = dirname(__FILE__).DIRECTORY_SEPARATOR.self::UPLOAD_FOLDER_NAME;
+        // $upload_dir = dirname(__FILE__).DIRECTORY_SEPARATOR.self::UPLOAD_FOLDER_NAME;
+        $base_path = self::getDataDirectory();
+        $upload_dir = $base_path."/uploads";
         return $upload_dir;
     }
 
+    /**
+     * path to a file insiede the uploads directory
+     *
+     * @param string $filename
+     * @return string
+     */
     public static function getUploadedFilePath($filename)
     {
         $basename = pathinfo($filename, PATHINFO_BASENAME); //make sure it's just the file name (no subdirectories)
@@ -92,7 +137,8 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $max_time = $start->add($max_execution);
         $queue = new Queue();
         $jobs_generator = $queue->jobsGenerator();
-        if($job = $jobs_generator->current()) {
+        $job = $jobs_generator->current();
+        while($job) {
             do {
                 try {
                     $now = new DateTime();
@@ -110,6 +156,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
                     $job->setError($e->getMessage());
                 }
             } while($keep_processing);
+            $job = $jobs_generator->next();
         }
     }
 
@@ -119,14 +166,13 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      *
      * @return void
      */
-    function cleanupUploads()
+    /* function cleanupUploads()
     {
         $queue = new Queue();
         $queue->attach($this); // listen for all events
         $queue->cleanup();
         // $completed_jobs = $queue->getJobs($params);
-
-    }
+    } */
 
     function cron_processQueue($cronInfo)
     {
@@ -136,17 +182,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
             return sprintf("%s - all jobs have been processed", $cron_name);
         } catch (\Exception $e) {
             return sprintf("%s -  error processing the jobs ( %s )", $cron_name, $e->getMessage());
-        }
-    }
-
-    function cron_Cleanup($cronInfo)
-    {
-        try {
-            $cron_name = @$cronInfo['cron_name'] ?: 'AdvancedImport';
-            $this->cleanupUploads();
-            return sprintf("%s - all data has been cleaned up", $cron_name);
-        } catch (\Exception $e) {
-            return sprintf("%s -  error cleaning up ( %s )", $cron_name, $e->getMessage());
         }
     }
 
@@ -196,42 +231,106 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     function redcap_module_system_enable($version) {
         try {
-            $this->initTables();
+            $this->onModuleSystemEnable();
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }
 
-    function cleanupUploadDirectory()
+
+    /**
+     * get a reference to the sqlite3 DB
+     * create the database if not exists
+     *
+     * @return Database
+     */
+    public static function db()
     {
-        $uploadDirectory = self::getUploadDirectory();
-        $files = glob($uploadDirectory."/*", GLOB_BRACE); // get all file names
-        foreach($files as $file){ // iterate files
-            if(is_file($file)) {
-                unlink($file); // delete file
+        $db_path = self::getDataDirectory().DIRECTORY_SEPARATOR.self::DB_NAME;
+        $database = new Database($db_path);
+        return $database;
+    }
+
+    /**
+     * Recursively deletes a directory tree.
+     *
+     * @param string $folder         The directory path.
+     * @param bool   $keepRootFolder Whether to keep the top-level folder.
+     *
+     * @return bool TRUE on success, otherwise FALSE.
+     */
+    private function deleteTree($folder, $keepRootFolder = false)
+    {
+        // Handle bad arguments.
+        if (empty($folder) || !file_exists($folder)) {
+            return true; // No such file/folder exists.
+        } elseif (is_file($folder) || is_link($folder)) {
+            return @unlink($folder); // Delete file/link.
+        }
+
+        // Delete all children.
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($folder, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        foreach ($files as $fileinfo) {
+            $action = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            if (!@$action($fileinfo->getRealPath())) {
+                return false; // Abort due to the failure.
             }
         }
 
+        // Delete the root folder itself?
+        return (!$keepRootFolder ? @rmdir($folder) : true);
+    }
+
+    /**
+     * delete all created files and folders
+     *
+     * @return void
+     */
+    function onModuleSystemDisable()
+    {
+        $data_directory = self::getDataDirectory();
+        $this->deleteTree($data_directory);
     }
 
     function redcap_module_system_disable($version)
     {
         try {
-            $this->dropTables();
-            $this->cleanupUploadDirectory();
+            $this->onModuleSystemDisable();
         } catch (\Exception $e) {
             echo $e->getMessage();
         }
     }
 
-    public function initTables()
+    /**
+     * create the directories
+     * needed by the module
+     *
+     * @return void
+     */
+    public function onModuleSystemEnable()
     {
-        Queue::createTable();
-    }
-
-    public function dropTables()
-    {
-        Queue::dropTable();
+        $dataDir = self::getDataDirectory();
+        $uploadDir = self::getUploadDirectory();
+        $databaseDir = self::getDatabaseDirectory();
+        $dirs = [$dataDir, $databaseDir, $uploadDir];
+        foreach ($dirs as $dir) {
+            if(!file_exists($dir)) mkdir($dir, 0777, $recursive=true);
+        }
+        // $queue = new Queue();
+        $newsStore = new \SleekDB\Store("news", self::getDatabaseDirectory());
+        $article = [
+            "title" => "Advanced import created",
+            "about" => "wite tested on module enable!",
+            "author" => [
+                "avatar" => "profile-12.jpg",
+                "name" => "Francesco"
+            ]
+        ];
+        $results = $newsStore->insert($article);
     }
 
     /**
