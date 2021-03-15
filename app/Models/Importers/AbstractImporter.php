@@ -2,6 +2,7 @@
 
 use Project;
 use Vanderbilt\AdvancedImport\AdvancedImport;
+use Vanderbilt\AdvancedImport\App\Helpers\InstanceSeeker;
 use Vanderbilt\AdvancedImport\App\Helpers\RecordHelper;
 use Vanderbilt\AdvancedImport\App\Helpers\TemporaryTable;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
@@ -38,9 +39,9 @@ abstract class AbstractImporter implements ImporterInterface
 
     /**
      *
-     * @var TemporaryTable
+     * @var InstanceSeeker
      */
-    protected $temporary_table;
+    protected $instanceSeeker;
     /**
      *
      * @var RecordHelper
@@ -50,15 +51,15 @@ abstract class AbstractImporter implements ImporterInterface
     /**
      * @param Project $project_id
      * @param ImportSettings $settings
-     * @param TemporaryTable
+     * @param InstanceSeeker
      * @param RecordHelper
      */
-    public function __construct($project, $settings, $temporary_table, $record_helper)
+    public function __construct($project, $settings, $instanceSeeker, $record_helper)
     {
         $this->project = $project;
         $this->project_id = $project->project_id;
         $this->settings = $settings;
-        $this->temporary_table = $temporary_table;
+        $this->instanceSeeker = $instanceSeeker;
         $this->record_helper = $record_helper;
         $module = AdvancedImport::getInstance();
         $this->attach($module, '*'); // attach the module as a subscriber

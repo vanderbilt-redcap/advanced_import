@@ -1,5 +1,23 @@
 ((typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] || []).push([[11],{
 
+/***/ "2e4d":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "314a":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_2c971a18_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("2e4d");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_2c971a18_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_2c971a18_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_2c971a18_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "4678":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -298,32 +316,21 @@ webpackContext.id = "4678";
 
 /***/ }),
 
-/***/ "60b8":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_bdb7dc26_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c6fd");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_bdb7dc26_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_bdb7dc26_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_bdb7dc26_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "9d0b":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_fcef6626_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("eb58");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_fcef6626_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_fcef6626_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_fcef6626_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
-/***/ "c6fd":
+/***/ "479e":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "9b5e":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_16f7fade_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("479e");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_16f7fade_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_16f7fade_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_16f7fade_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -334,19 +341,19 @@ webpackContext.id = "4678";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6d3536b3-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/pages/Jobs.vue?vue&type=template&id=fcef6626&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Monitor the status of the Jobs.")]),_c('JobsTable'),_c('div',{staticClass:"d-flex"},[_c('b-card',{staticStyle:{"max-width":"20rem"},attrs:{"title":"Status","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'bookmark']}}),_vm._v(": "),_c('span',[_vm._v("Job ready to be processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-success",attrs:{"fixed-width":"","icon":['fas', 'check-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job process completed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'spinner']}}),_vm._v(": "),_c('span',[_vm._v("Job being processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-warning",attrs:{"fixed-width":"","icon":['fas', 'exclamation-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped due to error")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'stop-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped by user")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'minus-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job marked as 'deleted'")])],1)])])]),_c('b-card',{staticClass:"ml-2",staticStyle:{"max-width":"20rem"},attrs:{"title":"Actions","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'stopwatch']}}),_vm._v(": "),_c('span',[_vm._v("Stop a Job in progress")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'trash']}}),_vm._v(": "),_c('span',[_vm._v("A Job and its associated file will be deleted")])],1)])])]),_c('b-card',{staticClass:"ml-2",staticStyle:{"max-width":"20rem"},attrs:{"title":"Types","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'file-import']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Import\"")]),_vm._v(" type Job")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'file-export']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Export\"")]),_vm._v(" type Job")])],1)])])])],1)],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/pages/Jobs.vue?vue&type=template&id=2c971a18&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Monitor the status of the Jobs.")]),_c('JobsTable'),_c('div',{staticClass:"d-flex"},[_c('b-card',{staticStyle:{"max-width":"20rem"},attrs:{"title":"Status","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'bookmark']}}),_vm._v(": "),_c('span',[_vm._v("Job ready to be processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-success",attrs:{"fixed-width":"","icon":['fas', 'check-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job process completed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'spinner']}}),_vm._v(": "),_c('span',[_vm._v("Job being processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-warning",attrs:{"fixed-width":"","icon":['fas', 'exclamation-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped due to error")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'stop-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped by user")])],1)])])]),_c('b-card',{staticClass:"ml-2",staticStyle:{"max-width":"20rem"},attrs:{"title":"Actions","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'stopwatch']}}),_vm._v(": "),_c('span',[_vm._v("Stop a Job in progress")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'trash']}}),_vm._v(": "),_c('span',[_vm._v("A Job and its associated file will be deleted")])],1)])])]),_c('b-card',{staticClass:"ml-2",staticStyle:{"max-width":"20rem"},attrs:{"title":"Types","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'file-import']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Import\"")]),_vm._v(" type Job")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'file-export']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Export\"")]),_vm._v(" type Job")])],1)])])])],1)],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/pages/Jobs.vue?vue&type=template&id=fcef6626&scoped=true&
+// CONCATENATED MODULE: ./src/pages/Jobs.vue?vue&type=template&id=2c971a18&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6d3536b3-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/JobsTable.vue?vue&type=template&id=bdb7dc26&scoped=true&
-var JobsTablevue_type_template_id_bdb7dc26_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"overflow-auto"},[_c('div',{staticClass:"d-flex flex-row justify-content-start align-items-start"},[_c('b-button',{attrs:{"size":"sm","variant":"info","disabled":_vm.loading},on:{"click":_vm.getItems}},[(_vm.loading)?_c('font-awesome-icon',{attrs:{"icon":['fas', 'spinner'],"spin":""}}):_c('font-awesome-icon',{attrs:{"icon":['fas', 'sync']}}),_c('span',[_vm._v(" Reload")])],1),_c('b-modal',{attrs:{"id":"modal-delete","title":"Delete jobs"},on:{"ok":_vm.handleOkDelete}},[_c('p',{staticClass:"my-4"},[_vm._v("Are you sure you want to delete all tasks for the current project?")])]),(_vm.hasItems)?_c('b-pagination',{staticClass:"ml-2",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1),_c('b-table',{staticClass:"my-2",attrs:{"id":"my-table","items":_vm.items_proxy,"fields":_vm.fields,"_per-page":"per_page","_current-page":"current_page","small":"","bordered":"","striped":"","hover":""},scopedSlots:_vm._u([{key:"cell(settings)",fn:function(data){return [(data.value)?_c('details',[_c('summary',[_vm._v("Show...")]),_c('pre',[_c('span',{},[_vm._v(_vm._s(data.value))])])]):_vm._e()]}},{key:"cell(status)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center",attrs:{"set":_vm.params=_vm.getStatusIcon(data.value)}},[_c('font-awesome-icon',{class:_vm.params.class,attrs:{"title":data.value,"icon":_vm.params.icon,"spin":_vm.params.spin}})],1):_vm._e()]}},{key:"cell(created_at)",fn:function(data){return [(data.value.date)?_c('div',[_vm._v(_vm._s(_vm.moment(data.value.date).format('YYYY/MM/DD hh:mm:ss')))]):_vm._e()]}},{key:"cell(updated_at)",fn:function(data){return [(data.value.date)?_c('div',[_vm._v(_vm._s(_vm.moment(data.value.date).format('YYYY/MM/DD hh:mm:ss')))]):_vm._e()]}},{key:"cell(completed_at)",fn:function(data){return [(data.value.date)?_c('div',[_vm._v(_vm._s(_vm.moment(data.value.date).format('YYYY/MM/DD hh:mm:ss')))]):_vm._e()]}},{key:"cell(type)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center"},[(data.value=='import')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-import']}}):(data.value=='export')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-export']}}):_vm._e()],1):_vm._e()]}},{key:"cell(actions)",fn:function(data){return [(data.item.id)?_c('div',{staticClass:"d-flex"},[_c('b-button',{attrs:{"variant":"outline-primary","size":"sm","disabled":_vm.getStopDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmStopTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'stopwatch']}})],1),_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-danger","size":"sm","disabled":_vm.getDeleteDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmDeleteTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'trash']}})],1)],1):_vm._e()]}}])}),(_vm.hasItems)?_c('b-pagination',{attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1)}
-var JobsTablevue_type_template_id_bdb7dc26_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/JobsTable.vue?vue&type=template&id=16f7fade&scoped=true&
+var JobsTablevue_type_template_id_16f7fade_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"overflow-auto"},[_c('div',{staticClass:"d-flex flex-row justify-content-start align-items-start"},[_c('b-button',{attrs:{"size":"sm","variant":"info","disabled":_vm.loading},on:{"click":_vm.getItems}},[(_vm.loading)?_c('font-awesome-icon',{attrs:{"icon":['fas', 'spinner'],"spin":""}}):_c('font-awesome-icon',{attrs:{"icon":['fas', 'sync']}}),_c('span',[_vm._v(" Reload")])],1),_c('b-modal',{attrs:{"id":"modal-delete","title":"Delete jobs"},on:{"ok":_vm.handleOkDelete}},[_c('p',{staticClass:"my-4"},[_vm._v("Are you sure you want to delete all tasks for the current project?")])]),(_vm.hasItems)?_c('b-pagination',{staticClass:"ml-2 mb-0",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1),_c('div',{staticClass:"table-wrapper"},[_c('b-table',{staticClass:"my-2",attrs:{"id":"my-table","items":_vm.items_proxy,"fields":_vm.fields,"_per-page":"per_page","_current-page":"current_page","small":"","bordered":"","striped":"","hover":""},scopedSlots:_vm._u([{key:"cell(settings)",fn:function(data){return [(data.value)?_c('details',[_c('summary',[_vm._v("Show...")]),_c('pre',[_c('span',{},[_vm._v(_vm._s(data.value))])])]):_vm._e()]}},{key:"cell(status)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center",attrs:{"set":_vm.params=_vm.getStatusIcon(data.value)}},[_c('font-awesome-icon',{class:_vm.params.class,attrs:{"title":data.value,"icon":_vm.params.icon,"spin":_vm.params.spin}})],1):_vm._e()]}},{key:"cell(created_at)",fn:function(data){return [(data.value.date)?_c('div',[_vm._v(_vm._s(_vm.moment(data.value.date).format('YYYY/MM/DD hh:mm:ss')))]):_vm._e()]}},{key:"cell(updated_at)",fn:function(data){return [(data.value.date)?_c('div',[_vm._v(_vm._s(_vm.moment(data.value.date).format('YYYY/MM/DD hh:mm:ss')))]):_vm._e()]}},{key:"cell(completed_at)",fn:function(data){return [(data.value.date)?_c('div',[_vm._v(_vm._s(_vm.moment(data.value.date).format('YYYY/MM/DD hh:mm:ss')))]):_vm._e()]}},{key:"cell(type)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center"},[(data.value=='import')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-import']}}):(data.value=='export')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-export']}}):_vm._e()],1):_vm._e()]}},{key:"cell(actions)",fn:function(data){return [(data.item.id)?_c('div',{staticClass:"d-flex"},[_c('b-button',{attrs:{"variant":"outline-primary","size":"sm","disabled":_vm.getStopDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmStopTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'stopwatch']}})],1),_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-danger","size":"sm","disabled":_vm.getDeleteDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmDeleteTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'trash']}})],1)],1):_vm._e()]}}])})],1),(_vm.hasItems)?_c('b-pagination',{staticClass:"mb-2",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1)}
+var JobsTablevue_type_template_id_16f7fade_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=template&id=bdb7dc26&scoped=true&
+// CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=template&id=16f7fade&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__("99af");
@@ -482,9 +489,9 @@ var moment_default = /*#__PURE__*/__webpack_require__.n(moment);
 //
 //
 //
+//
 
 
-var empty_value = "";
 var statusList = Object.freeze({
   READY: 'ready',
   ERROR: 'error',
@@ -533,7 +540,7 @@ var statusList = Object.freeze({
         key: 'actions',
         lable: 'Actions'
       }],
-      per_page: 50,
+      per_page: 10,
       current_page: 1,
       loading: false
     };
@@ -566,33 +573,19 @@ var statusList = Object.freeze({
     items_proxy: function items_proxy() {
       var items = Object(toConsumableArray["a" /* default */])(this.items);
 
-      var per_page = this.per_page;
-      var min_rows = 5;
-      if (per_page > min_rows) per_page = min_rows;
-      var remainder = per_page - items.length % per_page;
-      var placeholder = {
-        'no data': empty_value
-      };
-
-      if (items.length > 0) {
-        placeholder = {};
-        var first_item = items[0];
-
-        for (var _i = 0, _Object$keys = Object.keys(first_item); _i < _Object$keys.length; _i++) {
-          var key = _Object$keys[_i];
-          placeholder[key] = empty_value;
-        }
-      }
+      var remainder = this.per_page - items.length;
+      if (remainder < 0) remainder = 0;
 
       for (var i = 0; i < remainder; i++) {
-        items.push(placeholder);
+        items.push({});
       }
 
       return items;
     },
     rows: function rows() {
-      var total = this.$store.getters['logs/total'];
-      return total || this.items.length;
+      var _this$metadata$total = this.metadata.total,
+          total = _this$metadata$total === void 0 ? 0 : _this$metadata$total;
+      return total;
     },
     hasItems: function hasItems() {
       try {
@@ -788,7 +781,7 @@ var statusList = Object.freeze({
       var _this4 = this;
 
       return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-        var message, title;
+        var message, title, variant;
         return regeneratorRuntime.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
@@ -800,41 +793,39 @@ var statusList = Object.freeze({
                 });
 
               case 3:
-                message = "The job will be stopped";
+                message = "The job id ".concat(id, " has been stopped.");
                 title = 'Success';
-                _context5.next = 11;
+                variant = 'success';
+                _context5.next = 13;
                 break;
 
-              case 7:
-                _context5.prev = 7;
+              case 8:
+                _context5.prev = 8;
                 _context5.t0 = _context5["catch"](0);
-                message = "There was an error. The job will not be stopped";
+                message = "There was an error stopping the job ID ".concat(id, ".");
                 title = 'Error';
+                variant = 'danger';
 
-              case 11:
-                _context5.prev = 11;
-                _context5.next = 14;
-                return _this4.$bvModal.msgBoxOk(message, {
+              case 13:
+                _context5.prev = 13;
+
+                _this4.$bvToast.toast(message, {
                   title: title,
-                  size: 'sm',
-                  buttonSize: 'sm',
-                  okVariant: 'primary',
-                  headerClass: 'p-2 border-bottom-0',
-                  footerClass: 'p-2 border-top-0',
-                  centered: true
+                  autoHideDelay: 1500,
+                  appendToast: true,
+                  variant: variant
                 });
 
-              case 14:
                 _this4.getItems();
 
-                return _context5.finish(11);
+                return _context5.finish(13);
 
-              case 16:
+              case 17:
               case "end":
                 return _context5.stop();
             }
           }
-        }, _callee5, null, [[0, 7, 11, 16]]);
+        }, _callee5, null, [[0, 8, 13, 17]]);
       }))();
     },
     confirmDeleteTask: function confirmDeleteTask(id) {
@@ -875,7 +866,7 @@ var statusList = Object.freeze({
       var _this6 = this;
 
       return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
-        var message, title;
+        var message, title, variant;
         return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
@@ -887,49 +878,47 @@ var statusList = Object.freeze({
                 });
 
               case 3:
-                message = "The job will be deleted";
+                message = "The job ID ".concat(id, " has been deleted.");
                 title = 'Success';
-                _context7.next = 11;
+                variant = 'success';
+                _context7.next = 13;
                 break;
 
-              case 7:
-                _context7.prev = 7;
+              case 8:
+                _context7.prev = 8;
                 _context7.t0 = _context7["catch"](0);
-                message = "There was an error. The job will not be deleted";
+                message = "There was an error deleting the job ID ".concat(id, ".");
                 title = 'Error';
+                variant = 'danger';
 
-              case 11:
-                _context7.prev = 11;
-                _context7.next = 14;
-                return _this6.$bvModal.msgBoxOk(message, {
+              case 13:
+                _context7.prev = 13;
+
+                _this6.$bvToast.toast(message, {
                   title: title,
-                  size: 'sm',
-                  buttonSize: 'sm',
-                  okVariant: 'primary',
-                  headerClass: 'p-2 border-bottom-0',
-                  footerClass: 'p-2 border-top-0',
-                  centered: true
+                  autoHideDelay: 1500,
+                  appendToast: true,
+                  variant: variant
                 });
 
-              case 14:
                 _this6.getItems();
 
-                return _context7.finish(11);
+                return _context7.finish(13);
 
-              case 16:
+              case 17:
               case "end":
                 return _context7.stop();
             }
           }
-        }, _callee7, null, [[0, 7, 11, 16]]);
+        }, _callee7, null, [[0, 8, 13, 17]]);
       }))();
     }
   }
 });
 // CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_JobsTablevue_type_script_lang_js_ = (JobsTablevue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/JobsTable.vue?vue&type=style&index=0&id=bdb7dc26&scoped=true&lang=css&
-var JobsTablevue_type_style_index_0_id_bdb7dc26_scoped_true_lang_css_ = __webpack_require__("60b8");
+// EXTERNAL MODULE: ./src/components/JobsTable.vue?vue&type=style&index=0&id=16f7fade&scoped=true&lang=css&
+var JobsTablevue_type_style_index_0_id_16f7fade_scoped_true_lang_css_ = __webpack_require__("9b5e");
 
 // EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 var componentNormalizer = __webpack_require__("2877");
@@ -945,11 +934,11 @@ var componentNormalizer = __webpack_require__("2877");
 
 var component = Object(componentNormalizer["a" /* default */])(
   components_JobsTablevue_type_script_lang_js_,
-  JobsTablevue_type_template_id_bdb7dc26_scoped_true_render,
-  JobsTablevue_type_template_id_bdb7dc26_scoped_true_staticRenderFns,
+  JobsTablevue_type_template_id_16f7fade_scoped_true_render,
+  JobsTablevue_type_template_id_16f7fade_scoped_true_staticRenderFns,
   false,
   null,
-  "bdb7dc26",
+  "16f7fade",
   null
   
 )
@@ -1059,8 +1048,8 @@ var component = Object(componentNormalizer["a" /* default */])(
 });
 // CONCATENATED MODULE: ./src/pages/Jobs.vue?vue&type=script&lang=js&
  /* harmony default export */ var pages_Jobsvue_type_script_lang_js_ = (Jobsvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/pages/Jobs.vue?vue&type=style&index=0&id=fcef6626&scoped=true&lang=css&
-var Jobsvue_type_style_index_0_id_fcef6626_scoped_true_lang_css_ = __webpack_require__("9d0b");
+// EXTERNAL MODULE: ./src/pages/Jobs.vue?vue&type=style&index=0&id=2c971a18&scoped=true&lang=css&
+var Jobsvue_type_style_index_0_id_2c971a18_scoped_true_lang_css_ = __webpack_require__("314a");
 
 // CONCATENATED MODULE: ./src/pages/Jobs.vue
 
@@ -1077,19 +1066,12 @@ var Jobs_component = Object(componentNormalizer["a" /* default */])(
   staticRenderFns,
   false,
   null,
-  "fcef6626",
+  "2c971a18",
   null
   
 )
 
 /* harmony default export */ var Jobs = __webpack_exports__["default"] = (Jobs_component.exports);
-
-/***/ }),
-
-/***/ "eb58":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ })
 

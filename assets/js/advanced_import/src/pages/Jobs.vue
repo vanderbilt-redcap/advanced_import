@@ -40,12 +40,12 @@
             <span>Job stopped by user</span>
           </span>
         </li>
-        <li>
+        <!-- <li>
           <span>
             <font-awesome-icon fixed-width class="text-danger" :icon="['fas', 'minus-circle']" />:
             <span>Job marked as 'deleted'</span>
           </span>
-        </li>
+        </li> -->
       </ul>
       </b-card>
       <b-card

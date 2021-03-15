@@ -1,10 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Importers;
 
-use Logging;
-use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
-use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
-use Vanderbilt\AdvancedImport\App\Helpers\RecordHelper;
 use Vanderbilt\AdvancedImport\App\Models\Response;
 
 use function Vanderbilt\AdvancedImport\App\Functional\partial;
@@ -103,16 +99,16 @@ class AppendUpdate extends AbstractImporter
 		}else {
 			// check for existing
 			// $instance_number = $this->temporary_table->findInstance($record, $data);
-			$instance_number = $this->temporary_table->findMatches($record_id, $data, $full_match=true);
+			$instance_number = $this->instanceSeeker->findMatches($record_id, $data, $full_match=true);
 			if($instance_number) {
 				//full match, no need to import
 				return Response::NO_CHANGE;
 			}else {
 
-				$instance_number = $this->temporary_table->findMatches($record_id, $data,$full_match=true);
+				$instance_number = $this->instanceSeeker->findMatches($record_id, $data,$full_match=true);
 				if(!$instance_number) {
 					// need a new instance
-					$instance_number = $this->temporary_table->getAutoInstanceNumber($record_id);
+					$instance_number = $this->instanceSeeker->getAutoInstanceNumber($record_id);
 				}
 
 				$record = $this->record_helper->reduceRecord($record_id, $primary_key_name, $primary_key_value);
@@ -122,8 +118,6 @@ class AppendUpdate extends AbstractImporter
 				// return [$record, $record_id, $instance_number];
 			}
 		}
-
-		$this->temporary_table->insert($record_id, $instance_number, $data);
 
 		$save_response = \REDCap::saveData($project_id, 'array', $record);
 		if(empty(@$save_response['errors'])) {
