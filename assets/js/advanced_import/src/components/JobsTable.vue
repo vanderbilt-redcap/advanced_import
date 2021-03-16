@@ -43,14 +43,6 @@
         <template #cell(error)="data">
             <div v-if="data.value"><div class="job-error text-muted small">{{data.value}}</div></div>
         </template>
-        <template #cell(settings)="data">
-            <div v-if="data.value">
-                <b-button size="sm" variant="outline-secondary" @click="showSettings(data.value)">
-                    <font-awesome-icon :icon="['fas','eye']" />
-                    <span class="ml-2">Show</span>
-                </b-button>
-            </div>
-        </template>
         <template #cell(status)="data">
             <div v-if="data.value" :set="params=getStatusIcon(data.value)" class="d-flex justify-content-center align-items-center">
                 <font-awesome-icon :title="data.value" :icon="params.icon" :spin="params.spin" :class="params.class"/>
@@ -73,14 +65,18 @@
         </template>
         <template #cell(actions)="data">
             <div v-if="data.item.id" class="d-flex">
-                <b-button variant="outline-primary" size="sm" @click="confirmStopTask(data.item.id)" :disabled="getStopDisabled(data.item.status)">
-                    <font-awesome-icon  :icon="['fas', 'stopwatch']" />
+                <b-button size="sm" variant="outline-secondary" @click="showSettings(data.item.settings)">
+                    <font-awesome-icon :icon="['fas','eye']" fixed-width />
+                    <!-- <span class="ml-2">Show</span> -->
+                </b-button>
+                <b-button class="ml-2" variant="outline-primary" size="sm" @click="confirmStopTask(data.item.id)" :disabled="getStopDisabled(data.item.status)">
+                    <font-awesome-icon  :icon="['fas', 'stopwatch']" fixed-width />
                 </b-button>
                 <b-button class="ml-2" variant="outline-danger" size="sm" @click="confirmDeleteTask(data.item.id)" :disabled="getDeleteDisabled(data.item.status)">
-                    <font-awesome-icon  :icon="['fas', 'trash']" />
+                    <font-awesome-icon  :icon="['fas', 'trash']" fixed-width />
                 </b-button>
                 <b-button v-if="debugMode" class="ml-2" variant="outline-success" size="sm" @click="showEdit(data.item)">
-                    <font-awesome-icon  :icon="['fas', 'edit']" />
+                    <font-awesome-icon  :icon="['fas', 'edit']" fixed-width />
                 </b-button>
             </div>
         </template>
@@ -131,11 +127,10 @@ export default {
             metadata: {},
             fields: [
                 {key: 'id', lable: 'ID'},
+                {key: 'status', lable: 'Status'},
                 // {key: 'filename', lable: 'Filename'},
                 {key: 'processed_lines', lable: 'Processed Lines'},
-                {key: 'status', lable: 'Status'},
                 {key: 'error', lable: 'Error'},
-                {key: 'settings', lable: 'Settings'},
                 {key: 'created_at', lable: 'Created at'},
                 {key: 'updated_at', lable: 'Updated at'},
                 {key: 'completed_at', lable: 'Completed at'},
@@ -356,7 +351,7 @@ export default {
 }
 
 .table-wrapper {
-    overflow-x:scroll;
+    overflow-x: auto;
 }
 .job-error {
     max-width: 200px;
