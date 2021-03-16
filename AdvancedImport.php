@@ -354,7 +354,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $databaseDir = self::getDatabaseDirectory();
         $dirs = [$dataDir, $databaseDir, $uploadDir];
         foreach ($dirs as $dir) {
-            if(!file_exists($dir)) mkdir($dir, 0766, $recursive=true);
+            if(!file_exists($dir)) mkdir($dir, 0777, $recursive=true);
         }
         $queue = new Queue();
         $queue->createJobsTable();
