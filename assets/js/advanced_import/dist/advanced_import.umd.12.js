@@ -1,23 +1,5 @@
 ((typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] || []).push([[12],{
 
-/***/ "0406":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "0863":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_a291fc04_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("0406");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_a291fc04_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_a291fc04_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_a291fc04_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
-
-/***/ }),
-
 /***/ "2e4d":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -36,6 +18,24 @@
 
 /***/ }),
 
+/***/ "31ec":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "7616":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_071cc87a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("31ec");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_071cc87a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_071cc87a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_071cc87a_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
 /***/ "cf20":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -50,14 +50,14 @@ var staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/pages/Jobs.vue?vue&type=template&id=2c971a18&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/JobsTable.vue?vue&type=template&id=a291fc04&scoped=true&
-var JobsTablevue_type_template_id_a291fc04_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"overflow-auto"},[_c('div',{staticClass:"d-flex flex-row justify-content-start align-items-start"},[_c('b-button',{attrs:{"size":"sm","variant":"info","disabled":_vm.loading},on:{"click":_vm.getItems}},[(_vm.loading)?_c('font-awesome-icon',{attrs:{"icon":['fas', 'spinner'],"spin":""}}):_c('font-awesome-icon',{attrs:{"icon":['fas', 'sync']}}),_c('span',[_vm._v(" Reload")])],1),_c('b-modal',{attrs:{"id":"modal-delete","title":"Delete jobs"},on:{"ok":_vm.handleOkDelete}},[_c('p',{staticClass:"my-4"},[_vm._v("Are you sure you want to delete all tasks for the current project?")])]),(_vm.hasItems)?_c('b-pagination',{staticClass:"ml-2 mb-0",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1),_c('div',{staticClass:"table-wrapper"},[_c('b-table',{staticClass:"my-2",attrs:{"id":"my-table","items":_vm.items_proxy,"fields":_vm.fields,"_per-page":"per_page","_current-page":"current_page","small":"","bordered":"","striped":"","hover":""},scopedSlots:_vm._u([{key:"cell(error)",fn:function(data){return [(data.value)?_c('div',[_c('div',{staticClass:"job-error text-muted small"},[_vm._v(_vm._s(data.value))])]):_vm._e()]}},{key:"cell(settings)",fn:function(data){return [(data.value)?_c('div',[_c('b-button',{attrs:{"size":"sm","variant":"outline-secondary"},on:{"click":function($event){return _vm.showSettings(data.value)}}},[_c('font-awesome-icon',{attrs:{"title":data.value,"icon":['fas','eye']}}),_c('span',{staticClass:"ml-2"},[_vm._v("Show")])],1)],1):_vm._e()]}},{key:"cell(status)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center",attrs:{"set":_vm.params=_vm.getStatusIcon(data.value)}},[_c('font-awesome-icon',{class:_vm.params.class,attrs:{"title":data.value,"icon":_vm.params.icon,"spin":_vm.params.spin}})],1):_vm._e()]}},{key:"cell(created_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(updated_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(completed_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(type)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center"},[(data.value=='import')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-import']}}):(data.value=='export')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-export']}}):_vm._e()],1):_vm._e()]}},{key:"cell(actions)",fn:function(data){return [(data.item.id)?_c('div',{staticClass:"d-flex"},[_c('b-button',{attrs:{"variant":"outline-primary","size":"sm","disabled":_vm.getStopDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmStopTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'stopwatch']}})],1),_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-danger","size":"sm","disabled":_vm.getDeleteDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmDeleteTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'trash']}})],1),(_vm.debugMode)?_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-success","size":"sm"},on:{"click":function($event){return _vm.showEdit(data.item)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'edit']}})],1):_vm._e()],1):_vm._e()]}}])})],1),(_vm.hasItems)?_c('b-pagination',{staticClass:"mb-2",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e(),_c('b-modal',{ref:"modal-settings",attrs:{"title":"Settings","ok-only":""}},[_c('pre',[_vm._v(_vm._s(_vm.current_settings))])]),_c('b-modal',{ref:"modal-edit",attrs:{"title":"Edit","hide-footer":""}},[_c('EditJob',{attrs:{"job":_vm.editing_data},scopedSlots:_vm._u([{key:"footer",fn:function(ref){
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/JobsTable.vue?vue&type=template&id=071cc87a&scoped=true&
+var JobsTablevue_type_template_id_071cc87a_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"overflow-auto"},[_c('div',{staticClass:"d-flex flex-row justify-content-start align-items-start"},[_c('b-button',{attrs:{"size":"sm","variant":"info","disabled":_vm.loading},on:{"click":_vm.getItems}},[(_vm.loading)?_c('font-awesome-icon',{attrs:{"icon":['fas', 'spinner'],"spin":""}}):_c('font-awesome-icon',{attrs:{"icon":['fas', 'sync']}}),_c('span',[_vm._v(" Reload")])],1),_c('b-modal',{attrs:{"id":"modal-delete","title":"Delete jobs"},on:{"ok":_vm.handleOkDelete}},[_c('p',{staticClass:"my-4"},[_vm._v("Are you sure you want to delete all tasks for the current project?")])]),(_vm.hasItems)?_c('b-pagination',{staticClass:"ml-2 mb-0",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1),_c('div',{staticClass:"table-wrapper"},[_c('b-table',{staticClass:"my-2",attrs:{"id":"my-table","items":_vm.items_proxy,"fields":_vm.fields,"_per-page":"per_page","_current-page":"current_page","small":"","bordered":"","striped":"","hover":""},scopedSlots:_vm._u([{key:"cell(error)",fn:function(data){return [(data.value)?_c('div',[_c('div',{staticClass:"job-error text-muted small"},[_vm._v(_vm._s(data.value))])]):_vm._e()]}},{key:"cell(settings)",fn:function(data){return [(data.value)?_c('div',[_c('b-button',{attrs:{"size":"sm","variant":"outline-secondary"},on:{"click":function($event){return _vm.showSettings(data.value)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas','eye']}}),_c('span',{staticClass:"ml-2"},[_vm._v("Show")])],1)],1):_vm._e()]}},{key:"cell(status)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center",attrs:{"set":_vm.params=_vm.getStatusIcon(data.value)}},[_c('font-awesome-icon',{class:_vm.params.class,attrs:{"title":data.value,"icon":_vm.params.icon,"spin":_vm.params.spin}})],1):_vm._e()]}},{key:"cell(created_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(updated_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(completed_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(type)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center"},[(data.value=='import')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-import']}}):(data.value=='export')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-export']}}):_vm._e()],1):_vm._e()]}},{key:"cell(actions)",fn:function(data){return [(data.item.id)?_c('div',{staticClass:"d-flex"},[_c('b-button',{attrs:{"variant":"outline-primary","size":"sm","disabled":_vm.getStopDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmStopTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'stopwatch']}})],1),_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-danger","size":"sm","disabled":_vm.getDeleteDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmDeleteTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'trash']}})],1),(_vm.debugMode)?_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-success","size":"sm"},on:{"click":function($event){return _vm.showEdit(data.item)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'edit']}})],1):_vm._e()],1):_vm._e()]}}])})],1),(_vm.hasItems)?_c('b-pagination',{staticClass:"mb-2",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e(),_c('b-modal',{ref:"modal-settings",attrs:{"title":"Settings","ok-only":""}},[_c('pre',[_vm._v(_vm._s(_vm.current_settings))])]),_c('b-modal',{ref:"modal-edit",attrs:{"title":"Edit","hide-footer":""}},[_c('EditJob',{attrs:{"job":_vm.editing_data},scopedSlots:_vm._u([{key:"footer",fn:function(ref){
 var form = ref.form;
 return [_c('div',{staticClass:"d-flex justify-content-end"},[_c('b-button',{staticClass:"mr-2",attrs:{"size":"sm","variant":"secondary"},on:{"click":function($event){return _vm.$refs['modal-edit'].hide()}}},[_vm._v("Cancel")]),_c('b-button',{attrs:{"size":"sm","variant":"success"},on:{"click":function($event){return _vm.editJob(form)}}},[_vm._v("OK")])],1)]}}])})],1)],1)}
-var JobsTablevue_type_template_id_a291fc04_scoped_true_staticRenderFns = []
+var JobsTablevue_type_template_id_071cc87a_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=template&id=a291fc04&scoped=true&
+// CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=template&id=071cc87a&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__("99af");
@@ -89,20 +89,24 @@ var asyncToGenerator = __webpack_require__("1da1");
 // EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
 var vuex_esm = __webpack_require__("2f62");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EditJob.vue?vue&type=template&id=167eb2e5&
-var EditJobvue_type_template_id_167eb2e5_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.form),function(input,key){return _c('b-form-group',{key:key,attrs:{"label":key,"label-for":("input-" + key)}},[_c('b-form-input',{attrs:{"id":("input-" + key)},model:{value:(_vm.form[key]),callback:function ($$v) {_vm.$set(_vm.form, key, $$v)},expression:"form[key]"}})],1)}),_c('footer',[_vm._t("footer",null,{"form":_vm.form})],2)],2)}
-var EditJobvue_type_template_id_167eb2e5_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EditJob.vue?vue&type=template&id=5acf7a3e&
+var EditJobvue_type_template_id_5acf7a3e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.form),function(input,key){return _c('b-form-group',{key:key,attrs:{"label":key,"label-for":("input-" + key)}},[_c('b-form-input',{attrs:{"id":("input-" + key)},model:{value:(_vm.form[key]),callback:function ($$v) {_vm.$set(_vm.form, key, $$v)},expression:"form[key]"}})],1)}),_c('footer',[_vm._t("footer",null,{"form":_vm.form})],2)],2)}
+var EditJobvue_type_template_id_5acf7a3e_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/EditJob.vue?vue&type=template&id=167eb2e5&
+// CONCATENATED MODULE: ./src/components/EditJob.vue?vue&type=template&id=5acf7a3e&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.entries.js
 var es_object_entries = __webpack_require__("4fad");
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
+var esm_typeof = __webpack_require__("53ca");
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
 var slicedToArray = __webpack_require__("3835");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EditJob.vue?vue&type=script&lang=js&
+
 
 
 //
@@ -145,6 +149,8 @@ var slicedToArray = __webpack_require__("3835");
               key = _Object$entries$_i[0],
               value = _Object$entries$_i[1];
 
+          console.log(Object(esm_typeof["a" /* default */])(value), key);
+          if (value == null) value = undefined;else if (typeof value == 'boolean') value = String(value);else if (Object(esm_typeof["a" /* default */])(value) == 'object') value = JSON.stringify(value);
           this.$set(this.form, key, value);
         }
       }
@@ -166,8 +172,8 @@ var componentNormalizer = __webpack_require__("2877");
 
 var component = Object(componentNormalizer["a" /* default */])(
   components_EditJobvue_type_script_lang_js_,
-  EditJobvue_type_template_id_167eb2e5_render,
-  EditJobvue_type_template_id_167eb2e5_staticRenderFns,
+  EditJobvue_type_template_id_5acf7a3e_render,
+  EditJobvue_type_template_id_5acf7a3e_staticRenderFns,
   false,
   null,
   null,
@@ -728,8 +734,7 @@ var statusList = Object.freeze({
     showSettings: function showSettings(settings) {
       var modal = this.$refs['modal-settings'];
       if (!modal) return;
-      var pretty_settings = JSON.stringify(JSON.parse(settings), null, 2);
-      this.current_settings = pretty_settings;
+      this.current_settings = settings;
       modal.show();
     },
     showEdit: function showEdit(data) {
@@ -781,8 +786,8 @@ var statusList = Object.freeze({
 });
 // CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_JobsTablevue_type_script_lang_js_ = (JobsTablevue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/JobsTable.vue?vue&type=style&index=0&id=a291fc04&scoped=true&lang=css&
-var JobsTablevue_type_style_index_0_id_a291fc04_scoped_true_lang_css_ = __webpack_require__("0863");
+// EXTERNAL MODULE: ./src/components/JobsTable.vue?vue&type=style&index=0&id=071cc87a&scoped=true&lang=css&
+var JobsTablevue_type_style_index_0_id_071cc87a_scoped_true_lang_css_ = __webpack_require__("7616");
 
 // CONCATENATED MODULE: ./src/components/JobsTable.vue
 
@@ -795,11 +800,11 @@ var JobsTablevue_type_style_index_0_id_a291fc04_scoped_true_lang_css_ = __webpac
 
 var JobsTable_component = Object(componentNormalizer["a" /* default */])(
   components_JobsTablevue_type_script_lang_js_,
-  JobsTablevue_type_template_id_a291fc04_scoped_true_render,
-  JobsTablevue_type_template_id_a291fc04_scoped_true_staticRenderFns,
+  JobsTablevue_type_template_id_071cc87a_scoped_true_render,
+  JobsTablevue_type_template_id_071cc87a_scoped_true_staticRenderFns,
   false,
   null,
-  "a291fc04",
+  "071cc87a",
   null
   
 )

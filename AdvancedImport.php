@@ -244,8 +244,9 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public static function db()
     {
-        $db_path = self::getDatabaseDirectory().DIRECTORY_SEPARATOR.self::DB_NAME;
-        self::chmod_r($db_path);
+        $db_dir = self::getDatabaseDirectory();
+        self::chmod_r($db_dir);
+        $db_path = $db_dir.DIRECTORY_SEPARATOR.self::DB_NAME;
         $database = new Database($db_path);
         return $database;
     }
@@ -355,12 +356,8 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         foreach ($dirs as $dir) {
             if(!file_exists($dir)) mkdir($dir, 0766, $recursive=true);
         }
-        // $queue = new Queue();
-        $store = self::dbStore(Job::STORE_NAME);
-        $job = [
-            "title" => "Advanced import created",
-        ];
-        // $inserted = $store->insert($job);
+        $queue = new Queue();
+        $queue->createJobsTable();
     }
 
     /**

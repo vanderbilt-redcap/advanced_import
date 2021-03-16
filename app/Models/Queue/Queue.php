@@ -21,23 +21,54 @@ class Queue
         $status_list = @$params['status'] ?: [];
         $project_id = @$params['project_id'] ?: 0;
 
-        $queryBuilder = AdvancedImport::dbStore(Job::STORE_NAME)->createQueryBuilder();
-        $query = $queryBuilder->where(['project_id', '==', $project_id]);
-        if(count($status_list)>0) $query = $query->where(['status', 'IN', $status_list]);
         if($limit>0) {
             $start = $start ?: 0;
-            $query = $query->skip($start)->limit($limit);
+            $limit_clause = sprintf("LIMIT %u, %u", $start, $limit);
+        } else {
+            $limit_clause = '';
+        }
+        
+        $status_to_get = [];
+        foreach($status_list as $status) {
+            $status_to_get[] = checkNull($status);
+        }
+        if(empty($status_list)) {
+            $where_clause = '';
+        }else {
+            $where_clause = printf(" AND `status IN (%s)`", implode(',', $status_to_get));
         }
 
-        $jobs = $query->getQuery()->fetch();
+        $query_string = sprintf(
+            "SELECT * FROM %s
+            WHERE 1
+            AND project_id=?
+            %s %s",
+            Job::TABLE_NAME,
+            $where_clause,
+            $limit_clause
+        );
+        $stmt = AdvancedImport::db()->query($query_string, [$project_id]);
+        $jobs = [];
+        while($row = $stmt->fetch()) {
+            $type = @$row['type'];
+            if($type==Job::TYPE_IMPORT) {
+                $job = new ImportJob($row);
+            }else {
+                throw new \Exception("Error creating a list of jobs", 1);
+            }
+            $jobs[] = $job;
+        }
         return $jobs;
     }
 
     public function countJobs($project_id)
     {
-        $store = AdvancedImport::dbStore(Job::STORE_NAME);
-        $jobs = $store->findBy(['project_id', '==', $project_id]);
-        return count($jobs);
+        $query_string = sprintf("SELECT COUNT(*) AS total FROM %s WHERE project_id=:project_id", Job::TABLE_NAME);
+        $stmt = AdvancedImport::db()->query($query_string, ['project_id'=>$project_id]);
+        if($row = $stmt->fetch()){
+            return @$row['total'];
+        }
+        return 0;
     }
 
     /**
@@ -46,13 +77,15 @@ class Queue
      */
     public function jobsGenerator()
     {
-        $store = AdvancedImport::dbStore(Job::STORE_NAME);
-        $jobs = $store->findBy(['status', '==', Job::STATUS_READY]);
-
-        foreach ($jobs as $job_data) {
-            $type = @$job_data['type'];
+        $query_string = sprintf(
+            "SELECT * FROM %s WHERE status=:status",
+            Job::TABLE_NAME
+        );
+        $stmt = AdvancedImport::db()->query($query_string, ['status'=>Job::STATUS_READY]);
+        while($row = $stmt->fetch()) {
+            $type = @$row['type'];
             if($type==Job::TYPE_IMPORT) {
-                $job = new ImportJob($job_data);
+                $job = new ImportJob($row);
             }else {
                 throw new \Exception("Error creating a list of jobs", 1);
             }
@@ -62,23 +95,26 @@ class Queue
 
     public function updateJob($project_id, $id, $data)
     {
-        $store = AdvancedImport::dbStore(Job::STORE_NAME);
-        $job_data = @$store->findBy([['id','==', $id],['project_id','==',$project_id]])[0];
-        if(!$job_data) return false;
-        foreach ($job_data as $key => $value) {
-            if(!array_key_exists($key, $data)) continue;
-            $job_data[$key] = $data[$key];
+        $pdo = AdvancedImport::db();
+        $stmt = $pdo->query(sprintf("SELECT * FROM %s WHERE id=:id AND project_id=:project_id", Job::TABLE_NAME), ['id'=>$id, 'project_id'=>$project_id]);
+        if(!$job=$stmt->fetch(PDO::FETCH_ASSOC)) return false;
+        $filtered = [];
+        // filter allowed and translate objects/arrays (settings) to string
+        foreach($data as $key=>$value) {
+            if(!array_key_exists($key, $job)) continue;
+            if(is_object($value)|| is_array($value)) $value = json_encode($value, JSON_PRETTY_PRINT);
+            $filtered[$key] = $value;
         }
-        $updated = $store->update($job_data);
-        return $updated;
+        $result = $pdo->update(Job::TABLE_NAME, $filtered, ['id'=>$id]);
+        return $result;
     }
 
     public function updateJobStatus($project_id, $job_id, $status)
     {
-        $store = AdvancedImport::dbStore(Job::STORE_NAME);
-        $job = $store->findBy([['id','==', $job_id],['project_id','==',$project_id]]);
-        if(!$job) return false;
-        $updated = $store->updateById($job_id, ['status'=>$status]);
+        $pdo = AdvancedImport::db();
+        $stmt = $pdo->query(sprintf("SELECT * FROM %s WHERE id=:id AND project_id=:project_id", Job::TABLE_NAME), ['id'=>$job_id, 'project_id'=>$project_id]);
+        if(!$job=$stmt->fetch()) return false;
+        $updated = $pdo->update(Job::TABLE_NAME, ['status'=>$status], ['id'=>$job_id]);
         return $updated;
     }
 
@@ -96,17 +132,27 @@ class Queue
     public function deleteJob($project_id, $job_id)
     {
         $isFileUsedInOtherJobs = function($job_id, $filename) {
-            $jobs = AdvancedImport::dbStore(Job::STORE_NAME)->findBy([['id', '!=', $job_id],['filename', '=', $filename]]);
-            return count($jobs)>0;
-        };
-        $store = AdvancedImport::dbStore(Job::STORE_NAME);
-        $job = $store->findById($job_id);
+            $query_string = sprintf("SELECT COUNT(*) AS total FROM %s WHERE id!=:id AND filename=:filename", Job::TABLE_NAME);
+            $stmt = AdvancedImport::db()->query($query_string, ['id'=>$job_id, 'filename'=>$filename]);
+            if(!$stmt) throw new \Exception(sprintf("Error checking if data file '%s' is used in multiple jobs", $filename), 1);
 
-        if ($job) {
+            if($row=$stmt->fetch()) {
+                $total = intval(@$row['total']);
+                return $total>0;
+            }
+            return false;
+        };
+        $pdo = AdvancedImport::db();
+        $query_string = sprintf("SELECT * FROM %s WHERE id=:id AND project_id=:project_id", Job::TABLE_NAME);
+        $stmt = $pdo->query($query_string, ['id'=>$job_id, 'project_id'=>$project_id]);
+
+
+        if ($job=$stmt->fetch()) {
 
             $file_ok = false; // check if file has been deleted or is used by other jobs
             $filename = @$job['filename'];
-            $deleted_job = $store->deleteById($job_id);
+            
+            $deleted_job = $pdo->delete(Job::TABLE_NAME, ['id'=>$job_id]);
             $message = '';
             if($deleted_job) {
                 if(!$isFileUsedInOtherJobs($job_id, $filename)) {
@@ -134,6 +180,34 @@ class Queue
             }
         }
         return false;
+    }
+
+    public function createJobsTable()
+    {
+        $query_string = sprintf(
+            "CREATE TABLE IF NOT EXISTS `%s`
+             (
+                `id` INTEGER PRIMARY KEY,
+                `project_id` INTEGER NOT NULL,
+                `user_id` INTEGER NOT NULL,
+                `filename` TEXT,
+                `settings` BLOB,
+                `processed_lines` INTEGER NOT NULL DEFAULT 0,
+                `error` TEXT DEFAULT NULL,
+                `status` TEXT DEFAULT '%s',
+                `type` TEXT DEFAULT NULL,
+                `created_at` TEXT DEFAULT NULL,
+                `updated_at` TEXT DEFAULT NULL,
+                `completed_at` TEXT DEFAULT NULL
+            )",
+            Job::TABLE_NAME, Job::STATUS_READY
+        );
+        $result = AdvancedImport::db()->query($query_string);
+        if(!$result) {
+            throw new \Exception("Error creating the Jobs table", 1);
+            return false;
+        }
+        return $result;
     }
 
 }

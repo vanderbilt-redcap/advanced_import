@@ -37,6 +37,10 @@ export default {
       immediate: true,
       handler(job) {
         for(let [key, value] of Object.entries(job)) {
+          console.log(typeof value, key)
+          if(value==null) value = undefined
+          else if(typeof value =='boolean') value = String(value)
+          else if(typeof value =='object') value = JSON.stringify(value)
           this.$set(this.form, key, value)
         }
       }

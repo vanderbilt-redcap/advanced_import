@@ -52,7 +52,7 @@ class Import extends BaseModel
     public function processJob($job)
     {
         $project_id = $job->project_id;
-        $job_settings = $job->settings;
+        $job_settings =$job->settings;
         $file_path = AdvancedImport::getUploadedFilePath($job->filename);
         $processed_lines = intval($job->processed_lines); // 0 on failure
         

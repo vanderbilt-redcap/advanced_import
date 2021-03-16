@@ -79,10 +79,17 @@ abstract class Job implements JobInterface, JsonSerializable
 
     public function getStatus()
     {
-        $job = AdvancedImport::dbStore(self::STORE_NAME)->findById($this->id);
-        if($job==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 500);
-        $this->status = $status = @$job['status'];
-        return $status;
+        $query_string = sprintf(
+            "SELECT `status` FROM `%s` WHERE id=?",
+            self::TABLE_NAME
+        );
+        $stmt = AdvancedImport::db()->query($query_string, [$this->id]);
+        if($stmt==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 400);
+        if($row = $stmt->fetch()) {
+            $this->status = $status = @$row['status']; // also update the local one
+            return $this->status;
+        }
+        return false;
     }
 
     public function process() {}
@@ -101,7 +108,7 @@ abstract class Job implements JobInterface, JsonSerializable
             'user_id' => $user_id,
             'filename' => $filename,
             'processed_lines' => 0,
-            'settings' => json_encode($settings),
+            'settings' => json_encode($settings, JSON_PRETTY_PRINT),
             'type' => $type,
             'status' => Job::STATUS_READY,
             'error' => null,
@@ -109,9 +116,7 @@ abstract class Job implements JobInterface, JsonSerializable
             'updated_at' => $created_at,
             'completed_at' => null,
         ];
-        $store = AdvancedImport::dbStore(Job::STORE_NAME);
-        $job = $store->insert($data);
-        $id = @$job['id'];
+        $id = AdvancedImport::db()->insert(self::TABLE_NAME, $data);
         if($id==false) throw new \Exception("Error creating job", 400);
         return $id;
     }
@@ -145,15 +150,17 @@ abstract class Job implements JobInterface, JsonSerializable
     public function updateProperties($params)
     {
         $params['updated_at'] = self::getNow();
+        $job_id = $this->id;
         $data = array_filter($params, function($value, $key) {
             $guarded = in_array($key, $this->guarded);
             if($guarded) return false;
             $this->{$key} = $value;
             return true;
         }, ARRAY_FILTER_USE_BOTH);
-        $store = AdvancedImport::dbStore(Job::STORE_NAME);
-        $job = $store->updateById($this->id, $data);
-        return $job;
+
+        $result = AdvancedImport::db()->update(self::TABLE_NAME, $data, ['id'=>$job_id]);
+        if($result==false) throw new \Exception(sprintf("Error updating job id %u", $job_id), 400);
+        return $result;
     }
     /**
      * reset the status to ready so the job will be further procesed
@@ -230,6 +237,11 @@ abstract class Job implements JobInterface, JsonSerializable
     public function jsonSerialize()
     {
         $data =  $this->properties;
+        foreach ($data as $key => $value) {
+            if($value instanceof DateTime) {
+                $data[$key] = $value->format('Y-m-d H:i:s');
+            }
+        }
         return $data;
     }
 

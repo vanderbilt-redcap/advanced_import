@@ -46,7 +46,7 @@
         <template #cell(settings)="data">
             <div v-if="data.value">
                 <b-button size="sm" variant="outline-secondary" @click="showSettings(data.value)">
-                    <font-awesome-icon :title="data.value" :icon="['fas','eye']" />
+                    <font-awesome-icon :icon="['fas','eye']" />
                     <span class="ml-2">Show</span>
                 </b-button>
             </div>
@@ -322,8 +322,7 @@ export default {
         showSettings(settings) {
             const modal = this.$refs['modal-settings']
             if(!modal) return
-            const pretty_settings = JSON.stringify(JSON.parse(settings), null, 2)
-            this.current_settings = pretty_settings
+            this.current_settings = settings
             modal.show()
         },
         showEdit(data) {
