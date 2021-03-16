@@ -238,7 +238,12 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
 
     /**
      * get a reference to the sqlite3 DB
-     * create the database if not exists
+     * create the database if not exists.
+     * 
+     * NOTE: I need to update the privileges
+     * of the database folder before using it
+     * to avoid errors when the cronjob user
+     * iss different from the webserver user
      *
      * @return Database
      */
@@ -251,6 +256,13 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         return $database;
     }
 
+    /**
+     * update privileges recursively in a folder
+     *
+     * @param string $path
+     * @param integer $mode
+     * @return void
+     */
     private static function chmod_r($path, $mode=0777) {
         $dir = new \DirectoryIterator($path);
         foreach ($dir as $item) {
