@@ -244,11 +244,21 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public static function db()
     {
-        $db_path = self::getDataDirectory().DIRECTORY_SEPARATOR.self::DB_NAME;
+        $db_path = self::getDatabaseDirectory().DIRECTORY_SEPARATOR.self::DB_NAME;
+        self::chmod_r($db_path);
         $database = new Database($db_path);
         return $database;
     }
 
+    private static function chmod_r($path, $mode=0777) {
+        $dir = new \DirectoryIterator($path);
+        foreach ($dir as $item) {
+            chmod($item->getPathname(), $mode);
+            if ($item->isDir() && !$item->isDot()) {
+                self::chmod_r($item->getPathname(), $mode);
+            }
+        }
+    }
 
     /**
      * get a SleekDB Store
@@ -271,6 +281,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
             ]
         ];
         $db_path = self::getDatabaseDirectory();
+        self::chmod_r($db_path);
         $store = new \SleekDB\Store($store_name, $db_path, $configuration);
         return $store;
     }
@@ -342,19 +353,14 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $databaseDir = self::getDatabaseDirectory();
         $dirs = [$dataDir, $databaseDir, $uploadDir];
         foreach ($dirs as $dir) {
-            if(!file_exists($dir)) mkdir($dir, 0777, $recursive=true);
+            if(!file_exists($dir)) mkdir($dir, 0766, $recursive=true);
         }
         // $queue = new Queue();
-        $newsStore = new \SleekDB\Store("news", self::getDatabaseDirectory());
-        $article = [
+        $store = self::dbStore(Job::STORE_NAME);
+        $job = [
             "title" => "Advanced import created",
-            "about" => "wite tested on module enable!",
-            "author" => [
-                "avatar" => "profile-12.jpg",
-                "name" => "Francesco"
-            ]
         ];
-        $results = $newsStore->insert($article);
+        // $inserted = $store->insert($job);
     }
 
     /**
