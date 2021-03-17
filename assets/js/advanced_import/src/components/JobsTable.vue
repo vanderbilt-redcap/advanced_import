@@ -60,7 +60,7 @@
          <template #cell(type)="data">
             <div v-if="data.value" class="d-flex justify-content-center align-items-center">
                 <font-awesome-icon v-if="data.value=='import'" :title="data.value" :icon="['fas', 'file-import']" class="text-primary"/>
-                <font-awesome-icon v-else-if="data.value=='export'" :title="data.value" :icon="['fas', 'file-export']" class="text-primary"/>
+                <font-awesome-icon v-else-if="data.value=='export'" :title="data.value" :icon="['fas', 'file-export']" class="text-danger"/>
             </div>
         </template>
         <template #cell(actions)="data">
@@ -69,9 +69,14 @@
                     <font-awesome-icon :icon="['fas','eye']" fixed-width />
                     <!-- <span class="ml-2">Show</span> -->
                 </b-button>
-                <b-button class="ml-2" variant="outline-primary" size="sm" @click="confirmStopTask(data.item.id)" :disabled="getStopDisabled(data.item.status)">
+                <!-- stop/start -->
+                <b-button class="ml-2" v-if="data.item.status=='stopped'" variant="outline-success" size="sm" @click="confirmStartTask(data.item.id)">
+                    <font-awesome-icon  :icon="['fas', 'sync-alt']" fixed-width />
+                </b-button>
+                <b-button v-else class="ml-2" variant="outline-primary" size="sm" @click="confirmStopTask(data.item.id)" :disabled="getStopDisabled(data.item.status)">
                     <font-awesome-icon  :icon="['fas', 'stopwatch']" fixed-width />
                 </b-button>
+
                 <b-button class="ml-2" variant="outline-danger" size="sm" @click="confirmDeleteTask(data.item.id)" :disabled="getDeleteDisabled(data.item.status)">
                     <font-awesome-icon  :icon="['fas', 'trash']" fixed-width />
                 </b-button>
@@ -231,7 +236,7 @@ export default {
                     params = {...params, ...{icon: ['fas','spinner'], class: 'text-secondary', spin: true}}
                     break;
                 case statusList.ERROR:
-                    params = {...params, ...{icon: ['fas','exclamation-circle'], class: 'text-warning'}}
+                    params = {...params, ...{icon: ['fas','exclamation-circle'], class: 'text-danger'}}
                     break;
                 case statusList.STOPPED:
                     params = {...params, ...{icon: ['fas','stop-circle'], class: 'text-secondary'}}
@@ -267,6 +272,41 @@ export default {
                 variant = 'success'
             } catch (error) {
                 message = `There was an error stopping the job ID ${id}.`
+                title = 'Error'
+                variant = 'danger'
+            }finally {
+                this.$bvToast.toast(message, {
+                    title: title,
+                    autoHideDelay: 1500,
+                    appendToast: true,
+                    variant,
+                })
+                this.getItems()
+            }
+        },
+        async confirmStartTask(id) {
+            const message = `Do you want to restart this job?`
+            const title = `Start job ID ${id}`
+            const response = await this.$bvModal.msgBoxConfirm(message, {
+                title: title,
+                size: 'sm',
+                buttonSize: 'sm',
+                okVariant: 'primary',
+                headerClass: 'p-2 border-bottom-0',
+                footerClass: 'p-2 border-top-0',
+                centered: true
+            })
+            if(response) this.startTask(id)
+        },
+        async startTask(id) {
+            let message, title, variant
+            try {
+                await this.$API.dispatch('jobs/start', {id})
+                message = `The job id ${id} has been started.`
+                title = 'Success'
+                variant = 'success'
+            } catch (error) {
+                message = `There was an error starting the job ID ${id}.`
                 title = 'Error'
                 variant = 'danger'
             }finally {

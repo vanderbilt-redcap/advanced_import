@@ -97,17 +97,17 @@ class AppendUpdate extends AbstractImporter
 				$record = $this->record_helper->reduceRecord($record_id, $key, $value, $instance_number, $record);
 			}
 		}else {
-			// check for existing
+			// check for existing full match
 			// $instance_number = $this->temporary_table->findInstance($record, $data);
 			$instance_number = $this->instanceSeeker->findMatches($record_id, $data, $full_match=true);
 			if($instance_number) {
 				//full match, no need to import
 				return Response::NO_CHANGE;
 			}else {
-
-				$instance_number = $this->instanceSeeker->findMatches($record_id, $data,$full_match=true);
+				// check for match, but skip dynamic keys
+				$instance_number = $this->instanceSeeker->findMatches($record_id, $data,$full_match=false);
 				if(!$instance_number) {
-					// need a new instance
+					// not found; need a new instance
 					$instance_number = $this->instanceSeeker->getAutoInstanceNumber($record_id);
 				}
 

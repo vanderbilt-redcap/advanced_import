@@ -20,6 +20,7 @@ $routes = [
     ['GET', "jobs", ['Vanderbilt\AdvancedImport\App\Controllers\JobsController/index']],
     ['POST', "jobs/{id:\d+}", ['Vanderbilt\AdvancedImport\App\Controllers\JobsController/updateJob']],
     ['POST', "jobs/{id:\d+}/stop", ['Vanderbilt\AdvancedImport\App\Controllers\JobsController/stopJob']],
+    ['POST', "jobs/{id:\d+}/start", ['Vanderbilt\AdvancedImport\App\Controllers\JobsController/startJob']],
     ['DELETE', "jobs/{id:\d+}", ['Vanderbilt\AdvancedImport\App\Controllers\JobsController/deleteJob']],
 ];
 

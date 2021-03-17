@@ -74,11 +74,9 @@ class InstanceSeeker
         return md5($data_string);
     }
 
-    public function findMatches($record, $data, $full_match=true)
-    {
-      $project_id = $this->project_id;
-      $event_id = $this->settings->event_id;
 
+    private function getPivotRotationSubQuery($record)
+    {
       // helper to perform a table rotation
       $getPivotRotation = function($fields, $unit_separator) {
         // GROUP_CONCAT(CASE WHEN field_name = 'vitals_label' THEN value ELSE NULL END) AS vitals_label,
@@ -88,7 +86,28 @@ class InstanceSeeker
         }
         return implode(", \n", $cases);
       };
-      
+
+      $project_id = $this->project_id;
+      $event_id = $this->settings->event_id;
+
+      $pivot = $getPivotRotation($this->form_fields, self::unit_separator());
+      $query_string = sprintf(
+        "SELECT `record`, IFNULL(instance, 1) `normalized_instance`,
+            %s
+        FROM redcap_data 
+        WHERE `project_id` = %u
+        AND `event_id` = %u
+        AND `record`=%s
+        GROUP BY record, normalized_instance
+        ORDER BY record, normalized_instance",
+        $pivot,
+        $project_id, $event_id, checkNull($record)
+      );
+      return $query_string;
+    }
+
+    public function findMatches($record, $data, $full_match=true)
+    {      
       $buildWhereClause = function($data) {
         $wheres = array_map(function($key, $value) {
           return sprintf("`%s`<=>%s", $key, checkNull($value));
@@ -104,23 +123,18 @@ class InstanceSeeker
       // only use keys for the form (skip record_id or other unwanted)
       $valid_data = array_intersect_key($data, array_flip($fields));
 
-      $pivot = $getPivotRotation($this->form_fields, self::unit_separator());
-
       // $fields_list = DatabaseQueryHelper::getQueryList($fields);
+      $subQuery = $this->getPivotRotationSubQuery($record);
+
       $query_string = sprintf(
-        "SELECT `record`, IFNULL(instance, 1) `normalized_instance`,
-            %s
-        FROM redcap_data 
-        WHERE `project_id` = %u
-        AND `event_id` = %u
-        AND `record`=%s
-        GROUP BY record, normalized_instance
-        HAVING %s
-        ORDER BY record, normalized_instance",
-        $pivot,
-        $project_id, $event_id, checkNull($record),
+        "SELECT * FROM (
+          %s
+        ) AS pivot
+        WHERE %s",
+        $subQuery,
         $buildWhereClause($valid_data)
       );
+      
       $result = db_query($query_string);
       $total_matches = db_num_rows($result);
       if($full_match && $total_matches>1) {

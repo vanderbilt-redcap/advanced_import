@@ -56,12 +56,19 @@ class JobsController extends BaseController
         }
     }
 
-    function stopJob($id)
+    /**
+     * helper function to alter the status of a job
+     *
+     * @param [type] $id
+     * @param [type] $status
+     * @return void
+     */
+    private function changeJobStatus($id, $status)
     {
         try {
             $project_id = @$_GET['pid'];
             $queue = new Queue();
-            $response = $queue->updateJobStatus($project_id, $id, Job::STATUS_STOPPED);
+            $response = $queue->updateJobStatus($project_id, $id, $status);
             $this->printJSON($response, $code=200);
         } catch (\Throwable $th) {
             $message = $th->getMessage();
@@ -72,6 +79,16 @@ class JobsController extends BaseController
             ];
             $this->printJSON($response, $code);
         }
+    }
+
+    function stopJob($id)
+    {
+        $this->changeJobStatus($id, Job::STATUS_STOPPED);
+    }
+
+    function startJob($id)
+    {
+        $this->changeJobStatus($id, Job::STATUS_READY);
     }
 
     function deleteJob($id)

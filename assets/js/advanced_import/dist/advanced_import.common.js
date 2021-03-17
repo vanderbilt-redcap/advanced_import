@@ -87,7 +87,7 @@ module.exports =
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"d5f8d629","10":"31d6cfe0","11":"33d9679d","12":"b4febafb","13":"a25f28c8","14":"a25f28c8","15":"31d6cfe0","16":"d7180cb5","17":"1aec68ba","18":"31d6cfe0","19":"31d6cfe0","20":"31d6cfe0"}[chunkId] + ".css";
+/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"d5f8d629","10":"31d6cfe0","11":"33d9679d","12":"c6b8a850","13":"a25f28c8","14":"a25f28c8","15":"31d6cfe0","16":"d7180cb5","17":"1aec68ba","18":"31d6cfe0","19":"31d6cfe0","20":"31d6cfe0"}[chunkId] + ".css";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
@@ -24819,9 +24819,22 @@ var API_API = /*#__PURE__*/function () {
         }
       });
     },
-    update: function update(context, _ref4) {
-      var id = _ref4.id,
-          data = _ref4.data;
+    start: function start(context, _ref4) {
+      var id = _ref4.id;
+      var params = {
+        route: "jobs/".concat(id, "/start")
+      };
+      var form_data = new FormData();
+      return context.api_client.post('', form_data, {
+        params: params,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    },
+    update: function update(context, _ref5) {
+      var id = _ref5.id,
+          data = _ref5.data;
       var params = {
         route: "jobs/".concat(id)
       };

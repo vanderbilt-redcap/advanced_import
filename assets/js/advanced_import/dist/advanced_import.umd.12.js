@@ -1,27 +1,31 @@
 ((typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] || []).push([[12],{
 
-/***/ "2e4d":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
-/***/ "314a":
+/***/ "4089":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_2c971a18_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("2e4d");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_2c971a18_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_2c971a18_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_6e58a1a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("ee90");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_6e58a1a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_6e58a1a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_2c971a18_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_6e58a1a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
-/***/ "aedb":
+/***/ "b2b2":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "c491":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_02d5f17d_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("b2b2");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_02d5f17d_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_02d5f17d_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+ /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_02d5f17d_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
 
 /***/ }),
 
@@ -32,21 +36,21 @@
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/pages/Jobs.vue?vue&type=template&id=2c971a18&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Monitor the status of the Jobs.")]),_c('JobsTable'),_c('div',{staticClass:"d-flex"},[_c('b-card',{staticStyle:{"max-width":"20rem"},attrs:{"title":"Status","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'bookmark']}}),_vm._v(": "),_c('span',[_vm._v("Job ready to be processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-success",attrs:{"fixed-width":"","icon":['fas', 'check-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job process completed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'spinner']}}),_vm._v(": "),_c('span',[_vm._v("Job being processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-warning",attrs:{"fixed-width":"","icon":['fas', 'exclamation-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped due to error")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'stop-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped by user")])],1)])])]),_c('b-card',{staticClass:"ml-2",staticStyle:{"max-width":"20rem"},attrs:{"title":"Actions","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'stopwatch']}}),_vm._v(": "),_c('span',[_vm._v("Stop a Job in progress")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'trash']}}),_vm._v(": "),_c('span',[_vm._v("A Job and its associated file will be deleted")])],1)])])]),_c('b-card',{staticClass:"ml-2",staticStyle:{"max-width":"20rem"},attrs:{"title":"Types","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'file-import']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Import\"")]),_vm._v(" type Job")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'file-export']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Export\"")]),_vm._v(" type Job")])],1)])])])],1)],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/pages/Jobs.vue?vue&type=template&id=6e58a1a0&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Monitor the status of the Jobs.")]),_c('JobsTable'),_c('div',{staticClass:"d-flex legend-wrapper"},[_c('b-card',{attrs:{"title":"Status","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'bookmark']}}),_vm._v(": "),_c('span',[_vm._v("Job ready to be processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-success",attrs:{"fixed-width":"","icon":['fas', 'check-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job process completed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'spinner']}}),_vm._v(": "),_c('span',[_vm._v("Job being processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'exclamation-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped due to error")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'stop-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped by user")])],1)])])]),_c('b-card',{staticClass:"ml-2",attrs:{"title":"Actions","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'stopwatch']}}),_vm._v(": "),_c('span',[_vm._v("Stop a Job in progress")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-success",attrs:{"fixed-width":"","icon":['fas', 'sync-alt']}}),_vm._v(": "),_c('span',[_vm._v("Start a stopped Job")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'trash']}}),_vm._v(": "),_c('span',[_vm._v("Delete a Job and its associated file")])],1)])])]),_c('b-card',{staticClass:"ml-2",attrs:{"title":"Types","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'file-import']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Import\"")]),_vm._v(" type Job")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'file-export']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Export\"")]),_vm._v(" type Job")])],1)])])])],1)],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/pages/Jobs.vue?vue&type=template&id=2c971a18&scoped=true&
+// CONCATENATED MODULE: ./src/pages/Jobs.vue?vue&type=template&id=6e58a1a0&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/JobsTable.vue?vue&type=template&id=2fe20e4f&scoped=true&
-var JobsTablevue_type_template_id_2fe20e4f_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"overflow-auto"},[_c('div',{staticClass:"d-flex flex-row justify-content-start align-items-start"},[_c('b-button',{attrs:{"size":"sm","variant":"info","disabled":_vm.loading},on:{"click":_vm.getItems}},[(_vm.loading)?_c('font-awesome-icon',{attrs:{"icon":['fas', 'spinner'],"spin":""}}):_c('font-awesome-icon',{attrs:{"icon":['fas', 'sync']}}),_c('span',[_vm._v(" Reload")])],1),_c('b-modal',{attrs:{"id":"modal-delete","title":"Delete jobs"},on:{"ok":_vm.handleOkDelete}},[_c('p',{staticClass:"my-4"},[_vm._v("Are you sure you want to delete all tasks for the current project?")])]),(_vm.hasItems)?_c('b-pagination',{staticClass:"ml-2 mb-0",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1),_c('div',{staticClass:"table-wrapper"},[_c('b-table',{staticClass:"my-2",attrs:{"id":"my-table","items":_vm.items_proxy,"fields":_vm.fields,"_per-page":"per_page","_current-page":"current_page","small":"","bordered":"","striped":"","hover":""},scopedSlots:_vm._u([{key:"cell(error)",fn:function(data){return [(data.value)?_c('div',[_c('div',{staticClass:"job-error text-muted small"},[_vm._v(_vm._s(data.value))])]):_vm._e()]}},{key:"cell(status)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center",attrs:{"set":_vm.params=_vm.getStatusIcon(data.value)}},[_c('font-awesome-icon',{class:_vm.params.class,attrs:{"title":data.value,"icon":_vm.params.icon,"spin":_vm.params.spin}})],1):_vm._e()]}},{key:"cell(created_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(updated_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(completed_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(type)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center"},[(data.value=='import')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-import']}}):(data.value=='export')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-export']}}):_vm._e()],1):_vm._e()]}},{key:"cell(actions)",fn:function(data){return [(data.item.id)?_c('div',{staticClass:"d-flex"},[_c('b-button',{attrs:{"size":"sm","variant":"outline-secondary"},on:{"click":function($event){return _vm.showSettings(data.item.settings)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas','eye'],"fixed-width":""}})],1),_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-primary","size":"sm","disabled":_vm.getStopDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmStopTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'stopwatch'],"fixed-width":""}})],1),_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-danger","size":"sm","disabled":_vm.getDeleteDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmDeleteTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'trash'],"fixed-width":""}})],1),(_vm.debugMode)?_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-success","size":"sm"},on:{"click":function($event){return _vm.showEdit(data.item)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'edit'],"fixed-width":""}})],1):_vm._e()],1):_vm._e()]}}])})],1),(_vm.hasItems)?_c('b-pagination',{staticClass:"mb-2",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e(),_c('b-modal',{ref:"modal-settings",attrs:{"title":"Settings","ok-only":""}},[_c('pre',[_vm._v(_vm._s(_vm.current_settings))])]),_c('b-modal',{ref:"modal-edit",attrs:{"title":"Edit","hide-footer":""}},[_c('EditJob',{attrs:{"job":_vm.editing_data},scopedSlots:_vm._u([{key:"footer",fn:function(ref){
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/JobsTable.vue?vue&type=template&id=02d5f17d&scoped=true&
+var JobsTablevue_type_template_id_02d5f17d_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"overflow-auto"},[_c('div',{staticClass:"d-flex flex-row justify-content-start align-items-start"},[_c('b-button',{attrs:{"size":"sm","variant":"info","disabled":_vm.loading},on:{"click":_vm.getItems}},[(_vm.loading)?_c('font-awesome-icon',{attrs:{"icon":['fas', 'spinner'],"spin":""}}):_c('font-awesome-icon',{attrs:{"icon":['fas', 'sync']}}),_c('span',[_vm._v(" Reload")])],1),_c('b-modal',{attrs:{"id":"modal-delete","title":"Delete jobs"},on:{"ok":_vm.handleOkDelete}},[_c('p',{staticClass:"my-4"},[_vm._v("Are you sure you want to delete all tasks for the current project?")])]),(_vm.hasItems)?_c('b-pagination',{staticClass:"ml-2 mb-0",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1),_c('div',{staticClass:"table-wrapper"},[_c('b-table',{staticClass:"my-2",attrs:{"id":"my-table","items":_vm.items_proxy,"fields":_vm.fields,"_per-page":"per_page","_current-page":"current_page","small":"","bordered":"","striped":"","hover":""},scopedSlots:_vm._u([{key:"cell(error)",fn:function(data){return [(data.value)?_c('div',[_c('div',{staticClass:"job-error text-muted small"},[_vm._v(_vm._s(data.value))])]):_vm._e()]}},{key:"cell(status)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center",attrs:{"set":_vm.params=_vm.getStatusIcon(data.value)}},[_c('font-awesome-icon',{class:_vm.params.class,attrs:{"title":data.value,"icon":_vm.params.icon,"spin":_vm.params.spin}})],1):_vm._e()]}},{key:"cell(created_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(updated_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(completed_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(type)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center"},[(data.value=='import')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-import']}}):(data.value=='export')?_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"title":data.value,"icon":['fas', 'file-export']}}):_vm._e()],1):_vm._e()]}},{key:"cell(actions)",fn:function(data){return [(data.item.id)?_c('div',{staticClass:"d-flex"},[_c('b-button',{attrs:{"size":"sm","variant":"outline-secondary"},on:{"click":function($event){return _vm.showSettings(data.item.settings)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas','eye'],"fixed-width":""}})],1),(data.item.status=='stopped')?_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-success","size":"sm"},on:{"click":function($event){return _vm.confirmStartTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'sync-alt'],"fixed-width":""}})],1):_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-primary","size":"sm","disabled":_vm.getStopDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmStopTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'stopwatch'],"fixed-width":""}})],1),_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-danger","size":"sm","disabled":_vm.getDeleteDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmDeleteTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'trash'],"fixed-width":""}})],1),(_vm.debugMode)?_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-success","size":"sm"},on:{"click":function($event){return _vm.showEdit(data.item)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'edit'],"fixed-width":""}})],1):_vm._e()],1):_vm._e()]}}])})],1),(_vm.hasItems)?_c('b-pagination',{staticClass:"mb-2",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e(),_c('b-modal',{ref:"modal-settings",attrs:{"title":"Settings","ok-only":""}},[_c('pre',[_vm._v(_vm._s(_vm.current_settings))])]),_c('b-modal',{ref:"modal-edit",attrs:{"title":"Edit","hide-footer":""}},[_c('EditJob',{attrs:{"job":_vm.editing_data},scopedSlots:_vm._u([{key:"footer",fn:function(ref){
 var form = ref.form;
 return [_c('div',{staticClass:"d-flex justify-content-end"},[_c('b-button',{staticClass:"mr-2",attrs:{"size":"sm","variant":"secondary"},on:{"click":function($event){return _vm.$refs['modal-edit'].hide()}}},[_vm._v("Cancel")]),_c('b-button',{attrs:{"size":"sm","variant":"success"},on:{"click":function($event){return _vm.editJob(form)}}},[_vm._v("OK")])],1)]}}])})],1)],1)}
-var JobsTablevue_type_template_id_2fe20e4f_scoped_true_staticRenderFns = []
+var JobsTablevue_type_template_id_02d5f17d_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=template&id=2fe20e4f&scoped=true&
+// CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=template&id=02d5f17d&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
 var es_array_concat = __webpack_require__("99af");
@@ -181,6 +185,11 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 
 
+//
+//
+//
+//
+//
 //
 //
 //
@@ -519,7 +528,7 @@ var statusList = Object.freeze({
         case statusList.ERROR:
           params = Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, params), {
             icon: ['fas', 'exclamation-circle'],
-            class: 'text-warning'
+            class: 'text-danger'
           });
           break;
 
@@ -628,7 +637,7 @@ var statusList = Object.freeze({
         }, _callee5, null, [[0, 8, 13, 17]]);
       }))();
     },
-    confirmDeleteTask: function confirmDeleteTask(id) {
+    confirmStartTask: function confirmStartTask(id) {
       var _this5 = this;
 
       return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
@@ -637,14 +646,14 @@ var statusList = Object.freeze({
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                message = "Do you want to delete this job?";
-                title = "Delete job ID ".concat(id);
+                message = "Do you want to restart this job?";
+                title = "Start job ID ".concat(id);
                 _context6.next = 4;
                 return _this5.$bvModal.msgBoxConfirm(message, {
                   title: title,
                   size: 'sm',
                   buttonSize: 'sm',
-                  okVariant: 'danger',
+                  okVariant: 'primary',
                   headerClass: 'p-2 border-bottom-0',
                   footerClass: 'p-2 border-top-0',
                   centered: true
@@ -652,7 +661,7 @@ var statusList = Object.freeze({
 
               case 4:
                 response = _context6.sent;
-                if (response) _this5.deleteTask(id);
+                if (response) _this5.startTask(id);
 
               case 6:
               case "end":
@@ -662,7 +671,7 @@ var statusList = Object.freeze({
         }, _callee6);
       }))();
     },
-    deleteTask: function deleteTask(id) {
+    startTask: function startTask(id) {
       var _this6 = this;
 
       return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
@@ -673,12 +682,12 @@ var statusList = Object.freeze({
               case 0:
                 _context7.prev = 0;
                 _context7.next = 3;
-                return _this6.$API.dispatch('jobs/delete', {
+                return _this6.$API.dispatch('jobs/start', {
                   id: id
                 });
 
               case 3:
-                message = "The job ID ".concat(id, " has been deleted.");
+                message = "The job id ".concat(id, " has been started.");
                 title = 'Success';
                 variant = 'success';
                 _context7.next = 13;
@@ -687,7 +696,7 @@ var statusList = Object.freeze({
               case 8:
                 _context7.prev = 8;
                 _context7.t0 = _context7["catch"](0);
-                message = "There was an error deleting the job ID ".concat(id, ".");
+                message = "There was an error starting the job ID ".concat(id, ".");
                 title = 'Error';
                 variant = 'danger';
 
@@ -713,6 +722,91 @@ var statusList = Object.freeze({
         }, _callee7, null, [[0, 8, 13, 17]]);
       }))();
     },
+    confirmDeleteTask: function confirmDeleteTask(id) {
+      var _this7 = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+        var message, title, response;
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                message = "Do you want to delete this job?";
+                title = "Delete job ID ".concat(id);
+                _context8.next = 4;
+                return _this7.$bvModal.msgBoxConfirm(message, {
+                  title: title,
+                  size: 'sm',
+                  buttonSize: 'sm',
+                  okVariant: 'danger',
+                  headerClass: 'p-2 border-bottom-0',
+                  footerClass: 'p-2 border-top-0',
+                  centered: true
+                });
+
+              case 4:
+                response = _context8.sent;
+                if (response) _this7.deleteTask(id);
+
+              case 6:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }))();
+    },
+    deleteTask: function deleteTask(id) {
+      var _this8 = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+        var message, title, variant;
+        return regeneratorRuntime.wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                _context9.prev = 0;
+                _context9.next = 3;
+                return _this8.$API.dispatch('jobs/delete', {
+                  id: id
+                });
+
+              case 3:
+                message = "The job ID ".concat(id, " has been deleted.");
+                title = 'Success';
+                variant = 'success';
+                _context9.next = 13;
+                break;
+
+              case 8:
+                _context9.prev = 8;
+                _context9.t0 = _context9["catch"](0);
+                message = "There was an error deleting the job ID ".concat(id, ".");
+                title = 'Error';
+                variant = 'danger';
+
+              case 13:
+                _context9.prev = 13;
+
+                _this8.$bvToast.toast(message, {
+                  title: title,
+                  autoHideDelay: 1500,
+                  appendToast: true,
+                  variant: variant
+                });
+
+                _this8.getItems();
+
+                return _context9.finish(13);
+
+              case 17:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9, null, [[0, 8, 13, 17]]);
+      }))();
+    },
     showSettings: function showSettings(settings) {
       var modal = this.$refs['modal-settings'];
       if (!modal) return;
@@ -726,50 +820,50 @@ var statusList = Object.freeze({
       modal.show();
     },
     editJob: function editJob(data) {
-      var _this7 = this;
+      var _this9 = this;
 
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
         var id, modal;
-        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+        return regeneratorRuntime.wrap(function _callee10$(_context10) {
           while (1) {
-            switch (_context8.prev = _context8.next) {
+            switch (_context10.prev = _context10.next) {
               case 0:
                 id = data.id;
-                _context8.next = 3;
-                return _this7.$API.dispatch('jobs/update', {
+                _context10.next = 3;
+                return _this9.$API.dispatch('jobs/update', {
                   id: id,
                   data: Object(objectSpread2["a" /* default */])({}, data)
                 });
 
               case 3:
-                modal = _this7.$refs['modal-edit'];
+                modal = _this9.$refs['modal-edit'];
 
                 if (modal) {
-                  _context8.next = 6;
+                  _context10.next = 6;
                   break;
                 }
 
-                return _context8.abrupt("return");
+                return _context10.abrupt("return");
 
               case 6:
-                _this7.getItems();
+                _this9.getItems();
 
                 modal.hide();
 
               case 8:
               case "end":
-                return _context8.stop();
+                return _context10.stop();
             }
           }
-        }, _callee8);
+        }, _callee10);
       }))();
     }
   }
 });
 // CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=script&lang=js&
  /* harmony default export */ var components_JobsTablevue_type_script_lang_js_ = (JobsTablevue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/JobsTable.vue?vue&type=style&index=0&id=2fe20e4f&scoped=true&lang=css&
-var JobsTablevue_type_style_index_0_id_2fe20e4f_scoped_true_lang_css_ = __webpack_require__("ed0e");
+// EXTERNAL MODULE: ./src/components/JobsTable.vue?vue&type=style&index=0&id=02d5f17d&scoped=true&lang=css&
+var JobsTablevue_type_style_index_0_id_02d5f17d_scoped_true_lang_css_ = __webpack_require__("c491");
 
 // CONCATENATED MODULE: ./src/components/JobsTable.vue
 
@@ -782,17 +876,22 @@ var JobsTablevue_type_style_index_0_id_2fe20e4f_scoped_true_lang_css_ = __webpac
 
 var JobsTable_component = Object(componentNormalizer["a" /* default */])(
   components_JobsTablevue_type_script_lang_js_,
-  JobsTablevue_type_template_id_2fe20e4f_scoped_true_render,
-  JobsTablevue_type_template_id_2fe20e4f_scoped_true_staticRenderFns,
+  JobsTablevue_type_template_id_02d5f17d_scoped_true_render,
+  JobsTablevue_type_template_id_02d5f17d_scoped_true_staticRenderFns,
   false,
   null,
-  "2fe20e4f",
+  "02d5f17d",
   null
   
 )
 
 /* harmony default export */ var JobsTable = (JobsTable_component.exports);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/pages/Jobs.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
 //
 //
 //
@@ -896,8 +995,8 @@ var JobsTable_component = Object(componentNormalizer["a" /* default */])(
 });
 // CONCATENATED MODULE: ./src/pages/Jobs.vue?vue&type=script&lang=js&
  /* harmony default export */ var pages_Jobsvue_type_script_lang_js_ = (Jobsvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/pages/Jobs.vue?vue&type=style&index=0&id=2c971a18&scoped=true&lang=css&
-var Jobsvue_type_style_index_0_id_2c971a18_scoped_true_lang_css_ = __webpack_require__("314a");
+// EXTERNAL MODULE: ./src/pages/Jobs.vue?vue&type=style&index=0&id=6e58a1a0&scoped=true&lang=css&
+var Jobsvue_type_style_index_0_id_6e58a1a0_scoped_true_lang_css_ = __webpack_require__("4089");
 
 // CONCATENATED MODULE: ./src/pages/Jobs.vue
 
@@ -914,7 +1013,7 @@ var Jobs_component = Object(componentNormalizer["a" /* default */])(
   staticRenderFns,
   false,
   null,
-  "2c971a18",
+  "6e58a1a0",
   null
   
 )
@@ -923,14 +1022,10 @@ var Jobs_component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ "ed0e":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "ee90":
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_2fe20e4f_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("aedb");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_2fe20e4f_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_2fe20e4f_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_2fe20e4f_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+// extracted by mini-css-extract-plugin
 
 /***/ })
 

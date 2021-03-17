@@ -2,11 +2,10 @@
   <div>
     <p>Monitor the status of the Jobs.</p>
     <JobsTable />
-    <div class="d-flex">
+    <div class="d-flex legend-wrapper">
       <b-card
         title="Status"
         tag="article"
-        style="max-width: 20rem;"
         class=""
       >
       <ul>
@@ -30,7 +29,7 @@
         </li>
         <li>
           <span>
-            <font-awesome-icon fixed-width class="text-warning" :icon="['fas', 'exclamation-circle']" />:
+            <font-awesome-icon fixed-width class="text-danger" :icon="['fas', 'exclamation-circle']" />:
             <span>Job stopped due to error</span>
           </span>
         </li>
@@ -51,7 +50,6 @@
       <b-card
         title="Actions"
         tag="article"
-        style="max-width: 20rem;"
         class="ml-2"
       >
       <ul>
@@ -60,10 +58,17 @@
             <font-awesome-icon fixed-width class="text-primary" :icon="['fas', 'stopwatch']" />:
             <span>Stop a Job in progress</span>
           </span>
+        </li>
+        <li>
+          <span>
+            <font-awesome-icon fixed-width class="text-success" :icon="['fas', 'sync-alt']" />:
+            <span>Start a stopped Job</span>
+          </span>
+        </li>
         <li>
           <span>
             <font-awesome-icon fixed-width class="text-danger" :icon="['fas', 'trash']" />:
-            <span>A Job and its associated file will be deleted</span>
+            <span>Delete a Job and its associated file</span>
           </span>
         </li>
       </ul>
@@ -71,7 +76,6 @@
       <b-card
         title="Types"
         tag="article"
-        style="max-width: 20rem;"
         class="ml-2"
       >
       <ul>
@@ -80,9 +84,10 @@
             <font-awesome-icon fixed-width class="text-primary" :icon="['fas', 'file-import']" />:
             <span><em>"Import"</em> type Job</span>
           </span>
+        </li>
         <li>
           <span>
-            <font-awesome-icon fixed-width class="text-primary" :icon="['fas', 'file-export']" />:
+            <font-awesome-icon fixed-width class="text-danger" :icon="['fas', 'file-export']" />:
             <span><em>"Export"</em> type Job</span>
           </span>
         </li>
@@ -105,5 +110,8 @@ export default {
 ul {
   list-style-type: none;
   padding: 0;
+}
+.legend-wrapper > * {
+  flex: 1;
 }
 </style>
