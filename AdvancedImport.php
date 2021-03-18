@@ -7,8 +7,6 @@ if(file_exists($autoload)) require_once($autoload);
 use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
-use SleekDB\Query;
-use SleekDB\Store;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
@@ -23,7 +21,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     const DB_NAME = 'advanced_import.db';
 
     const TABLES_PREFIX = 'advanced_ie_';
-    const MAX_CRON_EXECUTION_TIME = '10 minutes';
+    const MAX_CRON_EXECUTION_TIME = '30 minutes';
     const UPLOAD_FOLDER_NAME = 'uploads';
 
     function __construct()
@@ -193,6 +191,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public function update($subject, $event = null, $data = null)
     {
+        $project_id = @$data['project_id'];
         switch ($event) {
             case 'emergency':
             case 'alert':
@@ -205,7 +204,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
             case 'log':
                 $message =  @$data['message'] ?: '';
                 unset($data['message']);
-                $data['project_id'] = $this->getProjectId(); // this is filled anyway in log_internal
+                $data['project_id'] = $project_id ?: $this->getProjectId(); // this is filled anyway in log_internal
                 $data['type'] = $event;
                 $encoded_data = [];
                 // transform all provided data to string
