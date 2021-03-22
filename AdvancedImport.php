@@ -287,7 +287,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      * @param string $store_name
      * @return \SleekDB\Store
      */
-    public static function dbStore($store_name)
+    /* public static function dbStore($store_name)
     {
         $configuration = [
             "auto_cache" => true,
@@ -305,7 +305,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         self::chmod_r($db_path);
         $store = new \SleekDB\Store($store_name, $db_path, $configuration);
         return $store;
-    }
+    } */
 
     /**
      * Recursively deletes a directory tree.
