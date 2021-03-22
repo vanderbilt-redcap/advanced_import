@@ -191,7 +191,7 @@ abstract class Job implements JobInterface, JsonSerializable
         return null;
     }
 
-    protected function __set($name, $value)
+    public function __set($name, $value)
     {
         if (!array_key_exists($name, $this->properties)) return;
         switch ($name) {

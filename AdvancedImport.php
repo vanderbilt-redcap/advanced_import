@@ -248,9 +248,18 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public static function db()
     {
+        $logFileInfo = function($db_name, $db_path) {
+            $permissions = shell_exec('getfacl '.$db_path);
+            $file_exists = file_exists($db_path);
+            $message = sprintf("getfacl for '%s': ", $db_name).$permissions;
+            $message .= sprintf("file_exists: %s", $file_exists);
+            self::getInstance()->log($message);
+        };
+
         $db_dir = self::getDatabaseDirectory();
-        self::chmod_r($db_dir);
         $db_path = $db_dir.DIRECTORY_SEPARATOR.self::DB_NAME;
+        // $logFileInfo(self::DB_NAME, $db_path);
+        self::chmod_r($db_dir);
         $database = new Database($db_path);
         return $database;
     }
@@ -262,7 +271,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      * @param integer $mode
      * @return void
      */
-    private static function chmod_r($path, $mode=0777) {
+    public static function chmod_r($path, $mode=0777) {
         $dir = new \DirectoryIterator($path);
         foreach ($dir as $item) {
             chmod($item->getPathname(), $mode);

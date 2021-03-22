@@ -75,7 +75,7 @@ class Database {
   {
     $db = new PDO("sqlite:".$this->db_path);
     $db->query("PRAGMA journal_mode=WAL");
-    $db->query("PRAGMA synchronous=OFF");
+    $db->query("PRAGMA synchronous=FULL");
     return $db;
   }
 

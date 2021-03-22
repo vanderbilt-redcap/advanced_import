@@ -1,13 +1,19 @@
 <?php
 namespace Vanderbilt\AdvancedImport;
 
+use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
+
 $page = new \HtmlPage();
 $page->PrintHeaderExt();
 $root = dirname(__FILE__);
 
-$databaseDirectory = AdvancedImport::getDatabaseDirectory();
+$database_directory = AdvancedImport::getDatabaseDirectory();
+$db_path = $database_directory.DIRECTORY_SEPARATOR.AdvancedImport::DB_NAME;
+if(file_exists($db_path)) unlink($db_path);
+$queue = new Queue();
+$queue->createJobsTable();
 
-$newsStore = new \SleekDB\Store("news", $databaseDirectory);
+/* $newsStore = new \SleekDB\Store("news", $databaseDirectory);
 $article = [
   "title" => "Google Pixel XL",
   "about" => "Google announced a new Pixel!",
@@ -22,7 +28,7 @@ $queryBuilder = $newsStore->createQueryBuilder();
 $allNews = $queryBuilder->select([])->orderBy(["_id" => "DESC"])->getQuery()
 ->fetch();
 
-print_r($allNews);
+print_r($allNews); */
 
 
 // $query_string = "CREATE TEMPORARY TABLE IF NOT EXISTS `advanced_ie_test` (
