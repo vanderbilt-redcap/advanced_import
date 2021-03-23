@@ -79,7 +79,7 @@ class RecordHelper
     public function getRecordId($primary_key_field, $primary_key_value)
     {
       $query_string = sprintf(
-        "SELECT record FROM redcap_data
+        "SELECT DISTINCT record FROM redcap_data
         WHERE `field_name`='%s'
         AND `value`=%s",
         $primary_key_field, checkNull($primary_key_value)

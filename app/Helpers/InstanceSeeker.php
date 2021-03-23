@@ -2,7 +2,6 @@
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use Project;
-use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 
 class InstanceSeeker
@@ -127,7 +126,7 @@ class InstanceSeeker
       $subQuery = $this->getPivotRotationSubQuery($record);
 
       $query_string = sprintf(
-        "SELECT * FROM (
+        "SELECT 1 FROM (
           %s
         ) AS pivot
         WHERE %s",
