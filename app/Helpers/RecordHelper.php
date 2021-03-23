@@ -78,50 +78,22 @@ class RecordHelper
 
     public function getRecordId($primary_key_field, $primary_key_value)
     {
-      $query_string = sprintf(
-        "SELECT DISTINCT record FROM redcap_data
-        WHERE `field_name`='%s'
-        AND `value`=%s",
-        $primary_key_field, checkNull($primary_key_value)
-      );
-      $result = db_query($query_string);
-      if($row=db_fetch_assoc($result)) {
-        return @$row['record'];
-      }
-      return false;
-    }
-
-    /**
-     * get the next available instance number for a form
-     * return 1 if the form is not repeatable
-     *
-     * @param int $project_id
-     * @param int $event_id
-     * @param string $record
-     * @param string $form_name
-     * @return int
-     */
-    function getAutoInstanceNumber($record, $form_name)
-    {
-        $project_id = $this->settings->project_id;
+        $project_id = $this->project_id;
         $event_id = $this->settings->event_id;
-        $form_fields = $this->getProjectFormFields($this->project, $form_name);
-        $fields_list = DatabaseQueryHelper::getQueryList($form_fields);
         $query_string = sprintf(
-            "SELECT COALESCE(MAX(IFNULL(instance,1)),0)+1 AS next_instance
-            FROM redcap_data
+            "SELECT DISTINCT record FROM redcap_data
             WHERE project_id=%u
             AND event_id=%u
-            AND record=%s
-            AND field_name IN (%s)",
-            $project_id, $event_id, checkNull($record), $fields_list
+            AND `field_name`='%s'
+            AND `value`=%s",
+            $project_id, $event_id,
+            $primary_key_field, checkNull($primary_key_value)
         );
         $result = db_query($query_string);
-        if($row=db_fetch_object($result)) {
-            $next_instance = $row->next_instance;
-            return intval($next_instance);
+        if($row=db_fetch_assoc($result)) {
+            return @$row['record'];
         }
-        throw new \Exception("Error finding the next instance number in project {$project_id}, record {$record}", 1);    
+        return false;
     }
 
     /**
