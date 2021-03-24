@@ -79,14 +79,12 @@ class RecordHelper
     public function getRecordId($primary_key_field, $primary_key_value)
     {
         $project_id = $this->project_id;
-        $event_id = $this->settings->event_id;
         $query_string = sprintf(
             "SELECT DISTINCT record FROM redcap_data
             WHERE project_id=%u
-            AND event_id=%u
             AND `field_name`='%s'
             AND `value`=%s",
-            $project_id, $event_id,
+            $project_id,
             $primary_key_field, checkNull($primary_key_value)
         );
         $result = db_query($query_string);
