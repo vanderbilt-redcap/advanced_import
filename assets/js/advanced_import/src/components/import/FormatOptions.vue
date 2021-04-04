@@ -2,7 +2,13 @@
     <div>
         <div class="form-group">
             <label for="field_name_row">Dates Format <b-button class="" v-b-modal.modal-datetime-formats size="sm" variant="outline-info"><font-awesome-icon class="icon" :icon="['fas', 'question-circle']" /></b-button></label>
-            <input class="form-control" type="text" id="dates_format" v-model="dates_format">
+            <b-input-group v-if="true">
+                <b-form-input id="dates_format" v-model="dates_format"></b-form-input>
+                <template #append>
+                    <DateHelper class="date-helper" @dateDetected="($event)=> dates_format=$event"/>
+                </template>
+
+            </b-input-group>
         </div>
         <!-- <ul v-if="false">
             <li>date order (DMY,DYM, MDY, MYD, YDM, YMD)</li>
@@ -30,13 +36,19 @@
 
 <script>
 import DateFormatsTable from '@/components/DateFormatsTable'
+import DateHelper from '@/components/import/DateHelper'
 
 export default {
-    components: {DateFormatsTable},
+    components: {DateFormatsTable, DateHelper},
     computed: {
         dates_format: {
             get() { return this.$store.state.import_settings.dates_format },
             set(value) { this.$store.dispatch('import_settings/setStateProperty', {key: 'dates_format', value})},
+        },
+    },
+    methods: {
+        showDateHelper() {
+
         },
     },
     validations: {},
@@ -44,6 +56,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.date-helper >>> .btn.dropdown-toggle {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
 </style>

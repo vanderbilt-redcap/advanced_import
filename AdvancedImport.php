@@ -7,6 +7,7 @@ if(file_exists($autoload)) require_once($autoload);
 use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
+use ExternalModules\ExternalModules;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
@@ -14,6 +15,18 @@ use Vanderbilt\AdvancedImport\App\Models\Mediator;
 
 class AdvancedImport extends AbstractExternalModule implements Mediator
 {
+    /**
+     * ID of the mnodule
+     *
+     * @var int
+     */
+    private $id;
+    
+    /**
+     * instance of the module
+     *
+     * @var AdvancedImport
+     */
     private static $instance;
     /**
      * name of the SQLite database
@@ -27,6 +40,14 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     function __construct()
     {
         parent::__construct();
+    }
+
+    function getId()
+    {
+        if(!$this->id) {
+            $this->id = ExternalModules::getIdForPrefix($this->PREFIX);
+        }
+        return $this->id;
     }
 
     /**

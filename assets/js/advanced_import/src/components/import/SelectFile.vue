@@ -8,6 +8,9 @@
         <li>guess the field delimiter</li>
         <li>extract the column names from the first row of the file</li>
       </ul>
+      <b-alert :show="files && csv_data.length<minCsvLength" variant="warning">
+        <span>The CSV file must contain at least 2 lines: 1 line of lables and 1 line of values</span> 
+      </b-alert>
 
       <b-form-file
         id="file"
@@ -36,13 +39,14 @@ import FileParser from '@/libs/FileParser'
 
 // check the minimum number of parsed CSV lines
 const minNumberLines = (min) => (value, vm) =>  {
-    return vm.csv_data.length >= min;
+    return [...vm.csv_data].length >= min;
 };
 
 export default {
 
   data() {
     return {
+      minCsvLength: 1,
       accept: ['.txt','.csv','.json'].join(','),
     }
   },
@@ -93,7 +97,7 @@ export default {
   validations() {
     return {
       files: {required},
-      csv_lines: {minLength: minNumberLines(2)}, //at least 1 line to import plus the columns
+      csv_lines: {minLength: minNumberLines(this.minCsvLength)}, //at least 1 line to import plus the columns
     }
   }
 }
