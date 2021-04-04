@@ -8,7 +8,9 @@ use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
 use ExternalModules\ExternalModules;
+use PDO;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
+use Vanderbilt\AdvancedImport\App\Helpers\ExModDatabase;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
@@ -191,15 +193,31 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         // $completed_jobs = $queue->getJobs($params);
     } */
 
-    function cron_processQueue($cronInfo)
+    private function processProjectQueue($cronInfo, $project_id)
     {
         try {
             $cron_name = @$cronInfo['cron_name'] ?: 'AdvancedImport';
             $this->processQueue();
-            return sprintf("%s - all jobs have been processed", $cron_name);
+            return sprintf("%s - all jobs have been processed for project %u", $cron_name, $project_id);
         } catch (\Exception $e) {
-            return sprintf("%s -  error processing the jobs ( %s )", $cron_name, $e->getMessage());
+            return sprintf(
+                "%s -  error processing the jobs for project %u ( %s )",
+                $cron_name, $project_id, $e->getMessage()
+            );
         }
+    }
+
+    function cron_processQueue($cronInfo)
+    {
+        $originalPid = $_GET['pid'];
+        foreach($this->framework->getProjectsWithModuleEnabled() as $localProjectId){
+            $_GET['pid'] = $localProjectId;
+
+            // Project specific method calls go here.
+            $this->processProjectQueue($cronInfo, $localProjectId);
+        }
+        // Put the pid back the way it was before this cron job (likely doesn't matter, but is good housekeeping practice)
+        $_GET['pid'] = $originalPid;
     }
 
     /**
@@ -281,8 +299,21 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $db_path = $db_dir.DIRECTORY_SEPARATOR.self::DB_NAME;
         // $logFileInfo(self::DB_NAME, $db_path);
         self::chmod_r($db_dir);
-        $database = new Database($db_path);
+        $connection = new PDO("sqlite:".$db_path);
+        $connection->query("PRAGMA journal_mode=WAL");
+        $connection->query("PRAGMA synchronous=FULL");
+        $database = new Database($connection);
         return $database;
+    }
+
+    /**
+     * get a reference to the database class
+     *
+     * @return ExModDatabase
+     */
+    public static function dbExMod()
+    {
+        return new ExModDatabase();
     }
 
     /**

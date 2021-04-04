@@ -5,17 +5,19 @@ use PDOStatement;
 
 class Database {
 
-  private $db_path;
-
   /**
    *
    * @var PDO
    */
   private $connection;
 
-  public function __construct($path)
+  /**
+   *
+   * @param PDO $connection
+   */
+  public function __construct($connection)
   {
-    $this->db_path = $path;
+    $this->connection = $connection;
   }
 
   /**
@@ -24,9 +26,6 @@ class Database {
    */
   public function getConnection()
   {
-      if($this->connection==null){
-        $this->connection = $this->connect();
-      }
       return $this->connection;
   }
 

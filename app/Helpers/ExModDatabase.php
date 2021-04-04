@@ -2,6 +2,7 @@
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use DateTime;
+use PDO;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 
 class ExModDatabase
@@ -10,12 +11,46 @@ class ExModDatabase
     const TABLE_PERFIX = '__ex_mod_table_'; //followed by 'table' name
     const AUTO_INCREMENT_KEY = '__ex_mode_auto_increment_'; //followed by 'table' name
 
-    private $project_id;
-
-    public function __construct($project_id)
+    public function __construct()
     {
-        $this->project_id = $project_id;
         $this->module = AdvancedImport::getInstance();
+    }    
+
+    /**
+     *
+     * @param string $query_string
+     * @param array $params
+     * @return PDOStatement
+     */
+    public function query($query_string, $params=[])
+    {
+        global $rc_connection;
+        $getTableName = function() use($query_string){
+            preg_match("/\sFROM\s*?['`]?(?<table>[^\s'`]+)['`]?/i", $query_string, $matches);
+            return @$matches['table'];
+        };
+        $fixFrom = function() use(&$query_string) {
+            $result = preg_replace("/\sFROM\s*?['`]?([^\s'`]+)['`]?/i", " FROM `redcap_external_module_settings` ", $query_string);
+            if($result) return $query_string = $result;
+        };
+        $fixWhere = function($tableName) use(&$query_string) {
+            $whereStatement = sprintf(
+                " WHERE `external_module_id`=%u AND `key` LIKE '%s%%' AND ",
+                $this->module->getId(), $tableName
+            );
+            $result = preg_replace("/\sWHERE\s/i", $whereStatement, $query_string);
+            if($result) return $query_string = $result;
+        };
+        $tableName = $getTableName();
+        $fixFrom();
+        $fixWhere($tableName);
+        $stmt = $rc_connection->prepare($query_string);
+        if(!$stmt) {
+            $error = print_r(db_error(), true);
+            throw new \Exception($error, 1);
+        }
+        $stmt->execute($params);
+        return $stmt;
     }
 
     public function dropTable($table_name)
@@ -23,9 +58,9 @@ class ExModDatabase
         $normalizedTableName = static::getRealTableName($table_name);
         $query_string = sprintf(
             "DELETE FROM `redcap_external_module_settings`
-            WHERE `project_id` = %u AND `external_module_id` = %u
+            WHERE `external_module_id` = %u
             AND `key` LIKE '%s%%'",
-            $this->project_id, $this->module->getId(), $normalizedTableName
+            $this->module->getId(), $normalizedTableName
         );
         $result = db_query($query_string);
         if($result==false) throw new \Exception(sprintf("Error dropping the table '%s'", $table_name), 1);
@@ -36,8 +71,8 @@ class ExModDatabase
         // $normalizedTableName = static::getRealTableName($table_name);
         if($drop) $this->dropTable($table_name);
         $normalizedAutoIncrement = self::AUTO_INCREMENT_KEY.$table_name;
-        $this->module->setProjectSetting($normalizedAutoIncrement, 0);
-        // $module->setProjectSetting($normalizedTableName, "[]");
+        $this->module->setSystemSetting($normalizedAutoIncrement, 0);
+        // $module->setSystemSetting($normalizedTableName, "[]");
     }
 
     private static function is_multidimensional_array($array) {
@@ -118,9 +153,9 @@ class ExModDatabase
         $normalizedTableName = static::getRealTableName($table_name);
         $query_string = sprintf(
             "SELECT `value` FROM redcap_external_module_settings
-            WHERE project_id=%u AND `external_module_id` = %u AND `key` LIKE '%s%%'
+            WHERE `external_module_id` = %u AND `key` LIKE '%s%%'
             AND %s",
-            $this->project_id, $this->module->getId(), $normalizedTableName,
+            $this->module->getId(), $normalizedTableName,
             implode("\nAND ", $whereClause)
         );
         $result = db_query($query_string);
@@ -134,7 +169,7 @@ class ExModDatabase
     public function getRowById($table_name, $id) {
         $normalizedTableName = static::getRealTableName($table_name);
         $key = implode('-', [$normalizedTableName, $id]);
-        $row = $this->module->getProjectSetting($key);
+        $row = $this->module->getSystemSetting($key);
         return json_decode($row, $assoc=true);
     }
 
@@ -151,9 +186,9 @@ class ExModDatabase
      */
     private function getId($table_name)
     {
-        $autoIncrement = $this->module->getProjectSetting(self::AUTO_INCREMENT_KEY.$table_name);
+        $autoIncrement = $this->module->getSystemSetting(self::AUTO_INCREMENT_KEY.$table_name);
         $next = intval($autoIncrement)+1;
-        $this->module->setProjectSetting(self::AUTO_INCREMENT_KEY.$table_name, $next);
+        $this->module->setSystemSetting(self::AUTO_INCREMENT_KEY.$table_name, $next);
         return $next;
     }
 
@@ -162,14 +197,14 @@ class ExModDatabase
         $normalizedTableName = static::getRealTableName($table_name);
         $data[self::ID_KEY] = "{$id}"; // add unique id as string or JSON_SEARCH won't work
         $key = implode('-', [$normalizedTableName, $id]);
-        $this->module->setProjectSetting($key, $data);
+        $this->module->setSystemSetting($key, $data);
         return $id;
     }
 
     public function delete($table_name, $id) {
         $normalizedTableName = static::getRealTableName($table_name);
         $key = implode('-', [$normalizedTableName, $id]);
-        $this->module->removeProjectSetting($key);
+        $this->module->removeSystemSetting($key);
         return $id;
     }
 
@@ -185,10 +220,10 @@ class ExModDatabase
         $query_string = sprintf(
             "UPDATE redcap_external_module_settings
             SET `value` = JSON_REPLACE(`value`, %s)
-            WHERE `project_id` = %u AND `external_module_id` = %u AND `key` LIKE '%s%%'
+            WHERE `external_module_id` = %u AND `key` LIKE '%s%%'
             AND %s",
             $updateStatement,
-            $this->project_id, $this->module->getId(), $normalizedTableName,
+            $this->module->getId(), $normalizedTableName,
             implode("\nAND ", $whereClause)
         );
         $result = db_query($query_string);
