@@ -10,7 +10,7 @@
             <b-badge variant="light">Step {{step_index+1}} of {{steps.length}}</b-badge>
           </div>
           
-          <component :is="item.component">
+          <component :is="item.element">
             <template v-slot:left>
               <button class="btn btn-outline-primary" @click="goToPrevStep" :disabled="step_index==0" v-if="step_index>0">go back</button>
               <span v-else/>
@@ -37,14 +37,14 @@
 import FilePreview from '@/components/import/FilePreview'
 
 const steps = [
-  { component: () => import('@/components/import/SelectFile'), },
-  { component: () => import('@/components/import/RecordFormat'), },
-  { component: () => import('@/components/import/FormatOptions'), },
-  { component: () => import('@/components/import/TargetForm'), },
-  { component: () => import('@/components/import/SetPrimaryKey'), },
-  { component: () => import('@/components/import/MapFields'), },
-  { component: () => import('@/components/import/ImportMode'), },
-  { component: () => import('@/components/import/Review'), },
+  { element: () => import('@/components/import/SelectFile'), },
+  { element: () => import('@/components/import/RecordFormat'), },
+  { element: () => import('@/components/import/FormatOptions'), },
+  { element: () => import('@/components/import/TargetForm'), },
+  { element: () => import('@/components/import/SetPrimaryKey'), },
+  { element: () => import('@/components/import/MapFields'), },
+  { element: () => import('@/components/import/ImportMode'), },
+  { element: () => import('@/components/import/Review'), },
 ]
 
 export default {

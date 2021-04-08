@@ -159,7 +159,7 @@ exports.default = void 0;
 
 var _common = __webpack_require__("78ef");
 
-var emailRegex = /(^$|^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$)/;
+var emailRegex = /^(?:[A-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]{2,}(?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
 
 var _default = (0, _common.regex)('email', emailRegex);
 
@@ -355,6 +355,261 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "8761":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e25c8372-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/SelectFile.vue?vue&type=template&id=041829ff&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"form-group"},[_c('p',[_vm._v("Select a file.")]),_c('p',[_vm._v("The wizard will parse it and:")]),_vm._m(0),_c('b-form-file',{ref:"file",attrs:{"id":"file","DISABLED-state":"Boolean(files)","placeholder":"Choose a file or drop it here...","drop-placeholder":"Drop file here...","accept":_vm.accept},model:{value:(_vm.files),callback:function ($$v) {_vm.files=$$v},expression:"files"}})],1),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)])}
+var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',[_c('li',[_vm._v("check if the content is valid")]),_c('li',[_vm._v("guess the field delimiter")]),_c('li',[_vm._v("extract the column names from the first row of the file")])])}]
+
+
+// CONCATENATED MODULE: ./src/components/import/SelectFile.vue?vue&type=template&id=041829ff&
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
+var asyncToGenerator = __webpack_require__("1da1");
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
+var objectSpread2 = __webpack_require__("5530");
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
+var toConsumableArray = __webpack_require__("2909");
+
+// EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
+var runtime = __webpack_require__("96cf");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
+var es_array_join = __webpack_require__("a15b");
+
+// EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
+var vuex_esm = __webpack_require__("2f62");
+
+// EXTERNAL MODULE: ./node_modules/vuelidate/lib/validators/index.js
+var validators = __webpack_require__("b5ae");
+
+// EXTERNAL MODULE: ./src/libs/FileParser.js + 4 modules
+var FileParser = __webpack_require__("27bf");
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/SelectFile.vue?vue&type=script&lang=js&
+
+
+
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+ // check the minimum number of parsed CSV lines
+
+var SelectFilevue_type_script_lang_js_minNumberLines = function minNumberLines(min) {
+  return function (value, vm) {
+    return Object(toConsumableArray["a" /* default */])(vm.csv_data).length >= min;
+  };
+};
+
+/* harmony default export */ var SelectFilevue_type_script_lang_js_ = ({
+  data: function data() {
+    return {
+      minCsvLength: 1,
+      accept: ['.txt', '.csv', '.json'].join(',')
+    };
+  },
+
+  /* mounted() {
+    this.files = null
+    const fileinput = this.$refs.file // reference to the b-form-file element
+    fileinput.reset()
+  }, */
+  computed: Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, Object(vuex_esm["b" /* mapState */])({
+    csv_fields: function csv_fields(state) {
+      return state.csv_data.fields;
+    },
+    csv_lines: function csv_lines(state) {
+      return state.csv_data.lines;
+    },
+    csv_data: function csv_data(state) {
+      return state.csv_data.data;
+    },
+    total_preview_lines: function total_preview_lines(state) {
+      return state.csv_data.total_preview_lines;
+    }
+  })), {}, {
+    files: {
+      get: function get() {
+        return this.$store.state.import_settings.files;
+      },
+      set: function set(value) {
+        this.$store.dispatch('import_settings/setStateProperty', {
+          key: 'files',
+          value: value
+        });
+      }
+    }
+  }),
+  methods: {
+    parse: function parse(file) {
+      var _this = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+        var total_lines, parser, lines, text, message;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (file) {
+                  _context.next = 2;
+                  break;
+                }
+
+                return _context.abrupt("return");
+
+              case 2:
+                _context.prev = 2;
+                total_lines = _this.total_preview_lines + 1;
+
+                if (!isNaN(total_lines)) {
+                  _context.next = 6;
+                  break;
+                }
+
+                throw new Error("total preview lines must be a number '(".concat(_this.total_preview_lines, " provided)'"));
+
+              case 6:
+                parser = new FileParser["a" /* default */]();
+                _context.next = 9;
+                return parser.getLines(file, total_lines);
+
+              case 9:
+                lines = _context.sent;
+                //read a maximum of 6 lines
+                text = lines.join("\n");
+                _context.next = 13;
+                return _this.$store.dispatch('csv_data/setStateProperty', {
+                  key: 'text',
+                  value: text
+                });
+
+              case 13:
+                _context.next = 15;
+                return _this.$store.dispatch('csv_data/parse', {
+                  text: text
+                });
+
+              case 15:
+                _context.next = 21;
+                break;
+
+              case 17:
+                _context.prev = 17;
+                _context.t0 = _context["catch"](2);
+                message = _context.t0.message || 'error parsing the file';
+
+                _this.$bvModal.msgBoxOk(message, {
+                  title: 'Error',
+                  okVariant: 'secondary',
+                  centered: true
+                });
+
+              case 21:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[2, 17]]);
+      }))();
+    }
+  },
+  watch: {
+    files: {
+      immediate: true,
+      handler: function handler(file) {
+        this.parse(file);
+      }
+    },
+    csv_data: {
+      handler: function handler() {
+        if (this.$v.csv_lines.minLength) return;
+        this.$bvModal.msgBoxOk("The file must contain at least ".concat(this.minCsvLength, " lines"), {
+          title: 'Error',
+          okVariant: 'secondary',
+          centered: true
+        });
+      }
+    }
+  },
+  validations: function validations() {
+    return {
+      files: {
+        required: validators["required"]
+      },
+      csv_lines: {
+        minLength: SelectFilevue_type_script_lang_js_minNumberLines(this.minCsvLength)
+      } //at least 1 line to import plus the columns
+
+    };
+  }
+});
+// CONCATENATED MODULE: ./src/components/import/SelectFile.vue?vue&type=script&lang=js&
+ /* harmony default export */ var import_SelectFilevue_type_script_lang_js_ = (SelectFilevue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
+var componentNormalizer = __webpack_require__("2877");
+
+// CONCATENATED MODULE: ./src/components/import/SelectFile.vue
+
+
+
+
+
+/* normalize component */
+
+var component = Object(componentNormalizer["a" /* default */])(
+  import_SelectFilevue_type_script_lang_js_,
+  render,
+  staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var SelectFile = __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
 /***/ "91d3":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -394,6 +649,32 @@ var hexValid = function hexValid(hex) {
 
 /***/ }),
 
+/***/ "a15b":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__("23e7");
+var IndexedObject = __webpack_require__("44ad");
+var toIndexedObject = __webpack_require__("fc6a");
+var arrayMethodIsStrict = __webpack_require__("a640");
+
+var nativeJoin = [].join;
+
+var ES3_STRINGS = IndexedObject != Object;
+var STRICT_METHOD = arrayMethodIsStrict('join', ',');
+
+// `Array.prototype.join` method
+// https://tc39.es/ecma262/#sec-array.prototype.join
+$({ target: 'Array', proto: true, forced: ES3_STRINGS || !STRICT_METHOD }, {
+  join: function join(separator) {
+    return nativeJoin.call(toIndexedObject(this), separator === undefined ? ',' : separator);
+  }
+});
+
+
+/***/ }),
+
 /***/ "aa82":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -425,8 +706,6 @@ exports.default = _default;
 
 "use strict";
 
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -605,9 +884,7 @@ var helpers = _interopRequireWildcard(__webpack_require__("78ef"));
 
 exports.helpers = helpers;
 
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -823,117 +1100,6 @@ var _default = function _default(prop) {
 };
 
 exports.default = _default;
-
-/***/ }),
-
-/***/ "e997":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/export/SetPrimaryKey.vue?vue&type=template&id=b881a772&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Please select the record identifier field")]),_c('table',{staticClass:"table table-striped table-bordered"},[_vm._m(0),_c('tbody',[_c('tr',[_c('td',[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.primary_key),expression:"primary_key"}],staticClass:"form-control",on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.primary_key=$event.target.multiple ? $$selectedVal : $$selectedVal[0]}}},[_c('option',{attrs:{"value":"","disabled":""}},[_vm._v("Select...")]),_vm._l((_vm.primary_keys),function(primary_key,index){return _c('option',{key:index,staticClass:"form-control"},[_vm._v(_vm._s(primary_key))])})],2)])])])]),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)])}
-var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('thead',[_c('tr',[_c('th',[_vm._v("Record Identifier (REDCap)")])])])}]
-
-
-// CONCATENATED MODULE: ./src/components/export/SetPrimaryKey.vue?vue&type=template&id=b881a772&
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
-var objectSpread2 = __webpack_require__("5530");
-
-// EXTERNAL MODULE: ./node_modules/vuelidate/lib/validators/index.js
-var validators = __webpack_require__("b5ae");
-
-// EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
-var vuex_esm = __webpack_require__("2f62");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/export/SetPrimaryKey.vue?vue&type=script&lang=js&
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ var SetPrimaryKeyvue_type_script_lang_js_ = ({
-  computed: Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, Object(vuex_esm["b" /* mapState */])({
-    primary_keys: function primary_keys(state) {
-      return state.settings.primary_keys;
-    }
-  })), {}, {
-    primary_key: {
-      get: function get() {
-        return this.$store.state.export_settings.primary_key;
-      },
-      set: function set(value) {
-        this.$store.dispatch('export_settings/setStateProperty', {
-          key: 'primary_key',
-          value: value
-        });
-      }
-    }
-  }),
-  methods: {},
-  validations: function validations() {
-    return {
-      primary_key: {
-        required: validators["required"]
-      }
-    };
-  }
-});
-// CONCATENATED MODULE: ./src/components/export/SetPrimaryKey.vue?vue&type=script&lang=js&
- /* harmony default export */ var export_SetPrimaryKeyvue_type_script_lang_js_ = (SetPrimaryKeyvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
-
-// CONCATENATED MODULE: ./src/components/export/SetPrimaryKey.vue
-
-
-
-
-
-/* normalize component */
-
-var component = Object(componentNormalizer["a" /* default */])(
-  export_SetPrimaryKeyvue_type_script_lang_js_,
-  render,
-  staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var SetPrimaryKey = __webpack_exports__["default"] = (component.exports);
 
 /***/ }),
 

@@ -30,7 +30,7 @@ $list = $exMod_db->search($tableName);
 
 $query_string = sprintf(
   "SELECT `value`->'$.status' FROM `%s` WHERE `value`->'\$.__id'=?",
-  AdvancedImport::db()::getRealTableName(Job::TABLE_NAME)
+  AdvancedImport::dbExMod()::getRealTableName(Job::TABLE_NAME)
 );
 
 $result = $exMod_db->query($query_string, ['id'=>'2']);

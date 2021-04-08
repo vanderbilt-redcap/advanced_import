@@ -33,13 +33,12 @@ const module = {
             const {data=[], errors=[], meta={}} = papaparse.parse(text, config)
             const {fields=[], delimiter} = meta
             if(errors.length>0) {
-                let message = 'error parsing the csv file'
+                let message = 'Error parsing the csv file.'
                 message = errors.reduce((accumulator, error)=> {
                     let error_message = error.message
                     return `${accumulator}\n${error_message}`
                 }, message)
-                console.log(errors, message, text)
-                return new Error(message)
+                throw new Error(message)
             }
             await context.dispatch('setStateProperty', {key:'data', value:data})
             await context.dispatch('setStateProperty', {key:'fields', value:fields})

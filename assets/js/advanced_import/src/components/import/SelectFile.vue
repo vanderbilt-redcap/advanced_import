@@ -8,9 +8,6 @@
         <li>guess the field delimiter</li>
         <li>extract the column names from the first row of the file</li>
       </ul>
-      <b-alert :show="files && csv_data.length<minCsvLength" variant="warning">
-        <span>The CSV file must contain at least 2 lines: 1 line of lables and 1 line of values</span> 
-      </b-alert>
 
       <b-form-file
         id="file"
@@ -80,7 +77,12 @@ export default {
         await this.$store.dispatch('csv_data/setStateProperty', {key:'text', value:text})
         await this.$store.dispatch('csv_data/parse', {text})
       } catch (error) {
-        console.log(error)
+        const message = error.message || 'error parsing the file'
+        this.$bvModal.msgBoxOk(message, {
+          title: 'Error',
+          okVariant: 'secondary',
+          centered: true
+        })
       }
       // this.$v.$touch()
     },
@@ -91,6 +93,17 @@ export default {
       immediate: true,
       handler(file) {
         this.parse(file)
+      }
+    },
+    csv_data: {
+      handler() {
+        if(this.$v.csv_lines.minLength) return
+
+        this.$bvModal.msgBoxOk(`The file must contain at least ${this.minCsvLength} lines`, {
+          title: 'Error',
+          okVariant: 'secondary',
+          centered: true
+        })
       }
     }
   },

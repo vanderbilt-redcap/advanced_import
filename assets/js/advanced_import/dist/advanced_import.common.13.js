@@ -1,1055 +1,56 @@
 ((typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] || []).push([[13],{
 
-/***/ "01bd":
+/***/ "4089":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_6e58a1a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("ee90");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_6e58a1a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Jobs_vue_vue_type_style_index_0_id_6e58a1a0_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/Review.vue?vue&type=template&id=1a4d91ee&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h6',[_vm._v("Review your settings")]),_c('table',{staticClass:"table table-bordered table-striped"},[_vm._m(0),_c('tbody',_vm._l((_vm.settings),function(value,key){return _c('tr',{key:key},[_c('td',[_vm._v(_vm._s(key))]),_c('td',[_vm._v(_vm._s(value))])])}),0)]),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default",[_c('section',[_c('button',{staticClass:"btn btn-primary ml-2",attrs:{"disabled":_vm.processing},on:{"click":_vm.importCSV}},[(_vm.processing)?_c('font-awesome-icon',{attrs:{"icon":"spinner","spin":""}}):_c('font-awesome-icon',{attrs:{"icon":"file-import"}}),_c('span',[_vm._v(" import")])],1)])]),_vm._t("right",null,{"validation":_vm.$v})],2),_c('b-modal',{ref:"modal-success",attrs:{"title":"Process completed","ok-only":"","size":"xl"},on:{"hidden":_vm.onCloseModal}},[_c('p',{staticClass:"my-4"},[_vm._v("The import proces is completed. Please check the "),_c('router-link',{attrs:{"to":{name:'logs'}}},[_vm._v("logs")]),_vm._v(" for details.")],1),_c('LogsTable',{ref:"logs"})],1),_c('b-modal',{ref:"modal-upload",attrs:{"title":"Uploading CSV file","ok-only":"","no-close-on-esc":"","no-close-on-backdrop":"","hide-header-close":"","ok-title":"cancel"},on:{"ok":_vm.onProcessStopped}},[_c('FileUploader',{ref:"uploader",attrs:{"files":_vm.files}})],1),_c('b-modal',{ref:"modal-process",attrs:{"id":"modal-process","title":"Processing CSV file","ok-only":"","no-close-on-esc":"","no-close-on-backdrop":"","hide-header-close":"","ok-title":"cancel","size":"xl"},on:{"ok":_vm.onProcessStopped}},[_c('FileProcesser',{ref:"processer",attrs:{"background_process":_vm.background_process}}),_c('LogsTable',{ref:"logs"})],1),_c('b-modal',{ref:"modal-abort",attrs:{"id":"modal-abort","title":"Process stopped","ok-only":""},on:{"ok":_vm.onProcessStopped}},[_c('p',{staticClass:"my-4"},[_vm._v("The process has been stopped by the user")])])],1)}
-var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('thead',[_c('tr',[_c('th',[_vm._v("key")]),_c('th',[_vm._v("value")])])])}]
-
-
-// CONCATENATED MODULE: ./src/components/import/Review.vue?vue&type=template&id=1a4d91ee&scoped=true&
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.name.js
-var es_function_name = __webpack_require__("b0c0");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
-var es_object_to_string = __webpack_require__("d3b7");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
-var es_promise = __webpack_require__("e6cf");
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__("53ca");
-
-// EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
-var runtime = __webpack_require__("96cf");
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__("1da1");
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
-var objectSpread2 = __webpack_require__("5530");
-
-// EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
-var vuex_esm = __webpack_require__("2f62");
-
-// EXTERNAL MODULE: ./src/components/FileUploader.vue + 4 modules
-var FileUploader = __webpack_require__("b929");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/FileProcesser.vue?vue&type=template&id=084c3311&
-var FileProcesservue_type_template_id_084c3311_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.processing && !_vm.background_process)?_c('div',[_c('b-progress',{attrs:{"max":_vm.max,"show-progress":"","animated":"","variant":"success","height":"2rem"}},[_c('b-progress-bar',{attrs:{"value":_vm.progress,"label":(((_vm.progress*100).toFixed(2)) + "%")}})],1),_c('div',{staticClass:"text-muted small my-2"},[(_vm.total_lines && _vm.total_lines>0)?_c('span',[_vm._v("Processed "+_vm._s(_vm.current_line)+"/"+_vm._s(_vm.total_lines))]):_vm._e(),_c('non-blank-space')],1)],1):_vm._e(),(false)?undefined:_vm._e()])}
-var FileProcesservue_type_template_id_084c3311_staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/FileProcesser.vue?vue&type=template&id=084c3311&
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/FileProcesser.vue?vue&type=script&lang=js&
-
-
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ var FileProcesservue_type_script_lang_js_ = ({
-  data: function data() {
-    return {
-      cancel: null,
-      max: 1,
-      current_line: 0,
-      processing: false,
-      abort: false,
-      progress: 0
-    };
-  },
-  computed: Object(objectSpread2["a" /* default */])({}, Object(vuex_esm["b" /* mapState */])({
-    settings: function settings(state) {
-      return state.import_settings;
-    },
-    total_lines: function total_lines(state) {
-      return state.csv_data.total_lines;
-    }
-  })),
-  props: {
-    background_process: {
-      type: Boolean,
-      default: false
-    }
-  },
-  destroyed: function destroyed() {
-    this.reset();
-  },
-  methods: {
-    /**
-     * process a remote file.
-     * start from line 1 by default
-     * since on line 0 we usually have field names
-     */
-    process: function process(file_name) {
-      var _arguments = arguments,
-          _this = this;
-
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var line, next;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                line = _arguments.length > 1 && _arguments[1] !== undefined ? _arguments[1] : 1;
-
-                if (!_this.abort) {
-                  _context2.next = 3;
-                  break;
-                }
-
-                return _context2.abrupt("return");
-
-              case 3:
-                _this.processing = true;
-                _context2.prev = 4;
-
-                next = /*#__PURE__*/function () {
-                  var _ref = Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee(line) {
-                    var settings, promise, response, data, _data$line, _line, progress;
-
-                    return regeneratorRuntime.wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            settings = Object(objectSpread2["a" /* default */])({}, _this.settings);
-                            settings.background_process = _this.background_process; //set the background process flag
-
-                            settings.data_row_start = line;
-                            promise = _this.$API.dispatch('importData/processCSV', file_name, settings);
-                            _this.cancel = promise.cancel;
-                            _context.next = 7;
-                            return promise;
-
-                          case 7:
-                            response = _context.sent;
-                            data = response.data;
-
-                            if (!data) {
-                              _context.next = 16;
-                              break;
-                            }
-
-                            if (!_this.background_process) {
-                              _context.next = 12;
-                              break;
-                            }
-
-                            return _context.abrupt("return", true);
-
-                          case 12:
-                            _data$line = data.line, _line = _data$line === void 0 ? 1 : _data$line;
-                            progress = _this.updateProgress({
-                              line: _line
-                            });
-
-                            _this.$emit('progress', {
-                              progress: progress
-                            });
-
-                            return _context.abrupt("return", next(_line));
-
-                          case 16:
-                          case "end":
-                            return _context.stop();
-                        }
-                      }
-                    }, _callee);
-                  }));
-
-                  return function next(_x) {
-                    return _ref.apply(this, arguments);
-                  };
-                }(); // await new Promise(resolve=>setTimeout(resolve, 10000))
-
-
-                _context2.next = 8;
-                return next(line);
-
-              case 8:
-                _this.$emit('completed');
-
-                _context2.next = 14;
-                break;
-
-              case 11:
-                _context2.prev = 11;
-                _context2.t0 = _context2["catch"](4);
-
-                _this.$emit('error', _context2.t0);
-
-              case 14:
-                _context2.prev = 14;
-                _this.processing = false;
-                return _context2.finish(14);
-
-              case 17:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, null, [[4, 11, 14, 17]]);
-      }))();
-    },
-    updateProgress: function updateProgress(_ref2) {
-      var line = _ref2.line;
-      if (this.total_lines <= 0) return;
-      if (line) this.current_line = line;
-      if (isNaN(this.current_line) || isNaN(this.total_lines)) return;
-      if (this.current_line > this.total_lines) this.current_line = this.total_lines;
-      var progress = this.current_line / this.total_lines;
-      this.progress = progress;
-      return progress;
-    },
-    reset: function reset() {
-      if (typeof this.cancel === 'function') this.cancel();
-      this.abort = true;
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/FileProcesser.vue?vue&type=script&lang=js&
- /* harmony default export */ var components_FileProcesservue_type_script_lang_js_ = (FileProcesservue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
-
-// CONCATENATED MODULE: ./src/components/FileProcesser.vue
-
-
-
-
-
-/* normalize component */
-
-var component = Object(componentNormalizer["a" /* default */])(
-  components_FileProcesservue_type_script_lang_js_,
-  FileProcesservue_type_template_id_084c3311_render,
-  FileProcesservue_type_template_id_084c3311_staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var FileProcesser = (component.exports);
-// EXTERNAL MODULE: ./src/components/LogsTable.vue + 4 modules
-var LogsTable = __webpack_require__("fb4a");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/Review.vue?vue&type=script&lang=js&
-
-
-
-
-
-
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-
-
-/* harmony default export */ var Reviewvue_type_script_lang_js_ = ({
-  components: {
-    FileUploader: FileUploader["a" /* default */],
-    FileProcesser: FileProcesser,
-    LogsTable: LogsTable["a" /* default */]
-  },
-  data: function data() {
-    return {
-      processing: false,
-      background_process: false
-    };
-  },
-  computed: Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, Object(vuex_esm["b" /* mapState */])({
-    files: function files(state) {
-      return state.import_settings.files;
-    },
-    event_id: function event_id(state) {
-      return state.import_settings.event_id;
-    },
-    form_name: function form_name(state) {
-      return state.import_settings.form_name;
-    },
-    import_settings: function import_settings(state) {
-      return state.import_settings;
-    }
-  })), {}, {
-    settings: function settings() {
-      var _ref = this.files || {},
-          _ref$name = _ref.name,
-          file_name = _ref$name === void 0 ? '' : _ref$name;
-
-      var import_settings = Object(objectSpread2["a" /* default */])({}, this.import_settings);
-
-      var settings = {
-        'file name': file_name,
-        'event ID': import_settings.event_id,
-        'form name': import_settings.form_name,
-        'field delimiter': import_settings.field_delimiter,
-        'text qualifier': import_settings.text_qualifier,
-        'dates format': import_settings.dates_format,
-        'import mode': import_settings.import_mode,
-        'primary key': import_settings.primary_key,
-        'dynamic keys': import_settings.dynamic_keys,
-        'mapping': import_settings.mapping
-      };
-      return settings;
-    }
-  }),
-  methods: {
-    showModal: function showModal(ref_name) {
-      var _this = this;
-
-      var promise = new Promise(function (resolve, reject) {
-        var modal_element = _this.$refs[ref_name];
-        if (!modal_element) return reject();
-
-        var onShown = function onShown() {
-          modal_element.$off('shown', onShown);
-          resolve();
-        };
-
-        modal_element.$on('shown', onShown);
-        modal_element.show();
-      });
-      return promise;
-    },
-    closeModal: function closeModal(ref_name) {
-      var _this2 = this;
-
-      var promise = new Promise(function (resolve, reject) {
-        var modal_element = _this2.$refs[ref_name];
-        if (!modal_element) return reject();
-
-        var onShown = function onShown() {
-          modal_element.$off('hidden', onShown);
-          resolve();
-        };
-
-        modal_element.$on('hidden', onShown);
-        modal_element.hide();
-      });
-      return promise;
-    },
-
-    /**
-     * upload a file for later processing
-     */
-    upload: function upload() {
-      var _this3 = this;
-
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var uploader;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return _this3.showModal('modal-upload');
-
-              case 2:
-                uploader = _this3.$refs.uploader;
-                uploader.$on('completed', function () {
-                  _this3.closeModal('modal-upload');
-                });
-                uploader.$on('error', function (_ref2) {
-                  var message = _ref2.message,
-                      file = _ref2.file,
-                      error = _ref2.error;
-                  console.log({
-                    message: message,
-                    file: file,
-                    error: error
-                  });
-                });
-                return _context.abrupt("return", uploader.upload());
-
-              case 6:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }))();
-    },
-    updateLogs: function updateLogs() {
-      var getLogs = this.$refs.logs.getLogs;
-      if (typeof getLogs !== 'function') return;
-      getLogs();
-    },
-    showCompleted: function showCompleted() {
-      var _this4 = this;
-
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.next = 2;
-                return _this4.showModal('modal-success');
-
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
-    },
-
-    /**
-     * process the reomte file
-     */
-    enqueProcess: function enqueProcess(file_name) {
-      var _this5 = this;
-
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-        var settings, response, data, message, error_message, _data, _data$message, _message;
-
-        return regeneratorRuntime.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.prev = 0;
-                settings = Object(objectSpread2["a" /* default */])({}, _this5.import_settings);
-                _context3.next = 4;
-                return _this5.$API.dispatch('importData/enqueue', file_name, settings);
-
-              case 4:
-                response = _context3.sent;
-                data = response.data;
-                message = "Import process created (ID ".concat(data['job_id'], "). Please check your logs.");
-                _context3.next = 9;
-                return _this5.$bvModal.msgBoxOk(message, {
-                  title: 'Success',
-                  buttonSize: 'sm'
-                });
-
-              case 9:
-                _this5.$router.push({
-                  name: 'home'
-                });
-
-                _context3.next = 17;
-                break;
-
-              case 12:
-                _context3.prev = 12;
-                _context3.t0 = _context3["catch"](0);
-                error_message = _context3.t0;
-
-                if (Object(esm_typeof["a" /* default */])(_context3.t0) === 'object') {
-                  _data = _context3.t0.response.data;
-                  _data$message = _data.message, _message = _data$message === void 0 ? 'error' : _data$message;
-                  error_message = "".concat(_message);
-                }
-
-                _this5.$bvModal.msgBoxOk(error_message, {
-                  title: 'Error',
-                  buttonSize: 'sm'
-                });
-
-              case 17:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, null, [[0, 12]]);
-      }))();
-    },
-    onProcessStopped: function onProcessStopped() {
-      var _this6 = this;
-
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
-        return regeneratorRuntime.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return _this6.showModal('modal-abort');
-
-              case 2:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4);
-      }))();
-    },
-
-    /**
-     * start the process:
-     * - upload the file
-     * - process the remote file
-     */
-    importCSV: function importCSV() {
-      var _this7 = this;
-
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
-        var _yield$_this7$upload, file_name;
-
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.prev = 0;
-                _context5.next = 3;
-                return _this7.upload();
-
-              case 3:
-                _yield$_this7$upload = _context5.sent;
-                file_name = _yield$_this7$upload.file_name;
-
-                if (file_name) {
-                  _context5.next = 7;
-                  break;
-                }
-
-                return _context5.abrupt("return");
-
-              case 7:
-                _context5.next = 9;
-                return _this7.enqueProcess(file_name);
-
-              case 9:
-                _context5.next = 14;
-                break;
-
-              case 11:
-                _context5.prev = 11;
-                _context5.t0 = _context5["catch"](0);
-                console.log(_context5.t0);
-
-              case 14:
-                _context5.prev = 14;
-                _this7.processing = false;
-                _this7.background_process = false;
-                return _context5.finish(14);
-
-              case 18:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5, null, [[0, 11, 14, 18]]);
-      }))();
-    },
-    onCloseModal: function onCloseModal() {
-      // this.$router.push({name: 'home'})
-      console.log('done');
-    }
-  },
-  validations: {}
-});
-// CONCATENATED MODULE: ./src/components/import/Review.vue?vue&type=script&lang=js&
- /* harmony default export */ var import_Reviewvue_type_script_lang_js_ = (Reviewvue_type_script_lang_js_); 
-// CONCATENATED MODULE: ./src/components/import/Review.vue
-
-
-
-
-
-/* normalize component */
-
-var Review_component = Object(componentNormalizer["a" /* default */])(
-  import_Reviewvue_type_script_lang_js_,
-  render,
-  staticRenderFns,
-  false,
-  null,
-  "1a4d91ee",
-  null
-  
-)
-
-/* harmony default export */ var Review = __webpack_exports__["default"] = (Review_component.exports);
 
 /***/ }),
 
-/***/ "83c4":
+/***/ "b2b2":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
 
 /***/ }),
 
-/***/ "b929":
+/***/ "c491":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/FileUploader.vue?vue&type=template&id=1a009a86&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.processing)?_c('div',[_c('b-progress',{attrs:{"max":_vm.max,"show-progress":"","animated":"","variant":"success","height":"2rem","size":"sm"}},[_c('b-progress-bar',{attrs:{"value":_vm.progress,"label":(((_vm.progress*100).toFixed(2)) + "%")}})],1),_c('div',{staticClass:"text-muted small"},[(_vm.uploaded_bytes && _vm.uploaded_bytes>0)?_c('span',[_vm._v("uploaded "+_vm._s(_vm.formatBytes(_vm.uploaded_bytes))+" of "+_vm._s(_vm.formatBytes(_vm.file_size)))]):_vm._e(),_c('non-blank-space')],1)],1):_vm._e(),(false)?undefined:_vm._e()])}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/FileUploader.vue?vue&type=template&id=1a009a86&
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
-var es_array_concat = __webpack_require__("99af");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
-var es_array_slice = __webpack_require__("fb6a");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.name.js
-var es_function_name = __webpack_require__("b0c0");
-
-// EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
-var runtime = __webpack_require__("96cf");
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__("1da1");
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__("53ca");
-
-// EXTERNAL MODULE: ./src/libs/FileReaderAsync.js + 10 modules
-var FileReaderAsync = __webpack_require__("6846");
-
-// EXTERNAL MODULE: ./src/libs/Utility.js + 1 modules
-var Utility = __webpack_require__("d234");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/FileUploader.vue?vue&type=script&lang=js&
-
-
-
-
-
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-// import { mapState } from 'vuex'
-
-
-var MIN_CHUNK_SIZE = 1000 * 1024;
-var MAX_CHUNK_SIZE = 1000 * 1024 * 5;
-var TOTAL_CHUNKS = 20;
-/* harmony default export */ var FileUploadervue_type_script_lang_js_ = ({
-  data: function data() {
-    return {
-      cancel: null,
-      // placeholder for canceling the promsie
-      content: '',
-      start: 0,
-      end: 0,
-      max: 1,
-      processing: false,
-      paused: false,
-      abort: false,
-      remote_file_name: null,
-      // unique file name used to save the file on the server
-      progress: 0,
-      uploaded_bytes: 0,
-      file_size: 0,
-      formatBytes: Utility["a" /* formatBytes */]
-    };
-  },
-  props: {
-    files: {
-      type: [File, Array],
-      default: function _default() {
-        return [];
-      }
-    }
-  },
-  computed: {
-    /* ...mapState({
-        file: state => state.import_settings.files,
-    }), */
-    file: function file() {
-      var files = this.files;
-      var file;
-      if (Object(esm_typeof["a" /* default */])(files) === 'object') file = files;else if (Array.isArray(files) && files.length > 0) file = files[0];
-      if (file) return new File([file], file.name);else return null;
-    },
-    chunk_size: function chunk_size() {
-      return this.calcChunkSize(this.file);
-    },
-    processed: function processed() {
-      var uploaded_bytes = this.uploaded_bytes || 0;
-      var file_size = this.file_size || 0;
-      var formatted_uploaded_bytes = Object(Utility["a" /* formatBytes */])(uploaded_bytes);
-      var formatted_file_size = Object(Utility["a" /* formatBytes */])(file_size);
-      return "".concat(formatted_uploaded_bytes, "/").concat(formatted_file_size);
-    }
-  },
-  destroyed: function destroyed() {
-    this.stop();
-  },
-  methods: {
-    processChunk: function processChunk(file, chunk) {
-      var _this = this;
-
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var response, data, uploaded_bytes, file_size, progress, unique_name, result, _error$response, _response, _response$data, _data, _data$message, message;
-
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-
-                if (!_this.abort) {
-                  _context.next = 3;
-                  break;
-                }
-
-                return _context.abrupt("return");
-
-              case 3:
-                _context.next = 5;
-                return _this.sendChunk(file, chunk);
-
-              case 5:
-                response = _context.sent;
-                data = response.data;
-                uploaded_bytes = data.uploaded_bytes, file_size = data.file_size;
-
-                if (data) {
-                  _context.next = 10;
-                  break;
-                }
-
-                throw new Error('no response');
-
-              case 10:
-                //exit if no response data
-                progress = _this.updateProgress(uploaded_bytes, file_size);
-
-                _this.$emit('progress', {
-                  file: file,
-                  progress: progress,
-                  response: response
-                }); // notify advancement
-                // advance the start
-
-
-                _this.start = _this.end;
-                unique_name = data.unique_name;
-                if (unique_name) _this.updateUniqueFileName(unique_name);
-
-                if (!(!_this.paused && _this.end < file.size)) {
-                  _context.next = 19;
-                  break;
-                }
-
-                return _context.abrupt("return", _this.upload());
-
-              case 19:
-                // exit if we are done
-                _this.reset();
-
-                result = {
-                  component: _this,
-                  file_name: _this.remote_file_name
-                };
-
-                _this.$emit('completed', result); // notify completed
-
-
-                return _context.abrupt("return", result);
-
-              case 23:
-                _context.next = 32;
-                break;
-
-              case 25:
-                _context.prev = 25;
-                _context.t0 = _context["catch"](0);
-                _error$response = _context.t0.response, _response = _error$response === void 0 ? {} : _error$response;
-                _response$data = _response.data, _data = _response$data === void 0 ? {} : _response$data;
-                _data$message = _data.message, message = _data$message === void 0 ? '' : _data$message; // console.log(message, file, error)
-
-                _this.$emit('error', {
-                  message: message,
-                  file: file,
-                  error: _context.t0
-                }); // notify error
-
-
-                _this.reset();
-
-              case 32:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, null, [[0, 25]]);
-      }))();
-    },
-    calculateProgress: function calculateProgress(file, position) {
-      try {
-        var value = position / file.size;
-        if (position < 0) return 0;
-        if (position > file.size) return 1;
-        return value;
-      } catch (error) {
-        return 0;
-      }
-    },
-    sendChunk: function sendChunk(file, chunk) {
-      var promise = this.$API.dispatch('upload/upload', file, chunk);
-      this.cancel = promise.cancel;
-      return promise;
-    },
-    calcChunkSize: function calcChunkSize(file) {
-      if (!file) return MIN_CHUNK_SIZE;
-      var _file$size = file.size,
-          size = _file$size === void 0 ? 0 : _file$size;
-      var chunk_size = size / TOTAL_CHUNKS;
-      if (chunk_size < MIN_CHUNK_SIZE) return MIN_CHUNK_SIZE;
-      if (chunk_size > MAX_CHUNK_SIZE) return MAX_CHUNK_SIZE;
-      return chunk_size;
-    },
-    updateProgress: function updateProgress(uploaded_bytes, file_size) {
-      this.uploaded_bytes = uploaded_bytes;
-      this.file_size = file_size;
-      if (isNaN(uploaded_bytes) || isNaN(file_size)) return;
-      if (file_size <= 0) return;
-      var percentage = uploaded_bytes / file_size;
-      this.progress = percentage;
-      return percentage;
-    },
-    upload: function upload() {
-      var _this2 = this;
-
-      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-        var file, blob, file_reader, chunk;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (_this2.file) {
-                  _context2.next = 2;
-                  break;
-                }
-
-                return _context2.abrupt("return");
-
-              case 2:
-                file = _this2.file;
-                _this2.processing = true;
-                _this2.paused = false;
-                _this2.end = _this2.start + _this2.chunk_size + 1;
-                blob = file.slice(_this2.start, _this2.end);
-                file_reader = new FileReaderAsync["a" /* default */]();
-                _context2.next = 10;
-                return file_reader.readAsDataURLAsync(blob);
-
-              case 10:
-                chunk = _context2.sent;
-                return _context2.abrupt("return", _this2.processChunk(file, chunk));
-
-              case 12:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2);
-      }))();
-    },
-    stop: function stop() {
-      if (typeof this.cancel === 'function') this.cancel();
-      this.abort = true;
-    },
-    onPause: function onPause() {
-      this.processing = false;
-      this.paused = true;
-    },
-    updateUniqueFileName: function updateUniqueFileName() {
-      var unique_name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-      if (!this.file.unique_name) {
-        this.file.unique_name = unique_name;
-        this.remote_file_name = unique_name;
-      }
-    },
-    reset: function reset() {
-      var _this3 = this;
-
-      setTimeout(function () {
-        _this3.cancel = null;
-        _this3.start = 0;
-        _this3.end = 0;
-        _this3.processing = false;
-        _this3.paused = false;
-        _this3.abort = false;
-      }, 1000);
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/FileUploader.vue?vue&type=script&lang=js&
- /* harmony default export */ var components_FileUploadervue_type_script_lang_js_ = (FileUploadervue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
-
-// CONCATENATED MODULE: ./src/components/FileUploader.vue
-
-
-
-
-
-/* normalize component */
-
-var component = Object(componentNormalizer["a" /* default */])(
-  components_FileUploadervue_type_script_lang_js_,
-  render,
-  staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var FileUploader = __webpack_exports__["a"] = (component.exports);
-
-/***/ }),
-
-/***/ "f6c6":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogsTable_vue_vue_type_style_index_0_id_d102da56_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("83c4");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogsTable_vue_vue_type_style_index_0_id_d102da56_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogsTable_vue_vue_type_style_index_0_id_d102da56_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_02d5f17d_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("b2b2");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_02d5f17d_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_JobsTable_vue_vue_type_style_index_0_id_02d5f17d_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
- /* unused harmony default export */ var _unused_webpack_default_export = (_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LogsTable_vue_vue_type_style_index_0_id_d102da56_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
 
 /***/ }),
 
-/***/ "fb4a":
+/***/ "cf20":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
+__webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"6bb439bc-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/LogsTable.vue?vue&type=template&id=d102da56&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"overflow-auto"},[_c('div',{staticClass:"d-flex flex-row justify-content-start align-items-start"},[_c('b-button',{attrs:{"size":"sm","variant":"info","disabled":_vm.loading},on:{"click":_vm.getLogs}},[(_vm.loading)?_c('font-awesome-icon',{attrs:{"icon":"spinner","spin":""}}):_c('font-awesome-icon',{attrs:{"icon":"sync"}}),_c('span',[_vm._v(" Reload")])],1),(_vm.hasItems)?_c('b-button',{directives:[{name:"b-modal",rawName:"v-b-modal.modal-delete",modifiers:{"modal-delete":true}}],staticClass:"ml-2",attrs:{"size":"sm","variant":"danger","disabled":_vm.loading}},[_c('font-awesome-icon',{attrs:{"icon":"trash"}}),_c('span',[_vm._v(" Delete logs")])],1):_vm._e(),_c('b-modal',{attrs:{"id":"modal-delete","title":"Delete logs"},on:{"ok":_vm.handleOkDelete}},[_c('p',{staticClass:"my-4"},[_vm._v("Are you sure you want to delete all logs for the current project?")])]),(_vm.hasItems)?_c('b-pagination',{staticClass:"ml-2",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1),_c('b-table',{staticClass:"my-2",attrs:{"id":"my-table","items":_vm.items_proxy,"_per-page":"per_page","_current-page":"current_page","small":"","bordered":"","striped":"","hover":""}}),(_vm.hasItems)?_c('b-pagination',{attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e25c8372-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/pages/Jobs.vue?vue&type=template&id=6e58a1a0&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Monitor the status of the Jobs.")]),_c('JobsTable'),_c('div',{staticClass:"d-flex legend-wrapper"},[_c('b-card',{attrs:{"title":"Status","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'bookmark']}}),_vm._v(": "),_c('span',[_vm._v("Job ready to be processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-success",attrs:{"fixed-width":"","icon":['fas', 'check-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job process completed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'spinner']}}),_vm._v(": "),_c('span',[_vm._v("Job being processed")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'exclamation-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped due to error")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-secondary",attrs:{"fixed-width":"","icon":['fas', 'stop-circle']}}),_vm._v(": "),_c('span',[_vm._v("Job stopped by user")])],1)])])]),_c('b-card',{staticClass:"ml-2",attrs:{"title":"Actions","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'stopwatch']}}),_vm._v(": "),_c('span',[_vm._v("Stop a Job in progress")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-success",attrs:{"fixed-width":"","icon":['fas', 'sync-alt']}}),_vm._v(": "),_c('span',[_vm._v("Start a stopped Job")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'trash']}}),_vm._v(": "),_c('span',[_vm._v("Delete a Job and its associated file")])],1)])])]),_c('b-card',{staticClass:"ml-2",attrs:{"title":"Types","tag":"article"}},[_c('ul',[_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"fixed-width":"","icon":['fas', 'file-import']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Import\"")]),_vm._v(" type Job")])],1)]),_c('li',[_c('span',[_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"fixed-width":"","icon":['fas', 'file-export']}}),_vm._v(": "),_c('span',[_c('em',[_vm._v("\"Export\"")]),_vm._v(" type Job")])],1)])])])],1)],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/LogsTable.vue?vue&type=template&id=d102da56&scoped=true&
+// CONCATENATED MODULE: ./src/pages/Jobs.vue?vue&type=template&id=6e58a1a0&scoped=true&
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
-var es_object_keys = __webpack_require__("b64b");
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e25c8372-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/JobsTable.vue?vue&type=template&id=02d5f17d&scoped=true&
+var JobsTablevue_type_template_id_02d5f17d_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"overflow-auto"},[_c('div',{staticClass:"d-flex flex-row justify-content-start align-items-start"},[_c('b-button',{attrs:{"size":"sm","variant":"info","disabled":_vm.loading},on:{"click":_vm.getItems}},[(_vm.loading)?_c('font-awesome-icon',{attrs:{"icon":['fas', 'spinner'],"spin":""}}):_c('font-awesome-icon',{attrs:{"icon":['fas', 'sync']}}),_c('span',[_vm._v(" Reload")])],1),_c('b-modal',{attrs:{"id":"modal-delete","title":"Delete jobs"},on:{"ok":_vm.handleOkDelete}},[_c('p',{staticClass:"my-4"},[_vm._v("Are you sure you want to delete all tasks for the current project?")])]),(_vm.hasItems)?_c('b-pagination',{staticClass:"ml-2 mb-0",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e()],1),_c('div',{staticClass:"table-wrapper"},[_c('b-table',{staticClass:"my-2",attrs:{"id":"my-table","items":_vm.items_proxy,"fields":_vm.fields,"_per-page":"per_page","_current-page":"current_page","small":"","bordered":"","striped":"","hover":""},scopedSlots:_vm._u([{key:"cell(error)",fn:function(data){return [(data.value)?_c('div',[_c('div',{staticClass:"job-error text-muted small"},[_vm._v(_vm._s(data.value))])]):_vm._e()]}},{key:"cell(status)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center",attrs:{"set":_vm.params=_vm.getStatusIcon(data.value)}},[_c('font-awesome-icon',{class:_vm.params.class,attrs:{"title":data.value,"icon":_vm.params.icon,"spin":_vm.params.spin}})],1):_vm._e()]}},{key:"cell(created_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(updated_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(completed_at)",fn:function(data){return [(data.value)?_c('div',[_vm._v(_vm._s(data.value))]):_vm._e()]}},{key:"cell(type)",fn:function(data){return [(data.value)?_c('div',{staticClass:"d-flex justify-content-center align-items-center"},[(data.value=='import')?_c('font-awesome-icon',{staticClass:"text-primary",attrs:{"title":data.value,"icon":['fas', 'file-import']}}):(data.value=='export')?_c('font-awesome-icon',{staticClass:"text-danger",attrs:{"title":data.value,"icon":['fas', 'file-export']}}):_vm._e()],1):_vm._e()]}},{key:"cell(actions)",fn:function(data){return [(data.item.id)?_c('div',{staticClass:"d-flex"},[_c('b-button',{attrs:{"size":"sm","variant":"outline-secondary"},on:{"click":function($event){return _vm.showSettings(data.item.settings)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas','eye'],"fixed-width":""}})],1),(data.item.status=='stopped')?_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-success","size":"sm"},on:{"click":function($event){return _vm.confirmStartTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'sync-alt'],"fixed-width":""}})],1):_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-primary","size":"sm","disabled":_vm.getStopDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmStopTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'stopwatch'],"fixed-width":""}})],1),_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-danger","size":"sm","disabled":_vm.getDeleteDisabled(data.item.status)},on:{"click":function($event){return _vm.confirmDeleteTask(data.item.id)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'trash'],"fixed-width":""}})],1),(_vm.debugMode)?_c('b-button',{staticClass:"ml-2",attrs:{"variant":"outline-success","size":"sm"},on:{"click":function($event){return _vm.showEdit(data.item)}}},[_c('font-awesome-icon',{attrs:{"icon":['fas', 'edit'],"fixed-width":""}})],1):_vm._e()],1):_vm._e()]}}])})],1),(_vm.hasItems)?_c('b-pagination',{staticClass:"mb-2",attrs:{"total-rows":_vm.rows,"per-page":_vm.per_page,"aria-controls":"my-table","size":"sm"},model:{value:(_vm.current_page),callback:function ($$v) {_vm.current_page=$$v},expression:"current_page"}}):_vm._e(),_c('b-modal',{ref:"modal-settings",attrs:{"title":"Settings","ok-only":""}},[_c('pre',[_vm._v(_vm._s(_vm.current_settings))])]),_c('b-modal',{ref:"modal-edit",attrs:{"title":"Edit","hide-footer":""}},[_c('EditJob',{attrs:{"job":_vm.editing_data},scopedSlots:_vm._u([{key:"footer",fn:function(ref){
+var form = ref.form;
+return [_c('div',{staticClass:"d-flex justify-content-end"},[_c('b-button',{staticClass:"mr-2",attrs:{"size":"sm","variant":"secondary"},on:{"click":function($event){return _vm.$refs['modal-edit'].hide()}}},[_vm._v("Cancel")]),_c('b-button',{attrs:{"size":"sm","variant":"success"},on:{"click":function($event){return _vm.editJob(form)}}},[_vm._v("OK")])],1)]}}])})],1)],1)}
+var JobsTablevue_type_template_id_02d5f17d_scoped_true_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=template&id=02d5f17d&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
 var toConsumableArray = __webpack_require__("2909");
@@ -1057,21 +58,47 @@ var toConsumableArray = __webpack_require__("2909");
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
 var objectSpread2 = __webpack_require__("5530");
 
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
+var asyncToGenerator = __webpack_require__("1da1");
+
 // EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
 var runtime = __webpack_require__("96cf");
 
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__("1da1");
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.freeze.js
+var es_object_freeze = __webpack_require__("dca8");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.reduce.js
+var es_array_reduce = __webpack_require__("13d5");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
+var es_object_keys = __webpack_require__("b64b");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
+var es_array_concat = __webpack_require__("99af");
 
 // EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
 var vuex_esm = __webpack_require__("2f62");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/LogsTable.vue?vue&type=script&lang=js&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e25c8372-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EditJob.vue?vue&type=template&id=5acf7a3e&
+var EditJobvue_type_template_id_5acf7a3e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._l((_vm.form),function(input,key){return _c('b-form-group',{key:key,attrs:{"label":key,"label-for":("input-" + key)}},[_c('b-form-input',{attrs:{"id":("input-" + key)},model:{value:(_vm.form[key]),callback:function ($$v) {_vm.$set(_vm.form, key, $$v)},expression:"form[key]"}})],1)}),_c('footer',[_vm._t("footer",null,{"form":_vm.form})],2)],2)}
+var EditJobvue_type_template_id_5acf7a3e_staticRenderFns = []
+
+
+// CONCATENATED MODULE: ./src/components/EditJob.vue?vue&type=template&id=5acf7a3e&
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
+var esm_typeof = __webpack_require__("53ca");
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
+var slicedToArray = __webpack_require__("3835");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.entries.js
+var es_object_entries = __webpack_require__("4fad");
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EditJob.vue?vue&type=script&lang=js&
 
 
 
-
-
 //
 //
 //
@@ -1088,45 +115,237 @@ var vuex_esm = __webpack_require__("2f62");
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ var LogsTablevue_type_script_lang_js_ = ({
+/* harmony default export */ var EditJobvue_type_script_lang_js_ = ({
   data: function data() {
     return {
-      per_page: 20,
+      form: {}
+    };
+  },
+  props: {
+    job: {
+      type: Object,
+      default: null
+    }
+  },
+  method: {
+    update: function update() {}
+  },
+  watch: {
+    job: {
+      immediate: true,
+      handler: function handler(job) {
+        for (var _i = 0, _Object$entries = Object.entries(job); _i < _Object$entries.length; _i++) {
+          var _Object$entries$_i = Object(slicedToArray["a" /* default */])(_Object$entries[_i], 2),
+              key = _Object$entries$_i[0],
+              value = _Object$entries$_i[1];
+
+          console.log(Object(esm_typeof["a" /* default */])(value), key);
+          if (value == null) value = undefined;else if (typeof value == 'boolean') value = String(value);else if (Object(esm_typeof["a" /* default */])(value) == 'object') value = JSON.stringify(value);
+          this.$set(this.form, key, value);
+        }
+      }
+    }
+  }
+});
+// CONCATENATED MODULE: ./src/components/EditJob.vue?vue&type=script&lang=js&
+ /* harmony default export */ var components_EditJobvue_type_script_lang_js_ = (EditJobvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
+var componentNormalizer = __webpack_require__("2877");
+
+// CONCATENATED MODULE: ./src/components/EditJob.vue
+
+
+
+
+
+/* normalize component */
+
+var component = Object(componentNormalizer["a" /* default */])(
+  components_EditJobvue_type_script_lang_js_,
+  EditJobvue_type_template_id_5acf7a3e_render,
+  EditJobvue_type_template_id_5acf7a3e_staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* harmony default export */ var EditJob = (component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/JobsTable.vue?vue&type=script&lang=js&
+
+
+
+
+
+
+
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+var statusList = Object.freeze({
+  READY: 'ready',
+  ERROR: 'error',
+  COMPLETED: 'completed',
+  PROCESSING: 'processing',
+  STOPPED: 'stopped',
+  DELETED: 'deleted'
+});
+/* harmony default export */ var JobsTablevue_type_script_lang_js_ = ({
+  components: {
+    EditJob: EditJob
+  },
+  data: function data() {
+    return {
+      items: [],
+      metadata: {},
+      fields: [{
+        key: 'id',
+        lable: 'ID'
+      }, {
+        key: 'status',
+        lable: 'Status'
+      }, // {key: 'filename', lable: 'Filename'},
+      {
+        key: 'processed_lines',
+        lable: 'Processed Lines'
+      }, {
+        key: 'error',
+        lable: 'Error'
+      }, {
+        key: 'created_at',
+        lable: 'Created at'
+      }, {
+        key: 'updated_at',
+        lable: 'Updated at'
+      }, {
+        key: 'completed_at',
+        lable: 'Completed at'
+      }, {
+        key: 'type',
+        lable: 'Type'
+      }, {
+        key: 'actions',
+        lable: 'Actions'
+      }],
+      per_page: 10,
       current_page: 1,
-      loading: false
+      loading: false,
+      current_settings: null,
+      editing_data: null
     };
   },
   created: function created() {
@@ -1143,40 +362,36 @@ var vuex_esm = __webpack_require__("2f62");
     }))();
   },
   computed: Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, Object(vuex_esm["b" /* mapState */])({
-    items: function items(state) {
-      return state.logs.list;
+    debugMode: function debugMode(state) {
+      return state.app.debugMode;
     }
   })), {}, {
+    fields_proxy: function fields_proxy() {
+      var items = Object(toConsumableArray["a" /* default */])(this.items);
+
+      if (items.length == 0) return [];
+      var keys = items.reduce(function (accumulator, item) {
+        var keys = Object.keys(item);
+        return [].concat(Object(toConsumableArray["a" /* default */])(accumulator), Object(toConsumableArray["a" /* default */])(keys));
+      }, []);
+      return [].concat(Object(toConsumableArray["a" /* default */])(keys), Object(toConsumableArray["a" /* default */])(this.fields));
+    },
     items_proxy: function items_proxy() {
       var items = Object(toConsumableArray["a" /* default */])(this.items);
 
-      var per_page = this.per_page;
-      var remainder = this.current_page * per_page - items.length;
+      var remainder = this.per_page - items.length;
       if (remainder < 0) remainder = 0;
-      var empty_value = "";
-      var placeholder = {
-        'no logs': empty_value
-      };
-
-      if (items.length > 0) {
-        placeholder = {};
-        var first_item = items[0];
-
-        for (var _i = 0, _Object$keys = Object.keys(first_item); _i < _Object$keys.length; _i++) {
-          var key = _Object$keys[_i];
-          placeholder[key] = empty_value;
-        }
-      }
 
       for (var i = 0; i < remainder; i++) {
-        items.push(placeholder);
+        items.push({});
       }
 
       return items;
     },
     rows: function rows() {
-      var total = this.$store.getters['logs/total'];
-      return total || this.items.length;
+      var _this$metadata$total = this.metadata.total,
+          total = _this$metadata$total === void 0 ? 0 : _this$metadata$total;
+      return total;
     },
     hasItems: function hasItems() {
       try {
@@ -1190,12 +405,12 @@ var vuex_esm = __webpack_require__("2f62");
     current_page: {
       immediate: true,
       handler: function handler() {
-        this.getLogs();
+        this.getItems();
       }
     }
   },
   methods: {
-    getLogs: function getLogs() {
+    getItems: function getItems() {
       var _this = this;
 
       return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
@@ -1207,44 +422,41 @@ var vuex_esm = __webpack_require__("2f62");
               case 0:
                 _context2.prev = 0;
                 _this.loading = true;
+                _this.items = [];
+                _this.metadata = {};
                 limit = _this.per_page;
                 start = _this.per_page * (_this.current_page - 1);
-                _context2.next = 6;
-                return _this.$API.dispatch('logs/get', {
+                _context2.next = 8;
+                return _this.$API.dispatch('jobs/get', {
                   start: start,
                   limit: limit
                 });
 
-              case 6:
+              case 8:
                 response = _context2.sent;
                 _response$data = response.data, data = _response$data === void 0 ? {} : _response$data;
                 _data$data = data.data, list = _data$data === void 0 ? {} : _data$data, _data$metadata = data.metadata, metadata = _data$metadata === void 0 ? {} : _data$metadata;
-                _context2.next = 11;
-                return _this.$store.dispatch('logs/setState', {
-                  list: list,
-                  metadata: metadata
-                });
-
-              case 11:
-                _context2.next = 16;
+                _this.items = list;
+                _this.metadata = metadata;
+                _context2.next = 18;
                 break;
 
-              case 13:
-                _context2.prev = 13;
+              case 15:
+                _context2.prev = 15;
                 _context2.t0 = _context2["catch"](0);
                 console.log(_context2.t0);
 
-              case 16:
-                _context2.prev = 16;
+              case 18:
+                _context2.prev = 18;
                 _this.loading = false;
-                return _context2.finish(16);
+                return _context2.finish(18);
 
-              case 19:
+              case 21:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 13, 16, 19]]);
+        }, _callee2, null, [[0, 15, 18, 21]]);
       }))();
     },
     handleOkDelete: function handleOkDelete() {
@@ -1257,13 +469,13 @@ var vuex_esm = __webpack_require__("2f62");
             switch (_context3.prev = _context3.next) {
               case 0:
                 _context3.next = 2;
-                return _this2.$API.dispatch('logs/delete');
+                return _this2.$API.dispatch('jobs/delete');
 
               case 2:
                 response = _context3.sent;
                 console.log(response);
 
-                _this2.getLogs();
+                _this2.getItems();
 
               case 5:
               case "end":
@@ -1272,18 +484,384 @@ var vuex_esm = __webpack_require__("2f62");
           }
         }, _callee3);
       }))();
+    },
+    getStopDisabled: function getStopDisabled(status) {
+      return status != statusList.PROCESSING;
+    },
+    getDeleteDisabled: function getDeleteDisabled(status) {
+      var disabled_status = [statusList.PROCESSING, statusList.DELETED];
+      return disabled_status.indexOf(status) >= 0;
+    },
+    getStatusIcon: function getStatusIcon(status) {
+      var params = {
+        icon: ['fas', 'tasks'],
+        spin: false
+      };
+
+      switch (status) {
+        case statusList.READY:
+          params = Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, params), {
+            icon: ['fas', 'bookmark'],
+            class: 'text-primary'
+          });
+          break;
+
+        case statusList.COMPLETED:
+          params = Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, params), {
+            icon: ['fas', 'check-circle'],
+            class: 'text-success'
+          });
+          break;
+
+        case statusList.PROCESSING:
+          params = Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, params), {
+            icon: ['fas', 'spinner'],
+            class: 'text-secondary',
+            spin: true
+          });
+          break;
+
+        case statusList.ERROR:
+          params = Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, params), {
+            icon: ['fas', 'exclamation-circle'],
+            class: 'text-danger'
+          });
+          break;
+
+        case statusList.STOPPED:
+          params = Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, params), {
+            icon: ['fas', 'stop-circle'],
+            class: 'text-secondary'
+          });
+          break;
+
+        case statusList.DELETED:
+          params = Object(objectSpread2["a" /* default */])(Object(objectSpread2["a" /* default */])({}, params), {
+            icon: ['fas', 'minus-circle'],
+            class: 'text-danger'
+          });
+          break;
+
+        default:
+          break;
+      }
+
+      return params;
+    },
+    confirmStopTask: function confirmStopTask(id) {
+      var _this3 = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee4() {
+        var message, title, response;
+        return regeneratorRuntime.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                message = "Do you want to stop this job?";
+                title = "Stop job ID ".concat(id);
+                _context4.next = 4;
+                return _this3.$bvModal.msgBoxConfirm(message, {
+                  title: title,
+                  size: 'sm',
+                  buttonSize: 'sm',
+                  okVariant: 'primary',
+                  headerClass: 'p-2 border-bottom-0',
+                  footerClass: 'p-2 border-top-0',
+                  centered: true
+                });
+
+              case 4:
+                response = _context4.sent;
+                if (response) _this3.stopTask(id);
+
+              case 6:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    stopTask: function stopTask(id) {
+      var _this4 = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+        var message, title, variant;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.prev = 0;
+                _context5.next = 3;
+                return _this4.$API.dispatch('jobs/stop', {
+                  id: id
+                });
+
+              case 3:
+                message = "The job id ".concat(id, " has been stopped.");
+                title = 'Success';
+                variant = 'success';
+                _context5.next = 13;
+                break;
+
+              case 8:
+                _context5.prev = 8;
+                _context5.t0 = _context5["catch"](0);
+                message = "There was an error stopping the job ID ".concat(id, ".");
+                title = 'Error';
+                variant = 'danger';
+
+              case 13:
+                _context5.prev = 13;
+
+                _this4.$bvToast.toast(message, {
+                  title: title,
+                  autoHideDelay: 1500,
+                  appendToast: true,
+                  variant: variant
+                });
+
+                _this4.getItems();
+
+                return _context5.finish(13);
+
+              case 17:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, null, [[0, 8, 13, 17]]);
+      }))();
+    },
+    confirmStartTask: function confirmStartTask(id) {
+      var _this5 = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee6() {
+        var message, title, response;
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                message = "Do you want to restart this job?";
+                title = "Start job ID ".concat(id);
+                _context6.next = 4;
+                return _this5.$bvModal.msgBoxConfirm(message, {
+                  title: title,
+                  size: 'sm',
+                  buttonSize: 'sm',
+                  okVariant: 'primary',
+                  headerClass: 'p-2 border-bottom-0',
+                  footerClass: 'p-2 border-top-0',
+                  centered: true
+                });
+
+              case 4:
+                response = _context6.sent;
+                if (response) _this5.startTask(id);
+
+              case 6:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6);
+      }))();
+    },
+    startTask: function startTask(id) {
+      var _this6 = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee7() {
+        var message, title, variant;
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                _context7.prev = 0;
+                _context7.next = 3;
+                return _this6.$API.dispatch('jobs/start', {
+                  id: id
+                });
+
+              case 3:
+                message = "The job id ".concat(id, " has been started.");
+                title = 'Success';
+                variant = 'success';
+                _context7.next = 13;
+                break;
+
+              case 8:
+                _context7.prev = 8;
+                _context7.t0 = _context7["catch"](0);
+                message = "There was an error starting the job ID ".concat(id, ".");
+                title = 'Error';
+                variant = 'danger';
+
+              case 13:
+                _context7.prev = 13;
+
+                _this6.$bvToast.toast(message, {
+                  title: title,
+                  autoHideDelay: 1500,
+                  appendToast: true,
+                  variant: variant
+                });
+
+                _this6.getItems();
+
+                return _context7.finish(13);
+
+              case 17:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, null, [[0, 8, 13, 17]]);
+      }))();
+    },
+    confirmDeleteTask: function confirmDeleteTask(id) {
+      var _this7 = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
+        var message, title, response;
+        return regeneratorRuntime.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                message = "Do you want to delete this job?";
+                title = "Delete job ID ".concat(id);
+                _context8.next = 4;
+                return _this7.$bvModal.msgBoxConfirm(message, {
+                  title: title,
+                  size: 'sm',
+                  buttonSize: 'sm',
+                  okVariant: 'danger',
+                  headerClass: 'p-2 border-bottom-0',
+                  footerClass: 'p-2 border-top-0',
+                  centered: true
+                });
+
+              case 4:
+                response = _context8.sent;
+                if (response) _this7.deleteTask(id);
+
+              case 6:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }))();
+    },
+    deleteTask: function deleteTask(id) {
+      var _this8 = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee9() {
+        var message, title, variant;
+        return regeneratorRuntime.wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                _context9.prev = 0;
+                _context9.next = 3;
+                return _this8.$API.dispatch('jobs/delete', {
+                  id: id
+                });
+
+              case 3:
+                message = "The job ID ".concat(id, " has been deleted.");
+                title = 'Success';
+                variant = 'success';
+                _context9.next = 13;
+                break;
+
+              case 8:
+                _context9.prev = 8;
+                _context9.t0 = _context9["catch"](0);
+                message = "There was an error deleting the job ID ".concat(id, ".");
+                title = 'Error';
+                variant = 'danger';
+
+              case 13:
+                _context9.prev = 13;
+
+                _this8.$bvToast.toast(message, {
+                  title: title,
+                  autoHideDelay: 1500,
+                  appendToast: true,
+                  variant: variant
+                });
+
+                _this8.getItems();
+
+                return _context9.finish(13);
+
+              case 17:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9, null, [[0, 8, 13, 17]]);
+      }))();
+    },
+    showSettings: function showSettings(settings) {
+      var modal = this.$refs['modal-settings'];
+      if (!modal) return;
+      this.current_settings = settings;
+      modal.show();
+    },
+    showEdit: function showEdit(data) {
+      var modal = this.$refs['modal-edit'];
+      if (!modal) return;
+      this.editing_data = data;
+      modal.show();
+    },
+    editJob: function editJob(data) {
+      var _this9 = this;
+
+      return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee10() {
+        var id, modal;
+        return regeneratorRuntime.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                id = data.id;
+                _context10.next = 3;
+                return _this9.$API.dispatch('jobs/update', {
+                  id: id,
+                  data: Object(objectSpread2["a" /* default */])({}, data)
+                });
+
+              case 3:
+                modal = _this9.$refs['modal-edit'];
+
+                if (modal) {
+                  _context10.next = 6;
+                  break;
+                }
+
+                return _context10.abrupt("return");
+
+              case 6:
+                _this9.getItems();
+
+                modal.hide();
+
+              case 8:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10);
+      }))();
     }
   }
 });
-// CONCATENATED MODULE: ./src/components/LogsTable.vue?vue&type=script&lang=js&
- /* harmony default export */ var components_LogsTablevue_type_script_lang_js_ = (LogsTablevue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/LogsTable.vue?vue&type=style&index=0&id=d102da56&scoped=true&lang=css&
-var LogsTablevue_type_style_index_0_id_d102da56_scoped_true_lang_css_ = __webpack_require__("f6c6");
+// CONCATENATED MODULE: ./src/components/JobsTable.vue?vue&type=script&lang=js&
+ /* harmony default export */ var components_JobsTablevue_type_script_lang_js_ = (JobsTablevue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/components/JobsTable.vue?vue&type=style&index=0&id=02d5f17d&scoped=true&lang=css&
+var JobsTablevue_type_style_index_0_id_02d5f17d_scoped_true_lang_css_ = __webpack_require__("c491");
 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
-
-// CONCATENATED MODULE: ./src/components/LogsTable.vue
+// CONCATENATED MODULE: ./src/components/JobsTable.vue
 
 
 
@@ -1292,18 +870,158 @@ var componentNormalizer = __webpack_require__("2877");
 
 /* normalize component */
 
-var component = Object(componentNormalizer["a" /* default */])(
-  components_LogsTablevue_type_script_lang_js_,
-  render,
-  staticRenderFns,
+var JobsTable_component = Object(componentNormalizer["a" /* default */])(
+  components_JobsTablevue_type_script_lang_js_,
+  JobsTablevue_type_template_id_02d5f17d_scoped_true_render,
+  JobsTablevue_type_template_id_02d5f17d_scoped_true_staticRenderFns,
   false,
   null,
-  "d102da56",
+  "02d5f17d",
   null
   
 )
 
-/* harmony default export */ var LogsTable = __webpack_exports__["a"] = (component.exports);
+/* harmony default export */ var JobsTable = (JobsTable_component.exports);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/pages/Jobs.vue?vue&type=script&lang=js&
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ var Jobsvue_type_script_lang_js_ = ({
+  components: {
+    JobsTable: JobsTable
+  },
+  computed: {}
+});
+// CONCATENATED MODULE: ./src/pages/Jobs.vue?vue&type=script&lang=js&
+ /* harmony default export */ var pages_Jobsvue_type_script_lang_js_ = (Jobsvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./src/pages/Jobs.vue?vue&type=style&index=0&id=6e58a1a0&scoped=true&lang=css&
+var Jobsvue_type_style_index_0_id_6e58a1a0_scoped_true_lang_css_ = __webpack_require__("4089");
+
+// CONCATENATED MODULE: ./src/pages/Jobs.vue
+
+
+
+
+
+
+/* normalize component */
+
+var Jobs_component = Object(componentNormalizer["a" /* default */])(
+  pages_Jobsvue_type_script_lang_js_,
+  render,
+  staticRenderFns,
+  false,
+  null,
+  "6e58a1a0",
+  null
+  
+)
+
+/* harmony default export */ var Jobs = __webpack_exports__["default"] = (Jobs_component.exports);
+
+/***/ }),
+
+/***/ "ee90":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ })
 
