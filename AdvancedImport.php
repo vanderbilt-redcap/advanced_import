@@ -8,6 +8,7 @@ use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
 use ExternalModules\ExternalModules;
+use Logging;
 use PDO;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
 use Vanderbilt\AdvancedImport\App\Helpers\ExModDatabase;
@@ -30,6 +31,13 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      * @var AdvancedImport
      */
     private static $instance;
+
+    /**
+     * reference to the DB instance
+     *
+     * @var Database
+     */
+    private $db;
     /**
      * name of the SQLite database
      */
@@ -146,18 +154,38 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     }
 
     /**
+     * check if the module is enabled in a specific project
+     *
+     * @param int $project_id
+     * @return boolean
+     */
+    public function isEnabledInProject($project_id)
+    {
+        $enabled = $this->framework->isModuleEnabled($this->PREFIX, $project_id);
+        return boolval($enabled);
+    }
+
+    /**
      * process valid jobs in the queue list
      *
      * @return void
      */
     public function processQueue()
     {
-        $start = new DateTime();
-        $max_execution = DateInterval::createFromDateString(self::MAX_CRON_EXECUTION_TIME);
-        $max_time = $start->add($max_execution);
+        $getMaxExecutionTime = function() {
+            $start = new DateTime();
+            $max_execution = DateInterval::createFromDateString(self::MAX_CRON_EXECUTION_TIME);
+            $max_time = $start->add($max_execution);
+            return $max_time;
+        };
+        $max_time = $getMaxExecutionTime();
+        $originalPid = $_GET['pid']; // save a reference to the original PID (if any)
         $queue = new Queue();
         $jobs_generator = $queue->jobsGenerator();
         while($job = $jobs_generator->current()) {
+            $project_id = $job->project_id; 
+            if(!$this->isEnabledInProject($project_id)) continue; // do not process jobs for disabled projects
+            $_GET['pid'] = $project_id; //set the project context
             do {
                 try {
                     $now = new DateTime();
@@ -177,6 +205,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
             } while($keep_processing);
             $jobs_generator->next();
         }
+        $_GET['pid'] = $originalPid; //restore the project context
     }
 
     /**
@@ -193,31 +222,22 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         // $completed_jobs = $queue->getJobs($params);
     } */
 
-    private function processProjectQueue($cronInfo, $project_id)
+    /**
+     * use this if enabled at project level?
+     * no, I'm setting the project context every time a job is processed
+     *
+     * @param [type] $cronInfo
+     * @return void
+     */
+    function cron_processQueue($cronInfo)
     {
         try {
             $cron_name = @$cronInfo['cron_name'] ?: 'AdvancedImport';
             $this->processQueue();
-            return sprintf("%s - all jobs have been processed for project %u", $cron_name, $project_id);
+            return sprintf("%s - all jobs have been processed", $cron_name);
         } catch (\Exception $e) {
-            return sprintf(
-                "%s -  error processing the jobs for project %u ( %s )",
-                $cron_name, $project_id, $e->getMessage()
-            );
+            return sprintf("%s - error processing the jobs: %s", $cron_name, $e->getMessage());
         }
-    }
-
-    function cron_processQueue($cronInfo)
-    {
-        $originalPid = $_GET['pid'];
-        foreach($this->framework->getProjectsWithModuleEnabled() as $localProjectId){
-            $_GET['pid'] = $localProjectId;
-
-            // Project specific method calls go here.
-            $this->processProjectQueue($cronInfo, $localProjectId);
-        }
-        // Put the pid back the way it was before this cron job (likely doesn't matter, but is good housekeeping practice)
-        $_GET['pid'] = $originalPid;
     }
 
     /**
@@ -285,7 +305,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      *
      * @return Database
      */
-    public static function db()
+    public static function db($newInstance = false)
     {
         $logFileInfo = function($db_name, $db_path) {
             $permissions = shell_exec('getfacl '.$db_path);
@@ -294,16 +314,21 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
             $message .= sprintf("file_exists: %s", $file_exists);
             self::getInstance()->log($message);
         };
-
-        $db_dir = self::getDatabaseDirectory();
-        $db_path = $db_dir.DIRECTORY_SEPARATOR.self::DB_NAME;
-        // $logFileInfo(self::DB_NAME, $db_path);
-        self::chmod_r($db_dir);
-        $connection = new PDO("sqlite:".$db_path);
-        $connection->query("PRAGMA journal_mode=WAL");
-        $connection->query("PRAGMA synchronous=FULL");
-        $database = new Database($connection);
-        return $database;
+        $instance = self::getInstance();
+        if(!$instance->db || $newInstance) {
+            $db_dir = self::getDatabaseDirectory();
+            $db_path = $db_dir.DIRECTORY_SEPARATOR.self::DB_NAME;
+            // $logFileInfo(self::DB_NAME, $db_path);
+            self::chmod_r($db_dir);
+            // $connectionOptions = [PDO::ATTR_PERSISTENT => true];
+            $connectionOptions = [];
+            $connection = new PDO("sqlite:".$db_path,'','', $connectionOptions);
+            $connection->query("PRAGMA journal_mode=WAL");
+            $connection->query("PRAGMA synchronous=EXTRA");
+            $database = new Database($connection);
+            $instance->db = $database;
+        }
+        return $instance->db;
     }
 
     /**
@@ -421,6 +446,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public function onModuleSystemEnable()
     {
+        Logging::writeToFile($this->PREFIX.'_log.txt', 'onModuleSystemEnable');
         $dataDir = self::getDataDirectory();
         $uploadDir = self::getUploadDirectory();
         $databaseDir = self::getDatabaseDirectory();
@@ -428,6 +454,15 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         foreach ($dirs as $dir) {
             if(!file_exists($dir)) mkdir($dir, 0777, $recursive=true);
         }
+        $queue = new Queue();
+        $queue->createJobsTable();
+    }
+
+    public function resetDatabase()
+    {
+        $databaseDir = self::getDatabaseDirectory();
+        $this->deleteTree($databaseDir);
+        if(!file_exists($databaseDir)) mkdir($databaseDir, 0777, $recursive=true);
         $queue = new Queue();
         $queue->createJobsTable();
     }
