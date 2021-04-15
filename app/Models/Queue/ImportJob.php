@@ -1,5 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Queue;
 
+use SplObserver;
 use SplSubject;
 use Vanderbilt\AdvancedImport\App\Models\Import;
 
@@ -7,7 +8,7 @@ class ImportJob extends Job
 {
     public function process()
     {
-        
+
         $importer = new Import();
         $importer->attach($this, "data:process_started");
         $importer->attach($this, "data:line_processed");
