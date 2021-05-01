@@ -42,7 +42,7 @@ class ImportController extends BaseController
             $settings = json_decode($_POST['settings'], $assoc=true);
             // manage only import for now
             if($type==Job::TYPE_IMPORT) {
-                $job_id = ImportJob::create($project_id, $user_id, $file_name, $settings, $type);
+                $job_id = ImportJob::create($project_id, $user_id, $file_name, $settings);
                 $response = [
                     'message' => 'Job created',
                     'job_id' => $job_id

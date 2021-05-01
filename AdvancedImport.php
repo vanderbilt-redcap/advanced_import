@@ -1,7 +1,7 @@
 <?php
 namespace Vanderbilt\AdvancedImport;
 
-$autoload = join([__DIR__,'vendor','autoload.php'],DIRECTORY_SEPARATOR);
+$autoload = join(DIRECTORY_SEPARATOR, [__DIR__,'vendor','autoload.php']);
 if(file_exists($autoload)) require_once($autoload);
 
 use DateInterval;
@@ -15,6 +15,7 @@ use Vanderbilt\AdvancedImport\App\Helpers\ExModDatabase;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
+use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
 
 class AdvancedImport extends AbstractExternalModule implements Mediator
 {

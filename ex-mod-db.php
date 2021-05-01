@@ -1,7 +1,6 @@
 <?php
 namespace Vanderbilt\AdvancedImport;
 
-use Vanderbilt\AdvancedImport\App\Helpers\ExModDatabase;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 
 $page = new \HtmlPage();
@@ -15,26 +14,46 @@ $data = [
   ['test' => 678, 'ritest' => "che mi racconti", 'status' => 'processing', 'processed_lines' => 444],
 ];
 
-$exMod_db = new ExModDatabase($project_id);
+$exMod_db = AdvancedImport::dbExMod();
 $tableName = Job::TABLE_NAME;
 $exMod_db->createTable($tableName, $drop=true);
 foreach ($data as $entry) {
   $exMod_db->insert($tableName, $entry);
 }
-$result = $exMod_db->update($tableName, ['processed_lines'=>111], ['__id', '2']);
+$list = range(1,666);
+while($index = current($list)) {
+  $result = $exMod_db->update($tableName, ['processed_lines'=>$index], ['__id', 2]);
+  next($list);
+}
 print $result ? 'updated' : 'error';
-$result = $exMod_db->delete($tableName, 2);
+$result = $exMod_db->delete($tableName, 1);
 print $result ? 'deleted' : 'error';
 
 $list = $exMod_db->search($tableName);
 
+
+global $rc_connection;
+$query_string = 'SELECT `value`->\'$.status\' AS `status` FROM `redcap_external_module_settings`  WHERE `external_module_id`=? AND `key` LIKE \'__ext_mod_table_jobs%\' AND `value`->\'$.__id\'=?';
+$stmt = $rc_connection->prepare($query_string);
+$params = ["ii", $id=1, $jobId=2];
+$stmt->bind_param(...$params);
+/* execute query */
+$stmt->execute();
+
+/* fetch value */
+$result = $stmt->get_result();
+while($row = db_fetch_assoc($result)) {
+  $results[] = $row;
+}
+
+
+
 $query_string = sprintf(
-  "SELECT `value`->'$.status' FROM `%s` WHERE `value`->'\$.__id'=?",
+  "SELECT `value`->>'$.processed_lines' AS `processed_lines` FROM `%s` WHERE `value`->>'$.__id'=? AND `value`->>'$.status'=?",
   AdvancedImport::dbExMod()::getRealTableName(Job::TABLE_NAME)
 );
 
-$result = $exMod_db->query($query_string, ['id'=>'2']);
-
+$result = $exMod_db->query($query_string, [2, 'processing']);
 $results = [];
 while($row = db_fetch_assoc($result)) {
   $results[] = $row;

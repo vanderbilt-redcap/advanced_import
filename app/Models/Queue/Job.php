@@ -31,6 +31,13 @@ abstract class Job implements JobInterface, JsonSerializable
     const TYPE_IMPORT = 'import';
     const TYPE_EXPORT = 'export';
 
+    /**
+     * type of the job (used in creation)
+     *
+     * @var string
+     */
+    static protected $type = null;
+
     const STATUS_READY = 'ready';
     const STATUS_ERROR = 'error';
     const STATUS_COMPLETED = 'completed';
@@ -101,15 +108,29 @@ abstract class Job implements JobInterface, JsonSerializable
         return DateTime::createFromFormat( 'Y-m-d H:i:s', $date_string );
     }
 
-    public static function create($project_id, $user_id, $filename, $settings, $type)
+    /**
+     * create a job
+     *
+     * @param int $project_id
+     * @param int $user_id
+     * @param string $filename
+     * @param array $settings
+     * @return int id og the created job
+     */
+    public static function create($project_id, $user_id, $filename, $settings)
     {
+        $createJobSetting = function($project_id, $user_id, $filename, $settings) {
+            $db = AdvancedImport::dbExMod();
+            $settings = compact('project_id', 'user_id', 'filename', 'settings');
+            $db->insert(Job::TABLE_NAME, $settings);
+        };
         $data = [
             'project_id' => $project_id,
             'user_id' => $user_id,
             'filename' => $filename,
             'processed_lines' => 0,
             'settings' => json_encode($settings, JSON_PRETTY_PRINT),
-            'type' => $type,
+            'type' => static::$type,
             'status' => Job::STATUS_READY,
             'error' => null,
             'created_at' => $created_at = self::getNow(),
@@ -120,6 +141,8 @@ abstract class Job implements JobInterface, JsonSerializable
         if($id==false) throw new \Exception("Error creating job", 400);
         return $id;
     }
+
+
 
     function markProcessing() {
         $params = [

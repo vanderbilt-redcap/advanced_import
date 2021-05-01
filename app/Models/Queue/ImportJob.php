@@ -6,6 +6,13 @@ use Vanderbilt\AdvancedImport\App\Models\Import;
 
 class ImportJob extends Job
 {
+    /**
+     * type for this job
+     *
+     * @var string
+     */
+    static protected $type = Job::TYPE_IMPORT;
+
     public function process()
     {
 

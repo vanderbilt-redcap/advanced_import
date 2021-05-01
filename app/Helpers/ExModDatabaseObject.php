@@ -3,10 +3,10 @@ namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use Vanderbilt\AdvancedImport\AdvancedImport;
 
-class ExModDatabase
+class ExModDatabaseObject
 {
-    const TABLE_PERFIX = '__ex_mod_table_'; //followed by 'table' name
-    const AUTO_INCREMENT_KEY = '__ex_mode_auto_increment_'; //followed by 'table' name
+    const TABLE_PERFIX = '__ext_mod_table_'; //followed by 'table' name
+    const AUTO_INCREMENT_KEY = '__ext_mod_auto_increment_'; //followed by 'table' name
 
     private $project_id;
 

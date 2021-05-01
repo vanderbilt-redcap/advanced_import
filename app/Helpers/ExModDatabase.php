@@ -2,14 +2,19 @@
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use DateTime;
-use PDO;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 
+/**
+ * this class uses the external module settings table to create virtual tables.
+ * suitable for storing any kind of data as JSON objects.
+ * each table as an autoincrement __id key
+ */
 class ExModDatabase
 {
     const ID_KEY = '__id';
-    const TABLE_PERFIX = '__ex_mod_table_'; //followed by 'table' name
-    const AUTO_INCREMENT_KEY = '__ex_mode_auto_increment_'; //followed by 'table' name
+    const TABLE_PERFIX = '__ext_mod_table_'; //followed by 'table' name
+    const AUTO_INCREMENT_KEY = '__ext_mod_auto_increment_'; //followed by 'table' name
+    const EXTERNAL_MODULE_SETTINGS_TABLE = 'redcap_external_module_settings';
 
     public function __construct()
     {
@@ -17,20 +22,65 @@ class ExModDatabase
     }    
 
     /**
-     *
+     * create a query and bind the provided params
+     * params can be in the format [type, value] or just passed as values
+     * available types are:
+     * i: corresponding variable has type integer
+     * d: corresponding variable has type double
+     * s: corresponding variable has type string
+     * b: corresponding variable is a blob and will be sent in packets
+     * 
+     * Example:
+     * 
+     * $exMod_db = AdvancedImport::dbExMod();
+     * $query_string = "SELECT `value`->>'$.settings' AS `settings` FROM `jobs` WHERE `value`->>'$.__id'=? AND `status`=?";
+     * $result = $exMod_db->query($query_string, [2,'processing']);
+     * 
      * @param string $query_string
-     * @param array $params
+     * @param array $params [['s','2'], ['i', 2], etc...]
      * @return PDOStatement
      */
     public function query($query_string, $params=[])
     {
         global $rc_connection;
+        // turn a param into a [type, value] format
+        $normalizeParam = function($param) {
+            // by default return a string
+            $type = 's';
+            if(is_double($param)) $type = 'd';
+            if(is_int($param)) $type = 'i';
+            return [$type, $param];
+        };
+        /**
+         * turn into a format compatible with $stmt->bind_param
+         * @see https://www.php.net/manual/en/mysqli-stmt.bind-param.php
+         */
+        $normalizeParams = function(&$params) use($normalizeParam) {
+            $types = [];
+            $values = [];
+            foreach($params as $param) {
+                if(!is_array($param)) $param = $normalizeParam($param);
+                list($type, $value) = $param;
+                $types[] = $type;
+                $values[] = $value;
+            }
+            $normalizedTypes = implode('',$types);
+            $normalizedParams = array_merge([$normalizedTypes], $values);
+            $params = $normalizedParams;
+        };
+        /**
+         * extract the name of the virtual table
+         */
         $getTableName = function() use($query_string){
             preg_match("/\sFROM\s*?['`]?(?<table>[^\s'`]+)['`]?/i", $query_string, $matches);
             return @$matches['table'];
         };
+        /**
+         * remove the provided from and adjust using the external modules setting table
+         */
         $fixFrom = function() use(&$query_string) {
-            $result = preg_replace("/\sFROM\s*?['`]?([^\s'`]+)['`]?/i", " FROM `redcap_external_module_settings` ", $query_string);
+            $table = self::EXTERNAL_MODULE_SETTINGS_TABLE;
+            $result = preg_replace("/\sFROM\s*?['`]?([^\s'`]+)['`]?/i", " FROM `{$table}` ", $query_string);
             if($result) return $query_string = $result;
         };
         $fixWhere = function($tableName) use(&$query_string) {
@@ -49,17 +99,22 @@ class ExModDatabase
             $error = print_r(db_error(), true);
             throw new \Exception($error, 1);
         }
-        $stmt->execute($params);
-        return $stmt;
+        $normalizeParams($params);
+        // bind params
+        $stmt->bind_param(...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result;
     }
 
     public function dropTable($table_name)
     {
         $normalizedTableName = static::getRealTableName($table_name);
         $query_string = sprintf(
-            "DELETE FROM `redcap_external_module_settings`
+            "DELETE FROM `%s`
             WHERE `external_module_id` = %u
             AND `key` LIKE '%s%%'",
+            self::EXTERNAL_MODULE_SETTINGS_TABLE,
             $this->module->getId(), $normalizedTableName
         );
         $result = db_query($query_string);
@@ -82,6 +137,16 @@ class ExModDatabase
         return false;
     }
 
+    /**
+     * adjust the key to be in a MySQL JSON compatible format.
+     * could be:
+     * - $.something (object)
+     * - $[1] (array)
+     * The key is not changed if starts with a dollar sign
+     *
+     * @param string $key
+     * @return string
+     */
     private static function adjustKey($key) {
         if(preg_match("/^\$/i", $key)) return; // do not change if starts with $
         if(preg_match("/^\d/i", $key)) return $key = "$[$key]"; // consider it an array key
@@ -109,7 +174,7 @@ class ExModDatabase
             return $clause;
         };
         $key = self::adjustKey($key);
-        $clause = sprintf("`value`->'%s'", $key);
+        $clause = sprintf("`value`->>'%s'", $key);
         $clause = $castIfNeeded($clause, $value);
         $clause .= sprintf(" %s %s", $operator, checkNull($value));
         return $clause;
@@ -152,9 +217,10 @@ class ExModDatabase
 
         $normalizedTableName = static::getRealTableName($table_name);
         $query_string = sprintf(
-            "SELECT `value` FROM redcap_external_module_settings
+            "SELECT `value` FROM `%s`
             WHERE `external_module_id` = %u AND `key` LIKE '%s%%'
             AND %s",
+            self::EXTERNAL_MODULE_SETTINGS_TABLE,
             $this->module->getId(), $normalizedTableName,
             implode("\nAND ", $whereClause)
         );
@@ -195,7 +261,7 @@ class ExModDatabase
     public function insert($table_name, $data) {
         $id = $this->getId($table_name);
         $normalizedTableName = static::getRealTableName($table_name);
-        $data[self::ID_KEY] = "{$id}"; // add unique id as string or JSON_SEARCH won't work
+        $data[self::ID_KEY] = $id; // add unique id as string or JSON_SEARCH won't work
         $key = implode('-', [$normalizedTableName, $id]);
         $this->module->setSystemSetting($key, $data);
         return $id;
@@ -218,10 +284,11 @@ class ExModDatabase
         $normalizedTableName = static::getRealTableName($table_name);
 
         $query_string = sprintf(
-            "UPDATE redcap_external_module_settings
+            "UPDATE `%s`
             SET `value` = JSON_REPLACE(`value`, %s)
             WHERE `external_module_id` = %u AND `key` LIKE '%s%%'
             AND %s",
+            self::EXTERNAL_MODULE_SETTINGS_TABLE,
             $updateStatement,
             $this->module->getId(), $normalizedTableName,
             implode("\nAND ", $whereClause)
