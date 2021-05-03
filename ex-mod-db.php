@@ -22,7 +22,7 @@ foreach ($data as $entry) {
 }
 $list = range(1,666);
 while($index = current($list)) {
-  $result = $exMod_db->update($tableName, ['processed_lines'=>$index, 'status'=>'ciao'], ['__id', 2]);
+  $result = $exMod_db->update($tableName, ['processed_lines'=>$index, 'status'=>'processing'], ['__id', 2]);
   next($list);
 }
 print $result ? 'updated' : 'error';
@@ -49,8 +49,8 @@ while($row = db_fetch_assoc($result)) {
 
 
 $query_string = sprintf(
-  "SELECT `value`->>'$.processed_lines' AS `processed_lines` FROM `%s` WHERE `value`->>'$.__id'=? AND `value`->>'$.status'=?",
-  AdvancedImport::dbExMod()::getRealTableName(Job::TABLE_NAME)
+  "SELECT `processed_lines` FROM  `%s` WHERE `__id`=? AND `status`=?",
+  Job::TABLE_NAME
 );
 
 $result = $exMod_db->query($query_string, [2, 'processing']);

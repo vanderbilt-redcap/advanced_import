@@ -75,32 +75,51 @@ class ExModDatabase
             $normalizedParams = array_merge([$normalizedTypes], $values);
             $params = $normalizedParams;
         };
-        /**
-         * extract the name of the virtual table
-         */
-        $getTableName = function() use($query_string){
-            preg_match("/\sFROM\s*?['`]?(?<table>[^\s'`]+)['`]?/i", $query_string, $matches);
-            return @$matches['table'];
-        };
+
         /**
          * remove the provided from and adjust using the external modules setting table
          */
         $fixFrom = function() use(&$query_string) {
             $table = self::EXTERNAL_MODULE_SETTINGS_TABLE;
-            $result = preg_replace("/\sFROM\s*?['`]?([^\s'`]+)['`]?/i", " FROM `{$table}` ", $query_string);
-            if($result) return $query_string = $result;
+            $query_string = preg_replace("/\sFROM\s*?['`]?([^\s'`]+)['`]?/i", " FROM `{$table}`", $query_string);
         };
-        $fixWhere = function($tableName) use(&$query_string) {
+        $fixWhere = function() use(&$query_string) {
+            /**
+             * extract the name of the virtual table
+             */
+            $getTableName = function() use($query_string){
+                preg_match("/\sFROM\s*?['`]?(?<table>[^\s'`]+)['`]?/i", $query_string, $matches);
+                if($tableName = $matches['table']) return static::getRealTableName($tableName);
+                return;
+            };
+            $tableName = $getTableName();
             $whereStatement = sprintf(
-                " WHERE `external_module_id`=%u AND `key` LIKE '%s%%' AND ",
+                " WHERE `external_module_id`=%u AND `key`='%s' AND ",
                 $this->module->getId(), $tableName
             );
-            $result = preg_replace("/\sWHERE\s/i", $whereStatement, $query_string);
-            if($result) return $query_string = $result;
+            $query_string = preg_replace("/\sWHERE\s/i", $whereStatement, $query_string);
         };
-        $tableName = $getTableName();
+        /**
+         * update all detected field names (variables surrounded by ' or ` except for the table because preceded by FROM)
+         */
+        $fixFieldNames = function() use(&$query_string) {
+            $fixKeys = function($matches) {
+                $field = $matches['fields'];
+                $jsonKey = static::adjustKey($field);
+                $key = "`value`->>'{$jsonKey}'";
+                return $key;
+            };
+            $query_string = preg_replace_callback("/(?<!FROM )(?:['`](?<fields>[^\s'`]+)['`])/", $fixKeys, $query_string);
+        };
+        $removeExtraBlankSpaces = function() use(&$query_string) {
+            $query_string = preg_replace("/[\s]{2,}/", ' ', $query_string);
+        };
+        // apply all fixes to the query string
+        $removeExtraBlankSpaces();
+        $fixFieldNames();
+        $fixWhere();
         $fixFrom();
-        $fixWhere($tableName);
+
         $stmt = $rc_connection->prepare($query_string);
         if(!$stmt) {
             $error = print_r(db_error(), true);
