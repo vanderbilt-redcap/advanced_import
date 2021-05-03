@@ -8,6 +8,13 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
  * this class uses the external module settings table to create virtual tables.
  * suitable for storing any kind of data as JSON objects.
  * each table as an autoincrement __id key
+ * 
+ * Structure of the settings tableBlade::component
+ * `external_module_id` int(11)
+ * `project_id` int(11)
+ * `key` varchar(255)
+ * `type` varchar(12)
+ * `value` mediumtext
  */
 class ExModDatabase
 {
@@ -193,9 +200,10 @@ class ExModDatabase
     {
         $list = [];
         foreach ($data as $key => $value) {
+            if(!is_numeric($value)) $value = checkNull($value); // quote everything but numbers
             $key = self::adjustKey($key);
             $list[] = "'$key'";
-            $list[] = checkNull($value);
+            $list[] = $value;
         }
         return implode(', ', $list);
     }
@@ -218,7 +226,7 @@ class ExModDatabase
         $normalizedTableName = static::getRealTableName($table_name);
         $query_string = sprintf(
             "SELECT `value` FROM `%s`
-            WHERE `external_module_id` = %u AND `key` LIKE '%s%%'
+            WHERE `external_module_id` = %u AND `key` = '%s'
             AND %s",
             self::EXTERNAL_MODULE_SETTINGS_TABLE,
             $this->module->getId(), $normalizedTableName,
@@ -259,18 +267,41 @@ class ExModDatabase
     }
 
     public function insert($table_name, $data) {
+        $implodeQuote = function($list) {
+            return '`'.implode('`, `', $list). '`';
+        };
+        $module_id = $this->module->getId();
         $id = $this->getId($table_name);
         $normalizedTableName = static::getRealTableName($table_name);
-        $data[self::ID_KEY] = $id; // add unique id as string or JSON_SEARCH won't work
-        $key = implode('-', [$normalizedTableName, $id]);
-        $this->module->setSystemSetting($key, $data);
+        $data[self::ID_KEY] = $id;
+        $table_data = [
+            'external_module_id' => $module_id,
+            // 'project_id',
+            'key' => checkNull($normalizedTableName),
+            'type' => checkNull('string'),
+            'value' => checkNull(json_encode($data))
+        ];
+
+        $query_string = sprintf(
+            'INSERT INTO `%s` (%s) VALUES (%s)',
+            self::EXTERNAL_MODULE_SETTINGS_TABLE,
+            $implodeQuote(array_keys($table_data)),
+            implode(', ', $table_data)
+        );
+        $result = db_query($query_string);
+        if(!$result) return false;
         return $id;
     }
 
     public function delete($table_name, $id) {
+        $module_id = $this->module->getId();
         $normalizedTableName = static::getRealTableName($table_name);
-        $key = implode('-', [$normalizedTableName, $id]);
-        $this->module->removeSystemSetting($key);
+        $query_string = sprintf(
+            "DELETE FROM `%s` WHERE `external_module_id`=%u AND `key`=%s AND `value`->>'$.__id'=%u",
+            self::EXTERNAL_MODULE_SETTINGS_TABLE, $module_id, checkNull($normalizedTableName), $id
+        );
+        $result = db_query($query_string);
+        if(!$result) return false;
         return $id;
     }
 
@@ -286,7 +317,7 @@ class ExModDatabase
         $query_string = sprintf(
             "UPDATE `%s`
             SET `value` = JSON_REPLACE(`value`, %s)
-            WHERE `external_module_id` = %u AND `key` LIKE '%s%%'
+            WHERE `external_module_id` = %u AND `key`='%s'
             AND %s",
             self::EXTERNAL_MODULE_SETTINGS_TABLE,
             $updateStatement,
@@ -294,7 +325,7 @@ class ExModDatabase
             implode("\nAND ", $whereClause)
         );
         $result = db_query($query_string);
-        if($result==false) throw new \Exception(sprintf("Error updating the entry with params '' and search params ''", json_encode($params, JSON_PRETTY_PRINT),  json_encode($where_params, JSON_PRETTY_PRINT)), 1);
+        if(!$result) return false;
         return true;
     }
  }

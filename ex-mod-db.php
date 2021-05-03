@@ -11,7 +11,7 @@ $root = dirname(__FILE__);
 $data = [
   ['test' => 123, 'ritest' => "allora com'è", 'status' => 'processing', 'processed_lines' => 1234],
   ['test' => 456, 'ritest' => "non so", 'status' => 'processing', 'processed_lines' => 223],
-  ['test' => 678, 'ritest' => "che mi racconti", 'status' => 'processing', 'processed_lines' => 444],
+  ['test' => 678, 'ritest' => "che mi racconti", 'status' => 'completed', 'processed_lines' => 444],
 ];
 
 $exMod_db = AdvancedImport::dbExMod();
@@ -22,14 +22,14 @@ foreach ($data as $entry) {
 }
 $list = range(1,666);
 while($index = current($list)) {
-  $result = $exMod_db->update($tableName, ['processed_lines'=>$index], ['__id', 2]);
+  $result = $exMod_db->update($tableName, ['processed_lines'=>$index, 'status'=>'ciao'], ['__id', 2]);
   next($list);
 }
 print $result ? 'updated' : 'error';
 $result = $exMod_db->delete($tableName, 1);
 print $result ? 'deleted' : 'error';
 
-$list = $exMod_db->search($tableName);
+$list = $exMod_db->search($tableName,['status','processing','=']);
 
 
 global $rc_connection;
