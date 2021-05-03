@@ -119,11 +119,6 @@ abstract class Job implements JobInterface, JsonSerializable
      */
     public static function create($project_id, $user_id, $filename, $settings)
     {
-        $createJobSetting = function($project_id, $user_id, $filename, $settings) {
-            $db = AdvancedImport::dbExMod();
-            $settings = compact('project_id', 'user_id', 'filename', 'settings');
-            $db->insert(Job::TABLE_NAME, $settings);
-        };
         $data = [
             'project_id' => $project_id,
             'user_id' => $user_id,
@@ -137,7 +132,10 @@ abstract class Job implements JobInterface, JsonSerializable
             'updated_at' => $created_at,
             'completed_at' => null,
         ];
-        $id = AdvancedImport::db()->insert(self::TABLE_NAME, $data);
+        $db = AdvancedImport::dbExMod();
+        $id = $db->insert(Job::TABLE_NAME, $data);
+
+        // $id = AdvancedImport::db()->insert(self::TABLE_NAME, $data);
         if($id==false) throw new \Exception("Error creating job", 400);
         return $id;
     }
@@ -180,10 +178,12 @@ abstract class Job implements JobInterface, JsonSerializable
             $this->{$key} = $value;
             return true;
         }, ARRAY_FILTER_USE_BOTH);
+        $db = AdvancedImport::dbExMod();
+        return $db->update(self::TABLE_NAME, $data, ['__id', $job_id]);
 
-        $result = AdvancedImport::db()->update(self::TABLE_NAME, $data, ['id'=>$job_id]);
+        /* $result = AdvancedImport::db()->update(self::TABLE_NAME, $data, ['id'=>$job_id]);
         if($result==false) throw new \Exception(sprintf("Error updating job id %u", $job_id), 400);
-        return $result;
+        return $result; */
     }
     /**
      * reset the status to ready so the job will be further procesed

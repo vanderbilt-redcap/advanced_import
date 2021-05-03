@@ -231,9 +231,9 @@ class ExModDatabase
      *
      * @param string $table_name
      * @param array $params [['key', '=', 'something']]
-     * @return array
+     * @return \Generator
      */
-    public function search($table_name, $criteria=[]) {
+    public function search($table_name, $criteria=[], $limit=0, $offset=0) {
         if(!empty($criteria)) {
             if(!self::is_multidimensional_array(@$criteria[0])) $criteria = [$criteria];
             $whereClause = array_map(function($criteria) {
@@ -253,8 +253,16 @@ class ExModDatabase
         );
         $result = db_query($query_string);
         $rows = [];
+        
+        $index = 0;
+        if(intval($limit)<=0) $limit = false;
+        $offset = $limit ? intval($offset) : false;
         while($row = db_fetch_assoc($result)) {
-            $rows[] = json_decode($row['value'], $assoc=true);
+            if($offset!==false && $index++<$offset) continue; // skip under offset
+            $decoded = json_decode($row['value'], $assoc=true);
+            yield $decoded;
+            $rows[] = $decoded;
+            if($limit!==false && count($rows)>=$limit) break; // break if limit is reached
         }
         return $rows;
     }
@@ -312,19 +320,35 @@ class ExModDatabase
         return $id;
     }
 
-    public function delete($table_name, $id) {
+    public function delete($table_name, $where_params=[]) {
+        if(!self::is_multidimensional_array(@$where_params[0])) $where_params = [$where_params];
+        $whereClause = array_map(function($criteria){
+            return self::makeStatement(...$criteria);
+        }, $where_params);
+        if(empty($whereClause)) $whereClause[] = 1;
+
         $module_id = $this->module->getId();
         $normalizedTableName = static::getRealTableName($table_name);
         $query_string = sprintf(
-            "DELETE FROM `%s` WHERE `external_module_id`=%u AND `key`=%s AND `value`->>'$.__id'=%u",
-            self::EXTERNAL_MODULE_SETTINGS_TABLE, $module_id, checkNull($normalizedTableName), $id
+            "DELETE FROM `%s` WHERE `external_module_id`=%u AND `key`=%s AND %s",
+            self::EXTERNAL_MODULE_SETTINGS_TABLE, $module_id, checkNull($normalizedTableName), implode("\nAND ", $whereClause)
         );
         $result = db_query($query_string);
         if(!$result) return false;
-        return $id;
+        return true;
     }
 
-    public function update($table_name, $params, $where_params) {
+    /**
+     * update a json object.
+     * Example:
+     * $result = $this->update($tableName, ['processed_lines'=>$index, 'status'=>'processing'], ['__id', 2]);
+     *
+     * @param [type] $table_name
+     * @param [type] $params
+     * @param [type] $where_params
+     * @return void
+     */
+    public function update($table_name, $params, $where_params=[]) {
         if(!self::is_multidimensional_array(@$where_params[0])) $where_params = [$where_params];
         $updateStatement = self::makePathValueList($params);
         $whereClause = array_map(function($criteria){

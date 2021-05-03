@@ -14,22 +14,41 @@ $data = [
   ['test' => 678, 'ritest' => "che mi racconti", 'status' => 'completed', 'processed_lines' => 444],
 ];
 
-$exMod_db = AdvancedImport::dbExMod();
+$db = AdvancedImport::dbExMod();
 $tableName = Job::TABLE_NAME;
-$exMod_db->createTable($tableName, $drop=true);
+$db->createTable($tableName, $drop=true);
 foreach ($data as $entry) {
-  $exMod_db->insert($tableName, $entry);
+  $db->insert($tableName, $entry);
 }
 $list = range(1,666);
 while($index = current($list)) {
-  $result = $exMod_db->update($tableName, ['processed_lines'=>$index, 'status'=>'processing'], ['__id', 2]);
+  $entry = $data[0];
+  $entry['index'] = $index;
+  $db->insert($tableName, $entry);
   next($list);
 }
+
+$list = range(1,20);
+while($index = current($list)) {
+  $result = $db->update($tableName, ['processed_lines'=>$index, 'status'=>'processing'], ['__id', 2]);
+  next($list);
+}
+
+$results = $db->search($tableName, ['index',30, '>'], 10, 630);
+
+$counter = 0;
+while ($entry = $results->current()) {
+  echo $entry['__id'];
+  $counter++;
+  $results->next();
+}
+echo $counter;
+
 print $result ? 'updated' : 'error';
-$result = $exMod_db->delete($tableName, 1);
+$result = $db->delete($tableName, ['__id', 1]);
 print $result ? 'deleted' : 'error';
 
-$list = $exMod_db->search($tableName,['status','processing','=']);
+$list = $db->search($tableName,['status','processing','=']);
 
 
 global $rc_connection;
@@ -42,6 +61,7 @@ $stmt->execute();
 
 /* fetch value */
 $result = $stmt->get_result();
+$rows = [];
 while($row = db_fetch_assoc($result)) {
   $results[] = $row;
 }
@@ -53,7 +73,7 @@ $query_string = sprintf(
   Job::TABLE_NAME
 );
 
-$result = $exMod_db->query($query_string, [2, 'processing']);
+$result = $db->query($query_string, [2, 'processing']);
 $results = [];
 while($row = db_fetch_assoc($result)) {
   $results[] = $row;
