@@ -55,7 +55,11 @@ class ImportJob extends Job
                 $this->markCompleted();
                 break;
             case 'data:chunk_completed':
-                // do nothing
+                //set back to ready when a chunk has been completed
+                $params = [
+                    'status' => self::STATUS_READY,
+                ];
+                $this->updateProperties($params);
                 break;
             case 'data:stopped':
                 // do nothing

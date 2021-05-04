@@ -14,9 +14,9 @@ $data = [
   ['test' => 678, 'ritest' => "che mi racconti", 'status' => 'completed', 'processed_lines' => 444],
 ];
 
-$db = AdvancedImport::dbExMod();
+$db = AdvancedImport::jsonDb();
 $tableName = Job::TABLE_NAME;
-$db->createTable($tableName, $drop=true);
+$db->createTable($tableName, ['primary_key'=>'id'], $drop=true);
 foreach ($data as $entry) {
   $db->insert($tableName, $entry);
 }
@@ -30,14 +30,14 @@ while($index = current($list)) {
 
 $list = range(1,20);
 while($index = current($list)) {
-  $result = $db->update($tableName, ['processed_lines'=>$index, 'status'=>'processing'], ['__id', 2]);
+  $result = $db->update($tableName, ['processed_lines'=>$index, 'status'=>'processing'], ['id', 2]);
   next($list);
 }
 
 $results = $db->search($tableName, ['index',30, '>'], 10, 10);
 $counter = 0;
 while ($entry = $results->current()) {
-  echo $entry['__id'];
+  echo $entry['id'];
   $counter++;
   $results->next();
 }
@@ -51,18 +51,18 @@ while ($row = db_fetch_assoc($result)) {
 }
 
 print $result ? 'updated' : 'error';
-$result = $db->delete($tableName, ['__id', 1]);
+$result = $db->delete($tableName, ['id', 1]);
 print $result ? 'deleted' : 'error';
 
-$list = $db->search($tableName,[['status','processing','='],['__id',2]]);
+$list = $db->search($tableName,[['status','processing','='],['id',2]]);
 while ($entry = $list->current()) {
-  $test = @$entry['__id'];
+  $test = @$entry['id'];
   $list->next();
 }
 
 
 global $rc_connection;
-$query_string = 'SELECT `value`->\'$.status\' AS `status` FROM `redcap_external_module_settings`  WHERE `external_module_id`=? AND `key` LIKE \'__ext_mod_table_jobs%\' AND `value`->\'$.__id\'=?';
+$query_string = 'SELECT `value`->\'$.status\' AS `status` FROM `redcap_external_module_settings`  WHERE `external_module_id`=? AND `key` LIKE \'__ext_mod_table_jobs%\' AND `value`->\'$.id\'=?';
 $stmt = $rc_connection->prepare($query_string);
 $params = ["ii", $id=1, $jobId=2];
 $stmt->bind_param(...$params);
@@ -79,7 +79,7 @@ while($row = db_fetch_assoc($result)) {
 
 
 $query_string = sprintf(
-  "SELECT `{processed_lines}` AS `processed_lines` FROM  `%s` WHERE `{__id}`=? AND `{status}`=?",
+  "SELECT `{processed_lines}` AS `processed_lines` FROM  `%s` WHERE `{id}`=? AND `{status}`=?",
   Job::TABLE_NAME
 );
 

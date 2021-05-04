@@ -100,10 +100,10 @@
     </b-modal>
     <b-modal ref="modal-edit" title="Edit" hide-footer>
         <EditJob :job="editing_data">
-            <template v-slot:footer="{form}" >
+            <template v-slot:footer="{form, object_keys}" >
                 <div class="d-flex justify-content-end">
                     <b-button class="mr-2" size="sm" variant="secondary" @click="$refs['modal-edit'].hide()">Cancel</b-button>
-                    <b-button size="sm" variant="success" @click="editJob(form)" >OK</b-button>
+                    <b-button size="sm" variant="success" @click="editJob(form, object_keys)" >OK</b-button>
                 </div>
             </template>
         </EditJob>
@@ -366,14 +366,30 @@ export default {
             this.editing_data = data
             modal.show()
         },
-        async editJob(data) {
-            const {id} = data
-            await this.$API.dispatch('jobs/update', {id, data: {...data}})
-            const modal = this.$refs['modal-edit']
-            if(!modal) return
-            this.getItems()
-            modal.hide()
-
+        async editJob(form, object_keys) {
+            try {
+                const data = {...form}
+                const {id} = data
+                // convert back strings that were objects before being edited in the form
+                for(let key of object_keys) {
+                    const converted = JSON.parse(data[key]) // will throw error if cannot parse
+                    data[key] = converted
+                }
+                await this.$API.dispatch('jobs/update', {id, data: {...data}})
+            } catch (error) {
+                console.log(error)
+                this.$bvModal.msgBoxOk('The JSON object is malformed and cannot be parsed. Data will not be updated.', {
+                    title: 'Error parsing JSON',
+                    // size: 'sm',
+                    buttonSize: 'sm',
+                    okVariant: 'secondary',
+                    centered: true
+                })
+            }finally {
+                const modal = this.$refs['modal-edit']
+                if(modal) modal.hide()
+                this.getItems()
+            }
         }
     }
 }
@@ -387,7 +403,8 @@ export default {
     float: left;
 }
 #my-table >>> tbody td {
-    vertical-align: middle;;
+    vertical-align: middle;
+    overflow-wrap: break-word;
 }
 
 .table-wrapper {

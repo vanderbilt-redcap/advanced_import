@@ -1,15 +1,16 @@
 <template>
   <div>
-    <b-form-group v-for="(input, key) in form" :key="key"
+    <b-form-group v-for="(value, key) in form" :key="key"
      :label="key" :label-for="`input-${key}`">
-        <b-form-input
+        <b-form-checkbox :id="`input-${key}`" v-model="form[key]" v-if="(typeof value =='boolean')" />
+        <b-form-input v-else
           :id="`input-${key}`"
           v-model="form[key]"
         ></b-form-input>
       </b-form-group>
 
     <footer>
-      <slot name="footer" :form="form"></slot>
+      <slot name="footer" :form="form" :object_keys="object_keys"></slot>
     </footer>
   </div>
 </template>
@@ -18,7 +19,8 @@
 export default {
   data() {
     return {
-      form: {}
+      form: {},
+      object_keys: [], // store keys of the JSON that need to be converted back to object
     }
   },
   props: {
@@ -27,9 +29,10 @@ export default {
       default: null
     }
   },
-  method: {
-    update() {
-
+  methods: {
+    editObject(key, value) {
+      console.log(key, value)
+      if(typeof value!='object') return
     }
   },
   watch: {
@@ -37,10 +40,15 @@ export default {
       immediate: true,
       handler(job) {
         for(let [key, value] of Object.entries(job)) {
-          console.log(typeof value, key)
           if(value==null) value = undefined
-          else if(typeof value =='boolean') value = String(value)
-          else if(typeof value =='object') value = JSON.stringify(value)
+          /**
+           * stringify objects for editing, but keep track of the key
+           * to convert it back to object before sending to server
+           */
+          else if(typeof value =='object') {
+            if(this.object_keys.indexOf(key)<0) this.object_keys.push(key)
+            value = JSON.stringify(value)
+          }
           this.$set(this.form, key, value)
         }
       }

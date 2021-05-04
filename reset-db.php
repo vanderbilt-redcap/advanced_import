@@ -7,11 +7,11 @@ $page = new \HtmlPage();
 $page->PrintHeaderExt();
 $root = dirname(__FILE__);
 
-$database_directory = AdvancedImport::getDatabaseDirectory();
+/* $database_directory = AdvancedImport::getDatabaseDirectory();
 $db_path = $database_directory.DIRECTORY_SEPARATOR.AdvancedImport::DB_NAME;
 if(file_exists($db_path)) unlink($db_path);
 $queue = new Queue();
-$queue->createJobsTable();
+$queue->createJobsTable(); */
 
 /* $newsStore = new \SleekDB\Store("news", $databaseDirectory);
 $article = [

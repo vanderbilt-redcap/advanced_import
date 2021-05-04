@@ -53,7 +53,7 @@ abstract class Job implements JobInterface, JsonSerializable
      *
      * @var array
      */
-    static private $guarded = ['id', 'project_id', 'user_id', 'filename', 'settings', 'type', 'created_at'];
+    static $guarded = ['id', 'project_id', 'user_id', 'filename', 'settings', 'type', 'created_at'];
 
     /**
      * define the allowed keys for properties
@@ -88,12 +88,12 @@ abstract class Job implements JobInterface, JsonSerializable
     public function getStatus()
     {
         $query_string = sprintf(
-            "SELECT `status` FROM `%s` WHERE id=?",
+            "SELECT `{status}` AS `status` FROM `%s` WHERE `{id}`=?",
             self::TABLE_NAME
         );
-        $stmt = AdvancedImport::db()->query($query_string, [$this->id]);
-        if($stmt==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 400);
-        if($row = $stmt->fetch()) {
+        $result = AdvancedImport::jsonDb()->query($query_string, [$this->id]);
+        if($result==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 400);
+        if($row = db_fetch_assoc($result)) {
             $this->status = $status = @$row['status']; // also update the local one
             return $this->status;
         }
@@ -133,7 +133,7 @@ abstract class Job implements JobInterface, JsonSerializable
             'updated_at' => $created_at,
             'completed_at' => null,
         ];
-        $db = AdvancedImport::dbExMod();
+        $db = AdvancedImport::jsonDb();
         $id = $db->insert(Job::TABLE_NAME, $data);
 
         // $id = AdvancedImport::db()->insert(self::TABLE_NAME, $data);
@@ -179,7 +179,7 @@ abstract class Job implements JobInterface, JsonSerializable
             $this->{$key} = $value;
             return true;
         }, ARRAY_FILTER_USE_BOTH);
-        $db = AdvancedImport::dbExMod();
+        $db = AdvancedImport::jsonDb();
         return $db->update(self::TABLE_NAME, $data, ['id', $job_id]);
 
         /* $result = AdvancedImport::db()->update(self::TABLE_NAME, $data, ['id'=>$job_id]);

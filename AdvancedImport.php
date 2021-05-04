@@ -337,7 +337,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      *
      * @return JsonDatabase
      */
-    public static function dbExMod()
+    public static function jsonDb()
     {
         return new JsonDatabase();
     }
@@ -450,8 +450,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         Logging::writeToFile($this->PREFIX.'_log.txt', 'onModuleSystemEnable');
         $dataDir = self::getDataDirectory();
         $uploadDir = self::getUploadDirectory();
-        $databaseDir = self::getDatabaseDirectory();
-        $dirs = [$dataDir, $databaseDir, $uploadDir];
+        $dirs = [$dataDir, $uploadDir];
         foreach ($dirs as $dir) {
             if(!file_exists($dir)) mkdir($dir, 0777, $recursive=true);
         }
@@ -459,13 +458,34 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $queue->createJobsTable();
     }
 
-    public function resetDatabase()
+    /**
+     * create virtual tables if have not been created
+     *
+     * @return void
+     */
+    private function checkDbIntegrity()
     {
-        $databaseDir = self::getDatabaseDirectory();
-        $this->deleteTree($databaseDir);
-        if(!file_exists($databaseDir)) mkdir($databaseDir, 0777, $recursive=true);
-        $queue = new Queue();
-        $queue->createJobsTable();
+        $jsonDb = self::jsonDb();
+        $checkJobsTable = function($jsonDb){
+            $tableName = Job::TABLE_NAME;
+            $metadata = $jsonDb->getMetadata($tableName);
+            if(!empty($metadata)) return;
+            $queue = new Queue();
+            $queue->createJobsTable();
+        };
+        $checkJobsTable($jsonDb);
+    }
+
+    /**
+     * actions to perform when module
+     *
+     * @param [type] $version
+     * @param [type] $old_version
+     * @return void
+     */
+    public function redcap_module_system_change_version($version, $old_version)
+    {
+        $this->checkDbIntegrity();
     }
 
     /**

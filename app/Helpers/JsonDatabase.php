@@ -18,15 +18,46 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
  */
 class JsonDatabase
 {
-    const ID_KEY = 'id';
-    const TABLE_PERFIX = '__ext_mod_table_'; //followed by 'table' name
-    const AUTO_INCREMENT_KEY = '__ext_mod_auto_increment_'; //followed by 'table' name
+    const DEFAULT_PRIMARY_KEY = 'id';
+    const PREFIX = '__ext_mod_'; //followed by 'table' name
+    const METADATA_KEY = '__ext_mod_meta_'; //followed by 'table' name
     const EXTERNAL_MODULE_SETTINGS_TABLE = 'redcap_external_module_settings';
 
     public function __construct()
     {
         $this->module = AdvancedImport::getInstance();
-    }    
+    }
+
+    public function getMetadataKey($tableName)
+    {
+        return self::PREFIX.$tableName.'_meta';
+    }
+
+    /**
+     * getter for the metadata of a virtual table
+     * it contains at least the primary_key and the auto_increment value
+     *
+     * @param string $tableName
+     * @return array
+     */
+    public function getMetadata($tableName)
+    {
+        $metadataKey = $this->getMetadataKey($tableName);
+        return $this->module->getSystemSetting($metadataKey) ?: [];
+    }
+
+    /**
+     * setter fot the metadata of a virtual table
+     *
+     * @param string $tableName
+     * @param array $metadata
+     * @return void
+     */
+    private function setMetadata($tableName, $metadata)
+    {
+        $metadataKey = $this->getMetadataKey($tableName);
+        $this->module->setSystemSetting($metadataKey, $metadata);
+    }
 
     /**
      * create a query and bind the provided params
@@ -41,7 +72,7 @@ class JsonDatabase
      * Example `{settings}` becomes `value`->>'$.settings'
      * 
      * Example query:
-     * $exMod_db = AdvancedImport::dbExMod();
+     * $exMod_db = AdvancedImport::jsonDb();
      * $query_string = "SELECT `{settings}` AS `settings` FROM `jobs` WHERE `{id}`=? AND `{status}`=?";
      * $result = $exMod_db->query($query_string, [2,'processing']);
      * 
@@ -153,12 +184,15 @@ class JsonDatabase
         return true;
     }
 
-    public function createTable($table_name, $drop=false) {
-        // $normalizedTableName = static::getRealTableName($table_name);
-        if($drop) $this->dropTable($table_name);
-        $normalizedAutoIncrement = self::AUTO_INCREMENT_KEY.$table_name;
-        $this->module->setSystemSetting($normalizedAutoIncrement, 0);
-        // $module->setSystemSetting($normalizedTableName, "[]");
+    public function createTable($tableName, $params=[], $drop=false) {
+        if($drop) $this->dropTable($tableName);
+        $metadata = $this->getMetadata($tableName);
+        if(!empty($metadata)) return; // exit if exists
+
+        $primaryKey = @$params['primary_key'] ?: self::DEFAULT_PRIMARY_KEY;
+        $metadata['primary_key'] = $primaryKey;
+        $metadata['auto_increment'] = 0;
+        $this->setMetadata($tableName, $metadata);
     }
 
     private static function is_multidimensional_array($array) {
@@ -222,9 +256,17 @@ class JsonDatabase
      */
     private static function makePathValueList($data)
     {
+        /**
+         * arrays need to be JSON_EXTRACTED or will be saved as escaped strings
+         */
+        $wrapJsonValue = function($value) {
+            $escaped = checkNull(json_encode($value));
+            return sprintf("JSON_EXTRACT(%s, '$')", $escaped);
+        };
         $list = [];
         foreach ($data as $key => $value) {
-            if(!is_numeric($value)) $value = checkNull($value); // quote everything but numbers
+            if(is_array($value)) $value = $wrapJsonValue($value);
+            elseif(!is_numeric($value)) $value = checkNull($value); // quote everything but numbers
             $key = self::adjustKey($key);
             $list[] = "'$key'";
             $list[] = $value;
@@ -281,7 +323,7 @@ class JsonDatabase
 
     public static function getRealTableName($table_name)
     {
-        return self::TABLE_PERFIX.$table_name;
+        return self::PREFIX.$table_name.'_table';
     }
 
     /**
@@ -292,20 +334,22 @@ class JsonDatabase
      */
     private function getId($table_name)
     {
-        $autoIncrement = $this->module->getSystemSetting(self::AUTO_INCREMENT_KEY.$table_name);
-        $next = intval($autoIncrement)+1;
-        $this->module->setSystemSetting(self::AUTO_INCREMENT_KEY.$table_name, $next);
+        $metadata = $this->getMetadata($table_name);
+        $autoIncrement = @$metadata['auto_increment'];
+        $next = $metadata['auto_increment'] = intval($autoIncrement)+1;
+        $this->setMetadata($table_name, $metadata);
         return $next;
     }
 
-    public function insert($table_name, $data) {
+    public function insert($tableName, $data) {
+        $primaryKey = @$this->getMetadata($tableName)['primary_key'];
         $implodeQuote = function($list) {
             return '`'.implode('`, `', $list). '`';
         };
         $module_id = $this->module->getId();
-        $id = $this->getId($table_name);
-        $normalizedTableName = static::getRealTableName($table_name);
-        $data[self::ID_KEY] = $id;
+        $id = $this->getId($tableName);
+        $normalizedTableName = static::getRealTableName($tableName);
+        $data[$primaryKey] = $id;
         $table_data = [
             'external_module_id' => $module_id,
             // 'project_id',
