@@ -142,7 +142,7 @@ class JsonDatabase
             $fixKeys = function($matches) {
                 $field = $matches['fields'];
                 $jsonKey = static::adjustKey($field);
-                $key = "`value`->>'{$jsonKey}'";
+                $key = "JSON_UNQUOTE(JSON_EXTRACT(`value`, '{$jsonKey}'))";
                 return $key;
             };
             $query_string = preg_replace_callback("/['`]?[{](?<fields>[^}]+)[}]['`]?/", $fixKeys, $query_string);
@@ -239,7 +239,7 @@ class JsonDatabase
             return $clause;
         };
         $key = self::adjustKey($key);
-        $clause = sprintf("`value`->>'%s'", $key);
+        $clause = sprintf("JSON_UNQUOTE(JSON_EXTRACT(`value`, '%s'))", $key);
         $clause = $castIfNeeded($clause, $value);
         $clause .= sprintf(" %s %s", $operator, checkNull($value));
         return $clause;
