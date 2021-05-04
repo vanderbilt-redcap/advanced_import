@@ -20,7 +20,7 @@ $db->createTable($tableName, $drop=true);
 foreach ($data as $entry) {
   $db->insert($tableName, $entry);
 }
-$list = range(1,666);
+$list = range(1,30);
 while($index = current($list)) {
   $entry = $data[0];
   $entry['index'] = $index;
@@ -34,8 +34,7 @@ while($index = current($list)) {
   next($list);
 }
 
-$results = $db->search($tableName, ['index',30, '>'], 10, 630);
-
+$results = $db->search($tableName, ['index',30, '>'], 10, 10);
 $counter = 0;
 while ($entry = $results->current()) {
   echo $entry['__id'];
@@ -43,12 +42,23 @@ while ($entry = $results->current()) {
   $results->next();
 }
 echo $counter;
+$query_string = sprintf("SELECT `{processed_lines}` AS `processed_lines` FROM  `%s` WHERE `{index}`>? LIMIT 0,10", $tableName);
+$result = $db->query($query_string, [13]);
+
+
+while ($row = db_fetch_assoc($result)) {
+  echo $row['processed_lines'];
+}
 
 print $result ? 'updated' : 'error';
 $result = $db->delete($tableName, ['__id', 1]);
 print $result ? 'deleted' : 'error';
 
-$list = $db->search($tableName,['status','processing','=']);
+$list = $db->search($tableName,[['status','processing','='],['__id',2]]);
+while ($entry = $list->current()) {
+  $test = @$entry['__id'];
+  $list->next();
+}
 
 
 global $rc_connection;
@@ -63,13 +73,13 @@ $stmt->execute();
 $result = $stmt->get_result();
 $rows = [];
 while($row = db_fetch_assoc($result)) {
-  $results[] = $row;
+  $rows[] = $row;
 }
 
 
 
 $query_string = sprintf(
-  "SELECT `processed_lines` FROM  `%s` WHERE `__id`=? AND `status`=?",
+  "SELECT `{processed_lines}` AS `processed_lines` FROM  `%s` WHERE `{__id}`=? AND `{status}`=?",
   Job::TABLE_NAME
 );
 

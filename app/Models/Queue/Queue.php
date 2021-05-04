@@ -21,27 +21,37 @@ class Queue
         $status_list = @$params['status'] ?: [];
         $project_id = @$params['project_id'] ?: 0;
         
-        $db = AdvancedImport::dbExMod();
-        $criteria = [['project_id', $project_id]];
-        $status_to_get = [];
-        foreach($status_list as $status) {
-            $status_to_get[] = checkNull($status);
+        
+        $where_clause = '';
+        $status_to_get = array_map('checkNull', $status_list);
+        if(!empty($status_to_get)) $where_clause = printf(" AND `status IN (%s)`", implode(',', $status_to_get));
+        $limit_clause = '';
+        if($limit>0) {
+            $start = intval($start);
+            $limit_clause = sprintf("LIMIT %u, %u", $start, $limit);
         }
-        if(!empty($status_list)) {
-            $criteria[] = ['status', '('.implode(',', $status_to_get).')', 'IN'];
-        }
+        $fields = array_map(function($key) {
+            return sprintf('`{%s}` AS `%s`', $key, $key);
+        }, Job::getKeys());
 
-        $results = $db->search(Job::TABLE_NAME, $criteria, $limit, $start);
+        $db = AdvancedImport::dbExMod();
+        $query_string = sprintf(
+            "SELECT `value` FROM %s WHERE `{project_id}`=? %s %s",
+            Job::TABLE_NAME, $where_clause, $limit_clause
+        );
+        $criteria = [$project_id];
+
+        $result = $db->query($query_string, $criteria);
         $jobs = [];
-        while($row = $results->current()) {
-            $type = @$row['type'];
+        while($row = db_fetch_assoc($result)) {
+            $entry = json_decode(@$row['value'], $assoc=true);
+            $type = @$entry['type'];
             if($type==Job::TYPE_IMPORT) {
-                $job = new ImportJob($row);
+                $job = new ImportJob($entry);
             }else {
                 throw new \Exception("Error creating a list of jobs", 1);
             }
             $jobs[] = $job;
-            $results->next();
         }
         return $jobs;
 
@@ -88,7 +98,7 @@ class Queue
     public function countJobs($project_id)
     {
         $db = AdvancedImport::dbExMod();
-        $query_string = sprintf('SELECT COUNT(1) as total FROM %s WHERE `project_id`=?', Job::TABLE_NAME);
+        $query_string = sprintf('SELECT COUNT(1) as total FROM %s WHERE `{project_id}`=?', Job::TABLE_NAME);
         $result = $db->query($query_string, [$project_id]);
         if($row = db_fetch_assoc($result)) {
             return intval($row['total']);
@@ -143,7 +153,7 @@ class Queue
     public function updateJob($project_id, $job_id, $data)
     {
         $db = AdvancedImport::dbExMod();
-        $results = $db->search(Job::TABLE_NAME, [['__id', $job_id], ['project_id', $project_id]]);
+        $results = $db->search(Job::TABLE_NAME, [['id', $job_id], ['project_id', $project_id]]);
         $job = $results->current();
         if(!$job) return false;
         $filtered = [];
@@ -173,10 +183,10 @@ class Queue
     public function updateJobStatus($project_id, $job_id, $status)
     {
         $db = AdvancedImport::dbExMod();
-        $results = $db->search(Job::TABLE_NAME, [['__id', $job_id], ['project_id', $project_id]]);
+        $results = $db->search(Job::TABLE_NAME, [['id', $job_id], ['project_id', $project_id]]);
         $job = $results->current();
         if(!$job) return false;
-        $updated = $db->update(Job::TABLE_NAME, ['status'=>$status], ['__id', $job_id]);
+        $updated = $db->update(Job::TABLE_NAME, ['status'=>$status], ['id', $job_id]);
         return $updated;
 
         /* $pdo = AdvancedImport::db();
@@ -200,38 +210,38 @@ class Queue
     public function deleteJob($project_id, $job_id)
     {
         $db = AdvancedImport::dbExMod();
-        $results = $db->search(Job::TABLE_NAME, [['__id', $job_id], ['project_id', $project_id]]);
+        $results = $db->search(Job::TABLE_NAME, [['id', $job_id], ['project_id', $project_id]]);
         $job = $results->current();
         if(!$job) {
             $message = sprintf("The job ID %u wa s not found and cannot be deleted", $job_id);
             $this->notify('log', compact('message'));
             return false;
         };
-        $deleted = $db->delete(Job::TABLE_NAME, ['__id', $job_id]);
+        $deleted = $db->delete(Job::TABLE_NAME, ['id', $job_id]);
         if(!$deleted) {
             $message = sprintf("There was ann error deleting the job ID %u", $job_id);
             $this->notify('log', compact('message'));
             return false;
         };
 
-        $unlinkFile = function($job) use($db){
-            $deleteFile = function($filename) {
+        $deleteFile = function($job) use($db){
+            $unlinkFile = function($filename) {
                 $file_path = AdvancedImport::getUploadedFilePath($filename);
                 $file_exists = is_file($file_path);
                 if(!$file_exists) return false;
                 return unlink($file_path);
             };
-            $deleteFile = true; // assume the file must be deleted
-            $deleted = false; //deletion state
+            $unlink = true; // assume the file must be deleted
+            $unlinked = false; //deletion state
             $filename = @$job['filename'];
             $results = $db->search(Job::TABLE_NAME, ['filename', $$filename]);
             $all = $results->getReturn();
-            if(!empty($all)) $deleteFile = false; // file used by other jobs; cannot delete
-            if($deleteFile) $deleted = $deleteFile($filename);
-            return $deleted;
+            if(!empty($all)) $unlink = false; // file used by other jobs; cannot delete
+            if($unlink) $unlinked = $unlinkFile($filename);
+            return $unlinked;
         };
 
-        $deleted = $unlinkFile($job);
+        $deleted = $deleteFile($job);
         if(!$deleted) $message = sprintf("The job ID %u has been deleted", $job_id);
         else $message = sprintf("The job ID %u and its associated file have been deleted", $job_id);
         $this->notify('log', compact('message'));

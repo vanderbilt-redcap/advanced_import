@@ -53,30 +53,31 @@ abstract class Job implements JobInterface, JsonSerializable
      *
      * @var array
      */
-    private $guarded = ['id', 'project_id', 'user_id', 'filename', 'settings', 'type', 'created_at'];
+    static private $guarded = ['id', 'project_id', 'user_id', 'filename', 'settings', 'type', 'created_at'];
+
+    /**
+     * define the allowed keys for properties
+     *
+     * @var array
+     */
+    static protected $keys = ['id','project_id','user_id','filename','settings','processed_lines','status','type','created_at','updated_at','completed_at','error'];
 
     private $properties = [];
 
     public function __construct($params)
     {
-        // define the allowed keys for properties
-        $this->properties = [
-            'id' =>null,
-            'project_id' =>null,
-            'user_id' =>null,
-            'filename' =>null,
-            'settings' =>null,
-            'processed_lines' =>null,
-            'status' =>null,
-            'type' =>null,
-            'created_at' =>null,
-            'updated_at' =>null,
-            'completed_at' =>null,
-            'error' =>null,
-        ];
         foreach ($params as $key => $value) {
             $this->{$key} = $value;
         }
+    }
+
+    /**
+     * get list of valid keys for a Job
+     *
+     * @return array
+     */
+    public static function getKeys() {
+        return static::$keys;
     }
 
     private static function getNow()
@@ -124,7 +125,7 @@ abstract class Job implements JobInterface, JsonSerializable
             'user_id' => $user_id,
             'filename' => $filename,
             'processed_lines' => 0,
-            'settings' => json_encode($settings, JSON_PRETTY_PRINT),
+            'settings' => $settings,
             'type' => static::$type,
             'status' => Job::STATUS_READY,
             'error' => null,
@@ -173,13 +174,13 @@ abstract class Job implements JobInterface, JsonSerializable
         $params['updated_at'] = self::getNow();
         $job_id = $this->id;
         $data = array_filter($params, function($value, $key) {
-            $guarded = in_array($key, $this->guarded);
+            $guarded = in_array($key, static::$guarded);
             if($guarded) return false;
             $this->{$key} = $value;
             return true;
         }, ARRAY_FILTER_USE_BOTH);
         $db = AdvancedImport::dbExMod();
-        return $db->update(self::TABLE_NAME, $data, ['__id', $job_id]);
+        return $db->update(self::TABLE_NAME, $data, ['id', $job_id]);
 
         /* $result = AdvancedImport::db()->update(self::TABLE_NAME, $data, ['id'=>$job_id]);
         if($result==false) throw new \Exception(sprintf("Error updating job id %u", $job_id), 400);
@@ -201,7 +202,7 @@ abstract class Job implements JobInterface, JsonSerializable
 
     public function __get($name)
     {
-        if (array_key_exists($name, $this->properties)) {
+        if (in_array($name, static::$keys)) {
             return @$this->properties[$name];
         }
 
@@ -216,7 +217,7 @@ abstract class Job implements JobInterface, JsonSerializable
 
     public function __set($name, $value)
     {
-        if (!array_key_exists($name, $this->properties)) return;
+        if (!in_array($name, static::$keys)) return;
         switch ($name) {
             case 'id':
                 $this->properties['id'] = intval($value);
@@ -231,7 +232,8 @@ abstract class Job implements JobInterface, JsonSerializable
                 $this->properties['filename'] = $value;
                 break;
             case 'settings':
-                $this->properties['settings'] = json_decode($value, $assoc=true);
+                // $this->properties['settings'] = json_decode($value, $assoc=true);
+                $this->properties['settings'] = $value;
                 break;
             case 'processed_lines':
                 $this->properties['processed_lines'] = intval($value);

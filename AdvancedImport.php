@@ -11,7 +11,7 @@ use ExternalModules\ExternalModules;
 use Logging;
 use PDO;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
-use Vanderbilt\AdvancedImport\App\Helpers\ExModDatabase;
+use Vanderbilt\AdvancedImport\App\Helpers\JsonDatabase;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
@@ -335,11 +335,11 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     /**
      * get a reference to the database class
      *
-     * @return ExModDatabase
+     * @return JsonDatabase
      */
     public static function dbExMod()
     {
-        return new ExModDatabase();
+        return new JsonDatabase();
     }
 
     /**

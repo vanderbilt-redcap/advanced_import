@@ -7,7 +7,7 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
 /**
  * this class uses the external module settings table to create virtual tables.
  * suitable for storing any kind of data as JSON objects.
- * each table as an autoincrement __id key
+ * each table as an autoincrement id key
  * 
  * Structure of the settings tableBlade::component
  * `external_module_id` int(11)
@@ -16,9 +16,9 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
  * `type` varchar(12)
  * `value` mediumtext
  */
-class ExModDatabase
+class JsonDatabase
 {
-    const ID_KEY = '__id';
+    const ID_KEY = 'id';
     const TABLE_PERFIX = '__ext_mod_table_'; //followed by 'table' name
     const AUTO_INCREMENT_KEY = '__ext_mod_auto_increment_'; //followed by 'table' name
     const EXTERNAL_MODULE_SETTINGS_TABLE = 'redcap_external_module_settings';
@@ -37,18 +37,23 @@ class ExModDatabase
      * s: corresponding variable has type string
      * b: corresponding variable is a blob and will be sent in packets
      * 
-     * Example:
+     * variable names surrounded in curly braces will be translated to the JSON extract format:
+     * Example `{settings}` becomes `value`->>'$.settings'
      * 
+     * Example query:
      * $exMod_db = AdvancedImport::dbExMod();
-     * $query_string = "SELECT `value`->>'$.settings' AS `settings` FROM `jobs` WHERE `value`->>'$.__id'=? AND `status`=?";
+     * $query_string = "SELECT `{settings}` AS `settings` FROM `jobs` WHERE `{id}`=? AND `{status}`=?";
      * $result = $exMod_db->query($query_string, [2,'processing']);
      * 
      * @param string $query_string
      * @param array $params [['s','2'], ['i', 2], etc...]
-     * @return PDOStatement
+     * @return mysqli_result|false
      */
     public function query($query_string, $params=[])
     {
+        /**
+         * @var \mysqli $rc_connection
+         */
         global $rc_connection;
         // turn a param into a [type, value] format
         $normalizeParam = function($param) {
@@ -109,7 +114,7 @@ class ExModDatabase
                 $key = "`value`->>'{$jsonKey}'";
                 return $key;
             };
-            $query_string = preg_replace_callback("/(?<!FROM )(?:['`](?<fields>[^\s'`]+)['`])/", $fixKeys, $query_string);
+            $query_string = preg_replace_callback("/['`]?[{](?<fields>[^}]+)[}]['`]?/", $fixKeys, $query_string);
         };
         $removeExtraBlankSpaces = function() use(&$query_string) {
             $query_string = preg_replace("/[\s]{2,}/", ' ', $query_string);
@@ -235,7 +240,7 @@ class ExModDatabase
      */
     public function search($table_name, $criteria=[], $limit=0, $offset=0) {
         if(!empty($criteria)) {
-            if(!self::is_multidimensional_array(@$criteria[0])) $criteria = [$criteria];
+            if(!self::is_multidimensional_array($criteria)) $criteria = [$criteria];
             $whereClause = array_map(function($criteria) {
                 return self::makeStatement(...$criteria);
             }, $criteria);
@@ -321,7 +326,7 @@ class ExModDatabase
     }
 
     public function delete($table_name, $where_params=[]) {
-        if(!self::is_multidimensional_array(@$where_params[0])) $where_params = [$where_params];
+        if(!self::is_multidimensional_array($where_params)) $where_params = [$where_params];
         $whereClause = array_map(function($criteria){
             return self::makeStatement(...$criteria);
         }, $where_params);
@@ -341,7 +346,7 @@ class ExModDatabase
     /**
      * update a json object.
      * Example:
-     * $result = $this->update($tableName, ['processed_lines'=>$index, 'status'=>'processing'], ['__id', 2]);
+     * $result = $this->update($tableName, ['processed_lines'=>$index, 'status'=>'processing'], ['id', 2]);
      *
      * @param [type] $table_name
      * @param [type] $params
@@ -349,7 +354,7 @@ class ExModDatabase
      * @return void
      */
     public function update($table_name, $params, $where_params=[]) {
-        if(!self::is_multidimensional_array(@$where_params[0])) $where_params = [$where_params];
+        if(!self::is_multidimensional_array($where_params)) $where_params = [$where_params];
         $updateStatement = self::makePathValueList($params);
         $whereClause = array_map(function($criteria){
             return self::makeStatement(...$criteria);

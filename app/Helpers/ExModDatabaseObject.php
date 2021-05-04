@@ -3,7 +3,7 @@ namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use Vanderbilt\AdvancedImport\AdvancedImport;
 
-class ExModDatabaseObject
+class JsonDatabaseObject
 {
     const TABLE_PERFIX = '__ext_mod_table_'; //followed by 'table' name
     const AUTO_INCREMENT_KEY = '__ext_mod_auto_increment_'; //followed by 'table' name
