@@ -20,9 +20,20 @@ class ColumnarDatabase
     const PREFIX = '__ct_'; // (ct=columnar table) followed by 'table' name
     const EXTERNAL_MODULE_SETTINGS_TABLE = 'redcap_external_module_settings';
 
-    public function __construct()
+    /**
+     * cache tables metadata
+     *
+     * @var array
+     */
+    private $metadata = [];
+
+    /**
+     *
+     * @param AdvancedImport $advancedImport
+     */
+    public function __construct($advancedImport)
     {
-        $this->module = AdvancedImport::getInstance();
+        $this->module = $advancedImport;
     }
 
     /**
@@ -58,8 +69,11 @@ class ColumnarDatabase
      */
     public function getMetadata($tableName)
     {
-        $metadataKey = $this->getMetadataKey($tableName);
-        return $this->module->getSystemSetting($metadataKey) ?: [];
+        if(!@$this->metadata[$tableName]) {
+            $metadataKey = $this->getMetadataKey($tableName);
+            $this->metadata[$tableName] = $this->module->getSystemSetting($metadataKey) ?: [];
+        }
+        return @$this->metadata[$tableName];
     }
 
     /**
@@ -88,9 +102,8 @@ class ColumnarDatabase
      * Example `{settings}` becomes `value`->>'$.settings'
      * 
      * Example query:
-     * $exMod_db = AdvancedImport::jsonDb();
-     * $query_string = "SELECT `{settings}` AS `settings` FROM `jobs` WHERE `{id}`=? AND `{status}`=?";
-     * $result = $exMod_db->query($query_string, [2,'processing']);
+     * $query_string = ""SELECT * FROM `jobs` WHERE `status`=?"";
+     * $result = $db->query($query_string, [2,'processing']);
      * 
      * @param string $query_string
      * @param array $params [['s','2'], ['i', 2], etc...]
@@ -166,14 +179,17 @@ class ColumnarDatabase
      * @param string $tableName
      * @param string $whereStatement a WHERE statement that can also include ORDER BY, LIMIT and all other supported statements
      * @param array $params paramenters to bind to the query
-     * @return array
+     * @return \Generator
      */
     public function search($tableName, $whereStatement='', $params=[]) {
         $whereStatement = preg_replace("/[\s]*WHERE[\s]*/i", '', $whereStatement); //remove WHERE if included
         $query_string = sprintf("SELECT * FROM `%s` WHERE %s", $tableName, $whereStatement);
         $result = $this->query($query_string, $params);
         $results = [];
-        while($row = db_fetch_assoc($result)) $results[] = $row;
+        while($row = db_fetch_assoc($result)) {
+            yield $row;
+            $results[] = $row;
+        }
         return $results;
     }
 
@@ -226,17 +242,7 @@ class ColumnarDatabase
      * @return int|false
      */
     public function insert($tableName, $data) {
-        $metadata = $this->getMetadata($tableName);
-
-        // remove data that should not be saved
-        $filterData = function($data) use($metadata) {
-            $tableFields = @$metadata['fields'];
-            $filtered = array_filter($data, function($key) use($tableFields){
-                return in_array($key, $tableFields);
-            }, ARRAY_FILTER_USE_KEY);
-            return $filtered;
-        };
-        $data = $filterData($data);
+        $data = $this->filterData($tableName, $data);
         
         $module_id = $this->module->getId();
         $id = $this->getId($tableName);
@@ -301,19 +307,28 @@ class ColumnarDatabase
      */
     public function delete($tableName, $whereStatement='', $whereParams=[])
     {
+        $stopTransaction = function() {
+            db_query("ROLLBACK");
+            return false;
+        };
         db_query("START TRANSACTION");
         $primaryKey = @$this->getMetadata($tableName)['primary_key'];
-        $matches = $this->search($tableName, $whereStatement, $whereParams);
+        $generator = $this->search($tableName, $whereStatement, $whereParams);
+        iterator_to_array($generator); // collect all those results first
+        $matches = $generator->getReturn();
         $ids = array_column($matches, $primaryKey);
+        if(empty($ids)) return $stopTransaction();
 
         $moduleId = $this->module->getId();
         $realTableName = $this->getRealTableName($tableName);
+        $implodedIds = static::implodeQuote($ids, "'");
+        // NOTE LIKE '%s,%%'. the comma is to make sure to delete virtual rows fields
         $delete_query = sprintf(
-            "DELETE FROM `%s` WHERE
-            `external_module_id`=%u AND `key` LIKE '%s%%' AND `%s` IN (%s)",
-            self::EXTERNAL_MODULE_SETTINGS_TABLE, $moduleId, $realTableName, static::implodeQuote($ids, "'")
+            "DELETE FROM `%s` WHERE `external_module_id`=%u AND `key` LIKE '%s,%%' AND `type` IN (%s)",
+            self::EXTERNAL_MODULE_SETTINGS_TABLE, $moduleId, $realTableName, $implodedIds
         );
         $result = db_query($delete_query);
+        if($result==false) return $stopTransaction();
         db_query("COMMIT");
         return $result; 
     }
@@ -324,15 +339,23 @@ class ColumnarDatabase
      * $result = $this->update($tableName, ['processed_lines'=>$index, 'status'=>'processing'], ['id', 2, '=']);
      *
      * @param string $tableName
-     * @param array $params
-     * @param array $whereStatement a WHERE statement (without the WHERE )
+     * @param array $params associative array [fieldName=>value]
+     * @param array $whereStatement a WHERE statement (WHERE word can be omitted)
+     * @param array $whereParams params applied to $stmt->bind_param
      * @return void
      */
     public function update($tableName, $params, $whereStatement='', $whereParams=[]) {
+        $stopTransaction = function() {
+            db_query("ROLLBACK");
+            return false;
+        };
         db_query("START TRANSACTION");
-        $matches = $this->search($tableName, $whereStatement, $whereParams);
+        $generator = $this->search($tableName, $whereStatement, $whereParams);
+        iterator_to_array($generator); // collect all those results first
+        $matches = $generator->getReturn();
         $primaryKey = @$this->getMetadata($tableName)['primary_key'];
         $ids = array_column($matches, $primaryKey);
+        if(empty($ids)) return $stopTransaction();
 
         $moduleId = $this->module->getId();
         $getUpdateStatement = function($fieldName, $value) use($ids, $moduleId, $tableName){
@@ -345,11 +368,12 @@ class ColumnarDatabase
             );
             return $query_string;
         };
-        foreach ($params as $fieldName => $value) {
+        $data = $this->filterData($tableName, $params);
+        foreach ($data as $fieldName => $value) {
             $update_query = $getUpdateStatement($fieldName, $value);
             $result = db_query($update_query);
             // stop and exit if any update fails
-            if($result==false) return false;
+            if($result==false) return $stopTransaction();
         }
         db_query("COMMIT");
         return true;
@@ -406,6 +430,16 @@ class ColumnarDatabase
             if (is_array($value)) return true;
         }
         return false;
+    }
+
+    private function filterData($tableName, $data)
+    {
+        $metadata = $this->getMetadata($tableName);
+        $tableFields = @$metadata['fields'];
+        $filtered = array_filter($data, function($key) use($tableFields){
+            return in_array($key, $tableFields);
+        }, ARRAY_FILTER_USE_KEY);
+        return $filtered;
     }
 
     /**

@@ -88,10 +88,10 @@ abstract class Job implements JobInterface, JsonSerializable
     public function getStatus()
     {
         $query_string = sprintf(
-            "SELECT `{status}` AS `status` FROM `%s` WHERE `{id}`=?",
+            "SELECT `status` FROM `%s` WHERE `id`=?",
             self::TABLE_NAME
         );
-        $result = AdvancedImport::jsonDb()->query($query_string, [$this->id]);
+        $result = AdvancedImport::colDb()->query($query_string, [$this->id]);
         if($result==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 400);
         if($row = db_fetch_assoc($result)) {
             $this->status = $status = @$row['status']; // also update the local one
@@ -133,7 +133,7 @@ abstract class Job implements JobInterface, JsonSerializable
             'updated_at' => $created_at,
             'completed_at' => null,
         ];
-        $db = AdvancedImport::jsonDb();
+        $db = AdvancedImport::colDb();
         $id = $db->insert(Job::TABLE_NAME, $data);
 
         // $id = AdvancedImport::db()->insert(self::TABLE_NAME, $data);
@@ -179,8 +179,9 @@ abstract class Job implements JobInterface, JsonSerializable
             $this->{$key} = $value;
             return true;
         }, ARRAY_FILTER_USE_BOTH);
-        $db = AdvancedImport::jsonDb();
-        return $db->update(self::TABLE_NAME, $data, ['id', $job_id]);
+        $db = AdvancedImport::colDb();
+        
+        return $db->update(self::TABLE_NAME, $data, $where='`id`=?', [$job_id]);
 
         /* $result = AdvancedImport::db()->update(self::TABLE_NAME, $data, ['id'=>$job_id]);
         if($result==false) throw new \Exception(sprintf("Error updating job id %u", $job_id), 400);
@@ -232,8 +233,7 @@ abstract class Job implements JobInterface, JsonSerializable
                 $this->properties['filename'] = $value;
                 break;
             case 'settings':
-                // $this->properties['settings'] = json_decode($value, $assoc=true);
-                $this->properties['settings'] = $value;
+                $this->properties['settings'] = json_decode($value, $assoc=true);
                 break;
             case 'processed_lines':
                 $this->properties['processed_lines'] = intval($value);

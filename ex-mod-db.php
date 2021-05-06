@@ -8,7 +8,7 @@ $page->PrintHeaderExt();
 $root = dirname(__FILE__);
 
 
-$data = [
+/* $data = [
   ['test' => 123, 'ritest' => "allora com'è", 'status' => 'processing', 'processed_lines' => 1234],
   ['test' => 456, 'ritest' => "non so", 'status' => 'processing', 'processed_lines' => 223],
   ['test' => 678, 'ritest' => "che mi racconti", 'status' => 'completed', 'processed_lines' => 444],
@@ -66,10 +66,10 @@ $query_string = 'SELECT `value`->\'$.status\' AS `status` FROM `redcap_external_
 $stmt = $rc_connection->prepare($query_string);
 $params = ["ii", $id=1, $jobId=2];
 $stmt->bind_param(...$params);
-/* execute query */
+// execute query
 $stmt->execute();
 
-/* fetch value */
+// fetch value
 $result = $stmt->get_result();
 $rows = [];
 while($row = db_fetch_assoc($result)) {
@@ -89,7 +89,7 @@ while($row = db_fetch_assoc($result)) {
   $results[] = $row;
 }
 
-print_r([$hostname, $username, $password, $db, $port, $db_socket]);
+print_r([$hostname, $username, $password, $db, $port, $db_socket]); */
 
 /* $json = '{"test":123,"test2":"abc"}'; */
 /* 

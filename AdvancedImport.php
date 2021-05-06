@@ -10,6 +10,7 @@ use ExternalModules\AbstractExternalModule;
 use ExternalModules\ExternalModules;
 use Logging;
 use PDO;
+use Vanderbilt\AdvancedImport\App\Helpers\ColumnarDatabase;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
 use Vanderbilt\AdvancedImport\App\Helpers\JsonDatabase;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
@@ -333,6 +334,17 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     }
 
     /**
+     *
+     * @return ColumnarDatabase
+     */
+    public static function colDb()
+    {
+        $module = AdvancedImport::getInstance();
+        $db = new ColumnarDatabase($module);
+        return $db;
+    }
+
+    /**
      * get a reference to the database class
      *
      * @return JsonDatabase
@@ -465,15 +477,15 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     private function checkDbIntegrity()
     {
-        $jsonDb = self::jsonDb();
-        $checkJobsTable = function($jsonDb){
+        $db = self::colDb();
+        $checkJobsTable = function($db){
             $tableName = Job::TABLE_NAME;
-            $metadata = $jsonDb->getMetadata($tableName);
+            $metadata = $db->getMetadata($tableName);
             if(!empty($metadata)) return;
             $queue = new Queue();
             $queue->createJobsTable();
         };
-        $checkJobsTable($jsonDb);
+        $checkJobsTable($db);
     }
 
     /**

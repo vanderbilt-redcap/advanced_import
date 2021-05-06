@@ -18,7 +18,7 @@ class Queue
         $status_list = @$params['status'] ?: [];
         $project_id = @$params['project_id'] ?: 0;
         
-        $where_clause = '';
+        $where_clause = '`project_id`=?';
         $status_to_get = array_map('checkNull', $status_list);
         if(!empty($status_to_get)) $where_clause = printf(" AND `status IN (%s)`", implode(',', $status_to_get));
         $limit_clause = '';
@@ -27,9 +27,9 @@ class Queue
             $limit_clause = sprintf("LIMIT %u, %u", $start, $limit);
         }
 
-        $db = AdvancedImport::jsonDb();
+        $db = AdvancedImport::colDb();
         $query_string = sprintf(
-            "SELECT `value` FROM %s WHERE `{project_id}`=? %s %s",
+            "SELECT * FROM `%s` WHERE %s %s",
             Job::TABLE_NAME, $where_clause, $limit_clause
         );
         $criteria = [$project_id];
@@ -37,10 +37,9 @@ class Queue
         $result = $db->query($query_string, $criteria);
         $jobs = [];
         while($row = db_fetch_assoc($result)) {
-            $entry = json_decode(@$row['value'], $assoc=true);
-            $type = @$entry['type'];
+            $type = @$row['type'];
             if($type==Job::TYPE_IMPORT) {
-                $job = new ImportJob($entry);
+                $job = new ImportJob($row);
             }else {
                 throw new \Exception("Error creating a list of jobs", 1);
             }
@@ -51,8 +50,8 @@ class Queue
 
     public function countJobs($project_id)
     {
-        $db = AdvancedImport::jsonDb();
-        $query_string = sprintf('SELECT COUNT(1) as total FROM %s WHERE `{project_id}`=?', Job::TABLE_NAME);
+        $db = AdvancedImport::colDb();
+        $query_string = sprintf('SELECT COUNT(1) as `total` FROM `%s` WHERE `project_id`=?', Job::TABLE_NAME);
         $result = $db->query($query_string, [$project_id]);
         if($row = db_fetch_assoc($result)) {
             return intval($row['total']);
@@ -66,8 +65,8 @@ class Queue
      */
     public function jobsGenerator()
     {
-        $db = AdvancedImport::jsonDb();
-        $results = $db->search(Job::TABLE_NAME, ['status', Job::STATUS_READY]);
+        $db = AdvancedImport::colDb();
+        $results = $db->search(Job::TABLE_NAME, '`status`=?', [Job::STATUS_READY]);
         while($row = $results->current()) {
             $type = @$row['type'];
             if($type==Job::TYPE_IMPORT) {
@@ -82,8 +81,8 @@ class Queue
 
     public function updateJob($project_id, $job_id, $data)
     {
-        $db = AdvancedImport::jsonDb();
-        $results = $db->search(Job::TABLE_NAME, [['id', $job_id], ['project_id', $project_id]]);
+        $db = AdvancedImport::colDb();
+        $results = $db->search(Job::TABLE_NAME, '`id`=? AND `project_id`=?', [$job_id, $project_id]);
         $job = $results->current();
         if(!$job) return false;
         $filtered = [];
@@ -92,17 +91,17 @@ class Queue
             if(!array_key_exists($key, $job)) continue;
             $filtered[$key] = $value;
         }
-        $updated = $db->update(Job::TABLE_NAME, $filtered, ['id', $job_id]);
+        $updated = $db->update(Job::TABLE_NAME, $filtered, '`id`=?', [$job_id]);
         return $updated;
     }
 
     public function updateJobStatus($project_id, $job_id, $status)
     {
-        $db = AdvancedImport::jsonDb();
-        $results = $db->search(Job::TABLE_NAME, [['id', $job_id], ['project_id', $project_id]]);
+        $db = AdvancedImport::colDb();
+        $results = $db->search(Job::TABLE_NAME, '`id`=? AND `project_id`=?', [$job_id, $project_id]);
         $job = $results->current();
         if(!$job) return false;
-        $updated = $db->update(Job::TABLE_NAME, ['status'=>$status], ['id', $job_id]);
+        $updated = $db->update(Job::TABLE_NAME, ['status'=>$status], '`id`=?', [$job_id]);
         return $updated;
     }
 
@@ -119,15 +118,15 @@ class Queue
      */
     public function deleteJob($project_id, $job_id)
     {
-        $db = AdvancedImport::jsonDb();
-        $results = $db->search(Job::TABLE_NAME, [['id', $job_id], ['project_id', $project_id]]);
+        $db = AdvancedImport::colDb();
+        $results = $db->search(Job::TABLE_NAME, '`id`=? AND `project_id`=?', [$job_id, $project_id]);
         $job = $results->current();
         if(!$job) {
             $message = sprintf("The job ID %u wa s not found and cannot be deleted", $job_id);
             $this->notify('log', compact('message'));
             return false;
         };
-        $deleted = $db->delete(Job::TABLE_NAME, ['id', $job_id]);
+        $deleted = $db->delete(Job::TABLE_NAME, '`id`=?', [$job_id]);
         if(!$deleted) {
             $message = sprintf("There was ann error deleting the job ID %u", $job_id);
             $this->notify('log', compact('message'));
@@ -144,8 +143,9 @@ class Queue
             $unlink = true; // assume the file must be deleted
             $unlinked = false; //deletion state
             $filename = @$job['filename'];
-            $results = $db->search(Job::TABLE_NAME, ['filename', $$filename]);
-            $all = $results->getReturn();
+            $generator = $db->search(Job::TABLE_NAME, '`filename`=?', [$$filename]);
+            iterator_to_array($generator);
+            $all = $generator->getReturn();
             if(!empty($all)) $unlink = false; // file used by other jobs; cannot delete
             if($unlink) $unlinked = $unlinkFile($filename);
             return $unlinked;
@@ -160,8 +160,11 @@ class Queue
 
     public function createJobsTable()
     {
-        $db = AdvancedImport::jsonDb();
-        return $db->createTable(Job::TABLE_NAME, ['primary_key'=>'id']);
+        $db = AdvancedImport::colDb();
+        return $db->createTable(Job::TABLE_NAME, [
+            'primary_key'=>'id',
+            'fields' => ['type','error','status','user_id','filename','settings','created_at','project_id','updated_at','completed_at','processed_lines'],
+        ]);
     }
 
 }
