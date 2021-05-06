@@ -20,7 +20,7 @@ class ImportJob extends Job
         $importer->attach($this, "data:process_started");
         $importer->attach($this, "data:line_processed");
         $importer->attach($this, "data:completed");
-        $importer->attach($this, "data:chunk_completed");
+        // $importer->attach($this, "data:chunk_completed");
         $importer->attach($this, "data:stopped");
         try {
             $importer->processJob($this);
@@ -54,13 +54,13 @@ class ImportJob extends Job
             case 'data:completed':
                 $this->markCompleted();
                 break;
-            case 'data:chunk_completed':
+            /* case 'data:chunk_completed':
                 //set back to ready when a chunk has been completed
                 $params = [
                     'status' => self::STATUS_READY,
                 ];
                 $this->updateProperties($params);
-                break;
+                break; */
             case 'data:stopped':
                 // do nothing
                 break;

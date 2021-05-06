@@ -47,7 +47,7 @@ class Import extends BaseModel
      * process a Job
      *
      * @param ImportJob $job
-     * @return mixed
+     * @return bool
      */
     public function processJob($job)
     {
@@ -63,12 +63,10 @@ class Import extends BaseModel
         $importer = ImporterFactory::create($project, $settings, $instanceSeeker, $record_helper);
         
         $row_index = $processed_lines + 1; // start after the last processd line. when starting from 0 also skips the `fields` row
-        $max_lines = $settings->max_lines ?: self::MAX_LINES_PER_PROCESS;
 
-        $counter = 0;
         $results = [];
         $this->notify("data:process_started", []);
-        while($counter++<$max_lines && $line = $this->readFileAtLine($file_path, $row_index)) {
+        while($line = $this->readFileAtLine($file_path, $row_index)) {
             $job_status = $job->getStatus();
             if($job_status==Job::STATUS_STOPPED) {
                 $this->notify("data:stopped", []);
@@ -90,14 +88,9 @@ class Import extends BaseModel
         }
         if(!$line || empty($results)) {
             $this->notify("data:completed", []);
-            return;
+            return true;
         }
-        $results['line'] = $row_index;
-        $this->notify("data:chunk_completed", [
-            'chunk_size' => $max_lines,
-        ]);
-
-        return $results;
+        return false;
     }
 
     public function countLines($file_path)

@@ -184,6 +184,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $originalPid = $_GET['pid']; // save a reference to the original PID (if any)
         $queue = new Queue();
         $jobs_generator = $queue->jobsGenerator();
+        /** @var Job $job */
         while($job = $jobs_generator->current()) {
             $project_id = $job->project_id; 
             if(!$this->isEnabledInProject($project_id)) continue; // do not process jobs for disabled projects
