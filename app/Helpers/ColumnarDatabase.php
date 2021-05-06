@@ -21,13 +21,6 @@ class ColumnarDatabase
     const EXTERNAL_MODULE_SETTINGS_TABLE = 'redcap_external_module_settings';
 
     /**
-     * cache tables metadata
-     *
-     * @var array
-     */
-    private $metadata = [];
-
-    /**
      *
      * @param AdvancedImport $advancedImport
      */
@@ -69,11 +62,8 @@ class ColumnarDatabase
      */
     public function getMetadata($tableName)
     {
-        if(!@$this->metadata[$tableName]) {
-            $metadataKey = $this->getMetadataKey($tableName);
-            $this->metadata[$tableName] = $this->module->getSystemSetting($metadataKey) ?: [];
-        }
-        return @$this->metadata[$tableName];
+        $metadataKey = $this->getMetadataKey($tableName);
+        return $this->module->getSystemSetting($metadataKey) ?: [];
     }
 
     /**
@@ -185,12 +175,26 @@ class ColumnarDatabase
         $whereStatement = preg_replace("/[\s]*WHERE[\s]*/i", '', $whereStatement); //remove WHERE if included
         $query_string = sprintf("SELECT * FROM `%s` WHERE %s", $tableName, $whereStatement);
         $result = $this->query($query_string, $params);
-        $results = [];
         while($row = db_fetch_assoc($result)) {
             yield $row;
-            $results[] = $row;
         }
-        return $results;
+    }
+
+    /**
+     * utility method to search and return all values
+     *
+     * @param string $tableName
+     * @param string $whereStatement
+     * @param array $params
+     * @return array
+     */
+    public function getEntries($tableName, $whereStatement='', $params=[])
+    {
+        $args = func_get_args();
+        $generator = $this->search(...$args);
+        $entries = iterator_to_array($generator); // collect all those results first
+        // $entries = $generator->getReturn();
+        return $entries ?: [];
     }
 
     /**
@@ -242,7 +246,8 @@ class ColumnarDatabase
      * @return int|false
      */
     public function insert($tableName, $data) {
-        $data = $this->filterData($tableName, $data);
+        $metadata = $this->getMetadata($tableName);
+        $data = $this->filterData($metadata, $data);
         
         $module_id = $this->module->getId();
         $id = $this->getId($tableName);
@@ -284,20 +289,6 @@ class ColumnarDatabase
         return $id;
     }
 
-    private static function makeWhereStatements($criteria)
-    {
-        if(!self::is_multidimensional_array($criteria)) $where_params = [$criteria];
-        $makeSingleCriteriaStatement = function($criteria) {
-            list($field, $value, $operator) = $criteria;
-            if(is_array($value)) $value = json_encode($value);
-            if(!is_numeric($value)) $value = checkNull($value);
-            $operator = $operator ?: '=';
-            return sprintf('`%s`%s%s',$field, $operator, $value);
-        };
-        $whereStatements = array_map($makeSingleCriteriaStatement, $criteria);
-        return $whereStatements;
-    }
-
     /**
      * delete an entry 
      *
@@ -313,9 +304,7 @@ class ColumnarDatabase
         };
         db_query("START TRANSACTION");
         $primaryKey = @$this->getMetadata($tableName)['primary_key'];
-        $generator = $this->search($tableName, $whereStatement, $whereParams);
-        iterator_to_array($generator); // collect all those results first
-        $matches = $generator->getReturn();
+        $matches = $this->getEntries($tableName, $whereStatement, $whereParams);
         $ids = array_column($matches, $primaryKey);
         if(empty($ids)) return $stopTransaction();
 
@@ -350,9 +339,7 @@ class ColumnarDatabase
             return false;
         };
         db_query("START TRANSACTION");
-        $generator = $this->search($tableName, $whereStatement, $whereParams);
-        iterator_to_array($generator); // collect all those results first
-        $matches = $generator->getReturn();
+        $matches = $this->getEntries($tableName, $whereStatement, $whereParams);
         $primaryKey = @$this->getMetadata($tableName)['primary_key'];
         $ids = array_column($matches, $primaryKey);
         if(empty($ids)) return $stopTransaction();
@@ -368,7 +355,8 @@ class ColumnarDatabase
             );
             return $query_string;
         };
-        $data = $this->filterData($tableName, $params);
+        $metadata = $this->getMetadata($tableName);
+        $data = $this->filterData($metadata, $params);
         foreach ($data as $fieldName => $value) {
             $update_query = $getUpdateStatement($fieldName, $value);
             $result = db_query($update_query);
@@ -432,9 +420,8 @@ class ColumnarDatabase
         return false;
     }
 
-    private function filterData($tableName, $data)
+    private function filterData($metadata, $data)
     {
-        $metadata = $this->getMetadata($tableName);
         $tableFields = @$metadata['fields'];
         $filtered = array_filter($data, function($key) use($tableFields){
             return in_array($key, $tableFields);

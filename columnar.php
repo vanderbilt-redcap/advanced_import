@@ -29,6 +29,7 @@ function test($module) {
   $result = $db->query($query_string, ['completed']);
   while($row=db_fetch_assoc($result)) $results[] = $row;
 }
+// test($module);
 ?>
 <pre><?= print_r($results) ?></pre>
 
