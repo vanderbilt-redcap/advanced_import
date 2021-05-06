@@ -156,13 +156,18 @@ class Queue
         return $deleted;
     }
 
-    public function createJobsTable()
+    /**
+     * create (or recreate) the jobs table
+     *
+     * @return bool
+     */
+    public function createJobsTable($drop=false)
     {
         $db = AdvancedImport::colDb();
         return $db->createTable(Job::TABLE_NAME, [
             'primary_key'=>'id',
             'fields' => ['type','error','status','user_id','filename','settings','created_at','project_id','updated_at','completed_at','processed_lines'],
-        ]);
+        ], $drop);
     }
 
 }

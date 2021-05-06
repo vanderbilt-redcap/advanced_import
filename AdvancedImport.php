@@ -476,9 +476,8 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      *
      * @return void
      */
-    private function checkDbIntegrity()
+    private function checkDbIntegrity($db)
     {
-        $db = self::colDb();
         $checkJobsTable = function($db){
             $tableName = Job::TABLE_NAME;
             $metadata = $db->getMetadata($tableName);
@@ -490,6 +489,41 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     }
 
     /**
+     * extract major, minor and patch as integeres from a provided version string
+     *
+     * @param string $versionString
+     * @return array [major=>int, minor=>int, patch=>int];
+     */
+    private function getSemanticVersioning($versionString)
+    {
+        $regExp = "/(?<major>\d+)\.(?<minor>\d+)(?:\.(?<patch>\d+))?/";
+        preg_match($regExp, $versionString, $matches);
+        $versioning = [
+            'major' => intval(@$matches['major']),
+            'minor' => intval(@$matches['minor']),
+            'patch' => intval(@$matches['patch']),
+        ];
+        return $versioning;
+    }
+
+
+    /**
+     * get an integer that evaluates the "weight" of a version
+     *
+     * @param string $versionString
+     * @return int
+     */
+    private function getVersionWeight($versionString)
+    {
+        $versioning = $this->getSemanticVersioning($versionString);
+        $weight = 0;
+        $weight += intval(@$versioning['patch'])*1;
+        $weight += intval(@$versioning['minor'])*10;
+        $weight += intval(@$versioning['major'])*100;
+        return $weight;
+    }
+
+    /**
      * actions to perform when module
      *
      * @param [type] $version
@@ -497,8 +531,23 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      * @return void
      */
     public function redcap_module_system_change_version($version, $old_version)
-    {
-        $this->checkDbIntegrity();
+    {        
+        $db = self::colDb();
+        /**
+         * make sure to reset any previous job table created
+         * before the columnar database was introduced in version 1.7.0
+         */
+        $checkColumnarDbInstalled = function() use($old_version){
+            $columnarMinimunVersion = 'v1.7.0';
+            $columnarMinimumVersionWeight = $this->getVersionWeight($columnarMinimunVersion);
+            $previousVersionWeight = $this->getVersionWeight($old_version);
+            if($previousVersionWeight<$columnarMinimumVersionWeight) {
+                $queue = new Queue();
+                $queue->createJobsTable($drop=true);
+            };
+        };
+        $checkColumnarDbInstalled();
+        $this->checkDbIntegrity($db);
     }
 
     /**
