@@ -496,7 +496,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     private function getSemanticVersioning($versionString)
     {
-        $regExp = "/(?<major>\d+)\.(?<minor>\d+)(?:\.(?<patch>\d+))?/";
+        $regExp = "/(?<major>\d+)(?:\.(?<minor>\d+))?(?:\.(?<patch>\d+))?/";
         preg_match($regExp, $versionString, $matches);
         $versioning = [
             'major' => intval(@$matches['major']),
