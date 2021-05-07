@@ -456,6 +456,20 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         }
     }
 
+    public function createWorkingDirectories()
+    {
+        $dataDir = self::getDataDirectory();
+        $uploadDir = self::getUploadDirectory();
+        $dirs = [$dataDir, $uploadDir];
+        foreach ($dirs as $dir) {
+            if(!file_exists($dir)) {
+                $created = mkdir($dir, 0777, $recursive=true);
+                if(!$created) return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * create the directories
      * needed by the module
@@ -464,15 +478,11 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public function onModuleSystemEnable()
     {
-        Logging::writeToFile($this->PREFIX.'_log.txt', 'onModuleSystemEnable');
-        $dataDir = self::getDataDirectory();
-        $uploadDir = self::getUploadDirectory();
-        $dirs = [$dataDir, $uploadDir];
-        foreach ($dirs as $dir) {
-            if(!file_exists($dir)) mkdir($dir, 0777, $recursive=true);
-        }
-        $queue = new Queue();
-        $queue->createJobsTable();
+        // Logging::writeToFile($this->PREFIX.'_log.txt', 'onModuleSystemEnable');
+        $this->createWorkingDirectories();
+        // create tables
+        $db = self::colDb();
+        $this->checkDbIntegrity($db);
     }
 
     /**

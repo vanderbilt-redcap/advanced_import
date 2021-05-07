@@ -9,12 +9,15 @@ require_once __DIR__ . '/../../../redcap_connect.php';
 
 class AdvancedImportTest extends \ExternalModules\ModuleBaseTest
 {
-   function testCompareVersions(){
-      $this->assertSame(1, $this->module->compareVersions('v1.0.0', 'v1.7.0'));
-      $this->assertSame(-1,  $this->module->compareVersions('v1.7.0', 'v1.0.0'));
-      $this->assertSame(0, $this->module->compareVersions('v1.7.0', 'v1.7.0'));
-      $this->assertSame(1, $this->module->compareVersions('v1.7.0', 'v1.7.1'));
-   }
+   /* function testIsMinimumVersionForColumnarDb() {
+        $currentVersion = $this->module->VERSION;
+        $compared = $this->module->compareVersions('v1.7.0', $currentVersion);
+        $this->assertGreaterThanOrEqual(0, $compared);
+        // $this->assertSame(1, $this->module->compareVersions('v1.0.0', 'v1.7.0'));
+        // $this->assertSame(-1,  $this->module->compareVersions('v1.7.0', 'v1.0.0'));
+        // $this->assertSame(0, $this->module->compareVersions('v1.7.0', 'v1.7.0'));
+        // $this->assertSame(1, $this->module->compareVersions('v1.7.0', 'v1.7.1'));
+   } */
 
    function testCkeckJobTable() {
        $db = AdvancedImport::colDb();
@@ -30,12 +33,16 @@ class AdvancedImportTest extends \ExternalModules\ModuleBaseTest
         $generator = $db->search(Job::TABLE_NAME, '`id`=?', [1]);
         $this->assertInstanceOf(Generator::class, $generator);
     }
-
+    
     function testQueryJobCompleted() {
         $db = AdvancedImport::colDb();
         $query_string = "SELECT * FROM `jobs` WHERE `status`=?";
         $result = $db->query($query_string, ['completed']);
-        $row = db_fetch_assoc($result);
-        $this->assertArrayHasKey('processed_lines', $row);
+        $this->assertInstanceOf(\mysqli_result::class, $result);
+    }
+
+    function testWorkingDirectories() {
+        $success = $this->module->createWorkingDirectories();
+        $this->assertSame(true, $success);
     }
 }
