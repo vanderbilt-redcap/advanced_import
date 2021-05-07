@@ -16,10 +16,14 @@ use Vanderbilt\AdvancedImport\App\Helpers\JsonDatabase;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
+use Vanderbilt\AdvancedImport\App\Traits\CanCompareVersions;
 use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
 
 class AdvancedImport extends AbstractExternalModule implements Mediator
 {
+
+    use CanCompareVersions;
+
     /**
      * ID of the mnodule
      *
@@ -488,40 +492,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $checkJobsTable($db);
     }
 
-    /**
-     * extract major, minor and patch as integeres from a provided version string
-     *
-     * @param string $versionString
-     * @return array [major=>int, minor=>int, patch=>int];
-     */
-    private function getSemanticVersioning($versionString)
-    {
-        $regExp = "/(?<major>\d+)(?:\.(?<minor>\d+))?(?:\.(?<patch>\d+))?/";
-        preg_match($regExp, $versionString, $matches);
-        $versioning = [
-            'major' => intval(@$matches['major']),
-            'minor' => intval(@$matches['minor']),
-            'patch' => intval(@$matches['patch']),
-        ];
-        return $versioning;
-    }
-
-
-    /**
-     * get an integer that evaluates the "weight" of a version
-     *
-     * @param string $versionString
-     * @return int
-     */
-    private function getVersionWeight($versionString)
-    {
-        $versioning = $this->getSemanticVersioning($versionString);
-        $weight = 0;
-        $weight += intval(@$versioning['patch'])*1;
-        $weight += intval(@$versioning['minor'])*10;
-        $weight += intval(@$versioning['major'])*100;
-        return $weight;
-    }
+    
 
     /**
      * actions to perform when module
@@ -539,9 +510,8 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
          */
         $checkColumnarDbInstalled = function() use($old_version){
             $columnarMinimunVersion = 'v1.7.0';
-            $columnarMinimumVersionWeight = $this->getVersionWeight($columnarMinimunVersion);
-            $previousVersionWeight = $this->getVersionWeight($old_version);
-            if($previousVersionWeight<$columnarMinimumVersionWeight) {
+            $greaterThanMinimumVersion = $this->compareVersions($columnarMinimunVersion, $old_version);
+            if(!$greaterThanMinimumVersion) {
                 $queue = new Queue();
                 $queue->createJobsTable($drop=true);
             };
