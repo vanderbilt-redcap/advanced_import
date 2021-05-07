@@ -5,7 +5,6 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 
 // For now, the path to "redcap_connect.php" on your system must be hard coded.
-require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../../../redcap_connect.php';
 
 class AdvancedImportTest extends \ExternalModules\ModuleBaseTest
@@ -32,7 +31,7 @@ class AdvancedImportTest extends \ExternalModules\ModuleBaseTest
         $this->assertInstanceOf(Generator::class, $generator);
     }
 
-    function testQueryJob() {
+    function testQueryJobCompleted() {
         $db = AdvancedImport::colDb();
         $query_string = "SELECT * FROM `jobs` WHERE `status`=?";
         $result = $db->query($query_string, ['completed']);
