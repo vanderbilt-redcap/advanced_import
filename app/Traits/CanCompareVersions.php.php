@@ -29,18 +29,75 @@ trait CanCompareVersions {
 	 *
 	 * @param string $version_A
 	 * @param string $version_B
-	 * @return int 
+	 * @return int|bool
 	 */
-	public function compareVersions($version_A, $version_B)
+	public function compareVersions($version_A, $version_B, $operator=null)
 	{
-		$orderedVersionTypes = ['major','minor','patch'];
-		$versioningA = $this->getSemanticVersioning($version_A);
-		$versioningB = $this->getSemanticVersioning($version_B);
-		foreach ($orderedVersionTypes as $type) {
-			if(@$versioningA[$type]>@$versioningB[$type]) return -1;
-			if(@$versioningA[$type]<@$versioningB[$type]) return 1;
+		$baseCompare = function($version_A, $version_B) {
+			$orderedVersionTypes = ['major','minor','patch'];
+			$versioningA = $this->getSemanticVersioning($version_A);
+			$versioningB = $this->getSemanticVersioning($version_B);
+			foreach ($orderedVersionTypes as $type) {
+				if(@$versioningA[$type]>@$versioningB[$type]) return -1;
+				if(@$versioningA[$type]<@$versioningB[$type]) return 1;
+			}
+			return 0;
+		};
+		$operatorCompare = function($operand1, $operand2, $operator) use($baseCompare){
+			$result = $baseCompare($operand1,$operand2);
+			switch ($operator) {
+				case '<':
+				case 'lt':
+					return ($result===1);
+					break;
+				case '<=':
+				case 'le':
+					return ($result===1 || $result===0);
+					break;
+				case '>':
+				case 'gt':
+					return ($result===-1);
+					break;
+				case '>=':
+				case 'ge':
+					return ($result===-1 || $result===0);
+					break;
+				case '==':
+				case '=':
+				case 'eq':
+					return ($result===0);
+					break;
+				case '!=':
+				case '<>':
+				case 'ne':
+					return ($result!==0);
+					break;
+				default:
+					return null;
+					break;
+			}
+		};
+		
+		if(is_null($operator)) return $baseCompare($version_A, $version_B);
+		else return $operatorCompare($version_A, $version_B, $operator);
+	}
+
+	/**
+	 * apply a function to an array
+	 * and return true as soon as
+	 * the first element is true
+	 *
+	 * @param array $array
+	 * @param callable $fn
+	 * @return Boolean
+	 */
+	private static function array_any(array $array, callable $fn) {
+		foreach ($array as $value) {
+			if($fn($value)) {
+				return true;
+			}
 		}
-		return 0;
+		return false;
 	}
 
 }

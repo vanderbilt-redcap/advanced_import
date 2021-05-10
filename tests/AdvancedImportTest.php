@@ -9,15 +9,20 @@ require_once __DIR__ . '/../../../redcap_connect.php';
 
 class AdvancedImportTest extends \ExternalModules\ModuleBaseTest
 {
-   /* function testIsMinimumVersionForColumnarDb() {
-        $currentVersion = $this->module->VERSION;
-        $compared = $this->module->compareVersions('v1.7.0', $currentVersion);
-        $this->assertGreaterThanOrEqual(0, $compared);
-        // $this->assertSame(1, $this->module->compareVersions('v1.0.0', 'v1.7.0'));
-        // $this->assertSame(-1,  $this->module->compareVersions('v1.7.0', 'v1.0.0'));
-        // $this->assertSame(0, $this->module->compareVersions('v1.7.0', 'v1.7.0'));
-        // $this->assertSame(1, $this->module->compareVersions('v1.7.0', 'v1.7.1'));
-   } */
+
+    function testCreateTable() {
+        $db = AdvancedImport::colDb();
+        $db->createTable('test', ['fields'=>['first_name','last_name','email']], $drop=true);
+        $metadata = $db->getMetadata('test');
+        $this->assertArrayHasKey('primary_key', $metadata);
+    }
+
+    function testDropTable() {
+        $db = AdvancedImport::colDb();
+        $db->dropTable('test');
+        $metadata = $db->getMetadata('test');
+        $this->assertEmpty($metadata);
+    }
 
    function testCkeckJobTable() {
        $db = AdvancedImport::colDb();
@@ -34,7 +39,7 @@ class AdvancedImportTest extends \ExternalModules\ModuleBaseTest
         $this->assertInstanceOf(Generator::class, $generator);
     }
     
-    function testQueryJobCompleted() {
+    function testQueryCompletedJobs() {
         $db = AdvancedImport::colDb();
         $query_string = "SELECT * FROM `jobs` WHERE `status`=?";
         $result = $db->query($query_string, ['completed']);

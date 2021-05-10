@@ -8,6 +8,10 @@ include APP_PATH_VIEWS . 'HomeTabs.php';
 $module_path = $module->getModulePath();
 include($module_path.'header.php');
 
+$version1 = 'v1.7.0';
+$version2 = 'v1.7.1';
+$compared = $module->compareVersions($version1, $version2, '<');
+
 ?>
 
 <script src="<?=APP_PATH_JS?>vue.min.js"></script>
