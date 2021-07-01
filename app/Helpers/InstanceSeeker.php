@@ -1,6 +1,7 @@
 <?php
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
+use Logging;
 use Project;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 
@@ -126,7 +127,7 @@ class InstanceSeeker
       $subQuery = $this->getPivotRotationSubQuery($record);
 
       $query_string = sprintf(
-        "SELECT 1 FROM (
+        "SELECT `record`, `normalized_instance` FROM (
           %s
         ) AS pivot
         WHERE %s",

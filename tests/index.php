@@ -1,5 +1,5 @@
 <?php
-chdir(__DIR__);
+chdir(dirname(__DIR__));
 // echo getcwd() . "\n";
 $command = "./vendor/bin/phpunit --color --testdox tests/";
 exec ($command, $output);

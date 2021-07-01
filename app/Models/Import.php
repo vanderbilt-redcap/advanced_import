@@ -16,6 +16,18 @@ class Import extends BaseModel
     use CanReadCSV;
     use SubjectTrait;
 
+    const IMPORT_STRATEGY_APPEND = 'append';
+    const IMPORT_STRATEGY_UPDATE = 'update';
+    const IMPORT_STRATEGY_APPEND_UPDATE = 'append-update';
+    const IMPORT_STRATEGY_DELETE = 'delete';
+    const IMPORT_STRATEGY_COPY = 'copy';
+
+    /**
+     * overwrite behaviour available in REDCap::saveData
+     */
+    const OVERWRITE_BEHAVIOR_NORMAL = 'normal';
+    const OVERWRITE_BEHAVIOR_OVERWRITE = 'overwrite';
+
     const MAX_LINES_PER_PROCESS = 1000;
 
 	function __construct()

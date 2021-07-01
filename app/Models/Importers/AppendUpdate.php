@@ -1,8 +1,9 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Importers;
 
-use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
+use Vanderbilt\AdvancedImport\App\Models\Import;
 use Vanderbilt\AdvancedImport\App\Models\Response;
 
+use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
 use function Vanderbilt\AdvancedImport\App\Functional\partial;
 // use function Functional\partial_left as partial;
 
@@ -106,7 +107,7 @@ class AppendUpdate extends AbstractImporter
 			}else {
 				// check for match, but skip dynamic keys
 				$instance_number = $this->instanceSeeker->findMatches($record_id, $data,$full_match=false);
-				if(!$instance_number) {
+				if($instance_number==false) {
 					// not found; need a new instance
 					$instance_number = $this->instanceSeeker->getAutoInstanceNumber($record_id);
 				}
@@ -119,7 +120,10 @@ class AppendUpdate extends AbstractImporter
 			}
 		}
 
-		$save_response = \REDCap::saveData($project_id, 'array', $record);
+		/**
+		 * note: set OVERWRITE_BEHAVIOR_OVERWRITE or blank values will not be saved
+		 */
+		$save_response = \REDCap::saveData($project_id, 'array', $record, Import::OVERWRITE_BEHAVIOR_OVERWRITE);
 		if(empty(@$save_response['errors'])) {
 			$saved_ids = $save_response['ids'] ?: [];
 			$ids_string = implode(',', $saved_ids);

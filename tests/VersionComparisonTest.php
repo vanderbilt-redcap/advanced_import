@@ -1,7 +1,8 @@
 <?php namespace Vanderbilt\AdvancedImport\tests;
 
 // For now, the path to "redcap_connect.php" on your system must be hard coded.
-require_once __DIR__ . '/../../../redcap_connect.php';
+$root = dirname(dirname(dirname(__DIR__)));
+require_once $root . '/redcap_connect.php';
 
 class VersionComparisonTest extends \ExternalModules\ModuleBaseTest
 {
