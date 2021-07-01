@@ -1,5 +1,7 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
+use Vanderbilt\AdvancedImport\AdvancedImport;
+
 class ChunkUploader
 {
     private $upload_dir;
@@ -55,9 +57,11 @@ class ChunkUploader
         // use the unique name if availabvle as parameter, otherwise create one
         $unique_name = @$params['unique_name'] ?: $this->getUniqueName($params['name']);
         $file_path = "{$this->upload_dir}/{$unique_name}";
+        $module = AdvancedImport::getInstance();
+        $safeFilePath = $module->getSafePath($file_path, $root='/');
         
         // check sent file size against local file
-        $checkFileSize($file_path, $file_size);
+        $checkFileSize($safeFilePath, $file_size);
         
         $data_chunk = @$params['data'];
         $file_data = $this->decode_chunk($data_chunk);
@@ -66,8 +70,8 @@ class ChunkUploader
             throw new \Exception("No file data", 400);
         }
 
-        $written_bytes = file_put_contents( $file_path, $file_data, FILE_APPEND );
-        $uploaded_bytes = filesize($file_path);
+        $written_bytes = file_put_contents( $safeFilePath, $file_data, FILE_APPEND );
+        $uploaded_bytes = filesize($safeFilePath);
         return compact('written_bytes', 'uploaded_bytes', 'file_size', 'unique_name');
     }
 

@@ -131,6 +131,7 @@ class BaseController
 	{
 		http_response_code($status_code); // set the status header
 		header('Content-Type: application/json');
+		header('Content-Disposition: inline');
 		print json_encode( $response );
 		exit;
 	}
