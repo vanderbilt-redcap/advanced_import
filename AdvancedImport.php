@@ -8,7 +8,6 @@ use DateInterval;
 use DateTime;
 use ExternalModules\AbstractExternalModule;
 use ExternalModules\ExternalModules;
-use Logging;
 use PDO;
 use Vanderbilt\AdvancedImport\App\Helpers\ColumnarDatabase;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
@@ -17,7 +16,6 @@ use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
 use Vanderbilt\AdvancedImport\App\Traits\CanCompareVersions;
-use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
 
 class AdvancedImport extends AbstractExternalModule implements Mediator
 {
