@@ -25,7 +25,8 @@ class ExportController extends BaseController
             ];
 
             $model = new Export();
-            return $model->exportCSV($project_id, $event_id, $form_name, $settings);
+            $project = new Project($project_id);
+            return $model->exportCSV($project, $event_id, $form_name, $settings);
         } catch (\Exception $e) {
             return $e->getMessage();
         }

@@ -108,12 +108,12 @@ exports.default = _default;
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e25c8372-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/TargetForm.vue?vue&type=template&id=16582cda&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/TargetForm.vue?vue&type=template&id=609cf6ce&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Select a destination form.")]),_c('EventFormSelect',{model:{value:(_vm.form),callback:function ($$v) {_vm.form=$$v},expression:"form"}}),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v,"processFunction":_vm.processSettings})],2)],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/import/TargetForm.vue?vue&type=template&id=16582cda&
+// CONCATENATED MODULE: ./src/components/import/TargetForm.vue?vue&type=template&id=609cf6ce&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
 var asyncToGenerator = __webpack_require__("1da1");
@@ -184,23 +184,9 @@ var EventFormSelect = __webpack_require__("fede");
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                _context.next = 2;
-                return _this.$store.dispatch('import_settings/setStateProperty', {
-                  key: 'dynamic_keys',
-                  value: []
-                });
-
-              case 2:
-                _context.next = 4;
-                return _this.$store.dispatch('import_settings/setStateProperty', {
-                  key: 'mapping',
-                  value: {}
-                });
-
-              case 4:
                 return _context.abrupt("return", _this.$store.dispatch('import_settings/guessMapping'));
 
-              case 5:
+              case 1:
               case "end":
                 return _context.stop();
             }
@@ -1026,19 +1012,18 @@ exports.default = _default;
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e25c8372-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EventFormSelect.vue?vue&type=template&id=0607621c&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"events"}},[_vm._v("REDCap forms")]),_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.form),expression:"form"}],staticClass:"form-control",attrs:{"id":"events"},on:{"change":[function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.form=$event.target.multiple ? $$selectedVal : $$selectedVal[0]},_vm.onInput]}},_vm._l((_vm.events),function(forms,event_id){return _c('optgroup',{key:("evt-group" + event_id),attrs:{"label":_vm.getEventName(event_id)+" (Event # " + event_id + ")"}},_vm._l((forms),function(form_name){return _c('option',{key:("form-" + event_id + "-" + form_name),attrs:{"data-event-id":event_id,"data-form-name":form_name},domProps:{"value":{event_id: event_id,form_name: form_name}}},[_vm._v(_vm._s(form_name))])}),0)}),0)])}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EventFormSelect.vue?vue&type=template&id=34756a94&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.form),expression:"form"}],staticClass:"form-control",attrs:{"id":"events"},on:{"change":[function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.form=$event.target.multiple ? $$selectedVal : $$selectedVal[0]},_vm.onInput]}},_vm._l((_vm.events),function(forms,event_id){return _c('optgroup',{key:("evt-group" + event_id),attrs:{"label":_vm.getEventName(event_id)+" (Event # " + event_id + ")"}},_vm._l((forms),function(form_name){return _c('option',{key:("form-" + event_id + "-" + form_name),attrs:{"data-event-id":event_id,"data-form-name":form_name},domProps:{"value":{event_id: event_id,form_name: form_name}}},[_vm._v(_vm._s(form_name))])}),0)}),0)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/EventFormSelect.vue?vue&type=template&id=0607621c&
+// CONCATENATED MODULE: ./src/components/EventFormSelect.vue?vue&type=template&id=34756a94&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
 var objectSpread2 = __webpack_require__("5530");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EventFormSelect.vue?vue&type=script&lang=js&
 
-//
 //
 //
 //

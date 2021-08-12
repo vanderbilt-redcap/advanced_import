@@ -16,12 +16,7 @@ const module = {
     actions: {
         setState(context, params) { context.commit('SET_STATE', params) },
     },
-    getters: {
-        total: state => {
-            const {total=0} = state.metadata
-            return total
-        }
-    }
+    getters: {}
 }
 
 export default module;

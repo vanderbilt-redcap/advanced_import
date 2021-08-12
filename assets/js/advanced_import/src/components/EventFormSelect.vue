@@ -1,6 +1,5 @@
 <template>
     <div class="form-group">
-        <label for="events">REDCap forms</label>
         <select class="form-control" id="events" v-model="form" @change="onInput" >
             <optgroup v-for="(forms, event_id) in events" :key="`evt-group${event_id}`" :label="getEventName(event_id)+` (Event # ${event_id})`">
                 <option v-for="(form_name) in forms" :value="{event_id,form_name}" :key="`form-${event_id}-${form_name}`" :data-event-id="event_id" :data-form-name="form_name">{{form_name}}</option>

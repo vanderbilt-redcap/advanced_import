@@ -1,13 +1,13 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Queue;
 
-use PDO;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Traits\Observer\SubjectTrait;
 
 class Queue
 {
-
     use SubjectTrait;
+
+    const MAX_CRON_EXECUTION_TIME = '30 minutes';
 
     public function __construct() {}
 
@@ -34,9 +34,9 @@ class Queue
         );
         $criteria = [$project_id];
 
-        $result = $db->query($query_string, $criteria);
+        $query = $db->makeQuery($query_string, $criteria);
         $jobs = [];
-        while($row = db_fetch_assoc($result)) {
+        while($row = $query->fetch_assoc()) {
             $type = @$row['type'];
             if($type==Job::TYPE_IMPORT) {
                 $job = new ImportJob($row);
@@ -52,8 +52,8 @@ class Queue
     {
         $db = AdvancedImport::colDb();
         $query_string = sprintf('SELECT COUNT(1) as `total` FROM `%s` WHERE `project_id`=?', Job::TABLE_NAME);
-        $result = $db->query($query_string, [$project_id]);
-        if($row = db_fetch_assoc($result)) {
+        $query = $db->makeQuery($query_string, [$project_id]);
+        if($row = $query->fetch_assoc()) {
             return intval($row['total']);
         }
         return 0;
@@ -61,13 +61,14 @@ class Queue
 
     /**
      *
+     * @param string $status
      * @return Generator|Job[]
      */
-    public function jobsGenerator()
+    public function jobsGenerator($status=Job::STATUS_READY)
     {
         $db = AdvancedImport::colDb();
-        $results = $db->search(Job::TABLE_NAME, '`status`=?', [Job::STATUS_READY]);
-        while($row = $results->current()) {
+        $query = $db->search(Job::TABLE_NAME, '`status`=?', [$status]);
+        while($row = $query->fetch_assoc()) {
             $type = @$row['type'];
             if($type==Job::TYPE_IMPORT) {
                 $job = new ImportJob($row);
@@ -75,16 +76,15 @@ class Queue
                 throw new \Exception("Error creating a list of jobs", 1);
             }
             yield $job;
-            $results->next();
         }
     }
 
     public function updateJob($project_id, $job_id, $data)
     {
         $db = AdvancedImport::colDb();
-        $results = $db->search(Job::TABLE_NAME, '`id`=? AND `project_id`=?', [$job_id, $project_id]);
-        $job = $results->current();
-        if(!$job) return false;
+        $query = $db->search(Job::TABLE_NAME, '`id`=? AND `project_id`=?', [$job_id, $project_id]);
+        $job = $query->fetch_assoc();
+        if(empty($job)) return false;
         $filtered = [];
         // filter allowed
         foreach($data as $key=>$value) {
@@ -119,9 +119,9 @@ class Queue
     public function deleteJob($project_id, $job_id)
     {
         $db = AdvancedImport::colDb();
-        $results = $db->search(Job::TABLE_NAME, '`id`=? AND `project_id`=?', [$job_id, $project_id]);
-        $job = $results->current();
-        if(!$job) {
+        $query = $db->search(Job::TABLE_NAME, '`id`=? AND `project_id`=?', [$job_id, $project_id]);
+        $job = $query->fetch_assoc();
+        if(empty($job)) {
             $message = sprintf("The job ID %u wa s not found and cannot be deleted", $job_id);
             $this->notify('log', compact('message'));
             return false;

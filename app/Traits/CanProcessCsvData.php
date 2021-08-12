@@ -63,7 +63,10 @@ trait CanProcessCsvData
     }
 
     /**
-     * filter data from CSV which is not mapped
+     * filter data from CSV which is not mapped.
+     * since each mapping is redcapField => [CSV indexes]
+     * all indexes are merged recursively into a single array
+     * 
      * @param array $mapping
      * @param mixed $value
      * @param mixed $index
@@ -71,8 +74,11 @@ trait CanProcessCsvData
      */
     public function filterMappedColumns($mapping, $value, $index, $collection=[])
     {
-        $in_array = in_array($index, $mapping);
-        return $in_array;
+        foreach ($mapping as $redcapField => $csvIndexes) {
+            $exists = in_array($index, $csvIndexes);
+            if($exists) return true;
+        }
+        return false;
     }
 
     /**
@@ -86,6 +92,6 @@ trait CanProcessCsvData
      */
     public function assignColumnNames($mapping, $value, $index, $collection=[])
     {
-        return array_search($value, $mapping);
+        return @$mapping[$value];
     }
 }

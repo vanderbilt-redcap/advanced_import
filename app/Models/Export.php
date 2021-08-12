@@ -15,7 +15,7 @@ class Export extends BaseModel
 		parent::__construct();
     }
 
-    function exportCSV($project_id, $event_id, $form_name, $settings=[] )
+    function exportCSV($project, $event_id, $form_name, $settings=[] )
     {
         // get settings
         $delimiter = $settings['delimiter'];
@@ -25,14 +25,15 @@ class Export extends BaseModel
         if(empty($primary_key)) {
             throw new \Exception("No primary key was found.", 400);
         }
+        
         // get fields data
-        $csv_columns = $this->getProjectFormFields($project_id, $form_name);
+        $csv_columns = $this->getProjectFormFields($project, $form_name);
         // add primary key if not there already
         if(!in_array($primary_key, $csv_columns)) array_unshift($csv_columns, $primary_key);
 
         // get the CSV. Note that field names are contained in an array and extract headers is false
         $csv = $this->writeCSV([$csv_columns], $extract_headers=false, $delimiter, $enclosure);
-
+        $project_id = $project->project_id;
         if(function_exists('addBOMtoUTF8')) $csv = addBOMtoUTF8($csv);
         $this->forceDownload("{$project_id}-{$event_id}-{$form_name}.csv", $csv);
     }

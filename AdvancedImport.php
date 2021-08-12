@@ -16,6 +16,7 @@ use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 use Vanderbilt\AdvancedImport\App\Models\Mediator;
 use Vanderbilt\AdvancedImport\App\Traits\CanCompareVersions;
+use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
 
 class AdvancedImport extends AbstractExternalModule implements Mediator
 {
@@ -46,9 +47,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      * name of the SQLite database
      */
     const DB_NAME = 'advanced_import.db';
-
     const TABLES_PREFIX = 'advanced_ie_';
-    const MAX_CRON_EXECUTION_TIME = '30 minutes';
     const UPLOAD_FOLDER_NAME = 'uploads';
 
     function __construct()
@@ -176,15 +175,10 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public function processQueue()
     {
-        $getMaxExecutionTime = function() {
-            $start = new DateTime();
-            $max_execution = DateInterval::createFromDateString(self::MAX_CRON_EXECUTION_TIME);
-            $max_time = $start->add($max_execution);
-            return $max_time;
-        };
-        $max_time = $getMaxExecutionTime();
+
         $originalPid = $_GET['pid']; // save a reference to the original PID (if any)
         $queue = new Queue();
+        $max_time = $this->addIntervalToDateTime(Queue::MAX_CRON_EXECUTION_TIME);
         $jobs_generator = $queue->jobsGenerator();
         /** @var Job $job */
         while($job = $jobs_generator->current()) {
@@ -231,8 +225,8 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      * use this if enabled at project level?
      * no, I'm setting the project context every time a job is processed
      *
-     * @param [type] $cronInfo
-     * @return void
+     * @param array $cronInfo  [cron_name, cron_description, method, cron_processQueue, cron_frequency, cron_max_run_time]
+     * @return string
      */
     function cron_processQueue($cronInfo)
     {
@@ -243,6 +237,63 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         } catch (\Exception $e) {
             return sprintf("%s - error processing the jobs: %s", $cron_name, $e->getMessage());
         }
+    }
+
+    /**
+     * get a list of running jobs and check if they 
+     * stop stuck jobs and return a list of IDs
+     *
+     * @return array
+     */
+    private function stopStuckJobs() {
+        $queue = new Queue();
+        $jobs_generator = $queue->jobsGenerator(Job::STATUS_PROCESSING);
+        $maxTime = $this->addIntervalToDateTime(Queue::MAX_CRON_EXECUTION_TIME);
+        $doubleMaxTime = $this->addIntervalToDateTime(Queue::MAX_CRON_EXECUTION_TIME, $maxTime);
+        $stuckJobs = [];
+        while($job=$jobs_generator->current()) {
+            if($job->updated_at>$doubleMaxTime) {
+                $stuckJobsCounter[] = $job->id;
+                $job->setError("the job ID {$job->id} exceeded the maximum allowed execution time and has been terminated.");
+            }
+            $jobs_generator->next();
+        }
+        $stuckJobs;
+    }
+
+    /**
+     * add an interval to the current time.
+     * used, for example, to check if a queue has been running for too much time
+     *
+     * @return \DateTime
+     */
+    public function addIntervalToDateTime($dateString='30 minutes', $start=null)
+    {
+        if(!($start instanceof \DateTime)) $start = new \DateTime();
+        $start = clone $start; // create a copy so the original is not modified
+        $interval = \DateInterval::createFromDateString($dateString);
+        $datetime = $start->add($interval);
+        return $datetime;
+    }
+
+    /**
+     * sanity check for jobs
+     *
+     * @param array $cronInfo
+     * @return string
+     */
+    function cron_checkJobs($cronInfo)
+    {
+        $stuckJobs = $this->stopStuckJobs();
+        $totalStuck = count($stuckJobs);
+        $messages = ['All jobs have been checked.'];
+        if($totalStuck>=1) {
+            $ids = implode(', ', $stuckJobs);
+            $cardinality = $totalStuck==1 ? ' was' : 's were';
+            $messages[] = sprintf('%u job%s terminated because exceeded the maximum allowed process time: %s', $totalStuck, $cardinality, $ids);
+        }
+        return implode(' '.PHP_EOL, $messages);
+
     }
 
     /**
@@ -375,32 +426,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     }
 
     /**
-     * get a SleekDB Store
-     *
-     * @param string $store_name
-     * @return \SleekDB\Store
-     */
-    /* public static function dbStore($store_name)
-    {
-        $configuration = [
-            "auto_cache" => true,
-            "cache_lifetime" => null,
-            "timeout" => 120,
-            "primary_key" => "id",
-            "search" => [
-                "min_length" => 1,
-                "mode" => "or",
-                // "score_key" => null,
-                // "algorithm" => Query::SEARCH_ALGORITHM["hits"]
-            ]
-        ];
-        $db_path = self::getDatabaseDirectory();
-        self::chmod_r($db_path);
-        $store = new \SleekDB\Store($store_name, $db_path, $configuration);
-        return $store;
-    } */
-
-    /**
      * Recursively deletes a directory tree.
      *
      * @param string $folder         The directory path.
@@ -443,6 +468,9 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     {
         $data_directory = self::getDataDirectory();
         $this->deleteTree($data_directory);
+        // drop the columnar database when the module is disabled
+        $db = self::colDb();
+        $db->dropDatabase();
     }
 
     function redcap_module_system_disable($version)
@@ -505,8 +533,8 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     /**
      * actions to perform when module
      *
-     * @param [type] $version
-     * @param [type] $old_version
+     * @param string $version
+     * @param string $old_version
      * @return void
      */
     public function redcap_module_system_change_version($version, $old_version)

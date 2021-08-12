@@ -64,11 +64,41 @@ class RecordHelper
         };
         
         $form_name = $this->getFormNameForField($this->project, $field_name);
+        $metadata =  $this->getFieldMetadata($this->project, $field_name);
+        $fieldType = @$metadata['element_type'];
+        // apply transformations based on field type
+        switch ($fieldType) {
+            case 'checkbox':
+                $value = $this->visitCheckbox($field_name, $value);
+                break;
+            default:
+                break;
+        }
         $is_repeating = $this->isRepeatingForm($this->project, $event_id, $form_name);
         if($is_repeating) $addRepeatingData($form_name, $field_name, $value);
         else $addData($field_name, $value);
 
         return $record_seed;
+    }
+
+    /**
+     * modify the value if the field is a checkbox:
+     * use each value as key
+     * set 1 if the value is present or 0 if not
+     *
+     * @param string $field_name
+     * @param array $values list of values
+     * @return array
+     */
+    private function visitCheckbox($field_name, $values=[])
+    {
+        $checkboxFields = \MetaData::getCheckboxFields($this->project_id);
+        $allCheckboxValues = @$checkboxFields[$field_name];
+        $checkboxValues = [];
+        foreach ($allCheckboxValues as $checkboxKey => $checkboxValue) {
+            $checkboxValues[$checkboxKey] = in_array($checkboxKey, $values) ? 1 : 0;
+        }
+        return $checkboxValues;
     }
 
     function getAutoId($project_id)

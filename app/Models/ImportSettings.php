@@ -7,7 +7,7 @@ use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
  * @property string field_delimiter
  * @property string text_qualifier
  * @property string primary_key
- * @property array dynamic_keys
+ * @property array dynamic_fields
  * @property int field_name_row
  * @property int data_row_start
  * @property int|null data_row_end
@@ -25,7 +25,7 @@ class ImportSettings
         'field_delimiter'       => "\t",
         'text_qualifier'        => ',',
         'primary_key'           => '',
-        'dynamic_keys'          => [],
+        'dynamic_fields'          => [],
         'field_name_row'        => 0,
         'data_row_start'        => 1,
         'data_row_end'          => null,
@@ -76,7 +76,7 @@ class ImportSettings
         $mapping = (array)$this->mapping;
         $form_fields = $this->getProjectFormFields($this->project, $this->form_name);
         $mapped_fields = array_intersect($form_fields, array_keys($mapping));
-        if(!$include_dynamic) $mapped_fields = array_diff($mapped_fields, $this->dynamic_keys);
+        if(!$include_dynamic) $mapped_fields = array_diff($mapped_fields, $this->dynamic_fields);
         return $mapped_fields;
     }
 
@@ -102,6 +102,36 @@ class ImportSettings
             $settings[$key] = $value ?: self::DEFAULT_SETTINGS[$key];
         }
         return (object)$settings;
+    }
+
+    /**
+     * transform the mapping into a normalized structure:
+     * single value for anything but `checkbox` type fields
+     * from
+     * REDCap field => [CSV indexes]
+     * to
+     * REDCap field => CSV index (for any field type but checkboxes)
+     * REDCap field => [CSV indexes] (for checkboxes)
+     *
+     * @return array
+     */
+    public function getMapping()
+    {
+        $mapping = $this->mapping;
+        return $mapping;
+        /* $normalized = [];
+        foreach ($mapping as $redcapField => $csvIndexes) {
+            $fieldMetadata = $this->getFieldMetadata($this->project, $redcapField);
+            $elementType = @$fieldMetadata['element_type'];
+                if($elementType==='checkbox') {
+                    sort($csvIndexes); // sort in ascending order
+                    $normalized[$redcapField] = $csvIndexes;
+                } else {
+                    $normalized[$redcapField] = reset($csvIndexes);
+                    if(is_array($normalized[$redcapField])) throw new \Exception(" List of values are only allowed in `checkbox` type fields. The type of the field `{$redcapField}` is `$elementType`.", 400);
+                }
+        }
+        return $normalized; */
     }
 
     public function __get($name)

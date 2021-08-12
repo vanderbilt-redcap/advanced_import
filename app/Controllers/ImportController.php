@@ -37,9 +37,11 @@ class ImportController extends BaseController
             $project_id = $_GET['pid'];
             $username = defined('USERID') ? USERID : false;
             $user_id = User::getUIIDByUsername($username);
-            $file_name = @$_POST['file_name'];
-            $type = @$_POST['type'];
-            $settings = json_decode($_POST['settings'], $assoc=true);
+            $data = file_get_contents("php://input");
+            $params = json_decode($data, $assoc=true);
+            $file_name = @$params['file_name'];
+            $type = @$params['type'];
+            $settings = @$params['settings'];
             // manage only import for now
             if($type==Job::TYPE_IMPORT) {
                 $job_id = ImportJob::create($project_id, $user_id, $file_name, $settings);

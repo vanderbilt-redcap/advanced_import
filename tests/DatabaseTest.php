@@ -10,6 +10,10 @@ require_once $root . '/redcap_connect.php';
 
 class DatabaseTest extends \ExternalModules\ModuleBaseTest
 {
+    function testWorkingDirectories() {
+        $success = $this->module->createWorkingDirectories();
+        $this->assertSame(true, $success);
+    }
 
     function testCreateTable() {
         $db = AdvancedImport::colDb();
@@ -25,7 +29,7 @@ class DatabaseTest extends \ExternalModules\ModuleBaseTest
         $this->assertEmpty($metadata);
     }
 
-   function testCkeckJobTable() {
+   function testCheckJobTable() {
        $db = AdvancedImport::colDb();
        $metadata = $db->getMetadata(Job::TABLE_NAME);
        $fields = @$metadata['fields'];
@@ -36,19 +40,16 @@ class DatabaseTest extends \ExternalModules\ModuleBaseTest
 
    function testSearchJob() {
         $db = AdvancedImport::colDb();
-        $generator = $db->search(Job::TABLE_NAME, '`id`=?', [1]);
+        $query = $db->search(Job::TABLE_NAME, '`id`=?', [1]);
+        $generator = $query->getResultGenerator();
         $this->assertInstanceOf(Generator::class, $generator);
     }
     
     function testQueryCompletedJobs() {
         $db = AdvancedImport::colDb();
         $query_string = "SELECT * FROM `jobs` WHERE `status`=?";
-        $result = $db->query($query_string, ['completed']);
-        $this->assertInstanceOf(\mysqli_result::class, $result);
-    }
-
-    function testWorkingDirectories() {
-        $success = $this->module->createWorkingDirectories();
-        $this->assertSame(true, $success);
+        $query = $db->makeQuery($query_string, ['completed']);
+        $results = $query->fetch_all();
+        $this->assertIsArray($results);
     }
 }

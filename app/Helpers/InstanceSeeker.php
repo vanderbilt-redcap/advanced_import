@@ -4,6 +4,7 @@ namespace Vanderbilt\AdvancedImport\App\Helpers;
 use Logging;
 use Project;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
+use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
 
 class InstanceSeeker
 {
@@ -82,7 +83,12 @@ class InstanceSeeker
         // GROUP_CONCAT(CASE WHEN field_name = 'vitals_label' THEN value ELSE NULL END) AS vitals_label,
         $cases = [];
         foreach ($fields as $field) {
-                $cases[] = sprintf("GROUP_CONCAT(CASE WHEN `field_name` = '%s' THEN value ELSE NULL END ORDER BY `value` ASC SEPARATOR '%s') AS `%s`", $field, $unit_separator, $field);
+          /**
+           * NOTE: I use an empty separator but prepend a unit separator before and after the value; this
+           * NOTE: I use an empty separator but prepend a unit separator before and after the value; the final result will be: {us}{value}{us}{us}{value}{us}
+           * this way any value, also the first one and teh last one, will always be preceeded/followed by at least a unit separator
+           */
+          $cases[] = sprintf("GROUP_CONCAT(CASE WHEN `field_name` = '%s' THEN CONCAT('%s', value, '%s') ELSE NULL END ORDER BY `value` ASC SEPARATOR '') AS `%s`", $field, $unit_separator, $unit_separator, $field);
         }
         return implode(", \n", $cases);
       };
@@ -108,8 +114,16 @@ class InstanceSeeker
 
     public function findMatches($record, $data, $full_match=true)
     {      
-      $buildWhereClause = function($data) {
-        $wheres = array_map(function($key, $value) {
+      $buildWhereClause = function($data, $full_match=false) {
+        $wheres = array_map(function($key, $value) use($full_match) {
+          if(is_array($value) && count($value)==0) $value = null; // take care of empty arrays
+          if(is_array($value)) {
+            // sort, prepend/postpend a unit separator and join with double unit separator to match the pivot rotation query
+            sort($value);
+            $regexp = self::unit_separator().implode( self::unit_separator().self::unit_separator(), $value). self::unit_separator();
+            if($full_match) $regexp = sprintf('^%s$', $regexp); //exact match (starts and ends)
+            return sprintf("`%s` REGEXP %s", $key, checkNull($regexp));
+          };
           return sprintf("`%s`<=>%s", $key, checkNull($value));
         }, array_keys($data), $data);
         return implode(' AND ', $wheres);
@@ -125,6 +139,7 @@ class InstanceSeeker
 
       // $fields_list = DatabaseQueryHelper::getQueryList($fields);
       $subQuery = $this->getPivotRotationSubQuery($record);
+      $whereClause = $buildWhereClause($valid_data, $full_match);
 
       $query_string = sprintf(
         "SELECT `record`, `normalized_instance` FROM (
@@ -132,8 +147,10 @@ class InstanceSeeker
         ) AS pivot
         WHERE %s",
         $subQuery,
-        $buildWhereClause($valid_data)
+        $whereClause
       );
+      $cache = new FileCache('instanceseeker');
+      $cache->set('query', $query_string);
       
       $result = db_query($query_string);
       $total_matches = db_num_rows($result);

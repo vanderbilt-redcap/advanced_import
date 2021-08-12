@@ -2,10 +2,7 @@
 
 use Vanderbilt\AdvancedImport\App\Models\Import;
 use Vanderbilt\AdvancedImport\App\Models\Response;
-
-use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
-use function Vanderbilt\AdvancedImport\App\Functional\partial;
-// use function Functional\partial_left as partial;
+use Vanderbilt\AdvancedImport\App\Models\ParserFactory;
 
 /**
  * Append/Update: add new records or update existing ones
@@ -22,32 +19,24 @@ class AppendUpdate extends AbstractImporter
 	{
 		// extract settings
 		$settings = $this->settings;
-		$mapping = (array)$settings->mapping;
+		$mapping = $settings->getMapping();
 		$parsing_settings['dates_format'] = $settings->dates_format;
 		$primary_key_name = $settings->primary_key;
 
-		// create callables to process data
-		$filterMappedColumns = partial([$this, 'filterMappedColumns'], $mapping); // filter data from CSV which is not mapped
-		$assignColumnNames = partial([$this, 'assignColumnNames'], $mapping); // map the csv file using the columns names from the mapping
-		$parse = partial([$this, 'applyParsers'], $this->project, $parsing_settings); // get parse function
-		$validate = partial([$this, 'applyValidations'], $this->project); // get validate function (better leaving this to REDCap::save)
-		/**
-		 * perform operations on the data_to_process: parsing, validation, mapping
-		 */
-		$processData = function($data_to_process) use($filterMappedColumns, $assignColumnNames, $parse, $validate) {
-			$boxed_data = ArrayBox::from($data_to_process);
-							$boxed_data = $boxed_data->filter($filterMappedColumns);
-							$boxed_data = $boxed_data->mapKeys($assignColumnNames);
-							$boxed_data = $boxed_data->map($parse); // transform dates, numbers...
-							//->map($validate); // validate (let REDCap do the validation on save)
-			return $boxed_data();
-		};
+		// apply parsers to the data to normalize it
+		$parsersFactory = new ParserFactory($this->project, $parsing_settings);
 
-		$data = $processData($data);
+		$normalizedData = [];
+		foreach ($mapping as $redcapField => $csvIndexes) {
+			$value = $this->getValue($data, $redcapField, $csvIndexes); // extract value
+			$normalizedData[$redcapField] = $this->applyParsers($parsersFactory, $redcapField, $value); // apply parsers
+		}
+
+		// $data = $processData($data);
 		// check primary key
-		$primary_key_value = @$data[$primary_key_name];
+		$primary_key_value = @$normalizedData[$primary_key_name];
 		if(!$primary_key_value) throw new \Exception("No primary key found.", 400);
-		return $data;
+		return $normalizedData;
 	}
 
 	/**
@@ -64,9 +53,8 @@ class AppendUpdate extends AbstractImporter
 
 		// extract settings
 		$settings = $this->settings;
-		$event_id = $settings->event_id;
-		$form_name = $settings->form_name;
-		$mapping = (array)$settings->mapping;
+
+
 		$parsing_settings['dates_format'] = $settings->dates_format;
 		$primary_key_name = $settings->primary_key;
 		list($project_primary_key, $project_secondary_key) = $this->record_helper->getPrimaryKeys();
@@ -78,7 +66,7 @@ class AppendUpdate extends AbstractImporter
 			$this->log($message, compact('project_id','line'));
 			return Response::ERROR;
 		}
-			// check primary key
+		// check primary key
 		$primary_key_value = @$data[$primary_key_name];
 	
 		if($primary_key_name==$project_primary_key) {
@@ -88,6 +76,7 @@ class AppendUpdate extends AbstractImporter
 			//generate record_id
 			$record_id = $this->record_helper->getRecordId($primary_key_name, $primary_key_value);
 		}
+		// check for new record
 		if($record_id==false) {
 			$record_id = $this->record_helper->getAutoId($project_id);
 			//create new record

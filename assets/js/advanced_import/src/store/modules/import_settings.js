@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// import Mapping from '@/libs/Mapping'
 
 const initialState = {
     // import options
@@ -24,8 +24,8 @@ const initialState = {
     event_id: null,
     form_name: null,
     primary_key: '',
-    dynamic_keys: [], // keys skipped when determining uniqueness of a row
-    mapping: {},
+    dynamic_fields: [],
+    mapping: {}, // csv_index to REDCap field
 }
 
 const module = {
@@ -37,53 +37,98 @@ const module = {
                 if(key in initialState) state[key] = value
             }
         },
-        SET_STATE_PROPERTY: (state, {key, value}) => {
-            if(key in initialState) state[key] = value
-        },
-        SET_MAPPING_PROPERTY: (state, {target, source}) => {
-            if(source==='' && target in state.mapping) Vue.delete(state.mapping, target)
-            else Vue.set(state.mapping, target, source)
-        },
+        SET_STATE_PROPERTY: (state, {key, value}) => { if(key in initialState) state[key] = value },
+        SET_MAPPING: (state, mapping) => state.mapping = mapping,
+        // SET_MAPPING_LIST: (state, list) => state.mappingList = list,
     },
     actions: {
         reset(context) { context.commit('SET_STATE', initialState) },
         setState(context, params) { context.commit('SET_STATE', params) },
         setStateProperty(context, {key, value}) { context.commit('SET_STATE_PROPERTY', {key, value}) },
-        setMapping(context, {target, source}) { context.commit('SET_MAPPING_PROPERTY', {target, source}) },
-        async guessMapping(context) {
-            const {state, dispatch, rootGetters, rootState} = context
-            const {form_name} = state
+        /* setMappingList(context) {
+            const { form_name } = context.state
+            const fields = context.rootGetters['settings/form_fields'](form_name)
+            const list = fields.map(properties => {
+                const {field_name: field, form_name: form, element_type:type, element_label: label} = properties
+                return new Mapping({field, form, type, label })
+            })
+            context.commit('SET_MAPPING_LIST', list)
+        }, */
+        /**
+         * attach/detach a CSV field to a REDCap field.
+         * 
+         * @param {object} context 
+         * @param {*} params 
+         * @returns 
+         */
+         toggleCsvField({state, commit}, {fieldName, csvIndex, checked=true}) {
+            const mapping = {...state.mapping}
+            if(!(fieldName in mapping)) mapping[fieldName] = [] // make sure it is an array
+            const fieldMapping = mapping[fieldName] // list of CSV columns in the mapping of a specific
+            const mappingindex = fieldMapping.indexOf(csvIndex) // index of te CSV column in the REDCap field mapping list
+            if(checked && mappingindex<0) {
+                mapping[fieldName].push(csvIndex)
+            }
+            else if(!checked && mappingindex>=0) {
+                mapping[fieldName].splice(mappingindex, 1)
+            }
+            // remove redcap fields if no CSV field is assigned
+            if(mapping[fieldName].length<1) delete mapping[fieldName]
+            return commit('SET_MAPPING', mapping)
+        },
+        toggleDynamicField(context, {field, checked}) {
+            const dynamicFields = [...context.state.dynamic_fields]
+            const index = dynamicFields.indexOf(field)
+            if(checked && index<0) dynamicFields.push(field)
+            if(!checked && index>=0) dynamicFields.splice(index, 1)
+            context.commit('SET_STATE_PROPERTY', {key: 'dynamic_fields', value: dynamicFields})
+        },
+        /**
+         * guess the mapping matching the names of the CSV
+         * fields and the REDCap fields
+         * 
+         * @param {object} context 
+         * @returns 
+         */
+        guessMapping(context) {
+            const {rootState, rootGetters } = context
             const {fields:csv_fields} = rootState.csv_data
+
+            const { form_name } = context.state
             const fields = rootGetters['settings/form_fields'](form_name)
-            fields.forEach(async field => {
-                let target = field.field_name
-                if(!target) return
-                let index = csv_fields.findIndex(csv_field => {
-                    let found = csv_field.toUpperCase() === target.toUpperCase()
+            fields.forEach( field => {
+                const {field_name:fieldName} = field
+                let csvIndex = csv_fields.findIndex(csv_field => {
+                    let found = csv_field.toUpperCase() === field.field_name.toUpperCase()
                     return found
                 })
-                if(index>=0) {
-                    // let source = columns[index]
-                    await dispatch('setMapping', {target, source:index})
-                }
+                if(csvIndex>=0) context.dispatch('toggleCsvField', {csvIndex, fieldName})
             })
-            return state.mapping
+            return fields
         },
         async setPrimaryKey(context, primary_key) {
             context.commit('SET_STATE_PROPERTY', {key:'primary_key', value:primary_key})
         },
-        async guessPrimaryKeysMapping(context) {
-            const {dispatch, rootState} = context
-            const {columns} = rootState.csv_data
-            const {primary_keys=[]} = rootState.settings
-            primary_keys.forEach( async target => {
-                let index = columns.indexOf(target)
-                if(index>=0) {
-                    await dispatch('setMapping', {target, source:index})
-                }
-            })
-        },
     },
+    getters: {
+        mappedCsvFields: state => redcap_field => {
+            const mapping = {...state.mapping}
+            let csvIndexes = mapping[redcap_field]
+            if(!Array.isArray(csvIndexes)) csvIndexes = []
+            return csvIndexes
+        },
+        /**
+         * keys skipped when determining uniqueness of a row
+         */
+         mappedDynamicFields: state => {
+            const mapping = {...state.mapping}
+            const dynamicFields = [...state.dynamic_fields].filter(fieldName => {
+                let csvIndexes = mapping[fieldName] ?? []
+                return (Array.isArray(csvIndexes) && csvIndexes.length>0)
+            })
+            return dynamicFields
+        },
+    }
 }
 
 export default module;

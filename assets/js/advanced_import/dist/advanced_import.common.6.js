@@ -362,12 +362,12 @@ exports.default = _default;
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e25c8372-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/SelectFile.vue?vue&type=template&id=041829ff&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/SelectFile.vue?vue&type=template&id=0dbcece2&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('div',{staticClass:"form-group"},[_c('p',[_vm._v("Select a file.")]),_c('p',[_vm._v("The wizard will parse it and:")]),_vm._m(0),_c('b-form-file',{ref:"file",attrs:{"id":"file","DISABLED-state":"Boolean(files)","placeholder":"Choose a file or drop it here...","drop-placeholder":"Drop file here...","accept":_vm.accept},model:{value:(_vm.files),callback:function ($$v) {_vm.files=$$v},expression:"files"}})],1),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)])}
 var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('ul',[_c('li',[_vm._v("check if the content is valid")]),_c('li',[_vm._v("guess the field delimiter")]),_c('li',[_vm._v("extract the column names from the first row of the file")])])}]
 
 
-// CONCATENATED MODULE: ./src/components/import/SelectFile.vue?vue&type=template&id=041829ff&
+// CONCATENATED MODULE: ./src/components/import/SelectFile.vue?vue&type=template&id=0dbcece2&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
 var asyncToGenerator = __webpack_require__("1da1");

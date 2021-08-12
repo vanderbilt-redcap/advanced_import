@@ -45,7 +45,7 @@ class Logs extends BaseModel
             implode(',',$fields)
         );
 		if($limit>0) $query_string .= " LIMIT {$start}, {$limit}";
-		$result = $this->module->queryLogs($query_string);
+		$result = $this->module->queryLogs($query_string, $params=[]);
 		$logs = [];
 		while($row = db_fetch_object($result)){
 			$logs[] = $row;
@@ -55,8 +55,8 @@ class Logs extends BaseModel
 
     public function getTotal()
     {
-        $query_string = "SELECT COUNT(*) AS total";
-        $result = $this->module->queryLogs($query_string);
+        $query_string = "SELECT COUNT(1) AS total";
+        $result = $this->module->queryLogs($query_string, $params=[]);
         if($row = db_fetch_object($result)){
             return $row->total;
         }
@@ -85,11 +85,8 @@ class Logs extends BaseModel
             $message = "Error deleting logs from the database";
             $this->notify('log', compact('message'));
             throw new \Exception($message, 1);
-            
         }
-        if($row = db_fetch_object($result)){
-            return $row;
-        }
+        return true;
     }
 
 

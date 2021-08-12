@@ -53,10 +53,11 @@ export default {
          * @param {object} settings 
          */
         enqueue(context, file_name, settings) {
-            const form_data = new FormData()
-            form_data.append('file_name', file_name)
-            form_data.append('type', 'import')
-            form_data.append('settings', JSON.stringify (settings))
+            const form_data = {
+                file_name: file_name,
+                type: 'import',
+                settings: settings,
+            }
 
             var params = {
                 route: `enqueue`,

@@ -7,24 +7,18 @@
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"e25c8372-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/SetPrimaryKey.vue?vue&type=template&id=62b17f4c&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Please select the record identifier field and map it to a column in the CSV file")]),_c('table',{staticClass:"table table-striped table-bordered"},[_vm._m(0),_c('tbody',[_c('tr',[_c('td',[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.primary_key),expression:"primary_key"}],staticClass:"form-control",on:{"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.primary_key=$event.target.multiple ? $$selectedVal : $$selectedVal[0]}}},[_c('option',{attrs:{"value":"","disabled":""}},[_vm._v("Select...")]),_vm._l((_vm.primary_keys),function(primary_key,index){return _c('option',{key:index,staticClass:"form-control"},[_vm._v(_vm._s(primary_key))])})],2)]),_c('td',[_c('select',{staticClass:"form-control",attrs:{"disabled":!_vm.primary_key},domProps:{"value":_vm.mapping[_vm.primary_key]},on:{"change":function($event){_vm.onInput(_vm.primary_key)($event)}}},[_c('option',{attrs:{"value":"","disabled":""}},[_vm._v("Select...")]),_vm._l((_vm.csv_fields),function(csv_field,index){return _c('option',{key:index,domProps:{"value":index}},[_vm._v(_vm._s(csv_field))])})],2)])])])]),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)])}
-var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('thead',[_c('tr',[_c('th',[_vm._v("Record Identifier (REDCap)")]),_c('th',[_vm._v("Source Field (CSV file)")])])])}]
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/SetPrimaryKey.vue?vue&type=template&id=38faa7b1&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Please select the record identifier in REDCap")]),_c('b-form-group',{attrs:{"label":""}},_vm._l((_vm.primary_keys),function(_primary_key,index){return _c('b-form-radio',{key:index,attrs:{"value":_primary_key},model:{value:(_vm.primary_key),callback:function ($$v) {_vm.primary_key=$$v},expression:"primary_key"}},[_vm._v(_vm._s(_primary_key))])}),1),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)],1)}
+var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/import/SetPrimaryKey.vue?vue&type=template&id=62b17f4c&
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
-var defineProperty = __webpack_require__("ade3");
+// CONCATENATED MODULE: ./src/components/import/SetPrimaryKey.vue?vue&type=template&id=38faa7b1&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
 var asyncToGenerator = __webpack_require__("1da1");
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
 var objectSpread2 = __webpack_require__("5530");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
-var es_number_constructor = __webpack_require__("a9e3");
 
 // EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
 var runtime = __webpack_require__("96cf");
@@ -39,27 +33,6 @@ var vuex_esm = __webpack_require__("2f62");
 
 
 
-
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -98,97 +71,32 @@ var vuex_esm = __webpack_require__("2f62");
       set: function set(value) {
         var _this = this;
 
-        return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-          var updatePrimaryKeyMapping;
-          return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+          return regeneratorRuntime.wrap(function _callee$(_context) {
             while (1) {
-              switch (_context2.prev = _context2.next) {
+              switch (_context.prev = _context.next) {
                 case 0:
-                  updatePrimaryKeyMapping = /*#__PURE__*/function () {
-                    var _ref = Object(asyncToGenerator["a" /* default */])( /*#__PURE__*/regeneratorRuntime.mark(function _callee(primary_key) {
-                      var current_primary_key, mapping, previous_source;
-                      return regeneratorRuntime.wrap(function _callee$(_context) {
-                        while (1) {
-                          switch (_context.prev = _context.next) {
-                            case 0:
-                              current_primary_key = _this.$store.state.import_settings.primary_key;
-                              mapping = Object(objectSpread2["a" /* default */])({}, _this.mapping);
-
-                              if (!(current_primary_key in mapping)) {
-                                _context.next = 8;
-                                break;
-                              }
-
-                              previous_source = mapping[current_primary_key];
-                              _context.next = 6;
-                              return _this.$store.dispatch('import_settings/setMapping', {
-                                target: current_primary_key,
-                                source: ''
-                              });
-
-                            case 6:
-                              _context.next = 8;
-                              return _this.$store.dispatch('import_settings/setMapping', {
-                                target: primary_key,
-                                source: previous_source
-                              });
-
-                            case 8:
-                            case "end":
-                              return _context.stop();
-                          }
-                        }
-                      }, _callee);
-                    }));
-
-                    return function updatePrimaryKeyMapping(_x) {
-                      return _ref.apply(this, arguments);
-                    };
-                  }();
-
-                  _context2.next = 3;
-                  return updatePrimaryKeyMapping(value);
-
-                case 3:
                   _this.$store.dispatch('import_settings/setPrimaryKey', value);
 
-                case 4:
+                case 1:
                 case "end":
-                  return _context2.stop();
+                  return _context.stop();
               }
             }
-          }, _callee2);
+          }, _callee);
         }))();
       }
     }
   }),
-  methods: {
-    onInput: function onInput(field_name) {
-      var _this2 = this;
-
-      return function (event) {
-        var value = Number(event.target.value);
-
-        if (!field_name || isNaN(value)) {
-          console.log('error mapping the primary key');
-          return;
-        }
-
-        _this2.$store.dispatch('import_settings/setMapping', {
-          target: field_name,
-          source: value
-        });
-      };
-    }
+  created: function created() {
+    if (Array.isArray(this.primary_keys) && this.primary_keys.length == 1) this.primary_key = this.primary_keys[0];
   },
+  methods: {},
   validations: function validations() {
     return {
       primary_key: {
         required: validators["required"]
-      },
-      mapping: Object(defineProperty["a" /* default */])({}, this.primary_key, {
-        required: validators["required"]
-      })
+      }
     };
   }
 });

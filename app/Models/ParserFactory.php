@@ -1,10 +1,8 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
-use Vanderbilt\AdvancedImport\App\Helpers\ArrayBox;
 use Vanderbilt\AdvancedImport\App\Models\Parser\AbstractParser;
 use Vanderbilt\AdvancedImport\App\Models\Parser\CheckBoxParser;
 use Vanderbilt\AdvancedImport\App\Models\Parser\DateTimeParser;
-use Vanderbilt\AdvancedImport\App\Models\Parser\PhoneParser;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
 use Vanderbilt\AdvancedImport\App\Models\Validator\DateTimeValidator;
 
@@ -63,9 +61,9 @@ class ParserFactory
         // check type
         $checkElementType = function($element_type) use(&$parsers){
             switch ($element_type) {
-                case 'checkbox':
+                /* case 'checkbox':
                     $parsers[] = new CheckBoxParser();
-                    break;
+                    break; */
                 default:
                     # code...
                     break;
@@ -82,47 +80,18 @@ class ParserFactory
     
                 switch ($validation_type) {
                     case 'phone':
-                        $parsers[] = new PhoneParser();
+                        // $parsers[] = new PhoneParser();
                         break;
                     default:
                     break;
                 }
             }
         };
-        $checkElementType($element_type);
+        // $checkElementType($element_type); // type check is not being used
         $checkValidationType($validation_type);
 
         return $parsers;
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param int $project_id
-     * @return true|array array of errors if not valid
-     */
-    function getParsingErrors($data)
-    {   
-        $getParsingErrors = function($redcap_key, &$value) {
-            $errors = [];
-            $parsers = $this->create($redcap_key);
-            foreach ($parsers as $parser) {
-                try {
-                    $parser->parse($value);
-                } catch (\Exception $e) {
-                    $errors[] = $e->getMessage();
-                }
-            }
-            if(empty($errors)) return false;
-            return $errors;
-        };
 
-        $errors = [];
-        foreach ($data as $key => $value) {
-            if($key_errors = $getParsingErrors($key, $value)) $errors[$key] = $key_errors;
-        }
-
-        if(empty($errors)) return false;
-        return $errors;
-    }
 }

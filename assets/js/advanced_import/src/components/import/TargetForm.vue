@@ -34,8 +34,8 @@ export default {
     methods: {
         // this function is processed befo switching to the next tab in the import wizard
         async processSettings() {
-            await this.$store.dispatch('import_settings/setStateProperty', {key: 'dynamic_keys', value:[]}) // reset the dynamic keys
-            await this.$store.dispatch('import_settings/setStateProperty',{key:'mapping', value: {}}) // reset the mappimg before guessing
+            // await this.$store.dispatch('import_settings/setStateProperty', {key: 'dynamic_keys', value:[]}) // reset the dynamic keys
+            // await this.$store.dispatch('import_settings/setStateProperty',{key:'mapping', value: {}}) // reset the mappimg before guessing
             return this.$store.dispatch('import_settings/guessMapping')
         },
     },

@@ -11,7 +11,7 @@
             <tbody>
                 <tr v-for="(value, key) in settings" :key="key">
                     <td>{{key}}</td>
-                    <td>{{value}}</td>
+                    <td><pre>{{value}}</pre></td>
                 </tr>
             </tbody>
         </table>
@@ -93,6 +93,7 @@ export default {
             form_name: state => state.import_settings.form_name,
             import_settings: state => state.import_settings,
         }),
+        dynamic_fields() { return this.$store.getters['import_settings/mappedDynamicFields'] },
         settings() {
             const {name:file_name=''} = this.files || {}
             const import_settings = {...this.import_settings}
@@ -105,7 +106,7 @@ export default {
                 'dates format': import_settings.dates_format,
                 'import mode': import_settings.import_mode,
                 'primary key': import_settings.primary_key,
-                'dynamic keys': import_settings.dynamic_keys,
+                'dynamic fields': this.dynamic_fields,
                 'mapping': import_settings.mapping,
             }
             return settings
@@ -168,6 +169,7 @@ export default {
 
             try {
                 const settings = {...this.import_settings}
+                settings.dynamic_fields = this.dynamic_fields // only gey dynamic fields that are actually mapped
                 const response = await this.$API.dispatch('importData/enqueue',file_name, settings)
                 const {data} = response
                 const message = `Import process created (ID ${data['job_id']}). Please check your logs.`
