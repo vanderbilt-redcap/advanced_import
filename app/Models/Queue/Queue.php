@@ -34,7 +34,7 @@ class Queue
         );
         $criteria = [$project_id];
 
-        $query = $db->makeQuery($query_string, $criteria);
+        $query = $db->runQuery($query_string, $criteria);
         $jobs = [];
         while($row = $query->fetch_assoc()) {
             $type = @$row['type'];
@@ -52,8 +52,9 @@ class Queue
     {
         $db = AdvancedImport::colDb();
         $query_string = sprintf('SELECT COUNT(1) as `total` FROM `%s` WHERE `project_id`=?', Job::TABLE_NAME);
-        $query = $db->makeQuery($query_string, [$project_id]);
+        $query = $db->runQuery($query_string, [$project_id]);
         if($row = $query->fetch_assoc()) {
+            // $query->closeStatement();
             return intval($row['total']);
         }
         return 0;
@@ -79,6 +80,23 @@ class Queue
         }
     }
 
+    public function getJobsByStatus($status=Job::STATUS_READY)
+    {
+        $db = AdvancedImport::colDb();
+        $result = $db->search(Job::TABLE_NAME, '`status`=?', [$status]);
+        $jobs = [];
+        while($row = $result->fetch_assoc()) {
+            $type = @$row['type'];
+            if($type==Job::TYPE_IMPORT) {
+                $jobs[] = new ImportJob($row);
+            }else {
+                throw new \Exception("Error creating a list of jobs", 1);
+            }
+        }
+        return $jobs;
+    }
+
+
     public function updateJob($project_id, $job_id, $data)
     {
         $db = AdvancedImport::colDb();
@@ -99,7 +117,7 @@ class Queue
     {
         $db = AdvancedImport::colDb();
         $results = $db->search(Job::TABLE_NAME, '`id`=? AND `project_id`=?', [$job_id, $project_id]);
-        $job = $results->current();
+        $job = $results->fetch_assoc();
         if(!$job) return false;
         $updated = $db->update(Job::TABLE_NAME, ['status'=>$status], '`id`=?', [$job_id]);
         return $updated;

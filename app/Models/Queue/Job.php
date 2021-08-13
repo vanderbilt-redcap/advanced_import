@@ -91,7 +91,7 @@ abstract class Job implements JobInterface, JsonSerializable
             "SELECT `status` FROM `%s` WHERE `id`=?",
             self::TABLE_NAME
         );
-        $query = AdvancedImport::colDb()->makeQuery($query_string, [$this->id]);
+        $query = AdvancedImport::colDb()->runQuery($query_string, [$this->id]);
         // if($query==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 400);
         if($row = $query->fetch_assoc()) {
             $this->status = $status = @$row['status']; // also update the local one

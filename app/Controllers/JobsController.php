@@ -113,10 +113,11 @@ class JobsController extends BaseController
     {
         try {
             $project_id = @$_GET['pid'];
-            $data = json_decode(@$_POST['data'], $assoc=true);
+            $data = file_get_contents("php://input");
+            $params = json_decode(@$data, $assoc=true);
             $queue = new Queue();
             $response = [];
-            $response = $queue->updateJob($project_id, $id, $data);
+            $response = $queue->updateJob($project_id, $id, $params);
             $this->printJSON($response, $code=200);
         } catch (\Throwable $th) {
             $message = $th->getMessage();

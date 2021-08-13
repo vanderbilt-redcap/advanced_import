@@ -2,9 +2,8 @@
 namespace Vanderbilt\AdvancedImport\App\Helpers
 {
 
-
-
-use Vanderbilt\AdvancedImport\AdvancedImport;
+    use mysqli;
+    use Vanderbilt\AdvancedImport\AdvancedImport;
 
     /**
      * this class uses the external module settings table to implement a columnar table.
@@ -51,6 +50,9 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
         public function getConnection()
         {
             global $rc_connection;
+            /* if(count($rc_connection->error_list)) {
+                $rc_connection->close();
+            } */
             return $rc_connection;
         }
 
@@ -80,6 +82,24 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
             return $this->module->getSystemSetting($metadataKey) ?: [];
         }
 
+        public function getMetadataALT($tableName)
+        {
+            $metadataKey = $this->getMetadataKey($tableName);
+            $moduleId = $this->module->getId();
+            $query_string = sprintf(
+                'SELECT `value` FROM `redcap_external_module_settings`
+                WHERE `external_module_id`=%u AND `key`=%s',
+                $moduleId, checkNull($metadataKey)
+            );
+            $result = db_query($query_string);
+            if($row = db_fetch_assoc($result)) {
+                $value = @$row['value'];
+                $metadata = json_decode($value, true);
+                return $metadata;
+            }
+            return [];
+        }
+
         /**
          * setter fot the metadata of a virtual table
          *
@@ -107,13 +127,13 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
          * 
          * Example query:
          * $query_string = ""SELECT * FROM `jobs` WHERE `status`=?"";
-         * $query = $db->makeQuery($query_string, [2,'processing']);
+         * $query = $db->runQuery($query_string, [2,'processing']);
          * 
          * @param string $query_string
          * @param array $params [['s','2'], ['i', 2], etc...]
-         * @return Query
+         * @return QueryResult
          */
-        public function makeQuery($query_string, $params=[])
+        public function runQuery($query_string, $params=[])
         {   
             /**
              * remove the provided from and adjust using the external modules setting table
@@ -134,7 +154,7 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
             };
             $connection = $this->getConnection();
             $normalized_query = $normalizeQuery($query_string);
-            $query = new Query($normalized_query, $params, $connection);
+            $query = new QueryResult($normalized_query, $params, $connection);
         
             return $query;
         }
@@ -176,12 +196,12 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
          * @param string $tableName
          * @param string $whereStatement a WHERE statement that can also include ORDER BY, LIMIT and all other supported statements
          * @param array $params paramenters to bind to the query
-         * @return \Query
+         * @return QueryResult
          */
         public function search($tableName, $whereStatement='', $params=[]) {
             $whereStatement = preg_replace("/[\s]*WHERE[\s]*/i", '', $whereStatement); //remove WHERE if included
             $query_string = sprintf("SELECT * FROM `%s` WHERE %s", $tableName, $whereStatement);
-            return $this->makeQuery($query_string, $params);
+            return $this->runQuery($query_string, $params);
         }
 
         /**
@@ -195,10 +215,9 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
         public function getEntries($tableName, $whereStatement='', $params=[])
         {
             $args = func_get_args();
-            $query = $this->search(...$args);
+            $result = $this->search(...$args);
             // $entries = iterator_to_array($generator); // collect all those results first
-            $entries = [];
-            while($row = $query->fetch_assoc()) $entries[] = $row;
+            $entries = $result->fetch_all();
             return $entries;
         }
 
@@ -473,19 +492,29 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
      * and provide an alternative to $stmt->get_result()
      * where the mysqlind driver is not available
      */
-    class Query
+    class QueryResult
     {
         private $stmt;
 
         /**
-         * results generator
+         * results
          *
-         * @var Generator
+         * @var Array
          */
-        private $generator;
+        private $row = [];
+        private $connection;
 
-        public function __construct($query, $params, $connection=null)
+        /**
+         * Undocumented function
+         *
+         * @param string $query
+         * @param array $params
+         * @param mysqli $connection
+         */
+        public function __construct($query, $params, $connection)
         {
+            $this->connection = $connection;
+
             $this->stmt = $connection->prepare($query);
             if(!$this->stmt) {
                 $error = print_r(db_error(), true);
@@ -494,6 +523,18 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
             $normalizedParams = $this->normalizeParams($params);
             // bind params
             $this->stmt->bind_param(...$normalizedParams);
+            // and bind results
+            $this->bindResults();
+        }
+
+        private function free_all_results(mysqli $dbCon)
+        {
+            do {
+                if ($res = $dbCon->store_result()) {
+                    $res->fetch_all(MYSQLI_ASSOC);
+                    $res->free();
+                }
+            } while ($dbCon->more_results() && $dbCon->next_result());
         }
 
         /**
@@ -508,25 +549,27 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
 
         /**
          * helper function as alternative to $stmt->get_result()
-         * where the mysqlind driver is not available
+         * where the mysqlind driver is not available.
+         * here the result metadata is used to bind the results with the specific field name
          *
-         * @return Generator
+         * @return void
          */
-        public function getResultGenerator() {
+        public function bindResults() {
             $this->stmt->execute();
-            $row = [];
-            $meta = $this->stmt->result_metadata();
-            while ($field = $meta->fetch_field())
+            $result = $this->stmt->result_metadata();
+            while ($field = $result->fetch_field())
             {
-                $params[] = &$row[$field->name];
+                $params[] = &$this->row[$field->name];
             }
-            call_user_func_array(array($this->stmt, 'bind_result'), $params);
-            while($this->stmt->fetch()) { yield $row; }
-            $this->stmt->close();
+            call_user_func_array([$this->stmt, 'bind_result'], $params);
+            mysqli_free_result($result); // this is important to not get 'Commands out of sync' error
+            $result->close();
         }
 
         public function closeStatement()
         {
+            $this->row = null;
+            // $this->free_all_results($this->connection);
             if($this->stmt) $this->stmt->close();
         }
 
@@ -568,12 +611,13 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
          */
         public function fetch_assoc()
         {
-            // make a result generator if not yet created
-            if(!$this->generator) $this->generator = $this->getResultGenerator();
-            $row = $this->generator->current();
-            $this->generator->next();
-            // if(!$this->generator->valid()) $this->closeStatement();
-            return $row;
+            $result = $this->stmt->fetch();
+            $this->stmt->close();
+            if(!$result) {
+                $this->closeStatement();
+                return null;
+            }
+            return $this->row;
         }
 
         /**
