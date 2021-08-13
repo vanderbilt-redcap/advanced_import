@@ -52,7 +52,7 @@ export default {
             const form_data = new FormData()
             const string_data = JSON.stringify(data)
             form_data.append('data',  string_data)
-            return context.api_client.post('',form_data, {
+            return context.api_client.post('', data, {
                 params,
                 headers: {
                     'Content-Type': 'multipart/form-data',

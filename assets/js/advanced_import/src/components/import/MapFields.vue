@@ -1,6 +1,7 @@
 <template>
     <div>
         <p>The wizard guessed the mapping for you but you can adjust the mapping as needed and select the dynamic fields.</p>
+        {{mapping}}
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
@@ -10,7 +11,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(form_field, index) in form_fields" :key="index">
+                <tr v-for="(form_field, index) in form_fields" :key="index" :class="{mapped: hasMapping(form_field.field_name)}">
                     <td class="min text-right">
                         <b-form-checkbox v-if="form_field.field_name!==primary_key"
                             :disabled="!hasMapping(form_field.field_name)"
@@ -122,30 +123,19 @@ td.min {
     width: 1%;
     white-space: nowrap;
 }
-.checkbox-dropdown {
-    width: 100%;
-}
-.checkbox-dropdown >>> .btn.dropdown-toggle {
-    text-align: left;
-    display: flex;
-    align-items: center;
-
-}
-.checkbox-dropdown >>> .btn.dropdown-toggle > div {
-    margin-right: auto;
-    display: inline-block;
+tr.mapped {
     position: relative;
 }
-.checkbox-dropdown >>> .btn.dropdown-toggle > div::after {
-    content: "\241f";
-    display: block;
-    color: transparent;
-    visibility: hidden;
-}
-.checkbox-dropdown >>> .btn.dropdown-toggle > div > *{
+tr.mapped > td::before {
+    content: '';
+    display: inline-block;
     position: absolute;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(50,255,50, 0.1);
+    pointer-events: none;
+    z-index: 0;
 }
 </style>

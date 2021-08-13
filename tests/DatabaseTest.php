@@ -10,6 +10,8 @@ require_once $root . '/redcap_connect.php';
 
 class DatabaseTest extends \ExternalModules\ModuleBaseTest
 {
+    private $testTableName = 'test';
+
     function testWorkingDirectories() {
         $success = $this->module->createWorkingDirectories();
         $this->assertSame(true, $success);
@@ -17,14 +19,42 @@ class DatabaseTest extends \ExternalModules\ModuleBaseTest
 
     function testCreateTable() {
         $db = AdvancedImport::colDb();
-        $db->createTable('test', ['fields'=>['first_name','last_name','email']], $drop=true);
+        $db->createTable($this->testTableName, ['fields'=>['first_name','last_name','email']], $drop=true);
         $metadata = $db->getMetadata('test');
         $this->assertArrayHasKey('primary_key', $metadata);
     }
 
+    function testInsertData() {
+        $data = [
+            ['first_name'=>'Luna','last_name'=>'Delacqua','email'=>'luna@email.com'],
+            ['first_name'=>'Stella','last_name'=>'Delacqua','email'=>'stella@email.com'],
+        ];
+        $db = AdvancedImport::colDb();
+        $lastId = null;
+        foreach ($data as $entry) {
+            $lastId = $db->insert($this->testTableName, $entry);
+        }
+        $this->assertIsNumeric($lastId);
+    }
+
+    function testSearchTable() {
+         $db = AdvancedImport::colDb();
+         $query = $db->search($this->testTableName, '`last_name`=?', ['Delacqua']);
+         $row = $query->fetch_assoc();
+         $this->assertEquals('Luna', @$row['first_name'], 'data was found');
+    }
+
+    function testUpdateEntry() {
+        $db = AdvancedImport::colDb();
+        $db->update($this->testTableName, ['first_name'=>'Stella the cat'], '`first_name`=?', ['Stella']);
+        $query = $db->search($this->testTableName, '`last_name`=? AND `first_name` LIKE ?', ['Delacqua', 'Stella%']);
+        $row = $query->fetch_assoc();
+        $this->assertEquals('Stella the cat', @$row['first_name'], 'data was found');
+     }
+
     function testDropTable() {
         $db = AdvancedImport::colDb();
-        $db->dropTable('test');
+        $db->dropTable($this->testTableName);
         $metadata = $db->getMetadata('test');
         $this->assertEmpty($metadata);
     }
@@ -38,17 +68,11 @@ class DatabaseTest extends \ExternalModules\ModuleBaseTest
        $this->assertSame(true, is_array($fields));
    }
 
-   function testSearchJob() {
-        $db = AdvancedImport::colDb();
-        $query = $db->search(Job::TABLE_NAME, '`id`=?', [1]);
-        $generator = $query->getResultGenerator();
-        $this->assertInstanceOf(Generator::class, $generator);
-    }
     
     function testQueryCompletedJobs() {
         $db = AdvancedImport::colDb();
         $query_string = "SELECT * FROM `jobs` WHERE `status`=?";
-        $query = $db->makeQuery($query_string, ['completed']);
+        $query = $db->runQuery($query_string, ['completed']);
         $results = $query->fetch_all();
         $this->assertIsArray($results);
     }

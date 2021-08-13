@@ -88,6 +88,31 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.checkbox-dropdown {
+    width: 100%;
+}
+.checkbox-dropdown >>> .btn.dropdown-toggle {
+    text-align: left;
+    display: flex;
+    align-items: center;
 
+}
+.checkbox-dropdown >>> .btn.dropdown-toggle > div {
+    margin-right: auto;
+    display: inline-block;
+    position: relative;
+}
+.checkbox-dropdown >>> .btn.dropdown-toggle > div::after {
+    content: "\241f";
+    display: block;
+    color: transparent;
+    visibility: hidden;
+}
+.checkbox-dropdown >>> .btn.dropdown-toggle > div > *{
+    position: absolute;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 </style>

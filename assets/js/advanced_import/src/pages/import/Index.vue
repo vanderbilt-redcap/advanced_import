@@ -13,11 +13,9 @@
           <component :is="item.element">
             <template v-slot:left>
               <button class="btn btn-outline-primary" @click="goToPrevStep" :disabled="step_index==0" v-if="step_index>0">go back</button>
-              <span v-else/>
+              <span v-else></span>
             </template>
-            <template v-slot:default>
-
-            </template>
+            <template v-slot:default ></template>
             <template v-slot:right="{validation, processFunction}">
               <button class="btn btn-outline-primary" @click="goToNextStep(processFunction)" :disabled="validation.$invalid" v-show="step_index<(steps.length-1)">next</button>
             </template>

@@ -40,13 +40,6 @@
                 "icon": "fas fa-file-import",
                 "url": "dashboard.php"
             }
-        ],
-        "control-center": [
-            {
-                "name": "Advanced Import - tests",
-                "icon": "fas fa-vial",
-                "url": "tests/index.php"
-            }
         ]
      },
      "no-auth-pages": [

@@ -5,6 +5,7 @@ use ExternalModules\ExternalModules;
 use Vanderbilt\AdvancedImport\App\Models\Import;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\ImportJob;
+use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
 
 $page = new \HtmlPage();
 $page->PrintHeaderExt();
@@ -98,9 +99,17 @@ function makejob($project_id, $settings)
 }
 
 
+/* $queue = new Queue();
+$jobs = $queue->getJobsByStatus();
+$db = AdvancedImport::colDb();
+foreach($jobs as $job) {
+    
+    $metadata = $db->getMetadata('jobs');
+} */
+
 // ExternalModules::callTimedCronMethods();
 // ExternalModules::callCronMethod($id=1,$cronName='advanced_import_process_jobs');
-ExternalModules::callCronMethod($id=1,$cronName='advanced_import_check_jobs');
+// ExternalModules::callCronMethod($id=1,$cronName='advanced_import_check_jobs');
 /* $project_id = 33;
 $job = makejob($project_id, $settings3);
 print_r($job);

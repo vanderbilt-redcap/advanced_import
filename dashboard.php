@@ -21,12 +21,10 @@ include($module_path.'header.php');
 
 <script>
   (function() {
-      const app = new Vue({
-        components: {
-          'advanced-import': advanced_import
-        }
-      }).$mount('#advanced-import-container')
-      window.advancedImportComponent = app.$children[0]
+    const app = new Vue({
+      render: h => h(advanced_import),
+    }).$mount('#advanced-import-container')
+    window.advancedImportComponent = app.$children[0]
   }(window.advancedImportComponent = window.advancedImportComponent || {}))
   </script>
 

@@ -18,15 +18,16 @@
         
         <div class="buttons d-flex flex-row justify-content-between" >
             <slot name="left" ></slot>
-            <slot>
-                <section>
-                    <button class="btn btn-primary ml-2" @click="importCSV" :disabled="processing">
-                        <font-awesome-icon v-if="processing" icon="spinner" spin/>
-                        <font-awesome-icon v-else icon="file-import" />
-                        <span> import</span>
-                    </button>
-                </section>
-            </slot>
+            <!-- <slot>
+                <NOTE>CANNOT USE THIS BECAUSE IN CHROME RETURNS 'udnefined'</NOTE>
+            </slot> -->
+            <section>
+                <button class="btn btn-primary ml-2" @click="importCSV" :disabled="processing">
+                    <font-awesome-icon v-if="processing" icon="spinner" spin fixed-width/>
+                    <font-awesome-icon v-else icon="file-import"  fixed-width/>
+                    <span> import</span>
+                </button>
+            </section>
             <slot name="right" :validation="$v" ></slot>
         </div>
 
@@ -217,7 +218,9 @@ export default {
             console.log('done')
         },
     },
-    validations: {}
+    validations() {
+        return {}
+    }
 }
 </script>
 
