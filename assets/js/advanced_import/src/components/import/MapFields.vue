@@ -1,7 +1,6 @@
 <template>
     <div>
         <p>The wizard guessed the mapping for you but you can adjust the mapping as needed and select the dynamic fields.</p>
-        {{mapping}}
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>

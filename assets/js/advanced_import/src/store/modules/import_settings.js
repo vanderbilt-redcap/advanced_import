@@ -128,6 +128,16 @@ const module = {
             })
             return dynamicFields
         },
+        mappedFieldsWithCsvNames: (state, getters, rootState) => {
+            console.log(state, getters, rootState)
+            const {fields} = rootState.csv_data
+            const {mapping} = state
+            const mappingWithNames = {}
+            for( let [redcapField, csvIndexes] of Object.entries(mapping)) {
+                mappingWithNames[redcapField] = csvIndexes.map(index => `${index} - ${fields[index]}`)
+            }
+            return mappingWithNames
+        }
     }
 }
 

@@ -43,10 +43,14 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ "699c":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ "a6e4":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-// extracted by mini-css-extract-plugin
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFields_vue_vue_type_style_index_0_id_3935dddd_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c573");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFields_vue_vue_type_style_index_0_id_3935dddd_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFields_vue_vue_type_style_index_0_id_3935dddd_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
 
 /***/ }),
 
@@ -57,12 +61,12 @@ module.exports = function (it) {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/MapFields.vue?vue&type=template&id=5a94eca1&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("The wizard guessed the mapping for you but you can adjust the mapping as needed and select the dynamic fields.")]),_vm._v(" "+_vm._s(_vm.mapping)+" "),_c('table',{staticClass:"table table-striped table-bordered"},[_c('thead',[_c('tr',[_c('th',{staticClass:"text-nowrap"},[_vm._v("Dynamic "),_c('b-button',{directives:[{name:"b-modal",rawName:"v-b-modal.modal-dynamic-fields",modifiers:{"modal-dynamic-fields":true}}],attrs:{"size":"sm","variant":"outline-info"}},[_c('font-awesome-icon',{staticClass:"icon",attrs:{"icon":['fas', 'question-circle']}})],1)],1),_c('th',[_vm._v("Destination Field (REDCap)")]),_c('th',[_vm._v("Source Field (CSV file)")])])]),_c('tbody',_vm._l((_vm.form_fields),function(form_field,index){return _c('tr',{key:index,class:{mapped: _vm.hasMapping(form_field.field_name)}},[_c('td',{staticClass:"min text-right"},[(form_field.field_name!==_vm.primary_key)?_c('b-form-checkbox',{attrs:{"disabled":!_vm.hasMapping(form_field.field_name),"checked":_vm.isDynamic(form_field.field_name),"switch":""},on:{"input":function($event){return _vm.onDynamicToggle(form_field.field_name, $event)}}}):_vm._e()],1),_c('td',[_c('span',{staticClass:"d-flex flex-row align-items-center"},[_c('span',[_vm._v(_vm._s(form_field.element_label))]),(form_field.field_name===_vm.primary_key)?_c('font-awesome-icon',{staticClass:"icon text-warning ml-1",attrs:{"title":"primary key","icon":['fas', 'star']}}):_vm._e()],1),_c('span',{staticClass:"small"},[_vm._v("("+_vm._s(form_field.field_name)+")")])]),_c('td',[_c('CsvFieldsDropDown',{attrs:{"redcapFieldName":form_field.field_name,"redcapFieldType":form_field.element_type}})],1)])}),0)]),_c('b-modal',{attrs:{"id":"modal-dynamic-fields","title":"Dynamic fields","ok-only":""}},[_c('div',{staticClass:"my-4"},[_c('p',[_vm._v("Mark as \"dynamic\" the fields that are not relevant in determining the uniqueness of an entry (i.e. can be different compared to existing data).")]),_c('p',[_vm._v("If you are importing \"medications\" in a repeated form, for example, you may want to mark the \"status\" field as dynamic since it could have changed since the previous import.")]),_c('p',[_vm._v("Dynamic fields will be ignored when the wizard will try to determine the uniqueness of a row.")])])]),_c('p',[_vm._v("Remember to map the primary key to proceed.")]),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)],1)}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/MapFields.vue?vue&type=template&id=3935dddd&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("The wizard guessed the mapping for you but you can adjust the mapping as needed and select the dynamic fields.")]),_c('table',{staticClass:"table table-striped table-bordered"},[_c('thead',[_c('tr',[_c('th',{staticClass:"text-nowrap"},[_vm._v("Dynamic "),_c('b-button',{directives:[{name:"b-modal",rawName:"v-b-modal.modal-dynamic-fields",modifiers:{"modal-dynamic-fields":true}}],attrs:{"size":"sm","variant":"outline-info"}},[_c('font-awesome-icon',{staticClass:"icon",attrs:{"icon":['fas', 'question-circle']}})],1)],1),_c('th',[_vm._v("Destination Field (REDCap)")]),_c('th',[_vm._v("Source Field (CSV file)")])])]),_c('tbody',_vm._l((_vm.form_fields),function(form_field,index){return _c('tr',{key:index,class:{mapped: _vm.hasMapping(form_field.field_name)}},[_c('td',{staticClass:"min text-right"},[(form_field.field_name!==_vm.primary_key)?_c('b-form-checkbox',{attrs:{"disabled":!_vm.hasMapping(form_field.field_name),"checked":_vm.isDynamic(form_field.field_name),"switch":""},on:{"input":function($event){return _vm.onDynamicToggle(form_field.field_name, $event)}}}):_vm._e()],1),_c('td',[_c('span',{staticClass:"d-flex flex-row align-items-center"},[_c('span',[_vm._v(_vm._s(form_field.element_label))]),(form_field.field_name===_vm.primary_key)?_c('font-awesome-icon',{staticClass:"icon text-warning ml-1",attrs:{"title":"primary key","icon":['fas', 'star']}}):_vm._e()],1),_c('span',{staticClass:"small"},[_vm._v("("+_vm._s(form_field.field_name)+")")])]),_c('td',[_c('CsvFieldsDropDown',{attrs:{"redcapFieldName":form_field.field_name,"redcapFieldType":form_field.element_type}})],1)])}),0)]),_c('b-modal',{attrs:{"id":"modal-dynamic-fields","title":"Dynamic fields","ok-only":""}},[_c('div',{staticClass:"my-4"},[_c('p',[_vm._v("Mark as \"dynamic\" the fields that are not relevant in determining the uniqueness of an entry (i.e. can be different compared to existing data).")]),_c('p',[_vm._v("If you are importing \"medications\" in a repeated form, for example, you may want to mark the \"status\" field as dynamic since it could have changed since the previous import.")]),_c('p',[_vm._v("Dynamic fields will be ignored when the wizard will try to determine the uniqueness of a row.")])])]),_c('p',[_vm._v("Remember to map the primary key to proceed.")]),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/import/MapFields.vue?vue&type=template&id=5a94eca1&scoped=true&
+// CONCATENATED MODULE: ./src/components/import/MapFields.vue?vue&type=template&id=3935dddd&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
 var slicedToArray = __webpack_require__("3835");
@@ -296,7 +300,6 @@ var component = Object(componentNormalizer["a" /* default */])(
 //
 //
 //
-//
 
 
 /* harmony default export */ var MapFieldsvue_type_script_lang_js_ = ({
@@ -378,8 +381,8 @@ var component = Object(componentNormalizer["a" /* default */])(
 });
 // CONCATENATED MODULE: ./src/components/import/MapFields.vue?vue&type=script&lang=js&
  /* harmony default export */ var import_MapFieldsvue_type_script_lang_js_ = (MapFieldsvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./src/components/import/MapFields.vue?vue&type=style&index=0&id=5a94eca1&scoped=true&lang=css&
-var MapFieldsvue_type_style_index_0_id_5a94eca1_scoped_true_lang_css_ = __webpack_require__("f992");
+// EXTERNAL MODULE: ./src/components/import/MapFields.vue?vue&type=style&index=0&id=3935dddd&scoped=true&lang=css&
+var MapFieldsvue_type_style_index_0_id_3935dddd_scoped_true_lang_css_ = __webpack_require__("a6e4");
 
 // CONCATENATED MODULE: ./src/components/import/MapFields.vue
 
@@ -396,7 +399,7 @@ var MapFields_component = Object(componentNormalizer["a" /* default */])(
   staticRenderFns,
   false,
   null,
-  "5a94eca1",
+  "3935dddd",
   null
   
 )
@@ -424,6 +427,13 @@ module.exports = function (METHOD_NAME) {
   } return false;
 };
 
+
+/***/ }),
+
+/***/ "c573":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -456,17 +466,6 @@ addToUnscopables('includes');
 "use strict";
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CsvFieldsDropDown_vue_vue_type_style_index_0_id_4e0303e8_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("3f68");
 /* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CsvFieldsDropDown_vue_vue_type_style_index_0_id_4e0303e8_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CsvFieldsDropDown_vue_vue_type_style_index_0_id_4e0303e8_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
-
-/***/ }),
-
-/***/ "f992":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFields_vue_vue_type_style_index_0_id_5a94eca1_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("699c");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFields_vue_vue_type_style_index_0_id_5a94eca1_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_6_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_6_oneOf_1_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_0_0_node_modules_vue_loader_lib_index_js_vue_loader_options_MapFields_vue_vue_type_style_index_0_id_5a94eca1_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
 /* unused harmony reexport * */
 
 

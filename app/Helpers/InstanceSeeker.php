@@ -149,8 +149,8 @@ class InstanceSeeker
         $subQuery,
         $whereClause
       );
-      $cache = new FileCache('instanceseeker');
-      $cache->set('query', $query_string);
+      // $cache = new FileCache('instanceseeker');
+      // $cache->set('query', $query_string);
       
       $result = db_query($query_string);
       $total_matches = db_num_rows($result);

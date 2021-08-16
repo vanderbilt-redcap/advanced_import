@@ -179,9 +179,9 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         $originalPid = $_GET['pid']; // save a reference to the original PID (if any)
         $queue = new Queue();
         $max_time = $this->addIntervalToDateTime(Queue::MAX_CRON_EXECUTION_TIME);
-        $jobs_generator = $queue->jobsGenerator();
+        $jobs = $queue->getJobsByStatus();
         /** @var Job $job */
-        while($job = $jobs_generator->current()) {
+        foreach($jobs as $job) {
             $project_id = $job->project_id; 
             if(!$this->isEnabledInProject($project_id)) continue; // do not process jobs for disabled projects
             $_GET['pid'] = $project_id; //set the project context
@@ -202,7 +202,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
                     $job->setError($e->getMessage());
                 }
             } while($keep_processing);
-            $jobs_generator->next();
         }
         $_GET['pid'] = $originalPid; //restore the project context
     }
@@ -247,16 +246,15 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     private function stopStuckJobs() {
         $queue = new Queue();
-        $jobs_generator = $queue->jobsGenerator(Job::STATUS_PROCESSING);
+        $jobs = $queue->getJobsByStatus(Job::STATUS_PROCESSING);
         $maxTime = $this->addIntervalToDateTime(Queue::MAX_CRON_EXECUTION_TIME);
         $doubleMaxTime = $this->addIntervalToDateTime(Queue::MAX_CRON_EXECUTION_TIME, $maxTime);
         $stuckJobs = [];
-        while($job=$jobs_generator->current()) {
+        foreach($jobs as $job) {
             if($job->updated_at>$doubleMaxTime) {
                 $stuckJobsCounter[] = $job->id;
                 $job->setError("the job ID {$job->id} exceeded the maximum allowed execution time and has been terminated.");
             }
-            $jobs_generator->next();
         }
         $stuckJobs;
     }

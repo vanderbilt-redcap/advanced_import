@@ -95,6 +95,7 @@ export default {
             import_settings: state => state.import_settings,
         }),
         dynamic_fields() { return this.$store.getters['import_settings/mappedDynamicFields'] },
+        mappedFieldsWithCsvNames() { return this.$store.getters['import_settings/mappedFieldsWithCsvNames'] },
         settings() {
             const {name:file_name=''} = this.files || {}
             const import_settings = {...this.import_settings}
@@ -108,7 +109,7 @@ export default {
                 'import mode': import_settings.import_mode,
                 'primary key': import_settings.primary_key,
                 'dynamic fields': this.dynamic_fields,
-                'mapping': import_settings.mapping,
+                'mapping': this.mappedFieldsWithCsvNames,
             }
             return settings
         }

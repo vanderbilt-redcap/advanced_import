@@ -102,6 +102,7 @@ class Queue
         $db = AdvancedImport::colDb();
         $query = $db->search(Job::TABLE_NAME, '`id`=? AND `project_id`=?', [$job_id, $project_id]);
         $job = $query->fetch_assoc();
+        // $query->closeStatement();
         if(empty($job)) return false;
         $filtered = [];
         // filter allowed

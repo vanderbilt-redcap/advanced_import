@@ -92,11 +92,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"10":1,"11":1,"13":1,"14":1,"15":1,"16":1,"17":1,"18":1,"19":1};
+/******/ 		var cssChunks = {"10":1,"12":1,"13":1,"14":1,"15":1,"16":1,"17":1,"18":1,"19":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"a0dfba2f","11":"5c9a0bfa","12":"31d6cfe0","13":"33d9679d","14":"4ccb7cda","15":"a25f28c8","16":"a25f28c8","17":"9b6f63f2","18":"d7180cb5","19":"1aec68ba","20":"31d6cfe0","21":"31d6cfe0"}[chunkId] + ".css";
+/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"bf19943f","11":"31d6cfe0","12":"33d9679d","13":"4ccb7cda","14":"5c9a0bfa","15":"a25f28c8","16":"a25f28c8","17":"9b6f63f2","18":"d7180cb5","19":"1aec68ba","20":"31d6cfe0","21":"31d6cfe0"}[chunkId] + ".css";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
@@ -14292,6 +14292,29 @@ module.exports = function (KEY, exec, FORCED, SHAM) {
 
   if (SHAM) createNonEnumerableProperty(RegExpPrototype[SYMBOL], 'sham', true);
 };
+
+
+/***/ }),
+
+/***/ "d81d":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__("23e7");
+var $map = __webpack_require__("b727").map;
+var arrayMethodHasSpeciesSupport = __webpack_require__("1dde");
+
+var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('map');
+
+// `Array.prototype.map` method
+// https://tc39.es/ecma262/#sec-array.prototype.map
+// with adding support of @@species
+$({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
+  map: function map(callbackfn /* , thisArg */) {
+    return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+  }
+});
 
 
 /***/ }),
@@ -59124,7 +59147,12 @@ var es_array_find_index = __webpack_require__("c740");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
 var es_array_filter = __webpack_require__("4de4");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
+var es_array_map = __webpack_require__("d81d");
+
 // CONCATENATED MODULE: ./src/store/modules/import_settings.js
+
+
 
 
 
@@ -59333,6 +59361,24 @@ var import_settings_module = {
       });
 
       return dynamicFields;
+    },
+    mappedFieldsWithCsvNames: function mappedFieldsWithCsvNames(state, getters, rootState) {
+      console.log(state, getters, rootState);
+      var fields = rootState.csv_data.fields;
+      var mapping = state.mapping;
+      var mappingWithNames = {};
+
+      for (var _i2 = 0, _Object$entries2 = Object.entries(mapping); _i2 < _Object$entries2.length; _i2++) {
+        var _Object$entries2$_i = Object(slicedToArray["a" /* default */])(_Object$entries2[_i2], 2),
+            redcapField = _Object$entries2$_i[0],
+            csvIndexes = _Object$entries2$_i[1];
+
+        mappingWithNames[redcapField] = csvIndexes.map(function (index) {
+          return "".concat(index, " - ").concat(fields[index]);
+        });
+      }
+
+      return mappingWithNames;
     }
   }
 };
@@ -62916,7 +62962,7 @@ var es_promise = __webpack_require__("e6cf");
 var routes = [{
   path: '/',
   component: function component() {
-    return __webpack_require__.e(/* import() */ 13).then(__webpack_require__.bind(null, "713b"));
+    return __webpack_require__.e(/* import() */ 12).then(__webpack_require__.bind(null, "713b"));
   },
   children: [{
     path: '',
@@ -62934,19 +62980,19 @@ var routes = [{
     path: 'jobs',
     name: 'jobs',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 14).then(__webpack_require__.bind(null, "cf20"));
+      return __webpack_require__.e(/* import() */ 13).then(__webpack_require__.bind(null, "cf20"));
     }
   }, {
     path: 'test',
     name: 'test',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 12).then(__webpack_require__.bind(null, "c961"));
+      return __webpack_require__.e(/* import() */ 11).then(__webpack_require__.bind(null, "c961"));
     }
   }, {
     path: 'import',
     name: 'import',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 11).then(__webpack_require__.bind(null, "a955"));
+      return __webpack_require__.e(/* import() */ 14).then(__webpack_require__.bind(null, "a955"));
     }
   }, {
     path: 'export',

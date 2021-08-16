@@ -3,6 +3,7 @@
 use Vanderbilt\AdvancedImport\App\Models\Parser\AbstractParser;
 use Vanderbilt\AdvancedImport\App\Models\Parser\CheckBoxParser;
 use Vanderbilt\AdvancedImport\App\Models\Parser\DateTimeParser;
+use Vanderbilt\AdvancedImport\App\Models\Parser\PhoneParser;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
 use Vanderbilt\AdvancedImport\App\Models\Validator\DateTimeValidator;
 
@@ -80,7 +81,7 @@ class ParserFactory
     
                 switch ($validation_type) {
                     case 'phone':
-                        // $parsers[] = new PhoneParser();
+                        $parsers[] = new PhoneParser(); // necessary because phone is saved with a format
                         break;
                     default:
                     break;
