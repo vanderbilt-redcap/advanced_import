@@ -3,6 +3,7 @@ namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use mysqli;
 use Vanderbilt\AdvancedImport\AdvancedImport;
+use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
 
 /**
  * this class uses the external module settings table to implement a columnar table.
@@ -213,14 +214,14 @@ class ColumnarDatabase
      * get the formatted key that contains table name, field name and id
      *
      * @param string $tableName
-     * @param string $fieldName
      * @param int $id
+     * @param string $fieldName
      * @return string
      */
-    private function getFieldName($tableName, $fieldName)
+    private function getFieldName($tableName, $id, $fieldName)
     {
         $normalizedTableName = static::getRealTableName($tableName);
-        return implode(static::getSeparatorCharacter(), [$normalizedTableName,$fieldName]);
+        return implode(static::getSeparatorCharacter(), [$normalizedTableName, $id, $fieldName]);
     }
 
     /**
@@ -236,13 +237,13 @@ class ColumnarDatabase
         
         $module_id = $this->module->getId();
         $id = $this->getId($tableName);
-        $getKey = function($fieldName) use($tableName) {
-            return $this->getFieldName($tableName, $fieldName);
+        $getKey = function($fieldName) use($tableName, $id) {
+            return $this->getFieldName($tableName, $id, $fieldName);
         };
 
         $tableData = [
             'external_module_id' => $module_id,
-            'project_id' => null, // will contain the ID
+            // 'project_id' => null, // will contain the ID
             'type' => checkNull(self::VALUES_TYPE),
             'key' => null,
             'value' => null,
@@ -254,7 +255,7 @@ class ColumnarDatabase
             if(is_array($value)) $value = json_encode($value);
             if(!is_numeric($value)) $value = checkNull($value);
             $key = $getKey($fieldName);
-            $tableData['project_id'] = intval($id);
+            // $tableData['project_id'] = intval($id);
             $tableData['key'] = checkNull($key);
             $tableData['value'] = $value;
             // array_multisort($tableData, $fields);
@@ -297,14 +298,15 @@ class ColumnarDatabase
 
         $moduleId = $this->module->getId();
         $realTableName = $this->getRealTableName($tableName);
-        $implodedIds = static::implodeQuote($ids, "'");
         // NOTE LIKE '%s,%%'. the comma is to make sure to delete virtual rows fields
-        $delete_query = sprintf(
-            "DELETE FROM `%s` WHERE `external_module_id`=%u AND `key` LIKE '%s,%%' AND `project_id` IN (%s)",
-            self::EXTERNAL_MODULE_SETTINGS_TABLE, $moduleId, $realTableName, $implodedIds
-        );
-        $result = db_query($delete_query);
-        if($result==false) return $stopTransaction();
+        foreach ($ids as $id) {
+            $delete_query = sprintf(
+                "DELETE FROM `%s` WHERE `external_module_id`=%u AND `key` LIKE '%s,%u,%%'",
+                self::EXTERNAL_MODULE_SETTINGS_TABLE, $moduleId, $realTableName, $id
+            );
+            $result = db_query($delete_query);
+            if($result==false) return $stopTransaction();
+        }
         db_query("COMMIT");
         return $result; 
     }
@@ -332,24 +334,26 @@ class ColumnarDatabase
         if(empty($ids)) return $stopTransaction();
 
         $moduleId = $this->module->getId();
-        $getUpdateStatement = function($fieldName, $value) use($ids, $moduleId, $tableName){
-            $key = $this->getFieldName($tableName, $fieldName);
+        $getUpdateStatement = function($key, $value) use($moduleId){
             if(is_array($value)) $value = json_encode($value);
             if(!is_numeric($value)) $value = checkNull($value);
             $query_string = sprintf(
-                "UPDATE `%s` SET `value`=%s WHERE `key`='%s' AND `external_module_id`=%u AND `project_id` IN (%s)",
-                self::EXTERNAL_MODULE_SETTINGS_TABLE, $value, $key, $moduleId, static::implodeQuote($ids, "'")
+                "UPDATE `%s` SET `value`=%s WHERE `key`='%s' AND `external_module_id`=%u",
+                self::EXTERNAL_MODULE_SETTINGS_TABLE, $value, $key, $moduleId
             );
             return $query_string;
         };
         $metadata = $this->getMetadata($tableName);
         $data = $this->filterData($metadata, $params);
-        foreach ($data as $fieldName => $value) {
-            $update_query = $getUpdateStatement($fieldName, $value);
-            $result = db_query($update_query);
-            // stop and exit if any update fails
-            if($result==false) return $stopTransaction();
+        foreach ($ids as $id) {
+            foreach ($data as $fieldName => $value) {
+                $key = $this->getFieldName($tableName, $id, $fieldName);
+                $update_query = $getUpdateStatement($key, $value);
+                $result = db_query($update_query);
+                if($result==false) return $stopTransaction();
+            }
         }
+
         db_query("COMMIT");
         return true;
     }
@@ -429,20 +433,27 @@ class ColumnarDatabase
         $fields = @$metadata['fields'];
         $primary_key = @$metadata['primary_key'] ?: self::DEFAULT_PRIMARY_KEY;
 
-        $realNames = [];
-        $groupContacts = array_map(function($fieldName) use($tableName, &$realNames){
-            $realNames[] = $realFieldName = $this->getFieldName($tableName, $fieldName);
-            return "GROUP_CONCAT(CASE WHEN `key`='{$realFieldName}' THEN value ELSE NULL END ORDER BY `value` ASC SEPARATOR '') AS `{$fieldName}`";
-
+        $groupContacts = array_map(function($fieldName) use($tableName){
+            return "GROUP_CONCAT(CASE WHEN `virtual_key`='{$fieldName}' THEN `value` ELSE NULL END ORDER BY `value` ASC SEPARATOR '') AS `{$fieldName}`\n";
         }, $fields);
+        $realTableName = self::getRealTableName($tableName);
         $query_string = sprintf(
-            "SELECT `project_id` AS `%s`, %s FROM `%s` WHERE
-            `external_module_id`=%u
-            AND `key` IN (%s)
-            GROUP BY `%s` ORDER BY `%s`",
+            "SELECT `virtual_id` AS `%s`, %s FROM 
+            (
+                SELECT 
+                SUBSTRING_INDEX(SUBSTRING_INDEX(`key`, ',', 1), ',', -1) AS `table_name`,
+                SUBSTRING_INDEX(SUBSTRING_INDEX(`key`, ',', 2), ',', -1) as `virtual_id`,
+                SUBSTRING_INDEX(SUBSTRING_INDEX(`key`, ',', 3), ',', -1) AS `virtual_key`,
+                `value`
+                FROM 
+                `%s`
+                WHERE `external_module_id`=%u
+                HAVING `table_name`='%s'
+                ORDER BY `virtual_id`
+            ) AS `virtual_table` GROUP BY `virtual_id`",
             $primary_key,
             implode(',', $groupContacts), self::EXTERNAL_MODULE_SETTINGS_TABLE,
-            intval($moduleId), static::implodeQuote($realNames, "'"), $primary_key, $primary_key
+            intval($moduleId), $realTableName
         );
         return $query_string;
     }

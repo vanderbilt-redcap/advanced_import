@@ -83,11 +83,11 @@ module.exports =
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"10":1,"12":1,"13":1,"14":1,"15":1,"16":1,"17":1,"18":1,"19":1};
+/******/ 		var cssChunks = {"10":1,"11":1,"13":1,"14":1,"15":1,"16":1,"17":1,"18":1,"19":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"bf19943f","11":"31d6cfe0","12":"33d9679d","13":"4ccb7cda","14":"5c9a0bfa","15":"a25f28c8","16":"a25f28c8","17":"9b6f63f2","18":"d7180cb5","19":"1aec68ba","20":"31d6cfe0","21":"31d6cfe0"}[chunkId] + ".css";
+/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"efaec6d8","11":"5c9a0bfa","12":"31d6cfe0","13":"33d9679d","14":"4ccb7cda","15":"a25f28c8","16":"a25f28c8","17":"9b6f63f2","18":"d7180cb5","19":"1aec68ba","20":"31d6cfe0","21":"31d6cfe0"}[chunkId] + ".css";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
@@ -7864,6 +7864,22 @@ module.exports = function (bitmap, value) {
 
 /***/ }),
 
+/***/ "5e89":
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__("861d");
+
+var floor = Math.floor;
+
+// `Number.isInteger` method implementation
+// https://tc39.es/ecma262/#sec-number.isinteger
+module.exports = function isInteger(it) {
+  return !isObject(it) && isFinite(it) && floor(it) === it;
+};
+
+
+/***/ }),
+
 /***/ "5fb2":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9624,6 +9640,21 @@ var charAt = __webpack_require__("6547").charAt;
 module.exports = function (S, index, unicode) {
   return index + (unicode ? charAt(S, index).length : 1);
 };
+
+
+/***/ }),
+
+/***/ "8ba4":
+/***/ (function(module, exports, __webpack_require__) {
+
+var $ = __webpack_require__("23e7");
+var isInteger = __webpack_require__("5e89");
+
+// `Number.isInteger` method
+// https://tc39.es/ecma262/#sec-number.isinteger
+$({ target: 'Number', stat: true }, {
+  isInteger: isInteger
+});
 
 
 /***/ }),
@@ -14283,29 +14314,6 @@ module.exports = function (KEY, exec, FORCED, SHAM) {
 
   if (SHAM) createNonEnumerableProperty(RegExpPrototype[SYMBOL], 'sham', true);
 };
-
-
-/***/ }),
-
-/***/ "d81d":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var $ = __webpack_require__("23e7");
-var $map = __webpack_require__("b727").map;
-var arrayMethodHasSpeciesSupport = __webpack_require__("1dde");
-
-var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('map');
-
-// `Array.prototype.map` method
-// https://tc39.es/ecma262/#sec-array.prototype.map
-// with adding support of @@species
-$({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
-  map: function map(callbackfn /* , thisArg */) {
-    return $map(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
-  }
-});
 
 
 /***/ }),
@@ -59032,7 +59040,9 @@ var settings_initialState = {
   // project ID
   project_data: {},
   // project data
-  record_identifiers: {}
+  record_identifiers: {},
+  checkbox_fields: {} // ilst of options for each checkbox field
+
 };
 var settings_module = {
   namespaced: true,
@@ -59054,6 +59064,16 @@ var settings_module = {
     }
   },
   getters: {
+    checkboxFieldOptions: function checkboxFieldOptions(state) {
+      return function (fieldName) {
+        var _checkbox_fields$fiel;
+
+        var checkbox_fields = Object(objectSpread2["a" /* default */])({}, state.checkbox_fields);
+
+        var options = (_checkbox_fields$fiel = checkbox_fields[fieldName]) !== null && _checkbox_fields$fiel !== void 0 ? _checkbox_fields$fiel : {};
+        return options;
+      };
+    },
     form_fields: function form_fields(state) {
       return function (form_name) {
         var metadata = state.project_data.metadata;
@@ -59062,6 +59082,25 @@ var settings_module = {
         for (var _i2 = 0, _Object$values = Object.values(metadata); _i2 < _Object$values.length; _i2++) {
           var field = _Object$values[_i2];
           if (field.form_name == form_name) fields.push(field);
+        }
+
+        fields.sort(function (a, b) {
+          var a_value = Number(a.field_order);
+          var b_value = Number(b.field_order);
+          if (a_value == b_value) return 0;
+          return a_value < b_value ? -1 : 1;
+        });
+        return fields;
+      };
+    },
+    mappable_fields: function mappable_fields(state) {
+      return function (form_name, primaryKey) {
+        var metadata = state.project_data.metadata;
+        var fields = [];
+
+        for (var _i3 = 0, _Object$values2 = Object.values(metadata); _i3 < _Object$values2.length; _i3++) {
+          var field = _Object$values2[_i3];
+          if (field.form_name == form_name || field.field_name == primaryKey) fields.push(field);
         }
 
         fields.sort(function (a, b) {
@@ -59126,6 +59165,12 @@ var logs_module = {
   }
 };
 /* harmony default export */ var modules_logs = (logs_module);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createForOfIteratorHelper.js
+var createForOfIteratorHelper = __webpack_require__("b85c");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.is-integer.js
+var es_number_is_integer = __webpack_require__("8ba4");
+
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
 var es_array_splice = __webpack_require__("a434");
 
@@ -59138,10 +59183,10 @@ var es_array_find_index = __webpack_require__("c740");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
 var es_array_filter = __webpack_require__("4de4");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
-var es_array_map = __webpack_require__("d81d");
-
 // CONCATENATED MODULE: ./src/store/modules/import_settings.js
+
+
+
 
 
 
@@ -59223,47 +59268,28 @@ var import_settings_module = {
       });
     },
 
-    /* setMappingList(context) {
-        const { form_name } = context.state
-        const fields = context.rootGetters['settings/form_fields'](form_name)
-        const list = fields.map(properties => {
-            const {field_name: field, form_name: form, element_type:type, element_label: label} = properties
-            return new Mapping({field, form, type, label })
-        })
-        context.commit('SET_MAPPING_LIST', list)
-    }, */
-
     /**
-     * attach/detach a CSV field to a REDCap field.
-     * 
+     * set the mapping for a specific REDCap field
      * @param {object} context 
-     * @param {*} params 
+     * @param {fieldName, csvIndex, fieldIndex} params fieldIndex will be 0 for single type fields, >0 for checkbox type fields
      * @returns 
      */
-    toggleCsvField: function toggleCsvField(_ref3, _ref4) {
+    setFieldMapping: function setFieldMapping(_ref3, _ref4) {
       var state = _ref3.state,
           commit = _ref3.commit;
       var fieldName = _ref4.fieldName,
           csvIndex = _ref4.csvIndex,
-          _ref4$checked = _ref4.checked,
-          checked = _ref4$checked === void 0 ? true : _ref4$checked;
+          _ref4$fieldIndex = _ref4.fieldIndex,
+          fieldIndex = _ref4$fieldIndex === void 0 ? 0 : _ref4$fieldIndex;
 
       var mapping = Object(objectSpread2["a" /* default */])({}, state.mapping);
 
-      if (!(fieldName in mapping)) mapping[fieldName] = []; // make sure it is an array
+      if (!Array.isArray(mapping[fieldName])) mapping[fieldName] = [];
+      mapping[fieldName][fieldIndex] = csvIndex; // if there is not at least one valid value (an integer) in the mapping for this fields, then delete the mapping
 
-      var fieldMapping = mapping[fieldName]; // list of CSV columns in the mapping of a specific
-
-      var mappingindex = fieldMapping.indexOf(csvIndex); // index of te CSV column in the REDCap field mapping list
-
-      if (checked && mappingindex < 0) {
-        mapping[fieldName].push(csvIndex);
-      } else if (!checked && mappingindex >= 0) {
-        mapping[fieldName].splice(mappingindex, 1);
-      } // remove redcap fields if no CSV field is assigned
-
-
-      if (mapping[fieldName].length < 1) delete mapping[fieldName];
+      if (!mapping[fieldName].some(function (value) {
+        return Number.isInteger(value);
+      })) delete mapping[fieldName];
       return commit('SET_MAPPING', mapping);
     },
     toggleDynamicField: function toggleDynamicField(context, _ref5) {
@@ -59294,15 +59320,19 @@ var import_settings_module = {
       var csv_fields = rootState.csv_data.fields;
       var form_name = context.state.form_name;
       var fields = rootGetters['settings/form_fields'](form_name);
+      var checkbox_fields = rootState.settings.checkbox_fields;
+      var checkboxFieldsNames = Object.keys(checkbox_fields);
       fields.forEach(function (field) {
         var fieldName = field.field_name;
+        if (checkboxFieldsNames.indexOf(fieldName) >= 0) return; // do not guess checkbox fields
+
         var csvIndex = csv_fields.findIndex(function (csv_field) {
           var found = csv_field.toUpperCase() === field.field_name.toUpperCase();
           return found;
         });
-        if (csvIndex >= 0) context.dispatch('toggleCsvField', {
-          csvIndex: csvIndex,
-          fieldName: fieldName
+        if (csvIndex >= 0) context.dispatch('setFieldMapping', {
+          fieldName: fieldName,
+          csvIndex: csvIndex
         });
       });
       return fields;
@@ -59354,9 +59384,48 @@ var import_settings_module = {
       return dynamicFields;
     },
     mappedFieldsWithCsvNames: function mappedFieldsWithCsvNames(state, getters, rootState) {
-      console.log(state, getters, rootState);
       var fields = rootState.csv_data.fields;
+      var checkbox_fields = rootState.settings.checkbox_fields;
+      var checkboxNames = Object.keys(checkbox_fields);
       var mapping = state.mapping;
+
+      var getFieldMapping = function getFieldMapping(csvIndexes) {
+        var list = [];
+
+        var _iterator = Object(createForOfIteratorHelper["a" /* default */])(csvIndexes),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var csvIndex = _step.value;
+            if (!Number.isInteger(csvIndex)) continue;
+            var fieldName = fields[csvIndex];
+            var name = "".concat(csvIndex, " - ").concat(fieldName);
+            list.push(name);
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+
+        return list;
+      };
+
+      var getCheckboxMapping = function getCheckboxMapping(csvIndexes, checkboxOptions) {
+        var list = {};
+
+        for (var index in csvIndexes) {
+          var csvIndex = csvIndexes[index];
+          if (!Number.isInteger(csvIndex)) continue;
+          var checkboxOption = checkboxOptions[index];
+          var fieldName = fields[csvIndex];
+          list[checkboxOption] = "".concat(csvIndex, " - ").concat(fieldName);
+        }
+
+        return list;
+      };
+
       var mappingWithNames = {};
 
       for (var _i2 = 0, _Object$entries2 = Object.entries(mapping); _i2 < _Object$entries2.length; _i2++) {
@@ -59364,9 +59433,10 @@ var import_settings_module = {
             redcapField = _Object$entries2$_i[0],
             csvIndexes = _Object$entries2$_i[1];
 
-        mappingWithNames[redcapField] = csvIndexes.map(function (index) {
-          return "".concat(index, " - ").concat(fields[index]);
-        });
+        if (checkboxNames.indexOf(redcapField) < 0) mappingWithNames[redcapField] = getFieldMapping(csvIndexes);else {
+          var checkboxOptions = checkbox_fields[redcapField];
+          mappingWithNames[redcapField] = getCheckboxMapping(csvIndexes, checkboxOptions);
+        }
       }
 
       return mappingWithNames;
@@ -62953,7 +63023,7 @@ var es_promise = __webpack_require__("e6cf");
 var routes = [{
   path: '/',
   component: function component() {
-    return __webpack_require__.e(/* import() */ 12).then(__webpack_require__.bind(null, "713b"));
+    return __webpack_require__.e(/* import() */ 13).then(__webpack_require__.bind(null, "713b"));
   },
   children: [{
     path: '',
@@ -62971,19 +63041,19 @@ var routes = [{
     path: 'jobs',
     name: 'jobs',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 13).then(__webpack_require__.bind(null, "cf20"));
+      return __webpack_require__.e(/* import() */ 14).then(__webpack_require__.bind(null, "cf20"));
     }
   }, {
     path: 'test',
     name: 'test',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 11).then(__webpack_require__.bind(null, "c961"));
+      return __webpack_require__.e(/* import() */ 12).then(__webpack_require__.bind(null, "c961"));
     }
   }, {
     path: 'import',
     name: 'import',
     component: function component() {
-      return __webpack_require__.e(/* import() */ 14).then(__webpack_require__.bind(null, "a955"));
+      return __webpack_require__.e(/* import() */ 11).then(__webpack_require__.bind(null, "a955"));
     }
   }, {
     path: 'export',

@@ -45,35 +45,19 @@ const module = {
         reset(context) { context.commit('SET_STATE', initialState) },
         setState(context, params) { context.commit('SET_STATE', params) },
         setStateProperty(context, {key, value}) { context.commit('SET_STATE_PROPERTY', {key, value}) },
-        /* setMappingList(context) {
-            const { form_name } = context.state
-            const fields = context.rootGetters['settings/form_fields'](form_name)
-            const list = fields.map(properties => {
-                const {field_name: field, form_name: form, element_type:type, element_label: label} = properties
-                return new Mapping({field, form, type, label })
-            })
-            context.commit('SET_MAPPING_LIST', list)
-        }, */
         /**
-         * attach/detach a CSV field to a REDCap field.
-         * 
+         * set the mapping for a specific REDCap field
          * @param {object} context 
-         * @param {*} params 
+         * @param {fieldName, csvIndex, fieldIndex} params fieldIndex will be 0 for single type fields, >0 for checkbox type fields
          * @returns 
          */
-         toggleCsvField({state, commit}, {fieldName, csvIndex, checked=true}) {
+        setFieldMapping({state, commit}, {fieldName, csvIndex, fieldIndex=0}) {
             const mapping = {...state.mapping}
-            if(!(fieldName in mapping)) mapping[fieldName] = [] // make sure it is an array
-            const fieldMapping = mapping[fieldName] // list of CSV columns in the mapping of a specific
-            const mappingindex = fieldMapping.indexOf(csvIndex) // index of te CSV column in the REDCap field mapping list
-            if(checked && mappingindex<0) {
-                mapping[fieldName].push(csvIndex)
-            }
-            else if(!checked && mappingindex>=0) {
-                mapping[fieldName].splice(mappingindex, 1)
-            }
-            // remove redcap fields if no CSV field is assigned
-            if(mapping[fieldName].length<1) delete mapping[fieldName]
+            if(!Array.isArray(mapping[fieldName])) mapping[fieldName] = []
+            mapping[fieldName][fieldIndex] = csvIndex
+            // if there is not at least one valid value (an integer) in the mapping for this fields, then delete the mapping
+            if(!mapping[fieldName].some((value => Number.isInteger(value)))) delete mapping[fieldName]
+
             return commit('SET_MAPPING', mapping)
         },
         toggleDynamicField(context, {field, checked}) {
@@ -96,13 +80,16 @@ const module = {
 
             const { form_name } = context.state
             const fields = rootGetters['settings/form_fields'](form_name)
+            const {checkbox_fields} = rootState.settings
+            const checkboxFieldsNames = Object.keys(checkbox_fields)
             fields.forEach( field => {
                 const {field_name:fieldName} = field
+                if(checkboxFieldsNames.indexOf(fieldName)>=0) return // do not guess checkbox fields
                 let csvIndex = csv_fields.findIndex(csv_field => {
                     let found = csv_field.toUpperCase() === field.field_name.toUpperCase()
                     return found
                 })
-                if(csvIndex>=0) context.dispatch('toggleCsvField', {csvIndex, fieldName})
+                if(csvIndex>=0) context.dispatch('setFieldMapping', {fieldName, csvIndex})
             })
             return fields
         },
@@ -120,7 +107,7 @@ const module = {
         /**
          * keys skipped when determining uniqueness of a row
          */
-         mappedDynamicFields: state => {
+        mappedDynamicFields: state => {
             const mapping = {...state.mapping}
             const dynamicFields = [...state.dynamic_fields].filter(fieldName => {
                 let csvIndexes = mapping[fieldName] ?? []
@@ -128,16 +115,44 @@ const module = {
             })
             return dynamicFields
         },
-        mappedFieldsWithCsvNames: (state, getters, rootState) => {
-            console.log(state, getters, rootState)
+        mappedFieldsWithCsvNames: (state, getters, rootState) => {            
             const {fields} = rootState.csv_data
+            const {checkbox_fields} = rootState.settings
+            const checkboxNames = Object.keys(checkbox_fields)
             const {mapping} = state
+
+            const getFieldMapping = (csvIndexes) => {
+                const list = []
+                for (const csvIndex of csvIndexes) {
+                    if(!Number.isInteger(csvIndex)) continue
+                    let fieldName = fields[csvIndex]
+                    let name = `${csvIndex} - ${fieldName}`
+                    list.push(name)
+                }
+                return list
+            }
+            const getCheckboxMapping = (csvIndexes, checkboxOptions) => {
+                const list = {}
+                for (const index in csvIndexes) {
+                    const csvIndex = csvIndexes[index]
+                    if(!Number.isInteger(csvIndex)) continue
+                    let checkboxOption = checkboxOptions[index]
+                    let fieldName = fields[csvIndex]
+                    list[checkboxOption] = `${csvIndex} - ${fieldName}`
+                }
+                return list
+            }
+
             const mappingWithNames = {}
             for( let [redcapField, csvIndexes] of Object.entries(mapping)) {
-                mappingWithNames[redcapField] = csvIndexes.map(index => `${index} - ${fields[index]}`)
+                if(checkboxNames.indexOf(redcapField)<0) mappingWithNames[redcapField] = getFieldMapping(csvIndexes)
+                else {
+                    let checkboxOptions = checkbox_fields[redcapField]
+                    mappingWithNames[redcapField] = getCheckboxMapping(csvIndexes, checkboxOptions)
+                }
             }
             return mappingWithNames
-        }
+        },
     }
 }
 

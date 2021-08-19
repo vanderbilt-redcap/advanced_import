@@ -10,7 +10,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(form_field, index) in form_fields" :key="index" :class="{mapped: hasMapping(form_field.field_name)}">
+                <tr v-for="(form_field, index) in form_fields" :key="index" >
                     <td class="min text-right">
                         <b-form-checkbox v-if="form_field.field_name!==primary_key"
                             :disabled="!hasMapping(form_field.field_name)"
@@ -20,16 +20,21 @@
                     </td>
                     <td>
                         <span class="d-flex flex-row align-items-center">
-                            <span>{{form_field.element_label}}</span>
+                            <span class="font-weight-bold">{{form_field.field_name}}</span>
                             <font-awesome-icon v-if="form_field.field_name===primary_key"
                             title="primary key"
                             class="icon text-warning ml-1"
                             :icon="['fas', 'star']" />
                         </span>
-                        <span class="small">({{form_field.field_name}})</span>
+                        <span class="small" v-html="form_field.element_label"></span>
                     </td>
                     <td>
-                        <CsvFieldsDropDown :redcapFieldName="form_field.field_name" :redcapFieldType="form_field.element_type" />
+                        <template v-if="form_field.element_type=='checkbox'">
+                            <CsvFieldsDropDown :redcapFieldName="form_field.field_name" :redcapFieldType="form_field.element_type" />
+                        </template>
+                        <template v-else>
+                            <CsvFieldsSingleSelect :redcapFieldName="form_field.field_name" />
+                        </template>
                     </td>
                     
                 </tr>
@@ -56,10 +61,11 @@
 
 <script>
 import CsvFieldsDropDown from './CsvFieldsDropDown'
+import CsvFieldsSingleSelect from './CsvFieldsSingleSelect'
 import { mapState } from 'vuex'
 
 export default {
-    components: { CsvFieldsDropDown },
+    components: { CsvFieldsDropDown, CsvFieldsSingleSelect },
     data() {
         return {}
     },
@@ -73,7 +79,8 @@ export default {
         }),
         form_fields() {
             const { form_name } = this.$store.state.import_settings
-            const fields = this.$store.getters['settings/form_fields'](form_name)
+            const primaryKey = this.primary_key
+            const fields = this.$store.getters['settings/mappable_fields'](form_name, primaryKey)
             return fields
         },
     },
@@ -121,20 +128,5 @@ export default {
 td.min {
     width: 1%;
     white-space: nowrap;
-}
-tr.mapped {
-    position: relative;
-}
-tr.mapped > td::before {
-    content: '';
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(50,255,50, 0.1);
-    pointer-events: none;
-    z-index: 0;
 }
 </style>

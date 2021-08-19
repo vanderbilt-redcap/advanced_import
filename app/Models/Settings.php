@@ -26,13 +26,15 @@ class Settings
         $redcap_version = REDCAP_VERSION;
         $app_path_webroot_full = APP_PATH_WEBROOT_FULL;
         $project_dashboard_url = "{$app_path_webroot_full}redcap_v{$redcap_version}/DataEntry/record_status_dashboard.php?pid={$project_id}";
+        $checkbox_fields = \MetaData::getCheckboxFields($project_id);
         $data = compact(
             'project_id',
             'project_data',
             'primary_keys',
             'redcap_version',
             'app_path_webroot_full',
-            'project_dashboard_url'
+            'project_dashboard_url',
+            'checkbox_fields',
         );
         return $data;
     }

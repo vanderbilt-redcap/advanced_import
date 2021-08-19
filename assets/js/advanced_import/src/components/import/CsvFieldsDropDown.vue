@@ -1,50 +1,28 @@
 <template>
-  <b-dropdown  variant="outline-secondary" class="checkbox-dropdown bg-white" >
-    <template #button-content>
-        <div>
-            <span>{{buttonText}}</span>
-        </div>
-    </template>
-    <b-dropdown-text >
-        <span v-if="multiSelectEnabled" class="small font-italic text-info" >multiple selection</span>
-        <span v-else class="small font-italic text-muted" >single selection</span>
-    </b-dropdown-text>
-    <b-dropdown-text v-for="(csv_field, csvIndex) in csv_fields" :key="csvIndex" >
-        <div class="d-flex">
-            <b-form-checkbox
-                :disabled="isDisabled(csvIndex)" 
-                :checked="isMapped(csvIndex)" @input.native.prevent="onSelected(csvIndex, $event.target.checked)"
-                switch>
-                <span>{{csv_field}}</span>
-            </b-form-checkbox>
-        </div>
-    </b-dropdown-text>
-
-</b-dropdown>
+<b-container>
+    <b-row v-for="(option, index) in checkboxOptions" :key="index" class="d-flex flex-column option">
+        <b-col class="small">
+            <span>{{index}})</span><span class="ml-1">{{option}}</span>
+        </b-col>
+        <b-col class="">
+            <CsvFieldsSingleSelect :redcapFieldName="redcapFieldName" :fieldIndex="index" />
+        </b-col>
+    </b-row>
+</b-container>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+
+import CsvFieldsSingleSelect from '@/components/import/CsvFieldsSingleSelect'
+
 export default {
+    components: { CsvFieldsSingleSelect },
     computed: {
-        ...mapState({
-            csv_fields: state => state.csv_data.fields,
-            mapping: state => state.import_settings.mapping,
-        }),
-        buttonText() {
-            const total = this.selected.length
-            if(total==0) return '--- skip ---'
-            const firstCsvIndex = this.selected[0]
-            const firstCsvColumn = this.csv_fields[firstCsvIndex]
-            if(total==1) return firstCsvColumn
-            else return `${firstCsvColumn} and ${total-1} more`
+        checkboxOptions() {
+            const options =  this.$store.getters['settings/checkboxFieldOptions'](this.redcapFieldName);
+            return options
         },
-        selected() {
-            return this.$store.getters['import_settings/mappedCsvFields'](this.redcapFieldName)
-        },
-        multiSelectEnabled() {
-            return this.redcapFieldType=='checkbox'
-        },
+
     },
     props: {
         redcapFieldName: {
@@ -57,62 +35,18 @@ export default {
         },
     },
     methods: {
-        isDisabled(csvIndex) {
-            if(this.isMappedElsewhere(csvIndex)) return true
-            const otherindexes = this.selected.filter(index => index!=csvIndex) // list of other mapped indexes excluded the current one
-            if(otherindexes.length>0 && !this.multiSelectEnabled) return true
-            return false
-        },
-        /**
-         * check if a CSV index is assigned to any REDCap field but the one specified
-         */
-        isMappedElsewhere(csvIndex) {
-            const mapping = {...this.mapping}
-            for(let [redcapField, csvIndexes] of Object.entries(mapping)) {
-                if(redcapField==this.redcapFieldName) continue
-                if(csvIndexes.indexOf(csvIndex)>=0) return true
-            }
-            return false
-        },
-        /**
-         * check if a REDCap field has a specific CSV column assigned
-         */
-        isMapped(csvIndex) {
-            return this.selected.indexOf(csvIndex) >= 0
-        },
-        onSelected(csvIndex, checked) {
-            const fieldName = this.redcapFieldName
-            this.$store.dispatch('import_settings/toggleCsvField', {fieldName, csvIndex, checked})
-        },
+
     }
 }
 </script>
 
 <style scoped>
-.checkbox-dropdown {
-    width: 100%;
+.option + .option {
+    margin-top: 5px;
 }
-.checkbox-dropdown >>> .btn.dropdown-toggle {
-    text-align: left;
-    display: flex;
-    align-items: center;
-
-}
-.checkbox-dropdown >>> .btn.dropdown-toggle > div {
-    margin-right: auto;
-    display: inline-block;
-    position: relative;
-}
-.checkbox-dropdown >>> .btn.dropdown-toggle > div::after {
-    content: "\241f";
-    display: block;
-    color: transparent;
-    visibility: hidden;
-}
-.checkbox-dropdown >>> .btn.dropdown-toggle > div > *{
-    position: absolute;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.option {
+    border: solid 1px rgba(200,200,200,1);
+    padding: 5px 0;
+    background-color: rgba(230,230,230, 1);
 }
 </style>

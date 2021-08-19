@@ -103,7 +103,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
     }
 
     /**
-     * path to a file insiede the uploads directory
+     * path to a file inside the uploads directory
      *
      * @param string $filename
      * @return string

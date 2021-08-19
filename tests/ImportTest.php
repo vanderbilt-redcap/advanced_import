@@ -25,10 +25,52 @@ class ImportTest extends \ExternalModules\ModuleBaseTest
         $this->csvFile = '33-import-test.csv';
     }
 
-    function testDeleteAllData() {
-        $queryString = sprintf('DELETE from `redcap_data` WHERE project_id=%u', $this->project_id);
-        $result = db_query($queryString);
+    function testCopyCsvFile() {
+        $module = AdvancedImport::getInstance();
+        $getTestFilePath = function($fileName) use($module) {
+            $modulePath = $module->getModulePath();
+            $filePath =  implode(DIRECTORY_SEPARATOR,[$modulePath, 'data', $fileName]);
+            return $module->getSafePath($filePath);
+
+        };
+        $safeSrcPath = $getTestFilePath($this->csvFile);
+
+        $dst_path = AdvancedImport::getUploadedFilePath($this->csvFile);
+        $safeDstPath = $module->getSafePath($dst_path, $root='/');
+
+        $result = copy($safeSrcPath, $safeDstPath);
         $this->assertTrue($result);
+    }
+
+    function testDeleteAllData() {
+        define('PROJECT_ID', $this->project_id);
+        $getTotal = function() {
+            $dataTotalQueryString = sprintf('SELECT count(`record`) AS `total` FROM `redcap_data` WHERE project_id=%u', $this->project_id);
+            $result = db_query($dataTotalQueryString);
+            $deleted = false;
+            if($row = db_fetch_assoc($result)) {
+                return intval(@$row['total']);
+            }
+            return false;
+        };
+        $deleteAll = function() {
+            $project = new \Project($this->project_id);
+            $dataQueryString = sprintf('SELECT distinct `record` FROM `redcap_data` WHERE project_id=%u', $this->project_id);
+            $result = db_query($dataQueryString);
+            while($row = db_fetch_assoc($result)) {
+                $record = @$row['record'];
+                \Records::deleteRecord($record, $project->table_pk, $project->multiple_arms, $project->project['randomization'], $project->project['status'], $project->project['require_change_reason'], $arm_id=false, " (AdvancedImport module)");
+            }
+        };
+        $totalStart = $getTotal();
+        $deleted = $totalStart == 0;
+        if(!$deleted) {
+            $deleteAll();
+            $totalEnd = $getTotal();
+            $deleted = $totalEnd == 0;
+        }
+        $this->assertTrue($deleted);
+
     }
 
     /**
@@ -45,6 +87,19 @@ class ImportTest extends \ExternalModules\ModuleBaseTest
     }
 
     private function createJob() {
+        /* 
+        0 - record_id
+        1 - text_box
+        2 - notes_box
+        3 - email
+        4 - date
+        5 - phone
+        6 - option_1
+        7 - option_2
+        8 - option_3
+        9 - option_4
+        10 - option_5
+        */
         $settings = [
             'field_delimiter' => ",",
             'text_qualifier' => "\"",
@@ -58,10 +113,11 @@ class ImportTest extends \ExternalModules\ModuleBaseTest
             'primary_key' => "record_id",
             'dynamic_fields' => ['phone'],
             'mapping' => [
+                'text_box' => [1],
                 'email' => [3],
                 'phone' => [5],
                 'record_id' => [0],
-                'checkbox' => [8,9,10],
+                'checkbox' => [null,7,8,9,10,11],
             ]
         ];
         

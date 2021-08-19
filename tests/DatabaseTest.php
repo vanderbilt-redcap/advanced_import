@@ -37,11 +37,19 @@ class DatabaseTest extends \ExternalModules\ModuleBaseTest
         $this->assertIsNumeric($lastId);
     }
 
+    function testQueryTable() {
+         $db = AdvancedImport::colDb();
+         $query_string = sprintf("SELECT * FROM `%s` WHERE `last_name`=?", $this->testTableName);
+         $query = $db->runQuery($query_string, ['Delacqua']);
+         $row = $query->fetch_assoc();
+         $this->assertEquals('Luna', @$row['first_name'], 'data was not found');
+    }
+
     function testSearchTable() {
          $db = AdvancedImport::colDb();
          $query = $db->search($this->testTableName, '`last_name`=?', ['Delacqua']);
          $row = $query->fetch_assoc();
-         $this->assertEquals('Luna', @$row['first_name'], 'data was found');
+         $this->assertEquals('Luna', @$row['first_name'], 'data was not found');
     }
 
     function testUpdateEntry() {
@@ -49,7 +57,15 @@ class DatabaseTest extends \ExternalModules\ModuleBaseTest
         $db->update($this->testTableName, ['first_name'=>'Stella the cat'], '`first_name`=?', ['Stella']);
         $query = $db->search($this->testTableName, '`last_name`=? AND `first_name` LIKE ?', ['Delacqua', 'Stella%']);
         $row = $query->fetch_assoc();
-        $this->assertEquals('Stella the cat', @$row['first_name'], 'data was found');
+        $this->assertEquals('Stella the cat', @$row['first_name'], 'data does not match');
+    }
+
+    function testDeleteEntry() {
+        $db = AdvancedImport::colDb();
+        $db->delete($this->testTableName, '`first_name`=?', ['Luna']);
+        $query = $db->search($this->testTableName, '`last_name`=? AND `first_name`=?', ['Delacqua', 'Luna']);
+        $row = $query->fetch_assoc();
+        $this->assertNull($row, 'data was found');
      }
 
     function testDropTable() {

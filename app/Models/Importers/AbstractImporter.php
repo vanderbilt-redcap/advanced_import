@@ -78,6 +78,12 @@ abstract class AbstractImporter implements ImporterInterface
      */
     protected function getValue($data, $redcapField, $csvIndexes) {
 
+        $getRealValue = function($value) {
+            $bool = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+            if(!is_null($bool)) return $bool;
+            if(is_numeric($value)) return $value+0;
+            return $value;
+        };
         $field_metadata = $this->getFieldMetadata($this->project, $redcapField);
         $element_type = $field_metadata['element_type'];
         if($element_type=='checkbox') {
@@ -92,17 +98,25 @@ abstract class AbstractImporter implements ImporterInterface
                     return preg_match('/\d+/', $value);
                 });
             }else {
-
+                /**
+                 * check each field and if truty for a
+                 * specific index then add that index
+                 * in the list
+                 */
                 $values = [];
-                foreach ($csvIndexes as $index) {
-                    $values[] = @$data[$index];
+                foreach ($csvIndexes as $index=>$csvIndex) {
+                    if(!isinteger($csvIndex)) continue;
+                    $realValue = $getRealValue(@$data[$csvIndex]);
+                    $value = boolval($realValue);
+                    if($value) $values[] = $index;
                 }
             }
             sort($values); // sort to match the pivot rotation query
             return $values;
         }else {
             $index = reset($csvIndexes);
-            return @$data[$index];
+            $realValue = $getRealValue(@$data[$index]);
+            return $realValue;
         }
     }
 

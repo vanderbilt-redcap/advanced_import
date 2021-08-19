@@ -26,6 +26,7 @@ export default {
                 return {event_id,form_name}
             },
             set({event_id,form_name}) {
+                this.$store.dispatch('import_settings/setStateProperty',{key: 'mapping', value: {}}) //reset the mapping
                 this.$store.dispatch('import_settings/setStateProperty',{key: 'event_id', value: event_id})
                 this.$store.dispatch('import_settings/setStateProperty',{key: 'form_name', value: form_name})
             },

@@ -108,12 +108,12 @@ exports.default = _default;
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/TargetForm.vue?vue&type=template&id=609cf6ce&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/TargetForm.vue?vue&type=template&id=646a890d&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Select a destination form.")]),_c('EventFormSelect',{model:{value:(_vm.form),callback:function ($$v) {_vm.form=$$v},expression:"form"}}),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v,"processFunction":_vm.processSettings})],2)],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/import/TargetForm.vue?vue&type=template&id=609cf6ce&
+// CONCATENATED MODULE: ./src/components/import/TargetForm.vue?vue&type=template&id=646a890d&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
 var asyncToGenerator = __webpack_require__("1da1");
@@ -163,6 +163,11 @@ var EventFormSelect = __webpack_require__("fede");
       set: function set(_ref) {
         var event_id = _ref.event_id,
             form_name = _ref.form_name;
+        this.$store.dispatch('import_settings/setStateProperty', {
+          key: 'mapping',
+          value: {}
+        }); //reset the mapping
+
         this.$store.dispatch('import_settings/setStateProperty', {
           key: 'event_id',
           value: event_id
