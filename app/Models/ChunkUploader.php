@@ -55,7 +55,7 @@ class ChunkUploader
         
         $file_size = intval(@$params['size'] ?: 0);
         // use the unique name if availabvle as parameter, otherwise create one
-        $unique_name = @$params['unique_name'] ?: $this->getUniqueName($params['name']);
+        $unique_name = htmlspecialchars(@$params['unique_name'] ?: $this->getUniqueName($params['name']));
         $file_path = "{$this->upload_dir}/{$unique_name}";
         $module = AdvancedImport::getInstance();
         $safeFilePath = $module->getSafePath($file_path, $root='/');
