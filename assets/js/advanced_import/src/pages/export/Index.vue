@@ -73,7 +73,6 @@ export default {
 
 <style scoped>
 .wizard {
-  width: 80%;
   margin: 0 auto;
 }
 .wizard-tabs {
