@@ -34,7 +34,7 @@ class Settings
             'redcap_version',
             'app_path_webroot_full',
             'project_dashboard_url',
-            'checkbox_fields',
+            'checkbox_fields'
         );
         return $data;
     }
