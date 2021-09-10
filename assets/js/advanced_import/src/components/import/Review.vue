@@ -19,7 +19,7 @@
         <div class="buttons d-flex flex-row justify-content-between" >
             <slot name="left" ></slot>
             <!-- <slot>
-                <NOTE>CANNOT USE THIS BECAUSE IN CHROME RETURNS 'udnefined'</NOTE>
+                <NOTE>CANNOT USE THIS BECAUSE IN CHROME RETURNS 'undefined'</NOTE>
             </slot> -->
             <section>
                 <button class="btn btn-primary ml-2" @click="importCSV" :disabled="processing">
