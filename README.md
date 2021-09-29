@@ -35,8 +35,6 @@ The module saves the job related settings in a virtual table stored in the *redc
 
 Logs are saved in the *redcap_external_modules_log* and *redcap_external_modules_log_parameters* tables.
 
-CSV files are uploaded in the edocs folder in REDCap.
+Files are uploaded in chunks using the file API to avoid POST size limits of the server and saved in the *edocs* folder in REDCap.
 
 A cronjob process checks for “ready” jobs every minute and starts them, one at a time. When a process takes too much time, it pauses for a minute and is resumed at the next cron cycle to avoid timeout issues.
-
-Files are uploaded in chunks using the file API to avoid POST size limits of the server.
