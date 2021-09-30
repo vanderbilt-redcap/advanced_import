@@ -66,10 +66,10 @@ If you DO NOT mark "medication_status" as *dynamic* the module will
 For now the module will only export the structure of an instrument.
 
 ## Technical information
-The module saves the job related settings in a virtual table stored in the *redcap_external_module_settings* table.
-
-Logs are saved in the *redcap_external_modules_log* and *redcap_external_modules_log_parameters* tables.
-
-Files are uploaded in chunks using the file API to avoid POST size limits of the server and saved in the *edocs* folder in REDCap.
-
-A cronjob process checks for “ready” jobs every minute and starts them, one at a time. When a process takes too much time, it pauses for a minute and is resumed at the next cron cycle to avoid timeout issues.
+* job related settings are saved in a virtual table stored in the *redcap_external_module_settings* table
+* logs are saved in the *redcap_external_modules_log* and *redcap_external_modules_log_parameters* tables
+* files are uploaded to the REDCap edocs folder (only 'local' option supported)
+* files are uploaded in chunks using the file API to avoid POST size limits of the server and saved in the *edocs* folder in REDCap
+* a specific file is deleted when the associated job is deleted
+* all files are deleted when the module is disabled
+* a cronjob process checks for “ready” jobs every minute and starts them, one at a time. When a process takes too much time, it pauses for a minute and is resumed at the next cron cycle to avoid timeout issues
