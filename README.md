@@ -1,5 +1,5 @@
-[![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D%207.2-brightgreen)](https://php.net)
-[![GitHub all releases](https://img.shields.io/github/downloads/vanderbilt-redcap/advanced_import/total)
+[![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D%207.2-8892BF)](https://php.net)
+![GitHub all releases](https://img.shields.io/github/downloads/vanderbilt-redcap/advanced_import/total)
 
 # Redcap Advanced Import/Export
 
