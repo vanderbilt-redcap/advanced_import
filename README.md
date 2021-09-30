@@ -28,9 +28,9 @@ The import process can adopt different strategies:
 * Copy: delete all records and repopulate from the source (NOT YET IMPLEMENTED)
 
 ### How existing data is identified
-Imported fields are compared to existing data in REDCap using a **full match** and a **partial match**; based on the match, the row in the CSV file will be skipped, will create a new entry or will update an existing one.
-* the **full match** compares every imported CSV field with the mapped REDCap field
-* the **partial match** uses *dynamic fields*, a special indicator used to mark those fields that are not decisive for the uniqueness of an entry.
+Imported fields are compared to existing data in REDCap using a *full match* and a *partial match*; based on the match, the row in the CSV file will be skipped, will create a new entry or will update an existing one.
+* the *full match* compares every imported CSV field with the mapped REDCap field
+* the *partial match* uses *dynamic fields*, a special indicator used to mark those fields that are not decisive for the uniqueness of an entry.
 
 ### Dynamic fields usage example
 You have a repeatable instrument called "medications" and you import this CSV file:
@@ -50,12 +50,14 @@ patient_id, medication_name, medication_dosage, medication_status
 0002, FENTANYL CITRATE, 50 MCG/ML, active
 ```
 In this case you should mark "medication_status" as *dynamic* and the module will
-* skip the entry matching line 1
-* update the status for the entry matching line 2
+* skip the entry matching line 1 (*full match*)
+* update the status for the entry matching line 2 (*partial match*)
 * create a new entry with data on line 3
 
-Otherwise the second import will create a new entry for "francesco", but will still skip "giovanni" because there is a full match.
-
+If you do not amrk "medication_status" as *dynamic*, the second import will
+* skip line 1 (*full match*)
+* create a new entry with data on line 2
+* create a new entry with data on line 3
 ## Export (NOT YET FULLY IMPLEMENTED)
 For now the module will only export the structure of an instrument.
 
