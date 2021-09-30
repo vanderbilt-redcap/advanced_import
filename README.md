@@ -54,7 +54,7 @@ In this case you should mark "medication_status" as *dynamic* and the module wil
 * update the status for the entry matching line 2 (*partial match*)
 * create a new entry with data on line 3
 
-If you do not amrk "medication_status" as *dynamic*, the second import will
+If you DO NOT mark "medication_status" as *dynamic* the module will
 * skip line 1 (*full match*)
 * create a new entry with data on line 2
 * create a new entry with data on line 3
