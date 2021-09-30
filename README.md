@@ -1,3 +1,5 @@
+![GitHub all releases](https://img.shields.io/github/downloads/vanderbilt-redcap/advanced_import/total)
+
 # Redcap Advanced Import/Export
 
 This module makes it easy to import/export large amount of data to/from REDCap repeatable instruments.
