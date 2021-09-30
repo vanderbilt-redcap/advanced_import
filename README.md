@@ -61,7 +61,7 @@ If you DO NOT mark "medication_status" as *dynamic* the module will
 ## Export (NOT YET FULLY IMPLEMENTED)
 For now the module will only export the structure of an instrument.
 
-## How it works
+## Technical information
 The module saves the job related settings in a virtual table stored in the *redcap_external_module_settings* table.
 
 Logs are saved in the *redcap_external_modules_log* and *redcap_external_modules_log_parameters* tables.
