@@ -46,6 +46,7 @@ class PhoneParser extends AbstractParser
      */
     public function parse($value)
     {
+        $this->makeSingleValue($value);
         $valid = preg_match($this->regexp, $value, $matches);
         if($valid===false) throw new \Exception("Error Processing the regular expression: {$this->format}", 1);
         if($valid===0) throw new \Exception("The format is not valid for the value '{$value}'", 1);

@@ -1,10 +1,10 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Queue;
 
-use SplObserver;
 use SplSubject;
+use Vanderbilt\AdvancedImport\App\Interfaces\ObserverInterface;
 use Vanderbilt\AdvancedImport\App\Models\Import;
 
-class ImportJob extends Job
+class ImportJob extends Job implements ObserverInterface
 {
     /**
      * type for this job
@@ -17,11 +17,11 @@ class ImportJob extends Job
     {
 
         $importer = new Import();
-        $importer->attach($this, "data:process_started");
-        $importer->attach($this, "data:line_processed");
-        $importer->attach($this, "data:completed");
+        $importer->attach($this, Import::NOTIFICATION_PROCESS_STARTED);
+        $importer->attach($this, Import::NOTIFICATION_LINE_PROCESSED);
+        $importer->attach($this, Import::NOTIFICATION_PROCESS_COMPLETED);
         // $importer->attach($this, "data:chunk_completed");
-        $importer->attach($this, "data:stopped");
+        $importer->attach($this, Import::NOTIFICATION_PROCESS_STOPPED);
         try {
             $importer->processJob($this);
         } catch (\Exception $e) {
@@ -38,20 +38,20 @@ class ImportJob extends Job
      * @param array $data
      * @return void
      */
-    public function update($importManager, string $event = null, $data = null)
+    public function update($importManager, $event = null, $data = null)
     {
         switch ($event) {
-            case 'data:process_started':
+            case Import::NOTIFICATION_PROCESS_STARTED:
                 $this->markProcessing(); // update the status of the job
                 break;
-            case 'data:line_processed':
+            case Import::NOTIFICATION_LINE_PROCESSED:
                 $processed_lines = @$data['processed_line'];
                 $update_params = [
                     'processed_lines' => $processed_lines,
                 ];
                 $this->updateProperties($update_params);
                 break;
-            case 'data:completed':
+            case Import::NOTIFICATION_PROCESS_COMPLETED:
                 $this->markCompleted();
                 break;
             /* case 'data:chunk_completed':
@@ -61,7 +61,7 @@ class ImportJob extends Job
                 ];
                 $this->updateProperties($params);
                 break; */
-            case 'data:stopped':
+            case Import::NOTIFICATION_PROCESS_STOPPED:
                 // do nothing
                 break;
             default:

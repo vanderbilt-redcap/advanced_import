@@ -69,55 +69,20 @@ abstract class AbstractImporter implements ImporterInterface
 
     /**
      * Used in pre-processing
-     * get value associated to a REDCap fields from the CSV data
+     * get values associated to a REDCap fields from the CSV data
      *
      * @param array $data
      * @param string $redcapField
      * @param array $csvIndexes
      * @return mixed
      */
-    protected function getValue($data, $redcapField, $csvIndexes) {
-
-        $getRealValue = function($value) {
-            $bool = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
-            if(!is_null($bool)) return $bool;
-            if(is_numeric($value)) return $value+0;
-            return $value;
-        };
-        $field_metadata = $this->getFieldMetadata($this->project, $redcapField);
-        $element_type = $field_metadata['element_type'];
-        if($element_type=='checkbox') {
-            /**
-             * if only one field is provided then split the values using a regexp
-             * else get one value per provided index
-             */
-            if(count($csvIndexes)===1) {
-                $index = reset($csvIndexes);
-                $values = preg_split('/[,;\s]/', @$data[$index]);
-                $values = array_filter($values, function($value) {
-                    return preg_match('/\d+/', $value);
-                });
-            }else {
-                /**
-                 * check each field and if truty for a
-                 * specific index then add that index
-                 * in the list
-                 */
-                $values = [];
-                foreach ($csvIndexes as $index=>$csvIndex) {
-                    if(!isinteger($csvIndex)) continue;
-                    $realValue = $getRealValue(@$data[$csvIndex]);
-                    $value = boolval($realValue);
-                    if($value) $values[] = $index;
-                }
-            }
-            sort($values); // sort to match the pivot rotation query
-            return $values;
-        }else {
-            $index = reset($csvIndexes);
-            $realValue = $getRealValue(@$data[$index]);
-            return $realValue;
+    protected function getValues($data, $csvIndexes) {
+        if(!is_array($csvIndexes)) $csvIndexes = [$csvIndexes];
+        $values = [];
+        foreach ($csvIndexes as $key=>$csvIndex) {
+            $values[$key] = @$data[$csvIndex];
         }
+        return $values;
     }
 
     /**

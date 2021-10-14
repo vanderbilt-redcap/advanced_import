@@ -1,0 +1,11 @@
+record_id,secondary_key,text_box,notes_box,multiple_choice_drop_down,multiple_choice_radio_buttons,checkbox___1,checkbox___2,checkbox___3,checkbox___4,checkbox___5,yes_no,true_false,date_time_ymd_hm,email,integer,number,phone,time,zipcode,form_1_complete
+501,,0002,dolor sit amet,2,1,0,1,1,1,1,1,1,"2000-01-01 00:00",abc@gmail.com,123,3.3,202-555-0176,16:45,37206,
+502,,0003,consectetur adipiscing elit,,1,1,1,0,0,0,8,0,"1999-01-01 00:00",def@gmail.com,456,5.2,202-555-0166,17:20,37207,
+503,,0004,Cras id luctus,1,,0,1,3,1,1,0,0,"1998-01-01 00:00",ghi@gmail.com,789,2.6,202-555-0128,09:20,37208,
+504,,hello,lacus. Sed consequat,2,1,1,1,0,0,0,0,0,"1997-01-01 00:00",jkl@outlook.com,246,2.7,202-555-0125,2:30,37209,
+505,,0006,et nisi porta cursus,2,1,0,1,1,1,1,false,1,"1996-01-01 00:00",mno@outlook.com,369,2.8,202-555-0169,6:52,37210,
+506,,some text,In hac habitasse,1,1,1,0,0,0,0,true,1,"1995-01-01 00:00",pqr@outlook.com,789,7.3,202-555-0105,9:38,37211,
+507,,0008,platea dictumst,1,2,0,1,1,0,1,1,1,"1994-01-01 00:00",stu@yahoo.com,123,8.5,202-555-0146,11:30,37212,
+508,,0001,lorem ipsum,1,,1,1,0,1,1,yes,1,"1993-01-01 00:00",vwx@yahoo.com,456,2.3,202-555-0193,12:15,37205,
+509,,0009,Phasellus eleifend rutrum volutpat,2,2,1,4,0,5,3,1,0,"1992-01-01 00:00",yz1@yahoo.com,789,2,202-555-0152,20:30,37213,
+510,,0010,"Pellentesque elit diam, convallis a auctor viverra, laoreet in eros. Aenean nec euismod felis, at facilisis velit. Vestibulum commodo, nisi eu ultrices pretium, elit urna molestie elit, vitae vehicula sapien sapien vel felis. Duis luctus dolor nec convallis laoreet. Quisque vehicula, nisl et sollicitudin semper",2,1,1,1,0,1,1,0,1,"1991-01-01 00:00",ab2@yahoo.com,123,12.30,202-555-0111,23:46,37214,

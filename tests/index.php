@@ -7,6 +7,8 @@ $xdebug2 = "php -dxdebug.remote_enable=1 -dxdebug.remote_mode=req -dxdebug.remot
 $xdebug3 = "-dxdebug.mode=debug -dxdebug.start_with_request=yes"; // add this to launch xdebug3
 $command = "./vendor/phpunit/phpunit/phpunit --color --testdox tests/";
 
+$command .= " --filter ParsingTest"; // only run this class
+
 exec ("php $xdebug3 $command", $output);
 ?>
 <pre>

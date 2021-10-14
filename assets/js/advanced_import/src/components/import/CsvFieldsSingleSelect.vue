@@ -1,4 +1,6 @@
 <template>
+<div>
+
 <b-dropdown class="w-100" text="Dropdown Button" :variant="hasMapping ? 'success': 'outline-primary'" lazy>
     <template #button-content>
         <span>{{selectedText}}</span>
@@ -9,6 +11,7 @@
         <span>{{field}}</span>
     </b-dropdown-item>
 </b-dropdown>
+</div>
 
 </template>
 
@@ -73,13 +76,12 @@ export default {
          */
         isMappedElsewhere(csvIndex) {
             const mapping = {...this.mapping}
-            for(let [redcapField, csvIndexes] of Object.entries(mapping)) {
-                if(!Array.isArray(csvIndexes)) csvIndexes = []
+            for(let [redcapField, csvIndexes={}] of Object.entries(mapping)) {
                 if(redcapField==this.redcapFieldName) {
-                    let otherIndexes = csvIndexes.filter((value, index) =>index!=csvIndex)
+                    let otherIndexes = Object.values(csvIndexes).filter((value, index) =>index!=csvIndex)
                     if(otherIndexes.indexOf(csvIndex)>=0) return true
                 }
-                else if(csvIndexes.indexOf(csvIndex)>=0) return true
+                else if(Object.values(csvIndexes).indexOf(csvIndex)>=0) return true
             }
             return false
         },

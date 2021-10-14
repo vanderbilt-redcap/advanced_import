@@ -22,6 +22,11 @@ class Import extends BaseModel
     const IMPORT_STRATEGY_DELETE = 'delete';
     const IMPORT_STRATEGY_COPY = 'copy';
 
+    const NOTIFICATION_PROCESS_STARTED = 'Import:process_started';
+    const NOTIFICATION_LINE_PROCESSED = 'Import:line_processed';
+    const NOTIFICATION_PROCESS_COMPLETED = 'Import:process_completed';
+    const NOTIFICATION_PROCESS_STOPPED = 'Import:process_stopped';
+
     /**
      * overwrite behaviour available in REDCap::saveData
      */
@@ -77,11 +82,11 @@ class Import extends BaseModel
         $row_index = $processed_lines + 1; // start after the last processd line. when starting from 0 also skips the `fields` row
 
         $results = [];
-        $this->notify("data:process_started", []);
+        $this->notify(self::NOTIFICATION_PROCESS_STARTED, []);
         while($line = $this->readFileAtLine($file_path, $row_index)) {
             $job_status = $job->getStatus();
             if($job_status==Job::STATUS_STOPPED) {
-                $this->notify("data:stopped", []);
+                $this->notify(self::NOTIFICATION_PROCESS_STOPPED, []);
                 return;
             }
             
@@ -90,7 +95,7 @@ class Import extends BaseModel
                 $response = $importer->process($csv_data, $row_index);
                 $results = $this->reduceResults($response, $results);
                 // use the observer pattern to update the processed lines in the job
-                $this->notify("data:line_processed", [
+                $this->notify(self::NOTIFICATION_LINE_PROCESSED, [
                     'data' => $csv_data,
                     'processed_line' => $row_index,
                     'results' => $results,
@@ -99,7 +104,7 @@ class Import extends BaseModel
             $row_index++;
         }
         if(!$line || empty($results)) {
-            $this->notify("data:completed", []);
+            $this->notify(self::NOTIFICATION_PROCESS_COMPLETED, []);
             return true;
         }
         return false;

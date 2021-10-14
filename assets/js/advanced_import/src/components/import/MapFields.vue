@@ -40,6 +40,7 @@
                 </tr>
             </tbody>
         </table>
+
         <b-modal id="modal-dynamic-fields" title="Dynamic fields" ok-only>
             <div class="my-4">
                 <p>Mark as "dynamic" the fields that are not relevant in determining the uniqueness of an entry (i.e. can be different compared to existing data).</p>
@@ -93,7 +94,7 @@ export default {
          */
         hasMapping(redcapField) {
             const csvFields = this.$store.getters['import_settings/mappedCsvFields'](redcapField)
-            return csvFields.length>0
+            return Object.values(csvFields).length>0
         },
         isDynamic(redcapField) {
             return this.dynamic_fields.indexOf(redcapField)>=0
@@ -102,8 +103,8 @@ export default {
     validations() {
         const getMappedFields = (list) => {
             const mappedFields = []
-            for(let [fieldName, indexes] of Object.entries(list) ) {
-                if(indexes.length>0) mappedFields.push(fieldName)
+            for(let [fieldName, indexes={}] of Object.entries(list) ) {
+                if(Object.values(indexes).length>0) mappedFields.push(fieldName)
             }
             return mappedFields
         }

@@ -3,12 +3,17 @@
 use Vanderbilt\AdvancedImport\App\Models\Import;
 use Vanderbilt\AdvancedImport\App\Models\Response;
 use Vanderbilt\AdvancedImport\App\Models\ParserFactory;
+use Vanderbilt\AdvancedImport\App\Traits\Observer\SubjectTrait;
 
 /**
  * Append/Update: add new records or update existing ones
  */
 class AppendUpdate extends AbstractImporter
 {
+
+	const NOTIFICATION_PROCESS_ERROR = 'AppendUpdate:process_error';
+	const NOTIFICATION_DATA_SAVED = 'AppendUpdate:data_saved';
+	const NOTIFICATION_DATA_SAVE_ERROR = 'AppendUpdate:data_save_error';
 
 	/**
 	 *
@@ -28,8 +33,8 @@ class AppendUpdate extends AbstractImporter
 
 		$normalizedData = [];
 		foreach ($mapping as $redcapField => $csvIndexes) {
-			$value = $this->getValue($data, $redcapField, $csvIndexes); // extract value
-			$normalizedData[$redcapField] = $this->applyParsers($parsersFactory, $redcapField, $value); // apply parsers
+			$values = $this->getValues($data, $csvIndexes); // extract value
+			$normalizedData[$redcapField] = $this->applyParsers($parsersFactory, $redcapField, $values); // apply parsers
 		}
 
 		// $data = $processData($data);
@@ -63,6 +68,7 @@ class AppendUpdate extends AbstractImporter
 			$data = $this->preProcess($data_to_process);
 		}catch (\Exception $e) {
 			$message = "Error pre-processing CSV data:\n".$e->getMessage();
+			$this->notify(self::NOTIFICATION_PROCESS_ERROR, compact('e', 'message'));
 			$this->log($message, compact('project_id','line'));
 			return Response::ERROR;
 		}
@@ -114,6 +120,7 @@ class AppendUpdate extends AbstractImporter
 		 */
 		$save_response = \REDCap::saveData($project_id, 'array', $record, Import::OVERWRITE_BEHAVIOR_OVERWRITE);
 		if(empty(@$save_response['errors'])) {
+			$this->notify(self::NOTIFICATION_DATA_SAVED, compact('save_response', 'record'));
 			$saved_ids = $save_response['ids'] ?: [];
 			$ids_string = implode(',', $saved_ids);
 			$saved_fields_count = $save_response['item_count'] ?: 0;
@@ -122,8 +129,9 @@ class AppendUpdate extends AbstractImporter
 			return Response::SUCCESS;
 		}else {
 			$errors = @$save_response['errors'];
-			if(is_array($errors)) $errors = implode("\n", $errors);
-			$message = "Error saving data #{$record_id}, instance #{$instance_number}:\n {$errors}";
+			if(is_array($errors)) $errorsString = implode("\n", $errors);
+			$message = "Error saving data #{$record_id}, instance #{$instance_number}:\n {$errorsString}";
+			$this->notify(self::NOTIFICATION_DATA_SAVE_ERROR, compact('save_response', 'record', 'errors', 'message'));
 			$this->log($message, compact('project_id','record_id', 'instance_number', 'save_response', 'line'));
 			return Response::ERROR;
 		}

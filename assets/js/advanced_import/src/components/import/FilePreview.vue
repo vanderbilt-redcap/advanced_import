@@ -92,7 +92,7 @@ export default {
             const mapping = {...this.mapping}
             const index = this.csvFields.indexOf(column_name)
             for(let[fieldName, csvIndexes] of Object.entries(mapping)) {
-                if(csvIndexes.indexOf(index)>=0) return fieldName
+                if(Object.values(csvIndexes).indexOf(index)>=0) return fieldName
             }
             return
         },

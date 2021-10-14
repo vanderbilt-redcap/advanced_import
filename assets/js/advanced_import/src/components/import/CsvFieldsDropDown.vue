@@ -2,7 +2,9 @@
 <b-container>
     <b-row v-for="(option, index) in checkboxOptions" :key="index" class="d-flex flex-column option">
         <b-col class="small">
-            <span>{{index}})</span><span class="ml-1">{{option}}</span>
+            <span>[{{index}}]:</span>
+            <!-- <font-awesome-icon :icon="['fas', 'arrow-right']" fixed-width class="small"/> -->
+            <span class="ml-1">{{option}}</span>
         </b-col>
         <b-col class="">
             <CsvFieldsSingleSelect :redcapFieldName="redcapFieldName" :fieldIndex="index" />

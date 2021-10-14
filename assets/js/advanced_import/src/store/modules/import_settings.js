@@ -53,10 +53,10 @@ const module = {
          */
         setFieldMapping({state, commit}, {fieldName, csvIndex, fieldIndex=0}) {
             const mapping = {...state.mapping}
-            if(!Array.isArray(mapping[fieldName])) mapping[fieldName] = []
+            if(typeof(mapping[fieldName])=='undefined') mapping[fieldName] = {}
             mapping[fieldName][fieldIndex] = csvIndex
             // if there is not at least one valid value (an integer) in the mapping for this fields, then delete the mapping
-            if(!mapping[fieldName].some((value => Number.isInteger(value)))) delete mapping[fieldName]
+            if(!Object.values(mapping[fieldName]).some((value => value != null))) delete mapping[fieldName]
 
             return commit('SET_MAPPING', mapping)
         },
@@ -65,6 +65,7 @@ const module = {
             const index = dynamicFields.indexOf(field)
             if(checked && index<0) dynamicFields.push(field)
             if(!checked && index>=0) dynamicFields.splice(index, 1)
+            console.log(field, checked, dynamicFields)
             context.commit('SET_STATE_PROPERTY', {key: 'dynamic_fields', value: dynamicFields})
         },
         /**
@@ -101,7 +102,7 @@ const module = {
         mappedCsvFields: state => redcap_field => {
             const mapping = {...state.mapping}
             let csvIndexes = mapping[redcap_field]
-            if(!Array.isArray(csvIndexes)) csvIndexes = []
+            if(typeof(csvIndexes)=='undefined') csvIndexes = {}
             return csvIndexes
         },
         /**
@@ -110,8 +111,8 @@ const module = {
         mappedDynamicFields: state => {
             const mapping = {...state.mapping}
             const dynamicFields = [...state.dynamic_fields].filter(fieldName => {
-                let csvIndexes = mapping[fieldName] ?? []
-                return (Array.isArray(csvIndexes) && csvIndexes.length>0)
+                let csvIndexes = mapping[fieldName] ?? {}
+                return Object.values(csvIndexes).length>0
             })
             return dynamicFields
         },
@@ -123,7 +124,7 @@ const module = {
 
             const getFieldMapping = (csvIndexes) => {
                 const list = []
-                for (const csvIndex of csvIndexes) {
+                for (const csvIndex of Object.values(csvIndexes)) {
                     if(!Number.isInteger(csvIndex)) continue
                     let fieldName = fields[csvIndex]
                     let name = `${csvIndex} - ${fieldName}`

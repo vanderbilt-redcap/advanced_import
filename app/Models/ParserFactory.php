@@ -1,10 +1,15 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
+use Vanderbilt\AdvancedImport\App\Models\Parser\TextParser;
+use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
+use Vanderbilt\AdvancedImport\App\Models\Parser\FloatParser;
+use Vanderbilt\AdvancedImport\App\Models\Parser\PhoneParser;
+use Vanderbilt\AdvancedImport\App\Models\Parser\BooleanParser;
+use Vanderbilt\AdvancedImport\App\Models\Parser\IntegerParser;
 use Vanderbilt\AdvancedImport\App\Models\Parser\AbstractParser;
 use Vanderbilt\AdvancedImport\App\Models\Parser\CheckBoxParser;
 use Vanderbilt\AdvancedImport\App\Models\Parser\DateTimeParser;
-use Vanderbilt\AdvancedImport\App\Models\Parser\PhoneParser;
-use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
+use Vanderbilt\AdvancedImport\App\Models\Parser\SelectionParser;
 use Vanderbilt\AdvancedImport\App\Models\Validator\DateTimeValidator;
 
 class ParserFactory
@@ -62,11 +67,17 @@ class ParserFactory
         // check type
         $checkElementType = function($element_type) use(&$parsers){
             switch ($element_type) {
-                /* case 'checkbox':
+                case 'checkbox':
                     $parsers[] = new CheckBoxParser();
-                    break; */
+                    break;
+                case 'yesno':
+                case 'truefalse':
+                    $parsers[] = new BooleanParser();
+                    break;
+                case 'select':
+                case 'radio':
                 default:
-                    # code...
+                    $parsers[] = new TextParser();
                     break;
             }
         };
@@ -83,12 +94,18 @@ class ParserFactory
                     case 'phone':
                         $parsers[] = new PhoneParser(); // necessary because phone is saved with a format
                         break;
+                    case 'int':
+                        $parsers[] = new IntegerParser();
+                        break;
+                    case 'float':
+                        $parsers[] = new FloatParser();
+                        break;
                     default:
                     break;
                 }
             }
         };
-        // $checkElementType($element_type); // type check is not being used
+        $checkElementType($element_type); // type check is not being used
         $checkValidationType($validation_type);
 
         return $parsers;

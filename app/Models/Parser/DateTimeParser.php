@@ -60,6 +60,7 @@ class DateTimeParser extends AbstractParser
      */
     public function parse($value)
     {
+        $this->makeSingleValue($value);
         if(empty($value)) return '';
         if($this->validation_format == DateTimeFormat::REDCAP_TIME) return $value; // skip parsing for time
         $datetime = \DateTime::createFromFormat($this->from, $value);
