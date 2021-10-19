@@ -1,6 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models;
 
-use Vanderbilt\AdvancedImport\AdvancedImport;
+use ExternalModules\ExternalModules;
 
 class ChunkUploader
 {
@@ -57,8 +57,7 @@ class ChunkUploader
         // use the unique name if availabvle as parameter, otherwise create one
         $unique_name = htmlspecialchars(@$params['unique_name'] ?: $this->getUniqueName($params['name']));
         $file_path = "{$this->upload_dir}/{$unique_name}";
-        $module = AdvancedImport::getInstance();
-        $safeFilePath = $module->getSafePath($file_path, $root='/');
+        $safeFilePath = ExternalModules::getSafePath($file_path, $root='/');
         
         // check sent file size against local file
         $checkFileSize($safeFilePath, $file_size);

@@ -82,6 +82,8 @@ class AppendUpdate extends AbstractImporter
 			//generate record_id
 			$record_id = $this->record_helper->getRecordId($primary_key_name, $primary_key_value);
 		}
+
+		
 		// check for new record
 		if($record_id==false) {
 			$record_id = $this->record_helper->getAutoId($project_id);
@@ -114,6 +116,8 @@ class AppendUpdate extends AbstractImporter
 				// return [$record, $record_id, $instance_number];
 			}
 		}
+		
+		// \Logging::writeToFile('append-update.txt', json_encode($record, JSON_PRETTY_PRINT));
 
 		/**
 		 * note: set OVERWRITE_BEHAVIOR_OVERWRITE or blank values will not be saved
