@@ -1,0 +1,11 @@
+record_id,repeated_text,repeated_text2,repeated_number
+501,0002,dolor sit amet,3.3
+501,0003,consectetur adipiscing elit,5.2
+503,0004,Cras id luctus,2.6
+503,text here,lacus. Sed consequat,2.7
+505,0006,et nisi porta cursus,2.8
+506,0007,In hac habitasse,7.3
+507,more text,platea dictumst,8.5
+508,0009,lorem ipsum,2.3
+509,0010,Phasellus eleifend rutrum volutpat,2
+509,0011,"Pellentesque elit diam, convallis a auctor viverra, laoreet in eros. Aenean nec euismod felis, at facilisis velit. Vestibulum commodo, nisi eu ultrices pretium, elit urna molestie elit, vitae vehicula sapien sapien vel felis. Duis luctus dolor nec convallis laoreet. Quisque vehicula, nisl et sollicitudin semper",12.30

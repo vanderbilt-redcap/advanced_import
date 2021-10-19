@@ -1,13 +1,10 @@
-<?php namespace Vanderbilt\AdvancedImport\tests;
+<?php namespace Vanderbilt\AdvancedImport\Tests;
 
-use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\Response;
 use Vanderbilt\AdvancedImport\App\Traits\CanReadCSV;
 use Vanderbilt\AdvancedImport\App\Helpers\RecordHelper;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 use Vanderbilt\AdvancedImport\App\Helpers\InstanceSeeker;
-use Vanderbilt\AdvancedImport\App\Models\Queue\ImportJob;
-use Vanderbilt\AdvancedImport\App\Helpers\ColumnarDatabase;
 use Vanderbilt\AdvancedImport\App\Interfaces\ObserverInterface;
 use Vanderbilt\AdvancedImport\App\Models\Importers\AppendUpdate;
 
@@ -26,10 +23,33 @@ class ParsingTest extends \ExternalModules\ModuleBaseTest
     public function setUp():void {
         $this->project_id = 33;
         $this->event_id = 60;
-        $this->user_id = 2;
+        $this->user_id = 2;        
+    }
 
-        $this->file_path = dirname(__FILE__).'/data/example_participant_upload.csv';
-        $this->job_settings = [
+    function getObserver() {
+        $Observer = new class implements ObserverInterface {
+            private $errors = [];
+            function update($subject, $event = null, $data = null)
+            {
+                switch ($event) {
+                    case AppendUpdate::NOTIFICATION_DATA_SAVE_ERROR:
+                        $message = $data['message'];// ['save_response', 'record', 'errors', 'message']
+                        print($message.PHP_EOL);
+                        break;
+                    case AppendUpdate::NOTIFICATION_PROCESS_ERROR:
+                        $message = $data['message'];// ['save_response', 'record', 'errors', 'message']
+                        print($message.PHP_EOL);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+        return new $Observer();
+    }
+    
+    function testParse() {
+        $job_settings = [
             'field_delimiter' => ",",
             'text_qualifier' => "\"",
             'field_name_row' => 0,
@@ -62,54 +82,26 @@ class ParsingTest extends \ExternalModules\ModuleBaseTest
                 'integer' => [15],
                 'number' => [16],
                 'phone' => [17],
-                'time' => [18],
+                // 'time' => [18], // need to fix this and provide date formats at mapping level
                 'zipcode' => [19],
             ]
         ];
-        
-    }
-    
-    function testParse() {
-        $Observer = new class implements ObserverInterface {
-            private $errors = [];
-            function update($subject, $event = null, $data = null)
-            {
-                switch ($event) {
-                    case AppendUpdate::NOTIFICATION_DATA_SAVE_ERROR:
-                        $message = $data['message'];// ['save_response', 'record', 'errors', 'message']
-                        print($message.PHP_EOL);
-                        break;
-                    case AppendUpdate::NOTIFICATION_PROCESS_ERROR:
-                        $message = $data['message'];// ['save_response', 'record', 'errors', 'message']
-                        print($message.PHP_EOL);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };
-        $job_settings = $this->job_settings;
-
-        $db = AdvancedImport::colDb();
-        $query = $db->search(ImportJob::TABLE_NAME, '`id`=?', [$jobID=10]);
-        if($row = $query->fetch_assoc()) {
-            $job_settings = json_decode(@$row['settings'], true);
-        }
+        $file_path = dirname(__FILE__).'/data/example_participant_upload.csv';
 
         $project = new \Project($this->project_id);
         $settings = new ImportSettings($job_settings, $project);
 
 
-        $record_helper = new RecordHelper($project, $this->file_path, $settings);
+        $record_helper = new RecordHelper($project, $settings);
         $instanceSeeker = new InstanceSeeker($project, $settings);
         $appendUpdate = new AppendUpdate($project, $settings, $instanceSeeker, $record_helper);
 
-        $observer = new $Observer();
+        $observer = $this->getObserver();
         $appendUpdate->attach($observer);
 
         $responses = [];
         $index = 1;
-        while($line = $this->readFileAtLine($this->file_path, $index)) {
+        while($line = $this->readFileAtLine($file_path, $index)) {
             if(empty(trim($line))) break;
             $data = $this->readCSVLine($line);
             $response = $appendUpdate->process($data, $index);

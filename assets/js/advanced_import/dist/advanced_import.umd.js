@@ -96,7 +96,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"efaec6d8","11":"5c9a0bfa","12":"31d6cfe0","13":"33d9679d","14":"4ccb7cda","15":"a25f28c8","16":"a25f28c8","17":"9b6f63f2","18":"d7180cb5","19":"1aec68ba","20":"31d6cfe0","21":"31d6cfe0"}[chunkId] + ".css";
+/******/ 				var href = "css/" + ({}[chunkId]||chunkId) + "." + {"1":"31d6cfe0","2":"31d6cfe0","3":"31d6cfe0","4":"31d6cfe0","5":"31d6cfe0","6":"31d6cfe0","7":"31d6cfe0","8":"31d6cfe0","9":"31d6cfe0","10":"4bb5d96f","11":"3571e74c","12":"31d6cfe0","13":"33d9679d","14":"4ccb7cda","15":"a25f28c8","16":"a25f28c8","17":"9b6f63f2","18":"d7180cb5","19":"5f42ff73","20":"31d6cfe0","21":"31d6cfe0"}[chunkId] + ".css";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {
@@ -59174,12 +59174,6 @@ var logs_module = {
   }
 };
 /* harmony default export */ var modules_logs = (logs_module);
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createForOfIteratorHelper.js
-var createForOfIteratorHelper = __webpack_require__("b85c");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.is-integer.js
-var es_number_is_integer = __webpack_require__("8ba4");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.splice.js
 var es_array_splice = __webpack_require__("a434");
 
@@ -59191,6 +59185,9 @@ var es_array_find_index = __webpack_require__("c740");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.filter.js
 var es_array_filter = __webpack_require__("4de4");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.is-integer.js
+var es_number_is_integer = __webpack_require__("8ba4");
 
 // CONCATENATED MODULE: ./src/store/modules/import_settings.js
 
@@ -59293,11 +59290,11 @@ var import_settings_module = {
 
       var mapping = Object(objectSpread2["a" /* default */])({}, state.mapping);
 
-      if (!Array.isArray(mapping[fieldName])) mapping[fieldName] = [];
+      if (typeof mapping[fieldName] == 'undefined') mapping[fieldName] = {};
       mapping[fieldName][fieldIndex] = csvIndex; // if there is not at least one valid value (an integer) in the mapping for this fields, then delete the mapping
 
-      if (!mapping[fieldName].some(function (value) {
-        return Number.isInteger(value);
+      if (!Object.values(mapping[fieldName]).some(function (value) {
+        return value != null;
       })) delete mapping[fieldName];
       return commit('SET_MAPPING', mapping);
     },
@@ -59310,6 +59307,7 @@ var import_settings_module = {
       var index = dynamicFields.indexOf(field);
       if (checked && index < 0) dynamicFields.push(field);
       if (!checked && index >= 0) dynamicFields.splice(index, 1);
+      console.log(field, checked, dynamicFields);
       context.commit('SET_STATE_PROPERTY', {
         key: 'dynamic_fields',
         value: dynamicFields
@@ -59372,7 +59370,7 @@ var import_settings_module = {
         var mapping = Object(objectSpread2["a" /* default */])({}, state.mapping);
 
         var csvIndexes = mapping[redcap_field];
-        if (!Array.isArray(csvIndexes)) csvIndexes = [];
+        if (typeof csvIndexes == 'undefined') csvIndexes = {};
         return csvIndexes;
       };
     },
@@ -59386,8 +59384,8 @@ var import_settings_module = {
       var dynamicFields = Object(toConsumableArray["a" /* default */])(state.dynamic_fields).filter(function (fieldName) {
         var _mapping$fieldName;
 
-        var csvIndexes = (_mapping$fieldName = mapping[fieldName]) !== null && _mapping$fieldName !== void 0 ? _mapping$fieldName : [];
-        return Array.isArray(csvIndexes) && csvIndexes.length > 0;
+        var csvIndexes = (_mapping$fieldName = mapping[fieldName]) !== null && _mapping$fieldName !== void 0 ? _mapping$fieldName : {};
+        return Object.values(csvIndexes).length > 0;
       });
 
       return dynamicFields;
@@ -59401,21 +59399,12 @@ var import_settings_module = {
       var getFieldMapping = function getFieldMapping(csvIndexes) {
         var list = [];
 
-        var _iterator = Object(createForOfIteratorHelper["a" /* default */])(csvIndexes),
-            _step;
-
-        try {
-          for (_iterator.s(); !(_step = _iterator.n()).done;) {
-            var csvIndex = _step.value;
-            if (!Number.isInteger(csvIndex)) continue;
-            var fieldName = fields[csvIndex];
-            var name = "".concat(csvIndex, " - ").concat(fieldName);
-            list.push(name);
-          }
-        } catch (err) {
-          _iterator.e(err);
-        } finally {
-          _iterator.f();
+        for (var _i2 = 0, _Object$values = Object.values(csvIndexes); _i2 < _Object$values.length; _i2++) {
+          var csvIndex = _Object$values[_i2];
+          if (!Number.isInteger(csvIndex)) continue;
+          var fieldName = fields[csvIndex];
+          var name = "".concat(csvIndex, " - ").concat(fieldName);
+          list.push(name);
         }
 
         return list;
@@ -59437,8 +59426,8 @@ var import_settings_module = {
 
       var mappingWithNames = {};
 
-      for (var _i2 = 0, _Object$entries2 = Object.entries(mapping); _i2 < _Object$entries2.length; _i2++) {
-        var _Object$entries2$_i = Object(slicedToArray["a" /* default */])(_Object$entries2[_i2], 2),
+      for (var _i3 = 0, _Object$entries2 = Object.entries(mapping); _i3 < _Object$entries2.length; _i3++) {
+        var _Object$entries2$_i = Object(slicedToArray["a" /* default */])(_Object$entries2[_i3], 2),
             redcapField = _Object$entries2$_i[0],
             csvIndexes = _Object$entries2$_i[1];
 

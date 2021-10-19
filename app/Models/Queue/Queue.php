@@ -80,18 +80,35 @@ class Queue
         }
     }
 
+    /**
+     * create a job using data retrieved from
+     * the database or in this structure: 
+     *  ['id','project_id','user_id','filename','settings','processed_lines','status','type','created_at','updated_at','completed_at','error'];
+     *
+     * @param [type] $data
+     * @return void
+     */
+    public function makeJob($data) {
+        $type = @$data['type'];
+        $job = null;
+        switch ($type) {
+            case Job::TYPE_IMPORT:
+                $job = new ImportJob($data);
+                break;
+            default:
+            throw new \Exception("Error creating the job; type {$type} not supported", 400);
+                break;
+        }
+        return $job;
+    }
+
     public function getJobsByStatus($status=Job::STATUS_READY)
     {
         $db = AdvancedImport::colDb();
         $result = $db->search(Job::TABLE_NAME, '`status`=?', [$status]);
         $jobs = [];
         while($row = $result->fetch_assoc()) {
-            $type = @$row['type'];
-            if($type==Job::TYPE_IMPORT) {
-                $jobs[] = new ImportJob($row);
-            }else {
-                throw new \Exception("Error creating a list of jobs", 1);
-            }
+            $jobs[] = $this->makeJob($row);
         }
         return $jobs;
     }

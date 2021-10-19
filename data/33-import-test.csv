@@ -1,6 +1,0 @@
-record_id,text_box,notes_box,email,date,phone,all_options, option_1,option_2,option_3,option_4,option_5
-508,"ciao come va 1","this is a note 1",vwx1@yahoo.com,"1993-01-01 12:34",9876543211,"3,5",1,0,1,0,1
-509,"ciao come va 2","this is a note 2",vwx2@yahoo.com,"1993-01-01 12:35",9876543211,"3,5",0,1,1,0,1
-510,"ciao come va 3","this is a note 3",vwx3@yahoo.com,"1993-01-01 12:36",9876543211,"3,5",0,0,0,1,1
-511,"ciao come va 4","this is a note 4",vwx4@yahoo.com,"1993-01-01 12:37",9876543211,"3,5",0,0,1,1,1
-512,"ciao come va 4","this is a note 4",vwx4@yahoo.com,"1993-01-01 12:37",9876543211,"3,5",ciao,false,3,true,true

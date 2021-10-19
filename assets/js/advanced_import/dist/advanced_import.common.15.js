@@ -7,12 +7,12 @@
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/Review.vue?vue&type=template&id=72e31b9a&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/import/Review.vue?vue&type=template&id=b4f43024&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('h6',[_vm._v("Review your settings")]),_c('table',{staticClass:"table table-bordered table-striped"},[_vm._m(0),_c('tbody',_vm._l((_vm.settings),function(value,key){return _c('tr',{key:key},[_c('td',[_vm._v(_vm._s(key))]),_c('td',[_c('pre',[_vm._v(_vm._s(value))])])])}),0)]),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_c('section',[_c('button',{staticClass:"btn btn-primary ml-2",attrs:{"disabled":_vm.processing},on:{"click":_vm.importCSV}},[(_vm.processing)?_c('font-awesome-icon',{attrs:{"icon":"spinner","spin":"","fixed-width":""}}):_c('font-awesome-icon',{attrs:{"icon":"file-import","fixed-width":""}}),_c('span',[_vm._v(" import")])],1)]),_vm._t("right",null,{"validation":_vm.$v})],2),_c('b-modal',{ref:"modal-success",attrs:{"title":"Process completed","ok-only":"","size":"xl"},on:{"hidden":_vm.onCloseModal}},[_c('p',{staticClass:"my-4"},[_vm._v("The import proces is completed. Please check the "),_c('router-link',{attrs:{"to":{name:'logs'}}},[_vm._v("logs")]),_vm._v(" for details.")],1),_c('LogsTable',{ref:"logs"})],1),_c('b-modal',{ref:"modal-upload",attrs:{"title":"Uploading CSV file","ok-only":"","no-close-on-esc":"","no-close-on-backdrop":"","hide-header-close":"","ok-title":"cancel"},on:{"ok":_vm.onProcessStopped}},[_c('FileUploader',{ref:"uploader",attrs:{"files":_vm.files}})],1),_c('b-modal',{ref:"modal-process",attrs:{"id":"modal-process","title":"Processing CSV file","ok-only":"","no-close-on-esc":"","no-close-on-backdrop":"","hide-header-close":"","ok-title":"cancel","size":"xl"},on:{"ok":_vm.onProcessStopped}},[_c('FileProcesser',{ref:"processer",attrs:{"background_process":_vm.background_process}}),_c('LogsTable',{ref:"logs"})],1),_c('b-modal',{ref:"modal-abort",attrs:{"id":"modal-abort","title":"Process stopped","ok-only":""},on:{"ok":_vm.onProcessStopped}},[_c('p',{staticClass:"my-4"},[_vm._v("The process has been stopped by the user")])])],1)}
 var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('thead',[_c('tr',[_c('th',[_vm._v("key")]),_c('th',[_vm._v("value")])])])}]
 
 
-// CONCATENATED MODULE: ./src/components/import/Review.vue?vue&type=template&id=72e31b9a&scoped=true&
+// CONCATENATED MODULE: ./src/components/import/Review.vue?vue&type=template&id=b4f43024&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
 var esm_typeof = __webpack_require__("53ca");
@@ -667,7 +667,7 @@ var Review_component = Object(componentNormalizer["a" /* default */])(
   staticRenderFns,
   false,
   null,
-  "72e31b9a",
+  "b4f43024",
   null
   
 )

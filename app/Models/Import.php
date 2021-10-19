@@ -76,7 +76,7 @@ class Import extends BaseModel
         $project = new Project($project_id);
         $settings = new ImportSettings($job_settings, $project);
         $instanceSeeker = new InstanceSeeker($project, $settings);
-        $record_helper = new RecordHelper($project, $file_path, $settings);
+        $record_helper = new RecordHelper($project, $settings);
         $importer = ImporterFactory::create($project, $settings, $instanceSeeker, $record_helper);
         
         $row_index = $processed_lines + 1; // start after the last processd line. when starting from 0 also skips the `fields` row

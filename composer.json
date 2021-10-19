@@ -18,7 +18,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Vanderbilt\\AdvancedImport\\App\\": "app/"
+            "Vanderbilt\\AdvancedImport\\App\\": "app/",
+            "Vanderbilt\\AdvancedImport\\Tests\\": "tests/"
         },
         "files": [
             "app/Functional/methods.php"

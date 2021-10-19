@@ -27,11 +27,10 @@ class RecordHelper
      * @param Project $project
      * @param ImportSettings $settings
      */
-    public function __construct($project, $file_path, $settings)
+    public function __construct($project, $settings)
     {
         $this->project = $project;
         $this->project_id = $project->project_id;
-        $this->file_path = $file_path;
         $this->settings = $settings;
 
     }

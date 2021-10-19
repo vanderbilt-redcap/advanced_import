@@ -62,6 +62,7 @@ class ImportJob extends Job implements ObserverInterface
                 $this->updateProperties($params);
                 break; */
             case Import::NOTIFICATION_PROCESS_STOPPED:
+                $this->markStopped();
                 // do nothing
                 break;
             default:

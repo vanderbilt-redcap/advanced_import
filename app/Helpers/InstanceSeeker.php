@@ -1,7 +1,6 @@
 <?php
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
-use Logging;
 use Project;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
@@ -112,14 +111,29 @@ class InstanceSeeker
       return $query_string;
     }
 
+    /**
+     * array sorting function that compares elements as strings.
+     * using 'sort' could have unexpected results when sorting number and strings together
+     *
+     * @param mixed $a
+     * @param mixed $b
+     * @return int
+     */
+    private function compareAsStrings($a, $b) {
+      $a = strval($a);
+      $b = strval($b);
+        if ($a == $b) return 0;
+        return ($a < $b) ? -1 : 1;
+    }
+
     public function findMatches($record, $data, $full_match=true)
-    {      
+    {
       $buildWhereClause = function($data, $full_match=false) {
         $wheres = array_map(function($key, $value) use($full_match) {
           if(is_array($value) && count($value)==0) $value = null; // take care of empty arrays
           if(is_array($value)) {
             // sort, prepend/postpend a unit separator and join with double unit separator to match the pivot rotation query
-            sort($value);
+            usort($value, [$this, 'compareAsStrings']);
             $regexp = self::unit_separator().implode( self::unit_separator().self::unit_separator(), $value). self::unit_separator();
             if($full_match) $regexp = sprintf('^%s$', $regexp); //exact match (starts and ends)
             return sprintf("`%s` REGEXP %s", $key, checkNull($regexp));
@@ -149,8 +163,8 @@ class InstanceSeeker
         $subQuery,
         $whereClause
       );
-      // $cache = new FileCache('instanceseeker');
-      // $cache->set('query', $query_string);
+      $cache = new FileCache('instanceseeker');
+      $cache->set('query', $query_string);
       
       $result = db_query($query_string);
       $total_matches = db_num_rows($result);

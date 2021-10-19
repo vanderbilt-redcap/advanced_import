@@ -1,30 +1,31 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Queue;
 
-use DateTime;
-use JsonSerializable;
 use Logging;
-use SplSubject;
 use SQLite3;
+use DateTime;
+use SplSubject;
+use JsonSerializable;
 use Vanderbilt\AdvancedImport\AdvancedImport;
-use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
 use Vanderbilt\AdvancedImport\App\Models\Import;
 use Vanderbilt\AdvancedImport\App\Models\Response;
+use Vanderbilt\AdvancedImport\App\Helpers\FileCache;
+use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
 
 /**
  * 
- * @var int id
- * @var int project_id
- * @var int user_id
- * @var string filename
- * @var array settings
- * @var int processed_lines
- * @var string status
- * @var string type
- * @var DateTime created_at
- * @var DateTime updated_at
- * @var DateTime completed_at
- * @var string error
- * @var string error
+ * @property int id
+ * @property int project_id
+ * @property int user_id
+ * @property string filename
+ * @property array settings
+ * @property int processed_lines
+ * @property string status
+ * @property string type
+ * @property DateTime created_at
+ * @property DateTime updated_at
+ * @property DateTime completed_at
+ * @property string error
+ * @property string error
  */
 abstract class Job implements JobInterface, JsonSerializable
 {
@@ -48,6 +49,8 @@ abstract class Job implements JobInterface, JsonSerializable
     const TABLE_NAME = "jobs";
     const STORE_NAME = "jobs";
 
+    const ACTION_STOP = 'stop';
+
     /**
      * list of fields to skip in mass assignment (update)
      *
@@ -64,11 +67,18 @@ abstract class Job implements JobInterface, JsonSerializable
 
     private $properties = [];
 
+    /**
+     *
+     * @var FileCache
+     */
+    private $fileCache;
+
     public function __construct($params)
     {
         foreach ($params as $key => $value) {
             $this->{$key} = $value;
         }
+        $this->fileCache = new FileCache(Job::TABLE_NAME.":{$this->id}");
     }
 
     /**
@@ -85,9 +95,25 @@ abstract class Job implements JobInterface, JsonSerializable
         return date('Y-m-d H:i:s');
     }
 
+    /**
+     * - check if there is an action flag (temp file)
+     * - update the status based on the action flag
+     * - return the status
+     *
+     * @return void
+     */
     public function getStatus()
     {
-        $query_string = sprintf(
+        $action = $this->checkActionFlag();
+        switch ($action) {
+            case self::ACTION_STOP:
+                $this->markStopped();
+                break;
+            default:
+                break;
+        }
+        return $this->status;
+        /* $query_string = sprintf(
             "SELECT `status` FROM `%s` WHERE `id`=?",
             self::TABLE_NAME
         );
@@ -97,7 +123,7 @@ abstract class Job implements JobInterface, JsonSerializable
             $this->status = $status = @$row['status']; // also update the local one
             return $this->status;
         }
-        return false;
+        return false; */
     }
 
     public function process() {}
@@ -143,9 +169,19 @@ abstract class Job implements JobInterface, JsonSerializable
 
 
 
-    function markProcessing() {
+    public function markProcessing()
+    {
         $params = [
-            'status' => self::STATUS_PROCESSING,
+            'status' =>  $this->status = self::STATUS_PROCESSING,
+        ];
+        $this->updateProperties($params);
+    }
+
+    public function markStopped()
+    {
+        $params = [
+            'status' =>  $this->status = self::STATUS_STOPPED,
+            'completed_at' => $this->completed_at = self::getNow(),
         ];
         $this->updateProperties($params);
     }
@@ -153,9 +189,9 @@ abstract class Job implements JobInterface, JsonSerializable
     public function setError($message)
     {
         $params = [
-            'status' => self::STATUS_ERROR,
-            'completed_at' => self::getNow(),
-            'error' => $message,
+            'status' =>  $this->status = self::STATUS_ERROR,
+            'completed_at' => $this->completed_at = self::getNow(),
+            'error' => $this->error = $message,
         ];
         $this->updateProperties($params);
     }
@@ -163,8 +199,8 @@ abstract class Job implements JobInterface, JsonSerializable
     public function markCompleted()
     {
         $params = [
-            'status' => self::STATUS_COMPLETED,
-            'completed_at' => self::getNow(),
+            'status' =>  $this->status = self::STATUS_COMPLETED,
+            'completed_at' => $this->completed_at = self::getNow(),
         ];
         $this->updateProperties($params);
     }
@@ -196,10 +232,38 @@ abstract class Job implements JobInterface, JsonSerializable
     public function putBackInQueue()
     {
         $params = [
-            'status' => self::STATUS_READY,
+            'status' => $this->status = self::STATUS_READY,
         ];
         $this->updateProperties($params);
     }
+
+    /**
+     * check if an action flag is available
+     * and thendelete it
+     *
+     * @return string the action to perform
+     */
+    public function checkActionFlag() {
+        $action = $this->fileCache->get('action');
+        $this->fileCache->delete('action'); // delete as soon as it is retrieved
+        return $action;
+    }
+
+    
+    /**
+     * create an action flag
+     *
+     * @param int $id
+     * @param string $action action to perform
+     * @return void
+     */
+    public static function createActionFlag($id, $action)
+    {
+        $fileCache = new FileCache(Job::TABLE_NAME.":{$id}");
+        $fileCache->set('action', $action);
+    }
+
+
 
     public function __get($name)
     {

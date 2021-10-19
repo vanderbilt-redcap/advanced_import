@@ -83,7 +83,8 @@ class JobsController extends BaseController
 
     function stopJob($id)
     {
-        $this->changeJobStatus($id, Job::STATUS_STOPPED);
+        // $this->changeJobStatus($id, Job::STATUS_STOPPED);
+        Job::createActionFlag($id, Job::ACTION_STOP);
     }
 
     function startJob($id)

@@ -1,4 +1,4 @@
-<?php namespace Vanderbilt\AdvancedImport\tests;
+<?php namespace Vanderbilt\AdvancedImport\Tests;
 
 // For now, the path to "redcap_connect.php" on your system must be hard coded.
 $root = dirname(dirname(dirname(__DIR__)));

@@ -1,4 +1,4 @@
-<?php namespace Vanderbilt\AdvancedImport\tests;
+<?php namespace Vanderbilt\AdvancedImport\Tests;
 
 use Generator;
 use Vanderbilt\AdvancedImport\AdvancedImport;

@@ -3,7 +3,6 @@ namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use mysqli;
 use Vanderbilt\AdvancedImport\AdvancedImport;
-use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
 
 /**
  * this class uses the external module settings table to implement a columnar table.
