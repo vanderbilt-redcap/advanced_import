@@ -1,6 +1,8 @@
 <?php
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
+use ExternalModules\ExternalModules;
+
 class FileCache
 {
   /**
@@ -23,7 +25,7 @@ class FileCache
   {
     $this->namespace = $namespace;
     // $cacheDir = sys_get_temp_dir();
-    $this->cacheDir = realpath($cacheDir);
+    $this->cacheDir = ExternalModules::getSafePath(realpath($cacheDir), $root='/');
   }
 
   /**
