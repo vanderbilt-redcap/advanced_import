@@ -3,7 +3,6 @@ namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use Project;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
-use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
 
 class InstanceSeeker
 {
@@ -83,11 +82,12 @@ class InstanceSeeker
         $cases = [];
         foreach ($fields as $field) {
           /**
-           * NOTE: I use an empty separator but prepend a unit separator before and after the value; this
-           * NOTE: I use an empty separator but prepend a unit separator before and after the value; the final result will be: {us}{value}{us}{us}{value}{us}
+           * NOTE 1: I use an empty separator but prepend a unit separator before and after the value; this
+           * NOTE 2: I use an empty separator but prepend a unit separator before and after the value; the final result will be: {us}{value}{us}{us}{value}{us}
+           * NOTE 3: DISTINCT is included to deal with double primary_key entries in the redcap_data table created by REDCap::saveData when the first instance of a repeatable instrument is saved
            * this way any value, also the first one and teh last one, will always be preceeded/followed by at least a unit separator
            */
-          $cases[] = sprintf("GROUP_CONCAT(CASE WHEN `field_name` = '%s' THEN CONCAT('%s', value, '%s') ELSE NULL END ORDER BY `value` ASC SEPARATOR '') AS `%s`", $field, $unit_separator, $unit_separator, $field);
+          $cases[] = sprintf("GROUP_CONCAT( DISTINCT CASE WHEN `field_name` = '%s' THEN CONCAT('%s', value, '%s') ELSE NULL END ORDER BY `value` ASC SEPARATOR '') AS `%s`", $field, $unit_separator, $unit_separator, $field);
         }
         return implode(", \n", $cases);
       };
@@ -163,8 +163,7 @@ class InstanceSeeker
         $subQuery,
         $whereClause
       );
-      $cache = new FileCache('instanceseeker');
-      $cache->set('query', $query_string);
+      // \Logging::writeToFile('instanceseeker.txt', $query_string);
       
       $result = db_query($query_string);
       $total_matches = db_num_rows($result);
