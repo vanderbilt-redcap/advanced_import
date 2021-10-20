@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ODM xmlns="http://www.cdisc.org/ns/odm/v1.3" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:redcap="https://projectredcap.org" xsi:schemaLocation="http://www.cdisc.org/ns/odm/v1.3 schema/odm/ODM1-3-1.xsd" ODMVersion="1.3.1" FileOID="000-00-0000" FileType="Snapshot" Description="Fields Types" AsOfDateTime="2021-10-19T16:24:23" CreationDateTime="2021-10-19T16:24:23" SourceSystem="REDCap" SourceSystemVersion="999.0.0">
+<Study OID="Project.FieldsTypes">
+<GlobalVariables>
+	<StudyName>Fields Types</StudyName>
+	<StudyDescription>This file contains the metadata, events, and data for REDCap project "Fields Types".</StudyDescription>
+	<ProtocolName>Fields Types</ProtocolName>
+	<redcap:RecordAutonumberingEnabled>1</redcap:RecordAutonumberingEnabled>
+	<redcap:CustomRecordLabel></redcap:CustomRecordLabel>
+	<redcap:SecondaryUniqueField>secondary_key</redcap:SecondaryUniqueField>
+	<redcap:SchedulingEnabled>0</redcap:SchedulingEnabled>
+	<redcap:SurveysEnabled>0</redcap:SurveysEnabled>
+	<redcap:SurveyInvitationEmailField></redcap:SurveyInvitationEmailField>
+	<redcap:Purpose>0</redcap:Purpose>
+	<redcap:PurposeOther></redcap:PurposeOther>
+	<redcap:ProjectNotes></redcap:ProjectNotes>
+	<redcap:MissingDataCodes></redcap:MissingDataCodes>
+	<redcap:RepeatingInstrumentsAndEvents>
+		<redcap:RepeatingInstruments>
+			<redcap:RepeatingInstrument redcap:UniqueEventName="event_1_arm_1" redcap:RepeatInstrument="repeatable_things" redcap:CustomLabel="[repeated_text] [repeated_text2] [repeated_number]"/>
+		</redcap:RepeatingInstruments>
+	</redcap:RepeatingInstrumentsAndEvents>
+</GlobalVariables>
+<MetaDataVersion OID="Metadata.FieldsTypes_2021-10-19_1624" Name="Fields Types" redcap:RecordIdField="record_id">
+	<FormDef OID="Form.form_1" Name="Form 1" Repeating="No" redcap:FormName="form_1">
+		<ItemGroupRef ItemGroupOID="form_1.record_id" Mandatory="No"/>
+		<ItemGroupRef ItemGroupOID="form_1.form_1_complete" Mandatory="No"/>
+	</FormDef>
+	<FormDef OID="Form.repeatable_things" Name="repeatable things" Repeating="No" redcap:FormName="repeatable_things">
+		<ItemGroupRef ItemGroupOID="repeatable_things.repeated_text" Mandatory="No"/>
+		<ItemGroupRef ItemGroupOID="repeatable_things.repeatable_things_complete" Mandatory="No"/>
+	</FormDef>
+	<ItemGroupDef OID="form_1.record_id" Name="Form 1" Repeating="No">
+		<ItemRef ItemOID="record_id" Mandatory="No" redcap:Variable="record_id"/>
+		<ItemRef ItemOID="secondary_key" Mandatory="No" redcap:Variable="secondary_key"/>
+		<ItemRef ItemOID="text_box" Mandatory="No" redcap:Variable="text_box"/>
+		<ItemRef ItemOID="notes_box" Mandatory="No" redcap:Variable="notes_box"/>
+		<ItemRef ItemOID="multiple_choice_drop_down" Mandatory="No" redcap:Variable="multiple_choice_drop_down"/>
+		<ItemRef ItemOID="multiple_choice_radio_buttons" Mandatory="No" redcap:Variable="multiple_choice_radio_buttons"/>
+		<ItemRef ItemOID="checkbox___1" Mandatory="No" redcap:Variable="checkbox"/>
+		<ItemRef ItemOID="checkbox___2" Mandatory="No" redcap:Variable="checkbox"/>
+		<ItemRef ItemOID="checkbox___3" Mandatory="No" redcap:Variable="checkbox"/>
+		<ItemRef ItemOID="checkbox___4" Mandatory="No" redcap:Variable="checkbox"/>
+		<ItemRef ItemOID="checkbox___test" Mandatory="No" redcap:Variable="checkbox"/>
+		<ItemRef ItemOID="yes_no" Mandatory="No" redcap:Variable="yes_no"/>
+		<ItemRef ItemOID="true_false" Mandatory="No" redcap:Variable="true_false"/>
+		<ItemRef ItemOID="date_time_ymd_hm" Mandatory="No" redcap:Variable="date_time_ymd_hm"/>
+		<ItemRef ItemOID="email" Mandatory="No" redcap:Variable="email"/>
+		<ItemRef ItemOID="integer" Mandatory="No" redcap:Variable="integer"/>
+		<ItemRef ItemOID="number" Mandatory="No" redcap:Variable="number"/>
+		<ItemRef ItemOID="phone" Mandatory="No" redcap:Variable="phone"/>
+		<ItemRef ItemOID="time" Mandatory="No" redcap:Variable="time"/>
+		<ItemRef ItemOID="zipcode" Mandatory="No" redcap:Variable="zipcode"/>
+		<ItemRef ItemOID="file" Mandatory="No" redcap:Variable="file"/>
+	</ItemGroupDef>
+	<ItemGroupDef OID="form_1.form_1_complete" Name="Form Status" Repeating="No">
+		<ItemRef ItemOID="form_1_complete" Mandatory="No" redcap:Variable="form_1_complete"/>
+	</ItemGroupDef>
+	<ItemGroupDef OID="repeatable_things.repeated_text" Name="repeatable things" Repeating="No">
+		<ItemRef ItemOID="repeated_text" Mandatory="No" redcap:Variable="repeated_text"/>
+		<ItemRef ItemOID="repeated_text2" Mandatory="No" redcap:Variable="repeated_text2"/>
+		<ItemRef ItemOID="repeated_number" Mandatory="No" redcap:Variable="repeated_number"/>
+	</ItemGroupDef>
+	<ItemGroupDef OID="repeatable_things.repeatable_things_complete" Name="Form Status" Repeating="No">
+		<ItemRef ItemOID="repeatable_things_complete" Mandatory="No" redcap:Variable="repeatable_things_complete"/>
+	</ItemGroupDef>
+	<ItemDef OID="record_id" Name="record_id" DataType="text" Length="999" redcap:Variable="record_id" redcap:FieldType="text">
+		<Question><TranslatedText>Record ID</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="secondary_key" Name="secondary_key" DataType="text" Length="999" redcap:Variable="secondary_key" redcap:FieldType="text">
+		<Question><TranslatedText>secondary key</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="text_box" Name="text_box" DataType="text" Length="999" redcap:Variable="text_box" redcap:FieldType="text">
+		<Question><TranslatedText>text_box</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="notes_box" Name="notes_box" DataType="text" Length="999" redcap:Variable="notes_box" redcap:FieldType="textarea">
+		<Question><TranslatedText>notes_box</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="multiple_choice_drop_down" Name="multiple_choice_drop_down" DataType="text" Length="1" redcap:Variable="multiple_choice_drop_down" redcap:FieldType="select">
+		<Question><TranslatedText>multiple_choice_drop_down</TranslatedText></Question>
+		<CodeListRef CodeListOID="multiple_choice_drop_down.choices"/>
+	</ItemDef>
+	<ItemDef OID="multiple_choice_radio_buttons" Name="multiple_choice_radio_buttons" DataType="text" Length="4" redcap:Variable="multiple_choice_radio_buttons" redcap:FieldType="radio">
+		<Question><TranslatedText>multiple_choice_radio_buttons</TranslatedText></Question>
+		<CodeListRef CodeListOID="multiple_choice_radio_buttons.choices"/>
+	</ItemDef>
+	<ItemDef OID="checkbox___1" Name="checkbox___1" DataType="boolean" Length="1" redcap:Variable="checkbox" redcap:FieldType="checkbox">
+		<Question><TranslatedText>checkbox</TranslatedText></Question>
+		<CodeListRef CodeListOID="checkbox___1.choices"/>
+	</ItemDef>
+	<ItemDef OID="checkbox___2" Name="checkbox___2" DataType="boolean" Length="1" redcap:Variable="checkbox" redcap:FieldType="checkbox">
+		<Question><TranslatedText>checkbox</TranslatedText></Question>
+		<CodeListRef CodeListOID="checkbox___2.choices"/>
+	</ItemDef>
+	<ItemDef OID="checkbox___3" Name="checkbox___3" DataType="boolean" Length="1" redcap:Variable="checkbox" redcap:FieldType="checkbox">
+		<Question><TranslatedText>checkbox</TranslatedText></Question>
+		<CodeListRef CodeListOID="checkbox___3.choices"/>
+	</ItemDef>
+	<ItemDef OID="checkbox___4" Name="checkbox___4" DataType="boolean" Length="1" redcap:Variable="checkbox" redcap:FieldType="checkbox">
+		<Question><TranslatedText>checkbox</TranslatedText></Question>
+		<CodeListRef CodeListOID="checkbox___4.choices"/>
+	</ItemDef>
+	<ItemDef OID="checkbox___test" Name="checkbox___test" DataType="boolean" Length="1" redcap:Variable="checkbox" redcap:FieldType="checkbox">
+		<Question><TranslatedText>checkbox</TranslatedText></Question>
+		<CodeListRef CodeListOID="checkbox___test.choices"/>
+	</ItemDef>
+	<ItemDef OID="yes_no" Name="yes_no" DataType="boolean" Length="1" redcap:Variable="yes_no" redcap:FieldType="yesno">
+		<Question><TranslatedText>yes_no</TranslatedText></Question>
+		<CodeListRef CodeListOID="yes_no.choices"/>
+	</ItemDef>
+	<ItemDef OID="true_false" Name="true_false" DataType="boolean" Length="1" redcap:Variable="true_false" redcap:FieldType="truefalse">
+		<Question><TranslatedText>true_false</TranslatedText></Question>
+		<CodeListRef CodeListOID="true_false.choices"/>
+	</ItemDef>
+	<ItemDef OID="date_time_ymd_hm" Name="date_time_ymd_hm" DataType="partialDatetime" Length="999" redcap:Variable="date_time_ymd_hm" redcap:FieldType="text" redcap:TextValidationType="datetime_ymd">
+		<Question><TranslatedText>date_time_ymd_hm</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="email" Name="email" DataType="text" Length="999" redcap:Variable="email" redcap:FieldType="text" redcap:TextValidationType="email">
+		<Question><TranslatedText>email</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="integer" Name="integer" DataType="integer" Length="999" redcap:Variable="integer" redcap:FieldType="text" redcap:TextValidationType="int">
+		<Question><TranslatedText>integer</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="number" Name="number" DataType="float" Length="999" SignificantDigits="1" redcap:Variable="number" redcap:FieldType="text" redcap:TextValidationType="float">
+		<Question><TranslatedText>number</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="phone" Name="phone" DataType="text" Length="999" redcap:Variable="phone" redcap:FieldType="text" redcap:TextValidationType="phone">
+		<Question><TranslatedText>phone</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="time" Name="time" DataType="partialTime" Length="999" redcap:Variable="time" redcap:FieldType="text" redcap:TextValidationType="time">
+		<Question><TranslatedText>time</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="zipcode" Name="zipcode" DataType="text" Length="999" redcap:Variable="zipcode" redcap:FieldType="text" redcap:TextValidationType="zipcode">
+		<Question><TranslatedText>zipcode</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="file" Name="file" DataType="text" Length="999" redcap:Variable="file" redcap:FieldType="file">
+		<Question><TranslatedText>File upload</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="form_1_complete" Name="form_1_complete" DataType="text" Length="1" redcap:Variable="form_1_complete" redcap:FieldType="select" redcap:SectionHeader="Form Status">
+		<Question><TranslatedText>Complete?</TranslatedText></Question>
+		<CodeListRef CodeListOID="form_1_complete.choices"/>
+	</ItemDef>
+	<ItemDef OID="repeated_text" Name="repeated_text" DataType="text" Length="999" redcap:Variable="repeated_text" redcap:FieldType="text">
+		<Question><TranslatedText>some text</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="repeated_text2" Name="repeated_text2" DataType="text" Length="999" redcap:Variable="repeated_text2" redcap:FieldType="text">
+		<Question><TranslatedText>another text</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="repeated_number" Name="repeated_number" DataType="float" Length="999" SignificantDigits="1" redcap:Variable="repeated_number" redcap:FieldType="text" redcap:TextValidationType="float">
+		<Question><TranslatedText>number</TranslatedText></Question>
+	</ItemDef>
+	<ItemDef OID="repeatable_things_complete" Name="repeatable_things_complete" DataType="text" Length="1" redcap:Variable="repeatable_things_complete" redcap:FieldType="select" redcap:SectionHeader="Form Status">
+		<Question><TranslatedText>Complete?</TranslatedText></Question>
+		<CodeListRef CodeListOID="repeatable_things_complete.choices"/>
+	</ItemDef>
+	<CodeList OID="multiple_choice_drop_down.choices" Name="multiple_choice_drop_down" DataType="text" redcap:Variable="multiple_choice_drop_down">
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>luna</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="2"><Decode><TranslatedText>stella</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="multiple_choice_radio_buttons.choices" Name="multiple_choice_radio_buttons" DataType="text" redcap:Variable="multiple_choice_radio_buttons">
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>luna</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="2"><Decode><TranslatedText>stella</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="ciao"><Decode><TranslatedText>miao</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="checkbox___1.choices" Name="checkbox___1" DataType="boolean" redcap:Variable="checkbox" redcap:CheckboxChoices="1, notte | 2, stella | 3, luna | 4, cielo | test, sole">
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>Checked</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="0"><Decode><TranslatedText>Unchecked</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="checkbox___2.choices" Name="checkbox___2" DataType="boolean" redcap:Variable="checkbox" redcap:CheckboxChoices="1, notte | 2, stella | 3, luna | 4, cielo | test, sole">
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>Checked</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="0"><Decode><TranslatedText>Unchecked</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="checkbox___3.choices" Name="checkbox___3" DataType="boolean" redcap:Variable="checkbox" redcap:CheckboxChoices="1, notte | 2, stella | 3, luna | 4, cielo | test, sole">
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>Checked</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="0"><Decode><TranslatedText>Unchecked</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="checkbox___4.choices" Name="checkbox___4" DataType="boolean" redcap:Variable="checkbox" redcap:CheckboxChoices="1, notte | 2, stella | 3, luna | 4, cielo | test, sole">
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>Checked</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="0"><Decode><TranslatedText>Unchecked</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="checkbox___test.choices" Name="checkbox___test" DataType="boolean" redcap:Variable="checkbox" redcap:CheckboxChoices="1, notte | 2, stella | 3, luna | 4, cielo | test, sole">
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>Checked</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="0"><Decode><TranslatedText>Unchecked</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="yes_no.choices" Name="yes_no" DataType="boolean" redcap:Variable="yes_no">
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>Yes</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="0"><Decode><TranslatedText>No</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="true_false.choices" Name="true_false" DataType="boolean" redcap:Variable="true_false">
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>True</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="0"><Decode><TranslatedText>False</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="form_1_complete.choices" Name="form_1_complete" DataType="text" redcap:Variable="form_1_complete">
+		<CodeListItem CodedValue="0"><Decode><TranslatedText>Incomplete</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>Unverified</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="2"><Decode><TranslatedText>Complete</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+	<CodeList OID="repeatable_things_complete.choices" Name="repeatable_things_complete" DataType="text" redcap:Variable="repeatable_things_complete">
+		<CodeListItem CodedValue="0"><Decode><TranslatedText>Incomplete</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="1"><Decode><TranslatedText>Unverified</TranslatedText></Decode></CodeListItem>
+		<CodeListItem CodedValue="2"><Decode><TranslatedText>Complete</TranslatedText></Decode></CodeListItem>
+	</CodeList>
+</MetaDataVersion>
+</Study>
+</ODM>

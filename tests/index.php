@@ -1,6 +1,8 @@
 <?php
 namespace Vanderbilt\AdvancedImport\Tests;
 
+/* //START
+
 use RegexIterator;
 use RecursiveRegexIterator;
 use RecursiveIteratorIterator;
@@ -20,9 +22,9 @@ function getAllTestFiles() {
         $className = pathinfo($filePath, PATHINFO_FILENAME);
         $files[$className] = $filePath;
     }
-    /* foreach ($iterator as $info) {
-        $files[] = $info->getPathname();
-      }*/
+    // foreach ($iterator as $info) {
+    //     $files[] = $info->getPathname();
+    // }
     return $files;
 }
 $files = getAllTestFiles();
@@ -32,16 +34,18 @@ $xdebug2 = "php -dxdebug.remote_enable=1 -dxdebug.remote_mode=req -dxdebug.remot
 $xdebug3 = "-dxdebug.mode=debug -dxdebug.start_with_request=yes"; // add this to launch xdebug3
 $command = "./vendor/phpunit/phpunit/phpunit --color --testdox tests/";
 
-if($class = @$_POST['class']) {
+$class = null;
+if($class = @$_POST['class'] && array_key_exists($class, $files)) {
     // $command .= sprintf(' --filter %s\%s', __NAMESPACE__, $class); // only run this class
-    /**
-     *  only run this class.
-     * \ (double escaped) is the separator from the namespace, thus indicates the beginning of the class name 
-     * :: is the separator for the method name, thus indicates the end of the class name 
-     */
+
+    // only run this class.
+    // * \ (double escaped) is the separator from the namespace, thus indicates the beginning of the class name 
+    // * :: is the separator for the method name, thus indicates the end of the class name 
     $command .= sprintf(' --filter \'/\\\%s::/\'', $class);
     exec ("php $xdebug3 $command", $output);
 }
+
+//END */
 
 ?>
 <form action="" method="POST">
