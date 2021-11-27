@@ -1,15 +1,41 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="7"
+    errorLevel="8"
     resolveFromConfigFile="true"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+    autoloader="../../redcap_connect.php"
 >
     <projectFiles>
         <directory name="." />
         <ignoreFiles>
             <directory name="vendor" />
+
+            <!-- These have some odd issues, and are unlikely to ever cause a vulnerability -->
+            <directory name="../../redcap_v999.0.0/ExternalModules/tests/phpcs/Sniffs" />
         </ignoreFiles>
     </projectFiles>
+    <globals>
+        <!-- From REDCap Core -->
+        <var name="auth_meth_global" type="string" />
+        <var name="lang" type="array" />
+        <var name="SUPER_USER" type="string" />
+        <var name="ACCESS_CONTROL_CENTER" type="string" />
+        <var name="app_title" type="string" />
+        <var name="external_modules_project_custom_text" type="string" />
+        <var name="user_firstname" type="string" />
+        <var name="user_lastname" type="string" />
+        <var name="project_contact_email" type="string" />
+        <var name="user_email" type="string" />
+        <var name="send_emails_admin_tasks" type="string" />
+
+        <!-- From the EM Framework (not really globals, but this works for variables in scope during require calls as well) -->
+        <var name="project_id" type="string" />
+        <var name="prefix" type="string" />
+        <var name="version" type="string" />
+        <var name="config" type="array" />
+        <var name="module" type="ExternalModules\AbstractExternalModule" />
+        <var name="arguments" type="array" />
+    </globals>
+    <issueHandlers>
+        <InvalidGlobal errorLevel="suppress" />
+    </issueHandlers>
 </psalm>

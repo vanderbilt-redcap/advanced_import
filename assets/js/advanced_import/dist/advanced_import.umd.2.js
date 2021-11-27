@@ -1,79 +1,23 @@
-((typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] = (typeof self !== 'undefined' ? self : this)["webpackJsonpadvanced_import"] || []).push([[2],{
-
-/***/ "1331":
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
+((typeof self !== 'undefined' ? self : this)["webpackChunkadvanced_import"] = (typeof self !== 'undefined' ? self : this)["webpackChunkadvanced_import"] || []).push([[2],{
 
+/***/ 7288:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var _default = (0, _common.regex)('integer', /(^[0-9]*$)|(^-[0-9]+$)/);
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "2a12":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var _default = function _default(length) {
-  return (0, _common.withParams)({
-    type: 'maxLength',
-    max: length
-  }, function (value) {
-    return !(0, _common.req)(value) || (0, _common.len)(value) <= length;
-  });
-};
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "31db":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 
 // EXPORTS
-__webpack_require__.d(__webpack_exports__, "b", function() { return /* reexport */ FieldDelimitervue_type_script_lang_js_isStandardDelimiter; });
+__webpack_require__.d(__webpack_exports__, {
+  "Z": function() { return /* binding */ EventFormSelect; }
+});
 
-// UNUSED EXPORTS: FIELD_DELIMITERS
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/FieldDelimiter.vue?vue&type=template&id=797f8e06&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{},[_c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"field_delimiter"}},[_vm._v("Field delimiter")]),_c('div',{staticClass:"input-group"},[_c('select',_vm._b({directives:[{name:"model",rawName:"v-model",value:(_vm.selected),expression:"selected"}],staticClass:"form-control",attrs:{"id":"field_delimiter"},on:{"input":_vm.onInput,"change":function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.selected=$event.target.multiple ? $$selectedVal : $$selectedVal[0]}}},'select',_vm.$attrs,false),[_c('option',{attrs:{"value":"","disabled":""}},[_vm._v("Select...")]),_vm._l((_vm.FIELD_DELIMITERS),function(field_delimiter,key){return _c('option',{key:key,domProps:{"value":field_delimiter.value}},[_vm._v(_vm._s(field_delimiter.label))])})],2),_c('div',{staticClass:"input-group-prepend"},[_c('input',{directives:[{name:"model",rawName:"v-model",value:(_vm.custom),expression:"custom"}],staticClass:"form-control",attrs:{"id":"custom-delimiter","disabled":_vm.isStandardDelimiter(_vm.value),"type":"text","placeholder":"custom delimiter"},domProps:{"value":(_vm.custom)},on:{"input":[function($event){if($event.target.composing){ return; }_vm.custom=$event.target.value},_vm.onInput]}})])])])])}
+;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"b9c96ad4-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js??ruleSet[0].rules[0].use[0]!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/index.js??vue-loader-options!./src/components/EventFormSelect.vue?vue&type=template&id=34756a94&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_c('select',{directives:[{name:"model",rawName:"v-model",value:(_vm.form),expression:"form"}],staticClass:"form-control",attrs:{"id":"events"},on:{"change":[function($event){var $$selectedVal = Array.prototype.filter.call($event.target.options,function(o){return o.selected}).map(function(o){var val = "_value" in o ? o._value : o.value;return val}); _vm.form=$event.target.multiple ? $$selectedVal : $$selectedVal[0]},_vm.onInput]}},_vm._l((_vm.events),function(forms,event_id){return _c('optgroup',{key:("evt-group" + event_id),attrs:{"label":_vm.getEventName(event_id)+" (Event # " + event_id + ")"}},_vm._l((forms),function(form_name){return _c('option',{key:("form-" + event_id + "-" + form_name),attrs:{"data-event-id":event_id,"data-form-name":form_name},domProps:{"value":{event_id: event_id,form_name: form_name}}},[_vm._v(_vm._s(form_name))])}),0)}),0)])}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/FieldDelimiter.vue?vue&type=template&id=797f8e06&
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
-var slicedToArray = __webpack_require__("3835");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.freeze.js
-var es_object_freeze = __webpack_require__("dca8");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.entries.js
-var es_object_entries = __webpack_require__("4fad");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/FieldDelimiter.vue?vue&type=script&lang=js&
-
-
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
+var objectSpread2 = __webpack_require__(7810);
+;// CONCATENATED MODULE: ./node_modules/@vue/cli-plugin-babel/node_modules/thread-loader/dist/cjs.js!./node_modules/@vue/cli-plugin-babel/node_modules/babel-loader/lib/index.js??clonedRuleSet-80[0].rules[0].use[1]!./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js??ruleSet[0].rules[0].use[0]!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/index.js??vue-loader-options!./src/components/EventFormSelect.vue?vue&type=script&lang=js&
 
 //
 //
@@ -85,107 +29,63 @@ var es_object_entries = __webpack_require__("4fad");
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-var FIELD_DELIMITERS = Object.freeze({
-  TAB: {
-    label: 'tab',
-    value: '\t'
-  },
-  SPACE: {
-    label: 'space',
-    value: ' '
-  },
-  SEMICOLON: {
-    label: '; (semicolon)',
-    value: ';'
-  },
-  COMMA: {
-    label: ', (comma)',
-    value: ','
-  },
-  PIPE: {
-    label: '| (pipe)',
-    value: '|'
-  },
-  CARET: {
-    label: '^ (caret)',
-    value: '^'
-  },
-  OTHER: {
-    label: '-- other --',
-    value: 'other'
-  }
-});
-var FieldDelimitervue_type_script_lang_js_isStandardDelimiter = function isStandardDelimiter(value) {
-  var delimiters = [];
-
-  for (var _i = 0, _Object$entries = Object.entries(FIELD_DELIMITERS); _i < _Object$entries.length; _i++) {
-    var _Object$entries$_i = Object(slicedToArray["a" /* default */])(_Object$entries[_i], 2),
-        key = _Object$entries$_i[0],
-        delimiter = _Object$entries$_i[1];
-
-    if (key !== 'OTHER') delimiters.push(delimiter.value);
-  }
-
-  return delimiters.indexOf(value) >= 0;
-};
-/* harmony default export */ var FieldDelimitervue_type_script_lang_js_ = ({
+/* harmony default export */ var EventFormSelectvue_type_script_lang_js_ = ({
   data: function data() {
     return {
-      FIELD_DELIMITERS: FIELD_DELIMITERS,
-      selected: '',
-      custom: ''
+      form: {}
     };
   },
   props: {
     value: {
-      type: String,
-      default: ''
+      type: Object,
+      default: function _default() {
+        return {};
+      }
+    }
+  },
+  computed: {
+    events: function events() {
+      try {
+        return this.$store.state.settings.project_data.events_forms;
+      } catch (error) {
+        return [];
+      }
     }
   },
   watch: {
     value: {
       immediate: true,
       handler: function handler(value) {
-        // select the 'other' option when a non standard value is set
-        if (this.isStandardDelimiter(value)) {
-          this.selected = value;
-          this.custom = '';
-        } else this.selected = 'other';
+        this.form = value;
       }
     }
   },
   methods: {
-    onInput: function onInput(event) {
-      var target = event.target;
-      var value = target.value;
-      if (this.isStandardDelimiter(value)) this.$emit('input', value);else this.$emit('input', this.custom);
+    getEventName: function getEventName(event_id) {
+      var event_info = this.$store.getters['settings/event_info'](event_id);
+      return event_info.name_ext || '';
     },
-    isStandardDelimiter: FieldDelimitervue_type_script_lang_js_isStandardDelimiter
+    onInput: function onInput() {
+      var value = (0,objectSpread2/* default */.Z)({}, this.form);
+
+      this.$emit('input', value);
+    }
   }
 });
-// CONCATENATED MODULE: ./src/components/FieldDelimiter.vue?vue&type=script&lang=js&
- /* harmony default export */ var components_FieldDelimitervue_type_script_lang_js_ = (FieldDelimitervue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
-
-// CONCATENATED MODULE: ./src/components/FieldDelimiter.vue
+;// CONCATENATED MODULE: ./src/components/EventFormSelect.vue?vue&type=script&lang=js&
+ /* harmony default export */ var components_EventFormSelectvue_type_script_lang_js_ = (EventFormSelectvue_type_script_lang_js_); 
+// EXTERNAL MODULE: ./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/runtime/componentNormalizer.js
+var componentNormalizer = __webpack_require__(3736);
+;// CONCATENATED MODULE: ./src/components/EventFormSelect.vue
 
 
 
 
 
 /* normalize component */
-
-var component = Object(componentNormalizer["a" /* default */])(
-  components_FieldDelimitervue_type_script_lang_js_,
+;
+var component = (0,componentNormalizer/* default */.Z)(
+  components_EventFormSelectvue_type_script_lang_js_,
   render,
   staticRenderFns,
   false,
@@ -195,22 +95,57 @@ var component = Object(componentNormalizer["a" /* default */])(
   
 )
 
-/* harmony default export */ var FieldDelimiter = __webpack_exports__["a"] = (component.exports);
+/* harmony default export */ var EventFormSelect = (component.exports);
 
 /***/ }),
 
-/***/ "3360":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 6408:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
+}));
+exports["default"] = void 0;
 
-var _common = __webpack_require__("78ef");
+var _common = __webpack_require__(6681);
+
+var _default = (0, _common.regex)('alpha', /^[a-zA-Z]*$/);
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 6195:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
+
+var _default = (0, _common.regex)('alphaNum', /^[a-zA-Z0-9]*$/);
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 5573:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
 
 var _default = function _default() {
   for (var _len = arguments.length, validators = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -232,204 +167,53 @@ var _default = function _default() {
   });
 };
 
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ }),
 
-/***/ "3a54":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 7884:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
+}));
+exports["default"] = void 0;
 
-var _common = __webpack_require__("78ef");
+var _common = __webpack_require__(6681);
 
-var _default = (0, _common.regex)('alphaNum', /^[a-zA-Z0-9]*$/);
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "45b8":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var _default = (0, _common.regex)('numeric', /^[0-9]*$/);
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "46bc":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var _default = function _default(max) {
+var _default = function _default(min, max) {
   return (0, _common.withParams)({
-    type: 'maxValue',
+    type: 'between',
+    min: min,
     max: max
   }, function (value) {
-    return !(0, _common.req)(value) || (!/\s/.test(value) || value instanceof Date) && +value <= +max;
+    return !(0, _common.req)(value) || (!/\s/.test(value) || value instanceof Date) && +min <= +value && +max >= +value;
   });
 };
 
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ }),
 
-/***/ "5d75":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 6681:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var emailRegex = /^(?:[A-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]{2,}(?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
-
-var _default = (0, _common.regex)('email', emailRegex);
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "5db3":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var _default = function _default(length) {
-  return (0, _common.withParams)({
-    type: 'minLength',
-    min: length
-  }, function (value) {
-    return !(0, _common.req)(value) || (0, _common.len)(value) >= length;
-  });
-};
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "6235":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var _default = (0, _common.regex)('alpha', /^[a-zA-Z]*$/);
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "6417":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var _default = function _default(validator) {
-  return (0, _common.withParams)({
-    type: 'not'
-  }, function (value, vm) {
-    return !(0, _common.req)(value) || !validator.call(this, value, vm);
-  });
-};
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "772d":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var urlRegex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
-
-var _default = (0, _common.regex)('url', urlRegex);
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "78ef":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "withParams", {
+}));
+Object.defineProperty(exports, "withParams", ({
   enumerable: true,
   get: function get() {
     return _withParams.default;
   }
-});
+}));
 exports.regex = exports.ref = exports.len = exports.req = void 0;
 
-var _withParams = _interopRequireDefault(__webpack_require__("8750"));
+var _withParams = _interopRequireDefault(__webpack_require__(8085));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -493,389 +277,226 @@ exports.regex = regex;
 
 /***/ }),
 
-/***/ "8652":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-// ESM COMPAT FLAG
-__webpack_require__.r(__webpack_exports__);
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/export/RecordFormat.vue?vue&type=template&id=7a3be3d4&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_c('p',[_vm._v("Select the field delimiter and the text qualifier.")]),_c('div',{staticClass:"d-flex flex-row align-items-center"},[_c('FieldDelimiter',{staticClass:"col pl-0",model:{value:(_vm.field_delimiter),callback:function ($$v) {_vm.field_delimiter=$$v},expression:"field_delimiter"}}),_c('TextQualifier',{staticClass:"col px-0",model:{value:(_vm.text_qualifier),callback:function ($$v) {_vm.text_qualifier=$$v},expression:"text_qualifier"}})],1),_c('div',{staticClass:"buttons d-flex flex-row justify-content-between"},[_vm._t("left"),_vm._t("default"),_vm._t("right",null,{"validation":_vm.$v})],2)])}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/export/RecordFormat.vue?vue&type=template&id=7a3be3d4&
-
-// EXTERNAL MODULE: ./node_modules/vuelidate/lib/validators/index.js
-var validators = __webpack_require__("b5ae");
-
-// EXTERNAL MODULE: ./src/components/FieldDelimiter.vue + 4 modules
-var FieldDelimiter = __webpack_require__("31db");
-
-// EXTERNAL MODULE: ./src/components/TextQualifier.vue + 4 modules
-var TextQualifier = __webpack_require__("de3d");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/export/RecordFormat.vue?vue&type=script&lang=js&
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/***/ 4078:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
-/* harmony default export */ var RecordFormatvue_type_script_lang_js_ = ({
-  components: {
-    FieldDelimiter: FieldDelimiter["a" /* default */],
-    TextQualifier: TextQualifier["a" /* default */]
-  },
-  data: function data() {
-    return {};
-  },
-  computed: {
-    field_delimiter: {
-      get: function get() {
-        return this.$store.state.export_settings.field_delimiter;
-      },
-      set: function set(value) {
-        this.$store.dispatch('export_settings/setStateProperty', {
-          key: 'field_delimiter',
-          value: value
-        });
-      }
-    },
-    text_qualifier: {
-      get: function get() {
-        return this.$store.state.export_settings.text_qualifier;
-      },
-      set: function set(value) {
-        this.$store.dispatch('export_settings/setStateProperty', {
-          key: 'text_qualifier',
-          value: value
-        });
-      }
-    }
-  },
-  validations: function validations() {
-    return {
-      field_delimiter: {
-        required: Object(validators["requiredIf"])(function (value) {
-          return !Object(FieldDelimiter["b" /* isStandardDelimiter */])(value);
-        })
-      },
-      text_qualifier: {
-        required: validators["required"]
-      }
-    };
-  }
-});
-// CONCATENATED MODULE: ./src/components/export/RecordFormat.vue?vue&type=script&lang=js&
- /* harmony default export */ var export_RecordFormatvue_type_script_lang_js_ = (RecordFormatvue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
 
-// CONCATENATED MODULE: ./src/components/export/RecordFormat.vue
+var _common = __webpack_require__(6681);
 
+var _default = (0, _common.regex)('decimal', /^[-]?\d*(\.\d+)?$/);
 
-
-
-
-/* normalize component */
-
-var component = Object(componentNormalizer["a" /* default */])(
-  export_RecordFormatvue_type_script_lang_js_,
-  render,
-  staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var RecordFormat = __webpack_exports__["default"] = (component.exports);
+exports["default"] = _default;
 
 /***/ }),
 
-/***/ "8750":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 8107:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
-var withParams = Object({"NODE_ENV":"production","VUE_APP_BASE_API_URL":"/backend/api","BASE_URL":"/"}).BUILD === 'web' ? __webpack_require__("cb69").withParams : __webpack_require__("0234").withParams;
-var _default = withParams;
-exports.default = _default;
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
+
+var emailRegex = /^(?:[A-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[A-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9]{2,}(?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
+
+var _default = (0, _common.regex)('email', emailRegex);
+
+exports["default"] = _default;
 
 /***/ }),
 
-/***/ "91d3":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ 379:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
-"use strict";
+var __webpack_unused_export__;
 
 
-Object.defineProperty(exports, "__esModule", {
+__webpack_unused_export__ = ({
   value: true
 });
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var _default = function _default() {
-  var separator = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ':';
-  return (0, _common.withParams)({
-    type: 'macAddress'
-  }, function (value) {
-    if (!(0, _common.req)(value)) {
-      return true;
-    }
-
-    if (typeof value !== 'string') {
-      return false;
-    }
-
-    var parts = typeof separator === 'string' && separator !== '' ? value.split(separator) : value.length === 12 || value.length === 16 ? value.match(/.{2}/g) : null;
-    return parts !== null && (parts.length === 6 || parts.length === 8) && parts.every(hexValid);
-  });
-};
-
-exports.default = _default;
-
-var hexValid = function hexValid(hex) {
-  return hex.toLowerCase().match(/^[0-9a-f]{2}$/);
-};
-
-/***/ }),
-
-/***/ "aa82":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
-
-var _default = function _default(prop) {
-  return (0, _common.withParams)({
-    type: 'requiredIf',
-    prop: prop
-  }, function (value, parentVm) {
-    return (0, _common.ref)(prop, this, parentVm) ? (0, _common.req)(value) : true;
-  });
-};
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "b5ae":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-Object.defineProperty(exports, "alpha", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _alpha.default;
   }
 });
-Object.defineProperty(exports, "alphaNum", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _alphaNum.default;
   }
 });
-Object.defineProperty(exports, "numeric", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _numeric.default;
   }
 });
-Object.defineProperty(exports, "between", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _between.default;
   }
 });
-Object.defineProperty(exports, "email", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _email.default;
   }
 });
-Object.defineProperty(exports, "ipAddress", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _ipAddress.default;
   }
 });
-Object.defineProperty(exports, "macAddress", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _macAddress.default;
   }
 });
-Object.defineProperty(exports, "maxLength", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _maxLength.default;
   }
 });
-Object.defineProperty(exports, "minLength", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _minLength.default;
   }
 });
-Object.defineProperty(exports, "required", {
+Object.defineProperty(exports, "C1", ({
   enumerable: true,
   get: function get() {
     return _required.default;
   }
-});
-Object.defineProperty(exports, "requiredIf", {
+}));
+Object.defineProperty(exports, "CF", ({
   enumerable: true,
   get: function get() {
     return _requiredIf.default;
   }
-});
-Object.defineProperty(exports, "requiredUnless", {
+}));
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _requiredUnless.default;
   }
 });
-Object.defineProperty(exports, "sameAs", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _sameAs.default;
   }
 });
-Object.defineProperty(exports, "url", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _url.default;
   }
 });
-Object.defineProperty(exports, "or", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _or.default;
   }
 });
-Object.defineProperty(exports, "and", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _and.default;
   }
 });
-Object.defineProperty(exports, "not", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _not.default;
   }
 });
-Object.defineProperty(exports, "minValue", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _minValue.default;
   }
 });
-Object.defineProperty(exports, "maxValue", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _maxValue.default;
   }
 });
-Object.defineProperty(exports, "integer", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _integer.default;
   }
 });
-Object.defineProperty(exports, "decimal", {
+__webpack_unused_export__ = ({
   enumerable: true,
   get: function get() {
     return _decimal.default;
   }
 });
-exports.helpers = void 0;
+__webpack_unused_export__ = void 0;
 
-var _alpha = _interopRequireDefault(__webpack_require__("6235"));
+var _alpha = _interopRequireDefault(__webpack_require__(6408));
 
-var _alphaNum = _interopRequireDefault(__webpack_require__("3a54"));
+var _alphaNum = _interopRequireDefault(__webpack_require__(6195));
 
-var _numeric = _interopRequireDefault(__webpack_require__("45b8"));
+var _numeric = _interopRequireDefault(__webpack_require__(5669));
 
-var _between = _interopRequireDefault(__webpack_require__("ec11"));
+var _between = _interopRequireDefault(__webpack_require__(7884));
 
-var _email = _interopRequireDefault(__webpack_require__("5d75"));
+var _email = _interopRequireDefault(__webpack_require__(8107));
 
-var _ipAddress = _interopRequireDefault(__webpack_require__("c99d"));
+var _ipAddress = _interopRequireDefault(__webpack_require__(9103));
 
-var _macAddress = _interopRequireDefault(__webpack_require__("91d3"));
+var _macAddress = _interopRequireDefault(__webpack_require__(7340));
 
-var _maxLength = _interopRequireDefault(__webpack_require__("2a12"));
+var _maxLength = _interopRequireDefault(__webpack_require__(5287));
 
-var _minLength = _interopRequireDefault(__webpack_require__("5db3"));
+var _minLength = _interopRequireDefault(__webpack_require__(3091));
 
-var _required = _interopRequireDefault(__webpack_require__("d4f4"));
+var _required = _interopRequireDefault(__webpack_require__(9956));
 
-var _requiredIf = _interopRequireDefault(__webpack_require__("aa82"));
+var _requiredIf = _interopRequireDefault(__webpack_require__(2941));
 
-var _requiredUnless = _interopRequireDefault(__webpack_require__("e652"));
+var _requiredUnless = _interopRequireDefault(__webpack_require__(8300));
 
-var _sameAs = _interopRequireDefault(__webpack_require__("b6cb"));
+var _sameAs = _interopRequireDefault(__webpack_require__(918));
 
-var _url = _interopRequireDefault(__webpack_require__("772d"));
+var _url = _interopRequireDefault(__webpack_require__(3213));
 
-var _or = _interopRequireDefault(__webpack_require__("d294"));
+var _or = _interopRequireDefault(__webpack_require__(5832));
 
-var _and = _interopRequireDefault(__webpack_require__("3360"));
+var _and = _interopRequireDefault(__webpack_require__(5573));
 
-var _not = _interopRequireDefault(__webpack_require__("6417"));
+var _not = _interopRequireDefault(__webpack_require__(2500));
 
-var _minValue = _interopRequireDefault(__webpack_require__("eb66"));
+var _minValue = _interopRequireDefault(__webpack_require__(2628));
 
-var _maxValue = _interopRequireDefault(__webpack_require__("46bc"));
+var _maxValue = _interopRequireDefault(__webpack_require__(301));
 
-var _integer = _interopRequireDefault(__webpack_require__("1331"));
+var _integer = _interopRequireDefault(__webpack_require__(6673));
 
-var _decimal = _interopRequireDefault(__webpack_require__("c301"));
+var _decimal = _interopRequireDefault(__webpack_require__(4078));
 
-var helpers = _interopRequireWildcard(__webpack_require__("78ef"));
+var helpers = _interopRequireWildcard(__webpack_require__(6681));
 
-exports.helpers = helpers;
+__webpack_unused_export__ = helpers;
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -883,63 +504,35 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /***/ }),
 
-/***/ "b6cb":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 6673:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
+}));
+exports["default"] = void 0;
 
-var _common = __webpack_require__("78ef");
+var _common = __webpack_require__(6681);
 
-var _default = function _default(equalTo) {
-  return (0, _common.withParams)({
-    type: 'sameAs',
-    eq: equalTo
-  }, function (value, parentVm) {
-    return value === (0, _common.ref)(equalTo, this, parentVm);
-  });
-};
+var _default = (0, _common.regex)('integer', /(^[0-9]*$)|(^-[0-9]+$)/);
 
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ }),
 
-/***/ "c301":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 9103:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
+}));
+exports["default"] = void 0;
 
-var _common = __webpack_require__("78ef");
-
-var _default = (0, _common.regex)('decimal', /^[-]?\d*(\.\d+)?$/);
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "c99d":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _common = __webpack_require__("78ef");
+var _common = __webpack_require__(6681);
 
 var _default = (0, _common.withParams)({
   type: 'ipAddress'
@@ -956,7 +549,7 @@ var _default = (0, _common.withParams)({
   return nibbles.length === 4 && nibbles.every(nibbleValid);
 });
 
-exports.default = _default;
+exports["default"] = _default;
 
 var nibbleValid = function nibbleValid(nibble) {
   if (nibble.length > 3 || nibble.length === 0) {
@@ -977,47 +570,197 @@ var nibbleValid = function nibbleValid(nibble) {
 
 /***/ }),
 
-/***/ "cb69":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ 7340:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
-"use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.withParams = void 0;
+}));
+exports["default"] = void 0;
 
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+var _common = __webpack_require__(6681);
 
-var root = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : {};
+var _default = function _default() {
+  var separator = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ':';
+  return (0, _common.withParams)({
+    type: 'macAddress'
+  }, function (value) {
+    if (!(0, _common.req)(value)) {
+      return true;
+    }
 
-var fakeWithParams = function fakeWithParams(paramsOrClosure, maybeValidator) {
-  if (_typeof(paramsOrClosure) === 'object' && maybeValidator !== undefined) {
-    return maybeValidator;
-  }
+    if (typeof value !== 'string') {
+      return false;
+    }
 
-  return paramsOrClosure(function () {});
+    var parts = typeof separator === 'string' && separator !== '' ? value.split(separator) : value.length === 12 || value.length === 16 ? value.match(/.{2}/g) : null;
+    return parts !== null && (parts.length === 6 || parts.length === 8) && parts.every(hexValid);
+  });
 };
 
-var withParams = root.vuelidate ? root.vuelidate.withParams : fakeWithParams;
-exports.withParams = withParams;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("c8ba")))
+exports["default"] = _default;
+
+var hexValid = function hexValid(hex) {
+  return hex.toLowerCase().match(/^[0-9a-f]{2}$/);
+};
 
 /***/ }),
 
-/***/ "d294":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 5287:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
+}));
+exports["default"] = void 0;
 
-var _common = __webpack_require__("78ef");
+var _common = __webpack_require__(6681);
+
+var _default = function _default(length) {
+  return (0, _common.withParams)({
+    type: 'maxLength',
+    max: length
+  }, function (value) {
+    return !(0, _common.req)(value) || (0, _common.len)(value) <= length;
+  });
+};
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 301:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
+
+var _default = function _default(max) {
+  return (0, _common.withParams)({
+    type: 'maxValue',
+    max: max
+  }, function (value) {
+    return !(0, _common.req)(value) || (!/\s/.test(value) || value instanceof Date) && +value <= +max;
+  });
+};
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 3091:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
+
+var _default = function _default(length) {
+  return (0, _common.withParams)({
+    type: 'minLength',
+    min: length
+  }, function (value) {
+    return !(0, _common.req)(value) || (0, _common.len)(value) >= length;
+  });
+};
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 2628:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
+
+var _default = function _default(min) {
+  return (0, _common.withParams)({
+    type: 'minValue',
+    min: min
+  }, function (value) {
+    return !(0, _common.req)(value) || (!/\s/.test(value) || value instanceof Date) && +value >= +min;
+  });
+};
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 2500:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
+
+var _default = function _default(validator) {
+  return (0, _common.withParams)({
+    type: 'not'
+  }, function (value, vm) {
+    return !(0, _common.req)(value) || !validator.call(this, value, vm);
+  });
+};
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 5669:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
+
+var _default = (0, _common.regex)('numeric', /^[0-9]*$/);
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 5832:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
 
 var _default = function _default() {
   for (var _len = arguments.length, validators = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -1039,22 +782,21 @@ var _default = function _default() {
   });
 };
 
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ }),
 
-/***/ "d4f4":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 9956:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
+}));
+exports["default"] = void 0;
 
-var _common = __webpack_require__("78ef");
+var _common = __webpack_require__(6681);
 
 var _default = (0, _common.withParams)({
   type: 'required'
@@ -1066,117 +808,46 @@ var _default = (0, _common.withParams)({
   return (0, _common.req)(value);
 });
 
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ }),
 
-/***/ "de3d":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-// UNUSED EXPORTS: TEXT_QUALIFIERS
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"13d50d64-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/TextQualifier.vue?vue&type=template&id=5a8bc031&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"form-group"},[_c('label',{attrs:{"for":"text_qualifier"}},[_vm._v("Text qualifier")]),_c('select',{staticClass:"form-control",attrs:{"id":"text_qualifier"},domProps:{"value":_vm.value},on:{"input":_vm.onInput}},[_c('option',{attrs:{"value":"","disabled":""}},[_vm._v("Select...")]),_vm._l((_vm.text_qualifiers),function(text_qualifier,key){return _c('option',{key:key,domProps:{"value":text_qualifier.value}},[_vm._v(_vm._s(text_qualifier.label))])})],2)])}
-var staticRenderFns = []
-
-
-// CONCATENATED MODULE: ./src/components/TextQualifier.vue?vue&type=template&id=5a8bc031&
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.freeze.js
-var es_object_freeze = __webpack_require__("dca8");
-
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/TextQualifier.vue?vue&type=script&lang=js&
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-var TEXT_QUALIFIERS = Object.freeze({
-  //   NONE: {label: '-- none --', value: ''},
-  DOUBLE_QUOTE: {
-    label: '" (double quote)',
-    value: '"'
-  },
-  QUOTE: {
-    label: '\' (quote)',
-    value: '\''
-  },
-  BACKTICK: {
-    label: '` (backtick)',
-    value: '`'
-  },
-  TILDE: {
-    label: '~ (tilde)',
-    value: '~'
-  }
-});
-/* harmony default export */ var TextQualifiervue_type_script_lang_js_ = ({
-  data: function data() {
-    return {
-      text_qualifiers: TEXT_QUALIFIERS
-    };
-  },
-  props: {
-    value: {
-      type: String,
-      default: ''
-    }
-  },
-  methods: {
-    onInput: function onInput(event) {
-      var target = event.target;
-      this.$emit('input', target.value);
-    }
-  }
-});
-// CONCATENATED MODULE: ./src/components/TextQualifier.vue?vue&type=script&lang=js&
- /* harmony default export */ var components_TextQualifiervue_type_script_lang_js_ = (TextQualifiervue_type_script_lang_js_); 
-// EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
-var componentNormalizer = __webpack_require__("2877");
-
-// CONCATENATED MODULE: ./src/components/TextQualifier.vue
+/***/ 2941:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
 
-
-
-/* normalize component */
-
-var component = Object(componentNormalizer["a" /* default */])(
-  components_TextQualifiervue_type_script_lang_js_,
-  render,
-  staticRenderFns,
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* harmony default export */ var TextQualifier = __webpack_exports__["a"] = (component.exports);
-
-/***/ }),
-
-/***/ "e652":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
+}));
+exports["default"] = void 0;
 
-var _common = __webpack_require__("78ef");
+var _common = __webpack_require__(6681);
+
+var _default = function _default(prop) {
+  return (0, _common.withParams)({
+    type: 'requiredIf',
+    prop: prop
+  }, function (value, parentVm) {
+    return (0, _common.ref)(prop, this, parentVm) ? (0, _common.req)(value) : true;
+  });
+};
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 8300:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
 
 var _default = function _default(prop) {
   return (0, _common.withParams)({
@@ -1187,60 +858,95 @@ var _default = function _default(prop) {
   });
 };
 
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ }),
 
-/***/ "eb66":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 918:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
   value: true
-});
-exports.default = void 0;
+}));
+exports["default"] = void 0;
 
-var _common = __webpack_require__("78ef");
+var _common = __webpack_require__(6681);
 
-var _default = function _default(min) {
+var _default = function _default(equalTo) {
   return (0, _common.withParams)({
-    type: 'minValue',
-    min: min
-  }, function (value) {
-    return !(0, _common.req)(value) || (!/\s/.test(value) || value instanceof Date) && +value >= +min;
+    type: 'sameAs',
+    eq: equalTo
+  }, function (value, parentVm) {
+    return value === (0, _common.ref)(equalTo, this, parentVm);
   });
 };
 
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ }),
 
-/***/ "ec11":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
+/***/ 3213:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 
-Object.defineProperty(exports, "__esModule", {
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _common = __webpack_require__(6681);
+
+var urlRegex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i;
+
+var _default = (0, _common.regex)('url', urlRegex);
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 8085:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var withParams = ({"NODE_ENV":"production","VUE_APP_BASE_API_URL":"/backend/api","BASE_URL":"/"}).BUILD === 'web' ? (__webpack_require__(16)/* .withParams */ .R) : (__webpack_require__(8413).withParams);
+var _default = withParams;
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ 16:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+var __webpack_unused_export__;
+
+
+__webpack_unused_export__ = ({
   value: true
 });
-exports.default = void 0;
+exports.R = void 0;
 
-var _common = __webpack_require__("78ef");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var _default = function _default(min, max) {
-  return (0, _common.withParams)({
-    type: 'between',
-    min: min,
-    max: max
-  }, function (value) {
-    return !(0, _common.req)(value) || (!/\s/.test(value) || value instanceof Date) && +min <= +value && +max >= +value;
-  });
+var root = typeof window !== 'undefined' ? window : typeof __webpack_require__.g !== 'undefined' ? __webpack_require__.g : {};
+
+var fakeWithParams = function fakeWithParams(paramsOrClosure, maybeValidator) {
+  if (_typeof(paramsOrClosure) === 'object' && maybeValidator !== undefined) {
+    return maybeValidator;
+  }
+
+  return paramsOrClosure(function () {});
 };
 
-exports.default = _default;
+var withParams = root.vuelidate ? root.vuelidate.withParams : fakeWithParams;
+exports.R = withParams;
 
 /***/ })
 

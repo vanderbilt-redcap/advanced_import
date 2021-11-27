@@ -4,21 +4,24 @@ namespace Vanderbilt\AdvancedImport;
 $autoload = join(DIRECTORY_SEPARATOR, [__DIR__,'vendor','autoload.php']);
 if(file_exists($autoload)) require_once($autoload);
 
-use DateInterval;
-use DateTime;
-use ExternalModules\AbstractExternalModule;
-use ExternalModules\ExternalModules;
 use PDO;
-use Vanderbilt\AdvancedImport\App\Helpers\ColumnarDatabase;
+use Files;
+use DateTime;
+use ExternalModules\ExternalModules;
+use ExternalModules\AbstractExternalModule;
+use Vanderbilt\AdvancedImport\App\Models\Logs;
+use Vanderbilt\AdvancedImport\App\Models\Mediator;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
-use Vanderbilt\AdvancedImport\App\Helpers\JsonDatabase;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
-use Vanderbilt\AdvancedImport\App\Models\Mediator;
+use Vanderbilt\AdvancedImport\App\Helpers\JsonDatabase;
+use Vanderbilt\AdvancedImport\App\Helpers\ColumnarDatabase;
+use Vanderbilt\AdvancedImport\App\Helpers\FileCache;
 use Vanderbilt\AdvancedImport\App\Traits\CanCompareVersions;
-use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
+use Vanderbilt\AdvancedImport\App\Interfaces\ObserverInterface;
+use Vanderbilt\AdvancedImport\App\Models\ChunkUploader\ChunkUploader;
 
-class AdvancedImport extends AbstractExternalModule implements Mediator
+class AdvancedImport extends AbstractExternalModule implements Mediator, ObserverInterface
 {
 
     use CanCompareVersions;
@@ -110,6 +113,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public static function getUploadedFilePath($filename)
     {
+        $filename =  decrypt($filename); // file name is encrypted when stored so we must decrypt it first
         $basename = pathinfo($filename, PATHINFO_BASENAME); //make sure it's just the file name (no subdirectories)
         $upload_dir = self::getUploadDirectory();
         if(!preg_match("#/$#", $upload_dir))
@@ -118,6 +122,26 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
         }
         return $upload_dir.$basename;
     }
+
+    /**
+     * get contents of the uploaded edoc.
+     * content is cached for faster access.
+     *
+     * @param int $edocID
+     * @return string
+     */
+    /* public static function getUploadedFileContents($edocID) {
+        $fileCache = new FileCache(__CLASS__.':edocs');
+        $cache = $fileCache->get($edocID);
+        if(!$cache) {
+            $fileAttr = Files::getEdocContentsAttributes($edocID);
+            if (empty($fileAttr)) return;
+            list ($mimeType, $docName, $fileContent) = $fileAttr;
+            $cache = $fileContent;
+            $fileCache->set($edocID, $fileContent);
+        }
+        return $cache;
+    } */
 
     /**
      * get the singleton
@@ -132,6 +156,19 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
             else static::$instance = new static();
         }
         return static::$instance;
+    }
+
+    /**
+     * check if the extension of the file being uploaded is valid
+     *
+     * @param string $filename
+     * @return bool
+     */
+    public function checkUploadFileIsAllowed($filename)
+    {
+        $allowed = ['txt', 'csv'];
+        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        return in_array($extension, $allowed);
     }
 
      /**
@@ -304,17 +341,17 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
      */
     public function update($subject, $event = null, $data = null)
     {
-        $project_id = @$data['project_id'];
         switch ($event) {
-            case 'emergency':
-            case 'alert':
-            case 'critical':
-            case 'error':
-            case 'warning':
-            case 'notice':
-            case 'info':
-            case 'debug':
-            case 'log':
+            case Logs::NOTIFICATION_LOG:
+            case Logs::NOTIFICATION_EMERGENCY:
+            case Logs::NOTIFICATION_ALERT:
+            case Logs::NOTIFICATION_CRITICAL:
+            case Logs::NOTIFICATION_ERROR:
+            case Logs::NOTIFICATION_WARNING:
+            case Logs::NOTIFICATION_NOTICE:
+            case Logs::NOTIFICATION_INFO:
+            case Logs::NOTIFICATION_DEBUG:
+                $project_id = @$data['project_id'];
                 $message =  @$data['message'] ?: '';
                 unset($data['message']);
                 $data['project_id'] = $project_id ?: $this->getProjectId(); // this is filled anyway in log_internal
@@ -327,8 +364,13 @@ class AdvancedImport extends AbstractExternalModule implements Mediator
                 }
                 $this->log($message, $encoded_data);
                 break;
+            case ChunkUploader::NOTIFICATION_PROGRESS:
+                break;
+            case ChunkUploader::NOTIFICATION_COMPLETED:
+                break;
+            case ChunkUploader::NOTIFICATION_ERROR:
+                break;
             default:
-                # code...
                 break;
         }
     }

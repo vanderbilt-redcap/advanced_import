@@ -1,0 +1,24 @@
+
+.menu-wrapper[data-v-5ed14ebe] {
+    border-bottom: solid 1px #cacaca;
+}
+a.router-link-active[data-v-5ed14ebe],
+a.router-link-exact-active[data-v-5ed14ebe] {
+    text-decoration: underline;
+}
+a + a[data-v-5ed14ebe] {
+    margin-left: 5px;
+}
+
+
+.fade-enter-active[data-v-7e338910] {
+  transition: opacity 100ms;
+}
+.fade-enter-active[data-v-7e338910] {
+  /** delay same amount of time of the transition duration */
+  transition-delay: 100ms;
+}
+.fade-enter[data-v-7e338910], .fade-leave-to[data-v-7e338910] {
+  opacity: 0;
+}
+

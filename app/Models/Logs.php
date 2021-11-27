@@ -7,6 +7,16 @@ class Logs extends BaseModel
 {
     use SubjectTrait;
 
+    const NOTIFICATION_LOG = 'Logs:log';
+    const NOTIFICATION_EMERGENCY = 'Logs:emergency';
+    const NOTIFICATION_ALERT = 'Logs:alert';
+    const NOTIFICATION_CRITICAL = 'Logs:critical';
+    const NOTIFICATION_ERROR = 'Logs:error';
+    const NOTIFICATION_WARNING = 'Logs:warning';
+    const NOTIFICATION_NOTICE = 'Logs:notice';
+    const NOTIFICATION_INFO = 'Logs:info';
+    const NOTIFICATION_DEBUG = 'Logs:debug';
+
     /**
      *
      * @var AdvancedImport
@@ -22,7 +32,15 @@ class Logs extends BaseModel
 	{
         $this->module = $module;
         parent::__construct();
-        $this->attach($this->module, '*'); // attache the module as a subscriber
+        $this->attach($this->module, self::NOTIFICATION_LOG);
+        $this->attach($this->module, self::NOTIFICATION_EMERGENCY);
+        $this->attach($this->module, self::NOTIFICATION_ALERT);
+        $this->attach($this->module, self::NOTIFICATION_CRITICAL);
+        $this->attach($this->module, self::NOTIFICATION_ERROR);
+        $this->attach($this->module, self::NOTIFICATION_WARNING);
+        $this->attach($this->module, self::NOTIFICATION_NOTICE);
+        $this->attach($this->module, self::NOTIFICATION_INFO);
+        $this->attach($this->module, self::NOTIFICATION_DEBUG);
     }
 
     public function getList($start=0, $limit=100)
@@ -83,7 +101,7 @@ class Logs extends BaseModel
         $result = db_query($query_string);
         if(!$result) {
             $message = "Error deleting logs from the database";
-            $this->notify('log', compact('message'));
+            $this->notify(self::NOTIFICATION_LOG, compact('message'));
             throw new \Exception($message, 1);
         }
         return true;

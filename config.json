@@ -14,8 +14,9 @@
     "permissions": [
          "redcap_module_system_enable",
          "redcap_module_system_disable",
+         "redcap_module_system_change_version",
          "redcap_module_project_enable",
-         "redcap_module_system_change_version"
+         "redcap_module_project_disable"
     ],
     "crons": [
         {
@@ -47,6 +48,6 @@
      ],
     "compatibility": {
         "php-version-min": "7.2.0",
-        "redcap-version-min": "10.0.0"
+        "redcap-version-min": "11.0.0"
     }
  }

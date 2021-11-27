@@ -1,0 +1,15 @@
+
+.title[data-v-528b01b0] {
+  font-size: 2rem;
+}
+.import a[data-v-528b01b0] {
+  color:#5BC3EB;
+}
+.export a[data-v-528b01b0] {
+  color:#F06449;
+}
+.import a[data-v-528b01b0]:hover,
+.export a[data-v-528b01b0]:hover {
+  color: #0056b3;
+}
+

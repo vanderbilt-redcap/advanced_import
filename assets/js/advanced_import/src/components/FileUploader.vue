@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="processing">
-            <b-progress  :max="max" show-progress animated variant="success" height="2rem" size="sm">
+            <b-progress  :max="max" show-progress :animated="false" variant="primary"  size="sm">
                 <b-progress-bar :value="progress" :label="`${(progress*100).toFixed(2)}%`"></b-progress-bar>
             </b-progress>
             <!-- <button class="btn btn-danger" @click="onPause">Pause</button> -->

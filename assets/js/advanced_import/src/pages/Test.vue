@@ -1,6 +1,16 @@
 <template>
     <div>
-        <FileUploader @completed="onUploadCompleted"/>
+        <FileUploader ref="uploader" :files="files"/>
+              <b-form-file
+            id="file"
+            v-model="files"
+            ref="file"
+            DISABLED-state="Boolean(files)"
+            placeholder="Choose a file or drop it here..."
+            drop-placeholder="Drop file here..."
+            :accept="accept"
+            ></b-form-file>
+            <b-button @click="upload">upload</b-button>
         <div class="d-flex flex-row justify-content-center align-items-center">
             <b-card 
                 title="This is a test"
@@ -27,7 +37,6 @@
 
 <script>
 import cat from "@/assets/crying-cat.jpg"
-import Uploader from '@/libs/Uploader/Uploader'
 import FileUploader from '@/components/FileUploader'
 
 export default {
@@ -35,7 +44,7 @@ export default {
     data() {
         return {
             cat,
-            file: null,
+            files: null,
             progress: 0,
             max: 100,
             uploading: false,
@@ -44,48 +53,18 @@ export default {
     },
     computed: {},
     methods: {
+        onUploadCompleted() {
+            console.log(arguments)
+        },
         upload() {
-            try {
-                this.uploading = true
-                this.completed = false
-                this.progress = 0
-                const upload_callback = (form_data) => this.$API.dispatch('upload/upload', form_data)
-                const uploader = new Uploader({upload_callback, chunk_size:1000*1024*1})
-                uploader.on('progress', (event) => {
-                    const {type, details} = event
-                    const {progress} = details
-                    this.progress = progress
-                    console.log(details, type, progress)
-                })
-                uploader.on('completed', (event) => {
-                    console.log(event)
-                    this.uploading = false
-                    this.completed = true
-                })
-                uploader.on('error', (event) => {
-                    console.log(event)
-                    this.uploading = false
-                    this.completed = false
-                })
-
-                uploader.upload(this.file)
-            } catch (error) {
-                console.log(error)
-            }
-        },
-        onFileChange(event) {
-            console.log(event)
-            const file_element = this.$refs.file
-            const file_list = file_element.files
-            const file = file_list[0] || false
-            this.file = file
-
-        },
-        update(subject, event, data) {
-            console.log(subject, event, data)
-        },
-        onUploadCompleted({component,file_name}) {
-            console.log(component,file_name)
+           const uploader = this.$refs.uploader
+            uploader.$on('completed', () => {
+                console.log(arguments)
+            })
+            uploader.$on('error', ({message, file, error})=> {
+                console.log({message, file, error})
+            })
+            return uploader.upload()
         }
     },
 }
