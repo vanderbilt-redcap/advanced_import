@@ -21,8 +21,14 @@ class Query
      * @var string
      */
     private $query;
+
     /**
-     * Undocumented function
+     *
+     * @var ColumnarDatabase
+     */
+    private $db;
+
+    /**
      *
      * @param ColumnarDatabase $db
      * @param string $query

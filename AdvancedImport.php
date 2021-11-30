@@ -587,13 +587,20 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
          */
         $checkColumnarDbInstalled = function() use($old_version){
             $columnarMinimunVersion = 'v1.7.0';
-            $greaterThanMinimumVersion = $this->compareVersions($columnarMinimunVersion, $old_version);
-            if(!$greaterThanMinimumVersion) {
+            $comparison = $this->compareVersions($columnarMinimunVersion, $old_version);
+            if($comparison<0) {
                 $queue = new Queue();
                 $queue->createJobsTable($drop=true);
             };
         };
-        $checkColumnarDbInstalled();
+        /**
+         * reset the jobs table on every update
+         */
+        $resetJobsTable = function() {
+            $queue = new Queue();
+            $queue->createJobsTable($drop=true);
+        };
+        $resetJobsTable();
         $this->checkDbIntegrity($db);
     }
 
