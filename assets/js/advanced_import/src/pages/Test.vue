@@ -8,7 +8,6 @@
             DISABLED-state="Boolean(files)"
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
-            :accept="accept"
             ></b-form-file>
             <b-button @click="upload">upload</b-button>
         <div class="d-flex flex-row justify-content-center align-items-center">

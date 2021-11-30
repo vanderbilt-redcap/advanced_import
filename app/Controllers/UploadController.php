@@ -45,8 +45,8 @@ class UploadController extends BaseController
             $uploader->attach($advancedImport, ChunkUploader::NOTIFICATION_ERROR);
             
             // use the name encryption upload decorator
-            $edocsUploader = new NameEncryptUploader($uploader);
-            $results = $edocsUploader->upload($name, $size, $data, $unique_name);
+            $uploadDecorator = new NameEncryptUploader($uploader);
+            $results = $uploadDecorator->upload($name, $size, $data, $unique_name);
             return $this->printJSON($results);
         } catch (\Exception $e) {
             $response = [

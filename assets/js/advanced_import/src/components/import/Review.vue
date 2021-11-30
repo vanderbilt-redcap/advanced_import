@@ -203,10 +203,10 @@ export default {
          */
         async importCSV() {
             try {
-                const {file_name} = await this.upload()
-                if(!file_name) return
+                const {unique_name} = await this.upload()
+                if(!unique_name) return
                 // let file_name = 'Data8277.csv'
-                await this.enqueProcess(file_name)
+                await this.enqueProcess(unique_name)
             } catch (error) {
                 console.log(error)
             }finally {

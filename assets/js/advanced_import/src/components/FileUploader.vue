@@ -29,6 +29,19 @@ const MIN_CHUNK_SIZE = 1000 * 1024
 const MAX_CHUNK_SIZE = 1000 * 1024 * 5
 const TOTAL_CHUNKS = 20
 
+class UploadMetadata {
+
+    constructor({file_size, name, percentage, progress, unique_name, uploaded_bytes, written_bytes}) {
+        this.file_size = file_size
+        this.name = name
+        this.percentage = percentage
+        this.progress = progress
+        this.unique_name = unique_name
+        this.uploaded_bytes = uploaded_bytes
+        this.written_bytes = written_bytes
+    }
+}
+
 export default {
     data() {
         return {
@@ -85,15 +98,13 @@ export default {
                 if(this.abort) return
                 const response = await this.sendChunk(file, chunk)
                 const {data} = response
-                const {uploaded_bytes,file_size} = data
+                console.log(data)
                 if(!data) throw new Error('no response') //exit if no response data
-                const progress = this.updateProgress(uploaded_bytes, file_size)
-                this.$emit('progress', {file, progress, response}) // notify advancement
+                const metadata = new UploadMetadata(data)
+                this.updateMetadata(metadata)
+                this.$emit('progress', {file, metadata}) // notify advancement
                 // advance the start
                 this.start = this.end
-                
-                const {unique_name} = data
-                if(unique_name) this.updateUniqueFileName(unique_name)
 
                 if(!this.paused && (this.end < file.size)) {
                     return this.upload()
@@ -101,9 +112,8 @@ export default {
                 else {
                     // exit if we are done
                     this.reset()
-                    let result = {component:this,file_name:this.remote_file_name }
-                    this.$emit('completed', result) // notify completed
-                    return result
+                    this.$emit('completed', metadata) // notify completed
+                    return metadata
                 }
             } catch (error) {
                 const {response={}} = error
@@ -138,14 +148,13 @@ export default {
             if(chunk_size>MAX_CHUNK_SIZE) return MAX_CHUNK_SIZE
             return chunk_size
         },
-        updateProgress(uploaded_bytes, file_size) {
+        updateMetadata({file_size, progress, unique_name, uploaded_bytes}) {
+            this.file.unique_name = unique_name
+            this.remote_file_name = unique_name
             this.uploaded_bytes = uploaded_bytes
             this.file_size = file_size
-            if(isNaN(uploaded_bytes) || isNaN(file_size)) return
-            if(file_size<=0) return
-            let percentage = uploaded_bytes/file_size
-            this.progress = percentage
-            return percentage
+            this.progress = progress
+            return progress
         },
         async upload() {
             if(!this.file) return
@@ -165,12 +174,6 @@ export default {
         onPause() {
             this.processing = false
             this.paused = true
-        },
-        updateUniqueFileName(unique_name=false) {
-            if(!this.file.unique_name) {
-                this.file.unique_name = unique_name
-                this.remote_file_name = unique_name
-            }
         },
         reset() {
             setTimeout(()=>{

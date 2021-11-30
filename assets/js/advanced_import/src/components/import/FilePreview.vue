@@ -32,11 +32,11 @@
                 <!-- <template #foot()="data">
                 </template> -->
             </b-table>
-            <section>
+            <!-- <section>
                 <span v-if="counting">Counting lines:</span>
                 <span v-else>Total lines:</span>
                 <span> {{formatNumber(total_lines)}}</span>
-            </section>
+            </section> -->
         </b-card>
   </div>
 </template>
@@ -110,12 +110,12 @@ export default {
         
     },
     watch: {
-        files: {
+        /* files: {
             immediate: true,
             handler(file) {
                 this.$store.dispatch('csv_data/countFileLinesFast', file)
             }
-        },
+        }, */
   },
 }
 </script>

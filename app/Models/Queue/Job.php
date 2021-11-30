@@ -177,6 +177,14 @@ abstract class Job implements JobInterface, JsonSerializable
         $this->updateProperties($params);
     }
 
+    public function markReady()
+    {
+        $params = [
+            'status' =>  $this->status = self::STATUS_READY,
+        ];
+        $this->updateProperties($params);
+    }
+
     public function markStopped()
     {
         $params = [

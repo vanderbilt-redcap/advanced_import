@@ -114,6 +114,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
     public static function getUploadedFilePath($filename)
     {
         $filename =  decrypt($filename); // file name is encrypted when stored so we must decrypt it first
+        if($filename===false) throw new \Exception("could not decrypt the file name", 1);
         $basename = pathinfo($filename, PATHINFO_BASENAME); //make sure it's just the file name (no subdirectories)
         $upload_dir = self::getUploadDirectory();
         if(!preg_match("#/$#", $upload_dir))
