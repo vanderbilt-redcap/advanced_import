@@ -179,7 +179,7 @@ class Queue
             $unlink = true; // assume the file must be deleted
             $unlinked = false; //deletion state
             $filename = @$job['filename'];
-            $entries = $db->getEntries(Job::TABLE_NAME, '`filename`=?', [$$filename]);
+            $entries = $db->getEntries(Job::TABLE_NAME, '`filename`=?', [$filename]);
             if(!empty($entries)) $unlink = false; // file used by other jobs; cannot delete
             if($unlink) $unlinked = $unlinkFile($filename);
             return $unlinked;
