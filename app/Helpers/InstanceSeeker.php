@@ -82,12 +82,12 @@ class InstanceSeeker
         $cases = [];
         foreach ($fields as $field) {
           /**
-           * NOTE 1: I use an empty separator but prepend a unit separator before and after the value; this
+           * NOTE 1: I use an empty separator but prepend a unit separator before and after the value;
+           *  this way any value, also the first one and teh last one, will always be preceeded/followed by at least a unit separator
            * NOTE 2: I use an empty separator but prepend a unit separator before and after the value; the final result will be: {us}{value}{us}{us}{value}{us}
            * NOTE 3: DISTINCT is included to deal with double primary_key entries in the redcap_data table created by REDCap::saveData when the first instance of a repeatable instrument is saved
-           * this way any value, also the first one and teh last one, will always be preceeded/followed by at least a unit separator
            */
-          $cases[] = sprintf("GROUP_CONCAT( DISTINCT CASE WHEN `field_name` = '%s' THEN CONCAT('%s', value, '%s') ELSE NULL END ORDER BY `value` ASC SEPARATOR '') AS `%s`", $field, $unit_separator, $unit_separator, $field);
+          $cases[] = sprintf("GROUP_CONCAT( DISTINCT CASE WHEN `field_name` = '%s' THEN `value` ELSE NULL END ORDER BY `value` ASC SEPARATOR '%s') AS `%s`", $field, $unit_separator, $field);
         }
         return implode(", \n", $cases);
       };
@@ -134,7 +134,7 @@ class InstanceSeeker
           if(is_array($value)) {
             // sort, prepend/postpend a unit separator and join with double unit separator to match the pivot rotation query
             usort($value, [$this, 'compareAsStrings']);
-            $regexp = self::unit_separator().implode( self::unit_separator().self::unit_separator(), $value). self::unit_separator();
+            $regexp = implode( self::unit_separator(), $value);
             if($full_match) $regexp = sprintf('^%s$', $regexp); //exact match (starts and ends)
             return sprintf("`%s` REGEXP %s", $key, checkNull($regexp));
           };

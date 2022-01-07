@@ -20,8 +20,8 @@ class ProcessTest extends \ExternalModules\ModuleBaseTest
      * @return void
      */
     public function setUp():void {
-        $this->project_id = 33;
-        $this->jobID = 25;
+        $this->project_id = 16;
+        $this->jobID = 1;
         $this->user_id = 2;
         $this->csvFile = '33-import-test.csv';
         $this->csvFile = '24000kb.csv';
