@@ -9,7 +9,7 @@
              "institution": "Vanderbilt University Medical Center"
          }
     ],
-    "framework-version": 7,
+    "framework-version": 8,
     "enable-every-page-hooks-on-system-pages": false,
     "permissions": [
          "redcap_module_system_enable",
