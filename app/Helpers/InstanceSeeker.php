@@ -201,8 +201,4 @@ class InstanceSeeker
       throw new \Exception("Error finding the next instance number in project {$this->project_id}, record {$record_id}", 1);
     }
 
-    
-
-
-
  }
