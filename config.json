@@ -43,9 +43,9 @@
             }
         ]
      },
-     "no-auth-pages": [
-        "api"
-     ],
+     "no-csrf-pages": [
+         "api"
+    ],
     "compatibility": {
         "php-version-min": "7.2.0",
         "redcap-version-min": "11.0.0"

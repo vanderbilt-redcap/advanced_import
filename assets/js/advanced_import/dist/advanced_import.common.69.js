@@ -1,7 +1,7 @@
 "use strict";
 ((typeof self !== 'undefined' ? self : this)["webpackChunkadvanced_import"] = (typeof self !== 'undefined' ? self : this)["webpackChunkadvanced_import"] || []).push([[69],{
 
-/***/ 2096:
+/***/ 9629:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 
@@ -10,7 +10,7 @@ __webpack_require__.d(__webpack_exports__, {
   "Z": function() { return /* binding */ FileUploader; }
 });
 
-;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"b9c96ad4-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js??ruleSet[0].rules[0].use[0]!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/index.js??vue-loader-options!./src/components/FileUploader.vue?vue&type=template&id=3895a4ea&
+;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"b9c96ad4-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js??ruleSet[0].rules[0].use[0]!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/index.js??vue-loader-options!./src/components/FileUploader.vue?vue&type=template&id=786ceae4&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.processing)?_c('div',[_c('b-progress',{attrs:{"max":_vm.max,"show-progress":"","animated":false,"variant":"primary","size":"sm"}},[_c('b-progress-bar',{attrs:{"value":_vm.progress,"label":(((_vm.progress*100).toFixed(2)) + "%")}})],1),_c('div',{staticClass:"text-muted small"},[(_vm.uploaded_bytes && _vm.uploaded_bytes>0)?_c('span',[_vm._v("uploaded "+_vm._s(_vm.formatBytes(_vm.uploaded_bytes))+" of "+_vm._s(_vm.formatBytes(_vm.file_size)))]):_vm._e(),_c('non-blank-space')],1)],1):_vm._e(),( false)?0:_vm._e()])}
 var staticRenderFns = []
 
@@ -169,16 +169,15 @@ var UploadMetadata = function UploadMetadata(_ref) {
               case 5:
                 response = _context.sent;
                 data = response.data;
-                console.log(data);
 
                 if (data) {
-                  _context.next = 10;
+                  _context.next = 9;
                   break;
                 }
 
                 throw new Error('no response');
 
-              case 10:
+              case 9:
                 //exit if no response data
                 metadata = new UploadMetadata(data);
 
@@ -194,13 +193,13 @@ var UploadMetadata = function UploadMetadata(_ref) {
                 _this.start = _this.end;
 
                 if (!(!_this.paused && _this.end < file.size)) {
-                  _context.next = 18;
+                  _context.next = 17;
                   break;
                 }
 
                 return _context.abrupt("return", _this.upload());
 
-              case 18:
+              case 17:
                 // exit if we are done
                 _this.reset();
 
@@ -209,12 +208,12 @@ var UploadMetadata = function UploadMetadata(_ref) {
 
                 return _context.abrupt("return", metadata);
 
-              case 21:
-                _context.next = 30;
+              case 20:
+                _context.next = 29;
                 break;
 
-              case 23:
-                _context.prev = 23;
+              case 22:
+                _context.prev = 22;
                 _context.t0 = _context["catch"](0);
                 _error$response = _context.t0.response, _response = _error$response === void 0 ? {} : _error$response;
                 _response$data = _response.data, _data = _response$data === void 0 ? {} : _response$data;
@@ -229,12 +228,12 @@ var UploadMetadata = function UploadMetadata(_ref) {
 
                 _this.reset();
 
-              case 30:
+              case 29:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, null, [[0, 23]]);
+        }, _callee, null, [[0, 22]]);
       }))();
     },
     calculateProgress: function calculateProgress(file, position) {
@@ -663,7 +662,7 @@ var es_promise = __webpack_require__(8674);
 // EXTERNAL MODULE: ./node_modules/vuex/dist/vuex.esm.js
 var vuex_esm = __webpack_require__(629);
 // EXTERNAL MODULE: ./src/components/FileUploader.vue + 3 modules
-var FileUploader = __webpack_require__(2096);
+var FileUploader = __webpack_require__(9629);
 ;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"b9c96ad4-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js??ruleSet[0].rules[0].use[0]!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/index.js??vue-loader-options!./src/components/FileProcesser.vue?vue&type=template&id=084c3311&
 var FileProcesservue_type_template_id_084c3311_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[(_vm.processing && !_vm.background_process)?_c('div',[_c('b-progress',{attrs:{"max":_vm.max,"show-progress":"","animated":"","variant":"success","height":"2rem"}},[_c('b-progress-bar',{attrs:{"value":_vm.progress,"label":(((_vm.progress*100).toFixed(2)) + "%")}})],1),_c('div',{staticClass:"text-muted small my-2"},[(_vm.total_lines && _vm.total_lines>0)?_c('span',[_vm._v("Processed "+_vm._s(_vm.current_line)+"/"+_vm._s(_vm.total_lines))]):_vm._e(),_c('non-blank-space')],1)],1):_vm._e(),( false)?0:_vm._e()])}
 var FileProcesservue_type_template_id_084c3311_staticRenderFns = []

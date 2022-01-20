@@ -43,7 +43,7 @@ export default class API {
     createClient(cancelToken) {
         const redcap_params = this.getRedCapQueryParams()
         
-        return axios.create({
+        const client = axios.create({
             baseURL: this.baseURL,
             timeout: default_timeout,
             headers: {common: {'X-Requested-With': 'XMLHttpRequest'}}, // set header for REDCap ajax
@@ -54,6 +54,35 @@ export default class API {
             },
             cancelToken,
         })
+
+        // add request inceptor
+        client.interceptors.request.use((config) => {
+            const redcap_csrf_token = window.redcap_csrf_token // csrf token for post requests
+            const {data} = config
+            if(data && redcap_csrf_token) {
+                /**
+                 * modify the data to include the redcap_csrf_token 
+                 */
+                if (data instanceof FormData) {
+                    data.append('redcap_csrf_token', redcap_csrf_token)
+                    data.append('redcap_external_module_csrf_token', redcap_csrf_token)
+                }else if(typeof data === 'object') {
+                    data['redcap_csrf_token'] = redcap_csrf_token
+                    data['redcap_external_module_csrf_token'] = redcap_csrf_token
+                }
+                // config.data = data
+            }
+            /* 
+            if(csrfToken) config['redcap_csrf_token'] = csrfToken */
+            // Do something before request is sent
+            return config
+          }, (error) => {
+            // Do something with request error
+            return Promise.reject(error);
+          })
+
+          return client
+        
     }
 
     
@@ -71,7 +100,7 @@ export default class API {
             type: 'module',
             prefix: this.module_prefix,
         }
-        if(window.redcap_csrf_token) query_params.redcap_csrf_token = window.redcap_csrf_token // csrf token for post requests
+        // if(window.redcap_csrf_token) query_params.redcap_csrf_token = window.redcap_csrf_token // csrf token for post requests
         return query_params
     }
 

@@ -14029,7 +14029,7 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"b9c96ad4-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js??ruleSet[0].rules[0].use[0]!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/index.js??vue-loader-options!./src/App.vue?vue&type=template&id=11d0e23f&
+;// CONCATENATED MODULE: ./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"b9c96ad4-vue-loader-template"}!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/@vue/cli-service/node_modules/cache-loader/dist/cjs.js??ruleSet[0].rules[0].use[0]!./node_modules/@vue/cli-service/node_modules/@vue/vue-loader-v15/lib/index.js??vue-loader-options!./src/App.vue?vue&type=template&id=77e063b0&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.status==_vm.status_list.READY)?_c('div',{attrs:{"id":"app"}},[_c('div',{staticClass:"d-block"},[(_vm.debugMode)?_c('b-badge',{attrs:{"variant":"warning"}},[_vm._v("Debug mode on")]):_vm._e()],1),_c('router-view')],1):_vm._e()}
 var staticRenderFns = []
 
@@ -14045,12 +14045,12 @@ var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__(3797);
 var external_commonjs_vue_commonjs2_vue_root_Vue_default = /*#__PURE__*/__webpack_require__.n(external_commonjs_vue_commonjs2_vue_root_Vue_);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js
 var objectSpread2 = __webpack_require__(3356);
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__(5340);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/toConsumableArray.js + 3 modules
 var toConsumableArray = __webpack_require__(6004);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js + 3 modules
 var slicedToArray = __webpack_require__(8655);
+// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
+var esm_typeof = __webpack_require__(5340);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
 var classCallCheck = __webpack_require__(7010);
 // EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/createClass.js
@@ -14075,6 +14075,8 @@ var web_dom_collections_iterator = __webpack_require__(3948);
 var web_url_search_params = __webpack_require__(1637);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
 var es_regexp_to_string = __webpack_require__(9714);
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
+var es_promise = __webpack_require__(8674);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.search.js
 var es_string_search = __webpack_require__(4765);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
@@ -14089,6 +14091,7 @@ var es_object_entries = __webpack_require__(9720);
 var axios = __webpack_require__(9669);
 var axios_default = /*#__PURE__*/__webpack_require__.n(axios);
 ;// CONCATENATED MODULE: ./src/API/API.js
+
 
 
 
@@ -14163,7 +14166,7 @@ var API = /*#__PURE__*/function () {
     key: "createClient",
     value: function createClient(cancelToken) {
       var redcap_params = this.getRedCapQueryParams();
-      return axios_default().create({
+      var client = axios_default().create({
         baseURL: this.baseURL,
         timeout: default_timeout,
         headers: {
@@ -14178,7 +14181,37 @@ var API = /*#__PURE__*/function () {
           return search_params.toString();
         },
         cancelToken: cancelToken
+      }); // add request inceptor
+
+      client.interceptors.request.use(function (config) {
+        var redcap_csrf_token = window.redcap_csrf_token; // csrf token for post requests
+
+        var data = config.data;
+
+        if (data && redcap_csrf_token) {
+          /**
+           * modify the data to include the redcap_csrf_token 
+           */
+          if (data instanceof FormData) {
+            data.append('redcap_csrf_token', redcap_csrf_token);
+            data.append('redcap_external_module_csrf_token', redcap_csrf_token);
+          } else if ((0,esm_typeof/* default */.Z)(data) === 'object') {
+            data['redcap_csrf_token'] = redcap_csrf_token;
+            data['redcap_external_module_csrf_token'] = redcap_csrf_token;
+          } // config.data = data
+
+        }
+        /* 
+        if(csrfToken) config['redcap_csrf_token'] = csrfToken */
+        // Do something before request is sent
+
+
+        return config;
+      }, function (error) {
+        // Do something with request error
+        return Promise.reject(error);
       });
+      return client;
     }
     /**
      * set project_id, page, module prefix
@@ -14196,8 +14229,7 @@ var API = /*#__PURE__*/function () {
         page: 'api',
         type: 'module',
         prefix: this.module_prefix
-      };
-      if (window.redcap_csrf_token) query_params.redcap_csrf_token = window.redcap_csrf_token; // csrf token for post requests
+      }; // if(window.redcap_csrf_token) query_params.redcap_csrf_token = window.redcap_csrf_token // csrf token for post requests
 
       return query_params;
     }
@@ -58274,8 +58306,6 @@ var es_symbol_description = __webpack_require__(1817);
 var es_symbol_async_iterator = __webpack_require__(2443);
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
 var es_symbol_iterator = __webpack_require__(2165);
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.promise.js
-var es_promise = __webpack_require__(8674);
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncIterator.js
 
 
@@ -61958,26 +61988,33 @@ var status_list = Object.freeze({
     var _this = this;
 
     return (0,asyncToGenerator/* default */.Z)( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-      var response, _response$data, settings;
+      var exposeCsrfToken, response, _response$data, settings;
 
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              exposeCsrfToken = function exposeCsrfToken(settings) {
+                var _settings$redcap_csrf = settings.redcap_csrf_token,
+                    redcap_csrf_token = _settings$redcap_csrf === void 0 ? '' : _settings$redcap_csrf;
+                if (!window.redcap_csrf_token) window.redcap_csrf_token = redcap_csrf_token;
+              };
+
               _this.status = status_list.LOADING;
-              _context.next = 3;
+              _context.next = 4;
               return _this.$API.dispatch('settings/get');
 
-            case 3:
+            case 4:
               response = _context.sent;
               _response$data = response.data, settings = _response$data === void 0 ? {} : _response$data;
-              _context.next = 7;
+              exposeCsrfToken(settings);
+              _context.next = 9;
               return _this.$store.dispatch('settings/setState', settings);
 
-            case 7:
+            case 9:
               _this.status = status_list.READY;
 
-            case 8:
+            case 10:
             case "end":
               return _context.stop();
           }

@@ -36,9 +36,14 @@ export default {
     }
   },
   async created() {
+    const exposeCsrfToken = (settings) => {
+      const {redcap_csrf_token=''} = settings
+      if(!window.redcap_csrf_token) window.redcap_csrf_token = redcap_csrf_token
+    }
     this.status = status_list.LOADING
     const response =  await this.$API.dispatch('settings/get')
     const {data: settings={}} = response
+    exposeCsrfToken(settings)
     await this.$store.dispatch('settings/setState', settings)
     this.status = status_list.READY
   },

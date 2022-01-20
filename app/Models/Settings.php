@@ -27,7 +27,10 @@ class Settings
         $app_path_webroot_full = APP_PATH_WEBROOT_FULL;
         $project_dashboard_url = "{$app_path_webroot_full}redcap_v{$redcap_version}/DataEntry/record_status_dashboard.php?pid={$project_id}";
         $checkbox_fields = \MetaData::getCheckboxFields($project_id);
+        $module = AdvancedImport::getInstance();
+        $redcap_csrf_token = $module->getCSRFToken();
         $data = compact(
+            'redcap_csrf_token',
             'project_id',
             'project_data',
             'primary_keys',

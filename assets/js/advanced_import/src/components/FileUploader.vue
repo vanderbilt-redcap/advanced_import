@@ -98,7 +98,6 @@ export default {
                 if(this.abort) return
                 const response = await this.sendChunk(file, chunk)
                 const {data} = response
-                console.log(data)
                 if(!data) throw new Error('no response') //exit if no response data
                 const metadata = new UploadMetadata(data)
                 this.updateMetadata(metadata)
