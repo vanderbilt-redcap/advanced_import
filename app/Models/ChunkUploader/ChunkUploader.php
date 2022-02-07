@@ -43,7 +43,10 @@ w     */
         
         $dir_path = $normalizePath($path ?: sys_get_temp_dir());
         if(!file_exists($dir_path)) mkdir($dir_path, 0777, $recursive=true);
-        return realpath($dir_path);
+        $realPath = realpath($dir_path);
+        if(!$realPath) throw new \Exception("There was an error setting the upload directory. Please check with your server administrator if {$dir_path} is writable", 1);
+        return $realPath;
+        
     }
 
     public static function generateRandomString($length = 10) {

@@ -74,7 +74,10 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
      */
     public static function getDataDirectory()
     {
+        if(!defined('EDOC_PATH')) throw new \Exception("EDOC_PATH is not defined; the module's data directory cannot be set.", 1);
+        
         $data_directrory = EDOC_PATH."advanced_import";
+        if(!file_exists($data_directrory)) mkdir($data_directrory, 0777, $recursive=true);
         return realpath($data_directrory);
     }
     
@@ -88,8 +91,9 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
     {
         // $upload_dir = dirname(__FILE__).DIRECTORY_SEPARATOR.self::UPLOAD_FOLDER_NAME;
         $base_path = self::getDataDirectory();
-        $upload_dir = realpath($base_path."/uploads");
-        return $upload_dir;
+        $upload_dir = $base_path."/uploads";
+        if(!file_exists($upload_dir)) mkdir($upload_dir, 0777, $recursive=true);
+        return realpath($upload_dir);
     }
 
     /**
