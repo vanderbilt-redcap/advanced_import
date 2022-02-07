@@ -75,20 +75,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
     public static function getDataDirectory()
     {
         $data_directrory = EDOC_PATH."advanced_import";
-        return $data_directrory;
-    }
-
-    /**
-     * path to the data directory:
-     * contains the 'uploads' folder and the SQLite database
-     *
-     * @return string
-     */
-    public static function getDatabaseDirectory()
-    {
-        $base_path = self::getDataDirectory();
-        $upload_dir = $base_path."/database";
-        return $upload_dir;
+        return realpath($data_directrory);
     }
     
     /**
@@ -101,7 +88,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
     {
         // $upload_dir = dirname(__FILE__).DIRECTORY_SEPARATOR.self::UPLOAD_FOLDER_NAME;
         $base_path = self::getDataDirectory();
-        $upload_dir = $base_path."/uploads";
+        $upload_dir = realpath($base_path."/uploads");
         return $upload_dir;
     }
 
@@ -392,43 +379,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
 
 
     /**
-     * get a reference to the sqlite3 DB
-     * create the database if not exists.
-     * 
-     * NOTE: I need to update the privileges
-     * of the database folder before using it
-     * to avoid errors when the cronjob user
-     * iss different from the webserver user
-     *
-     * @return Database
-     */
-    public static function db($newInstance = false)
-    {
-        $logFileInfo = function($db_name, $db_path) {
-            $permissions = shell_exec('getfacl '.$db_path);
-            $file_exists = file_exists($db_path);
-            $message = sprintf("getfacl for '%s': ", $db_name).$permissions;
-            $message .= sprintf("file_exists: %s", $file_exists);
-            self::getInstance()->log($message);
-        };
-        $instance = self::getInstance();
-        if(!$instance->db || $newInstance) {
-            $db_dir = self::getDatabaseDirectory();
-            $db_path = $db_dir.DIRECTORY_SEPARATOR.self::DB_NAME;
-            // $logFileInfo(self::DB_NAME, $db_path);
-            self::chmod_r($db_dir);
-            // $connectionOptions = [PDO::ATTR_PERSISTENT => true];
-            $connectionOptions = [];
-            $connection = new PDO("sqlite:".$db_path,'','', $connectionOptions);
-            $connection->query("PRAGMA journal_mode=WAL");
-            $connection->query("PRAGMA synchronous=EXTRA");
-            $database = new Database($connection);
-            $instance->db = $database;
-        }
-        return $instance->db;
-    }
-
-    /**
      *
      * @return ColumnarDatabase
      */
@@ -439,15 +389,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
         return $db;
     }
 
-    /**
-     * get a reference to the database class
-     *
-     * @return JsonDatabase
-     */
-    public static function jsonDb()
-    {
-        return new JsonDatabase();
-    }
 
     /**
      * update privileges recursively in a folder

@@ -43,7 +43,7 @@ w     */
         
         $dir_path = $normalizePath($path ?: sys_get_temp_dir());
         if(!file_exists($dir_path)) mkdir($dir_path, 0777, $recursive=true);
-        return $dir_path;
+        return realpath($dir_path);
     }
 
     public static function generateRandomString($length = 10) {
@@ -87,8 +87,7 @@ w     */
 
         // use the unique name if availabvle as parameter, otherwise create one
         $unique_name = $getDecodedUniqueName($unique_name, $name);
-        $file_path = "{$this->upload_dir}/{$unique_name}";
-        $upload_path = ExternalModules::getSafePath($file_path, $root='/');
+        $upload_path = "{$this->upload_dir}/{$unique_name}";
         
         // check sent file size against local file
         $checkFileSize($upload_path, $file_size);
