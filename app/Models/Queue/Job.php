@@ -1,15 +1,9 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Queue;
 
-use Logging;
-use SQLite3;
 use DateTime;
-use SplSubject;
 use JsonSerializable;
 use Vanderbilt\AdvancedImport\AdvancedImport;
-use Vanderbilt\AdvancedImport\App\Models\Import;
-use Vanderbilt\AdvancedImport\App\Models\Response;
 use Vanderbilt\AdvancedImport\App\Helpers\FileCache;
-use Vanderbilt\AdvancedImport\App\Helpers\DatabaseQueryHelper;
 
 /**
  * 

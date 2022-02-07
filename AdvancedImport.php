@@ -4,8 +4,6 @@ namespace Vanderbilt\AdvancedImport;
 $autoload = join(DIRECTORY_SEPARATOR, [__DIR__,'vendor','autoload.php']);
 if(file_exists($autoload)) require_once($autoload);
 
-use PDO;
-use Files;
 use DateTime;
 use ExternalModules\ExternalModules;
 use ExternalModules\AbstractExternalModule;
@@ -14,9 +12,7 @@ use Vanderbilt\AdvancedImport\App\Models\Mediator;
 use Vanderbilt\AdvancedImport\App\Helpers\Database;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Queue;
-use Vanderbilt\AdvancedImport\App\Helpers\JsonDatabase;
 use Vanderbilt\AdvancedImport\App\Helpers\ColumnarDatabase;
-use Vanderbilt\AdvancedImport\App\Helpers\FileCache;
 use Vanderbilt\AdvancedImport\App\Traits\CanCompareVersions;
 use Vanderbilt\AdvancedImport\App\Interfaces\ObserverInterface;
 use Vanderbilt\AdvancedImport\App\Models\ChunkUploader\ChunkUploader;
@@ -114,26 +110,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
         }
         return $upload_dir.$basename;
     }
-
-    /**
-     * get contents of the uploaded edoc.
-     * content is cached for faster access.
-     *
-     * @param int $edocID
-     * @return string
-     */
-    /* public static function getUploadedFileContents($edocID) {
-        $fileCache = new FileCache(__CLASS__.':edocs');
-        $cache = $fileCache->get($edocID);
-        if(!$cache) {
-            $fileAttr = Files::getEdocContentsAttributes($edocID);
-            if (empty($fileAttr)) return;
-            list ($mimeType, $docName, $fileContent) = $fileAttr;
-            $cache = $fileContent;
-            $fileCache->set($edocID, $fileContent);
-        }
-        return $cache;
-    } */
 
     /**
      * get the singleton

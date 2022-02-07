@@ -128,9 +128,8 @@ w     */
     public function finalizeUpload($upload_path, $file_name) {
         $destinationName = $this->getUniqueName($file_name);
         $destinationPath = dirname($upload_path). DIRECTORY_SEPARATOR. $destinationName;
-        $safe_path = ExternalModules::getSafePath($destinationPath, $root='/');
-        rename($upload_path, $safe_path);
-        return $safe_path;
+        rename($upload_path, $destinationPath);
+        return $destinationPath;
     }
 
     /**

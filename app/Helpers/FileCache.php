@@ -25,7 +25,20 @@ class FileCache
   {
     $this->namespace = $namespace;
     // $cacheDir = sys_get_temp_dir();
-    $this->cacheDir = ExternalModules::getSafePath(realpath($cacheDir), $root='/');
+    $this->setCacheDir($cacheDir);
+  }
+
+  /**
+   * set the cache directory
+   *
+   * @param string $path
+   * @return void
+   * @throws Exception if the directory does not exist
+   */
+  private function setCacheDir($path) {
+    $realPath = realpath($path);
+    if(!$realPath) throw new \Exception("There was an error setting the cache directory. Please check with your server administrator if {$path} exists", 1);
+    $this->cacheDir = $realPath;
   }
 
   /**

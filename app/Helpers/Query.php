@@ -3,7 +3,6 @@ namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 
 use mysqli;
-use Vanderbilt\REDCap\Classes\Fhir\Utility\FileCache;
 
 
 /**
