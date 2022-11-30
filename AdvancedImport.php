@@ -261,7 +261,7 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
                 $job->setError("the job ID {$job->id} exceeded the maximum allowed execution time and has been terminated.");
             }
         }
-        $stuckJobs;
+        return $stuckJobs;
     }
 
     /**
