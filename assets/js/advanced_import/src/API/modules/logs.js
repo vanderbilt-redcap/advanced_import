@@ -4,7 +4,7 @@ export default {
     actions: {
         get(context, {start, limit}) {
             var params = {
-                route: `logs`,
+                _route: `logs`,
                 _start: start,
                 _limit: limit,
             }
@@ -12,7 +12,7 @@ export default {
         },
         delete(context, ) {
             var params = {
-                route: `logs`,
+                _route: `logs`,
             }
             return context.api_client.delete('',{params})
         },

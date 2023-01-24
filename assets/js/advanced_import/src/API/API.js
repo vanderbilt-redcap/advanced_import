@@ -7,7 +7,7 @@ const CancelToken = axios.CancelToken;
 
 const default_timeout = 60*1000*10 // 10 minutes
 export default class API {
-    route = '' // route name for the CDP Mapping API
+    _route = '' // route name for the CDP Mapping API
     actions = {} // api actions
     module_prefix = 'advanced_import'
     cancel = null
@@ -35,7 +35,7 @@ export default class API {
 
     get baseURL() {
         const app_path_webroot = window.app_path_webroot || '/'
-        let baseURL = `${app_path_webroot}/API/`
+        let baseURL = `${app_path_webroot}/api/`
         baseURL = baseURL.replace(/\/\/+/, '/')
         return baseURL
     } 

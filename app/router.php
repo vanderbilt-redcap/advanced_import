@@ -29,6 +29,6 @@ $baseController = new BaseController();
 
 $router = new Router($routes, $baseController);
 
-$route = Router::extractRoute('route');
+$route = Router::extractRoute('_route');
 
 $router->dispatch($route);

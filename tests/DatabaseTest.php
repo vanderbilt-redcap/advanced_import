@@ -4,9 +4,7 @@ use Generator;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\Queue\Job;
 
-// For now, the path to "redcap_connect.php" on your system must be hard coded.
-$root = dirname(dirname(dirname(__DIR__)));
-require_once $root . '/redcap_connect.php';
+
 
 class DatabaseTest extends \ExternalModules\ModuleBaseTest
 {

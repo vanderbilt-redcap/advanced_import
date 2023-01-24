@@ -21,7 +21,7 @@ export default {
             // use data to skip REDCap from saving this in the logs
             form_data.append('data', chunk)
             var params = {
-                route: `upload`,
+                _route: `upload`,
             }
             return context.api_client.post('',form_data, {
                 params,

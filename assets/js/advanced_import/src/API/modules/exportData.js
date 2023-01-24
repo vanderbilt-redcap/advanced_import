@@ -15,7 +15,7 @@ export default {
 
             const getExportUrl = (settings) => {
                 const redcap_params = $api.getRedCapQueryParams()
-                const params = {...redcap_params,route: 'export',...settings,}
+                const params = {...redcap_params,_route: 'export',...settings,}
                 let search_params = objectToUrlSearchParams(params)
                 
                 const exportURL = `${$api.baseURL}?`+search_params.toString()

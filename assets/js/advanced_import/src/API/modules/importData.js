@@ -15,7 +15,7 @@ export default {
             form_data.append('settings', JSON.stringify (settings))
 
             var params = {
-                route: `parse`,
+                _route: `parse`,
             }
             return context.api_client.post('',form_data, {
                 params,
@@ -35,7 +35,7 @@ export default {
             form_data.append('settings', JSON.stringify (settings))
 
             var params = {
-                route: `import`,
+                _route: `import`,
             }
             return context.api_client.post('',form_data, {
                 params,
@@ -60,13 +60,11 @@ export default {
             }
 
             var params = {
-                route: `enqueue`,
+                _route: `enqueue`,
             }
             return context.api_client.post('',form_data, {
                 params,
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                headers: {},
             })
         },
 
@@ -83,7 +81,7 @@ export default {
             form_data.append('settings', JSON.stringify (settings))
 
             var params = {
-                route: `process`,
+                _route: `process`,
             }
             return context.api_client.post('',form_data, {
                 params,

@@ -4,7 +4,7 @@ export default {
     actions: {
         get(context, {start, limit}) {
             var params = {
-                route: `jobs`,
+                _route: `jobs`,
                 _start: start,
                 _limit: limit,
             }
@@ -12,7 +12,7 @@ export default {
         },
         delete(context, {id}) {
             var params = {
-                route: `jobs/${id}`,
+                _route: `jobs/${id}`,
             }
             return context.api_client.delete('', {
                 params,
@@ -23,7 +23,7 @@ export default {
         },
         stop(context, {id}) {
             var params = {
-                route: `jobs/${id}/stop`,
+                _route: `jobs/${id}/stop`,
             }
             const form_data = new FormData()
             return context.api_client.post('',form_data, {
@@ -35,7 +35,7 @@ export default {
         },
         start(context, {id}) {
             var params = {
-                route: `jobs/${id}/start`,
+                _route: `jobs/${id}/start`,
             }
             const form_data = new FormData()
             return context.api_client.post('',form_data, {
@@ -47,7 +47,7 @@ export default {
         },
         update(context, {id, data}) {
             var params = {
-                route: `jobs/${id}`,
+                _route: `jobs/${id}`,
             }
             const form_data = new FormData()
             const string_data = JSON.stringify(data)

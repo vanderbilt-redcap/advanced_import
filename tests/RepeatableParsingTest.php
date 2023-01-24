@@ -11,9 +11,7 @@ use Vanderbilt\AdvancedImport\App\Helpers\ColumnarDatabase;
 use Vanderbilt\AdvancedImport\App\Interfaces\ObserverInterface;
 use Vanderbilt\AdvancedImport\App\Models\Importers\AppendUpdate;
 
-// For now, the path to "redcap_connect.php" on your system must be hard coded.
-$root = dirname(dirname(dirname(__DIR__)));
-require_once $root . '/redcap_connect.php';
+
 
 class RepeatableParsingTest extends \ExternalModules\ModuleBaseTest
 {
