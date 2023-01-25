@@ -27,8 +27,8 @@ class LogsController extends BaseController
     {
         try {
             // $project_id = $_GET['pid'];
-            $start = @$_GET['_start'];
-            $limit =  @$_GET['_limit'];
+            $start = $_GET['_start'] ?? 0;
+            $limit =  $_GET['_limit'] ?? 0;
             $model = new Logs($this->module);
             $logs = $model->getList($start, $limit);
             $total = $model->getTotal();

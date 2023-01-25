@@ -62,11 +62,16 @@ class Logs extends BaseModel
             ORDER BY log_id DESC, timestamp DESC",
             implode(',',$fields)
         );
-		if($limit>0) $query_string .= " LIMIT {$start}, {$limit}";
+		$params = [];
+		if($limit>0) {
+            $query_string .= " LIMIT ?, ?";
+            $params[] = $start;
+            $params[] = $limit;
+        }
 		$result = $this->module->queryLogs($query_string, $params=[]);
 		$logs = [];
 		while($row = db_fetch_object($result)){
-			$logs[] = $row;
+			$logs[] = AdvancedImport::escape($row);
         }
         return $logs;
     }

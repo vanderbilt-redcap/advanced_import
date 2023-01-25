@@ -25,5 +25,10 @@
             "app/Functional/methods.php"
         ],
         "classmap": [""]
+    },
+    "config": {
+        "platform": {
+            "php": "7.3.0"
+        }
     }
 }
