@@ -47,28 +47,14 @@ class Logs extends BaseModel
     {
         $start = $start ?: 0;
         $limit =  $limit ?: 100;
-        $fields = [
-            'log_id',
-            'project_id',
-            'record_id',
-            'instance_number',
-            'timestamp',
-            'line',
-            'message',
-            'ip',
-        ];
-        $query_string = sprintf(
-            "SELECT %s
-            ORDER BY log_id DESC, timestamp DESC",
-            implode(',',$fields)
-        );
+        $query_string = "SELECT * FROM redcap_external_modules_log ORDER BY log_id DESC, timestamp DESC";
 		$params = [];
 		if($limit>0) {
             $query_string .= " LIMIT ?, ?";
             $params[] = $start;
             $params[] = $limit;
         }
-		$result = $this->module->queryLogs($query_string, $params=[]);
+		$result = db_query($query_string, $params);
 		$logs = [];
 		while($row = db_fetch_object($result)){
 			$logs[] = AdvancedImport::escape($row);
