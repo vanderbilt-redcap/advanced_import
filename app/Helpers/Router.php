@@ -5,6 +5,9 @@ use Authentication;
 
 class Router {
 
+    private $baseController;
+    private $dispatcher;
+
     const API_TOKEN_PROTECTED = 'api_token_protected';
     const REDCAP_USER_PROTECTED = 'redcap_user_protected';
     
