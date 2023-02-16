@@ -6866,7 +6866,7 @@ class API {
   }
   get baseURL() {
     const app_path_webroot = window.app_path_webroot || '/';
-    let baseURL = `${app_path_webroot}/api/`;
+    let baseURL = `${app_path_webroot}/API/`;
     baseURL = baseURL.replace(/\/\/+/, '/');
     return baseURL;
   }
