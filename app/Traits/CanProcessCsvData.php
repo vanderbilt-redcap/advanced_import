@@ -92,6 +92,6 @@ trait CanProcessCsvData
      */
     public function assignColumnNames($mapping, $value, $index, $collection=[])
     {
-        return @$mapping[$value];
+        return $mapping[$value] ?? [];
     }
 }

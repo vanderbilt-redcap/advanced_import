@@ -80,7 +80,7 @@ abstract class AbstractImporter implements ImporterInterface
         if(!is_array($csvIndexes)) $csvIndexes = [$csvIndexes];
         $values = [];
         foreach ($csvIndexes as $key=>$csvIndex) {
-            $values[$key] = @$data[$csvIndex];
+            $values[$key] = $data[$csvIndex] ?? null;
         }
         return $values;
     }

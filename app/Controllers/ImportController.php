@@ -12,24 +12,6 @@ class ImportController extends BaseController
     {
         parent::__construct();
     }
-    
-    /* function import()
-    {
-        try {
-            $project_id = $_GET['pid'];
-            $file = reset($_FILES); // get only one file
-            $file_path = @$file['tmp_name'];
-            $settings = json_decode($_POST['settings']);
-            $model = new Import();
-            $results = $model->importCSV($project_id, $file_path, $settings);
-            
-            return $this->printJSON($results);
-        } catch (\Exception $e) {
-            $response = ['message'=>$e->getMessage()];
-            $code = $e->getCode();
-            return $this->printJSON($response, $code);
-        }
-    } */
 
     function enqueue()
     {
@@ -39,9 +21,9 @@ class ImportController extends BaseController
             $user_id = User::getUIIDByUsername($username);
             $data = file_get_contents("php://input");
             $params = json_decode($data, $assoc=true);
-            $file_name = @$params['file_name'];
-            $type = @$params['type'];
-            $settings = @$params['settings'];
+            $file_name = $params['file_name'] ?? null;
+            $type = $params['type'] ?? null;
+            $settings = $params['settings'] ?? null;
             // manage only import for now
             if($type==Job::TYPE_IMPORT) {
                 $job_id = ImportJob::create($project_id, $user_id, $file_name, $settings);
@@ -69,7 +51,7 @@ class ImportController extends BaseController
     {
         try {
             $importer = new Import();
-            $text = @$_POST['text'] ?: '';
+            $text = $_POST['text'] ?? '';
             $settings = json_decode($_POST['settings']);
             $data = $importer->parseFile($text, $settings);
             return $this->printJSON($data);

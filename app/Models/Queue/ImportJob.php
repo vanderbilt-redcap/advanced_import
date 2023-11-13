@@ -45,7 +45,7 @@ class ImportJob extends Job implements ObserverInterface
                 $this->markProcessing(); // update the status of the job
                 break;
             case Import::NOTIFICATION_LINE_PROCESSED:
-                $processed_lines = @$data['processed_line'];
+                $processed_lines = $data['processed_line'] ?? 0;
                 $update_params = [
                     'processed_lines' => $processed_lines,
                 ];

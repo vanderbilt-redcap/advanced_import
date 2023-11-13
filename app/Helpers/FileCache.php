@@ -98,13 +98,13 @@ class FileCache
     $serializedData = file_get_contents($filename);
 
     $data = @unserialize($serializedData);
-    $ttl = @$data[0];
+    $ttl = $data[0] ?? 0;
     if (!$data || (time() > $ttl)) {
        $this->delete($key);
        return;
     }
     
-    return @$data[1];
+    return $data[1] ?? null;
   }
 
   /**

@@ -107,17 +107,6 @@ abstract class Job implements JobInterface, JsonSerializable
                 break;
         }
         return $this->status;
-        /* $query_string = sprintf(
-            "SELECT `status` FROM `%s` WHERE `id`=?",
-            self::TABLE_NAME
-        );
-        $query = AdvancedImport::colDb()->runQuery($query_string, [$this->id]);
-        // if($query==false) throw new \Exception(sprintf("Error getting the status of job id %u", $this->id), 400);
-        if($row = $query->fetch_assoc()) {
-            $this->status = $status = @$row['status']; // also update the local one
-            return $this->status;
-        }
-        return false; */
     }
 
     public function process() {}
@@ -270,7 +259,7 @@ abstract class Job implements JobInterface, JsonSerializable
     public function __get($name)
     {
         if (in_array($name, static::$keys)) {
-            return @$this->properties[$name];
+            return $this->properties[$name] ?? null;
         }
 
         $trace = debug_backtrace();

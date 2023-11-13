@@ -28,10 +28,10 @@ class UploadController extends BaseController
     function upload()
     {
         try {
-            $name = @$_POST['name'];
-            $size = @$_POST['size'];
-            $data = @$_POST['data'];
-            $unique_name = @$_POST['unique_name'];
+            $name = $_POST['name'] ?? '';
+            $size = $_POST['size'] ?? '';
+            $data = $_POST['data'] ?? '';
+            $unique_name = $_POST['unique_name'] ?? '';
             
             $this->checkUploadedFile($name); // check if file type is valid
 

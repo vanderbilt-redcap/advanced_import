@@ -5,7 +5,9 @@ use Vanderbilt\AdvancedImport\App\Models\Validator\PhoneValidator;
 
 class PhoneParser extends AbstractParser
 {
-
+    private $format;
+    private $regexp;
+    
     const REGEXP_US = '/^(?:\(?(?P<area_code>[0-9]{3})\)?[-. ]?(?P<prefix>[0-9]{3})[-. ]?(?P<line_number>[0-9]{4}))?$/';
     const REGEXP_AUSTRALIA = '/^(?P<area_code>\(0[2-8]\)|0[2-8])\s*(?P<prefix>\d{4})\s*\(?P<line_number>d{4})$/';
 
@@ -50,9 +52,9 @@ class PhoneParser extends AbstractParser
         $valid = preg_match($this->regexp, $value, $matches);
         if($valid===false) throw new \Exception("Error Processing the regular expression: {$this->format}", 1);
         if($valid===0) throw new \Exception("The format is not valid for the value '{$value}'", 1);
-        $area_code = @$matches['area_code'];
-        $prefix = @$matches['prefix'];
-        $line_number = @$matches['line_number'];
+        $area_code = $matches['area_code'] ?? '';
+        $prefix = $matches['prefix'] ?? '';
+        $line_number = $matches['line_number'] ?? '';
         $phone_number = $this->getPhoneNumber($area_code, $prefix, $line_number);
         return $phone_number;
     }

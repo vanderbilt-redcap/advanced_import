@@ -85,7 +85,7 @@ class ParserFactory
         // check validation
         $checkValidationType = function($validation_type) use (&$parsers) {
             if(array_key_exists($validation_type, DateTimeValidator::FORMATS)) {
-                $from_format = @$this->parsing_settings['dates_format'] ?: '';
+                $from_format = $this->parsing_settings['dates_format'] ?? '';
                 $parsers[] = new DateTimeParser($from_format, $validation_type);
     
             }else {

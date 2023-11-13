@@ -17,7 +17,7 @@ class PhoneValidator implements ValidatorInterface
     public function __construct($format='us')
     {
         $redcap_validations = getValTypes();
-        $regexp = @$redcap_validations['phone']['regex_php'];    
+        $regexp = $redcap_validations['phone']['regex_php'] ?? null;
         $this->regexp = $regexp;
     }
 }

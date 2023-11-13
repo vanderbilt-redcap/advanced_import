@@ -119,19 +119,6 @@ class ImportSettings
     {
         $mapping = $this->mapping;
         return $mapping;
-        /* $normalized = [];
-        foreach ($mapping as $redcapField => $csvIndexes) {
-            $fieldMetadata = $this->getFieldMetadata($this->project, $redcapField);
-            $elementType = @$fieldMetadata['element_type'];
-                if($elementType==='checkbox') {
-                    sort($csvIndexes); // sort in ascending order
-                    $normalized[$redcapField] = $csvIndexes;
-                } else {
-                    $normalized[$redcapField] = reset($csvIndexes);
-                    if(is_array($normalized[$redcapField])) throw new \Exception(" List of values are only allowed in `checkbox` type fields. The type of the field `{$redcapField}` is `$elementType`.", 400);
-                }
-        }
-        return $normalized; */
     }
 
     public function __get($name)

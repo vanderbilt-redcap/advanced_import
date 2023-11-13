@@ -2,6 +2,10 @@
 
 trait CanValidateRegExp
 {
+
+    protected $regexp;
+    protected $format;
+
     public function validate($value)
     {
         $valid = preg_match($this->regexp, $value);

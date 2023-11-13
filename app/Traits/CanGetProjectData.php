@@ -65,7 +65,7 @@ trait CanGetProjectData {
     function getFormNameForField($project, $field_name)
     {
         $field_metadata = $this->getFieldMetadata($project, $field_name);
-        return @$field_metadata['form_name'] ?: false;
+        return $field_metadata['form_name'] ?? false;
     }
 	
 }

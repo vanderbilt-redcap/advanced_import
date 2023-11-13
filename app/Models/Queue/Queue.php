@@ -13,10 +13,10 @@ class Queue
 
     public function getJobs($params=[])
     {
-        $start = @$params['start'] ?: 0;
-        $limit= @$params['limit'] ?: 100;
-        $status_list = @$params['status'] ?: [];
-        $project_id = @$params['project_id'] ?: 0;
+        $start = $params['start'] ?? 0;
+        $limit= $params['limit'] ?? 100;
+        $status_list = $params['status'] ?? [];
+        $project_id = $params['project_id'] ?? 0;
         
         $where_clause = '`project_id`=?';
         $status_to_get = array_map('checkNull', $status_list);
@@ -37,7 +37,7 @@ class Queue
         $query = $db->runQuery($query_string, $criteria);
         $jobs = [];
         while($row = $query->fetch_assoc()) {
-            $type = @$row['type'];
+            $type = $row['type'] ?? null;
             if($type==Job::TYPE_IMPORT) {
                 $job = new ImportJob($row);
             }else {
@@ -70,7 +70,7 @@ class Queue
         $db = AdvancedImport::colDb();
         $query = $db->search(Job::TABLE_NAME, '`status`=?', [$status]);
         while($row = $query->fetch_assoc()) {
-            $type = @$row['type'];
+            $type = $row['type'] ?? null;
             if($type==Job::TYPE_IMPORT) {
                 $job = new ImportJob($row);
             }else {
@@ -89,7 +89,7 @@ class Queue
      * @return void
      */
     public function makeJob($data) {
-        $type = @$data['type'];
+        $type = $data['type'] ?? null;
         $job = null;
         switch ($type) {
             case Job::TYPE_IMPORT:
@@ -183,7 +183,7 @@ class Queue
             };
             $unlink = true; // assume the file must be deleted
             $unlinked = false; //deletion state
-            $filename = @$job['filename'];
+            $filename = $job['filename'] ?? null;
             $entries = $db->getEntries(Job::TABLE_NAME, '`filename`=?', [$filename]);
             if(!empty($entries)) $unlink = false; // file used by other jobs; cannot delete
             if($unlink) $unlinked = $unlinkFile($filename);

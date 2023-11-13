@@ -21,6 +21,8 @@ class Query
      */
     private $query;
 
+    private $result;
+
     /**
      *
      * @var ColumnarDatabase
@@ -104,12 +106,12 @@ class Query
     private function normalizeQuery($query_string) {
         $fromRegExp = "/\sFROM\s*?['`]?(?<table>[^\s'`]+)['`]?(?<where> ?WHERE)?/i";
         preg_match($fromRegExp, $query_string, $matches);
-        $tableName = @$matches['table'];
+        $tableName = $matches['table'] ?? null;
         $rotationQuery = $this->db->getRotatedTableQuery($tableName);
-        $moduleId = $this->db->module->getId();
+        $moduleId = $this->db->getModule()->getId();
         $realTableName = ColumnarDatabase::getRealTableName($tableName);
         $whereClause = sprintf("WHERE 1", $realTableName, $moduleId);
-        if($where = @$matches['where']) $whereClause .= " AND";
+        if($where = $matches['where'] ?? null) $whereClause .= " AND";
         
         $table = ColumnarDatabase::EXTERNAL_MODULE_SETTINGS_TABLE;
         $normalized_query = preg_replace($fromRegExp, " FROM ($rotationQuery) AS `{$table}` {$whereClause} ", $query_string);

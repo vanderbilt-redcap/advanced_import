@@ -39,7 +39,7 @@ class AppendUpdate extends AbstractImporter
 
 		// $data = $processData($data);
 		// check primary key
-		$primary_key_value = @$normalizedData[$primary_key_name];
+		$primary_key_value = $normalizedData[$primary_key_name] ?? null;
 		if(!$primary_key_value) throw new \Exception("No primary key found.", 400);
 		return $normalizedData;
 	}
@@ -73,7 +73,7 @@ class AppendUpdate extends AbstractImporter
 			return Response::ERROR;
 		}
 		// check primary key
-		$primary_key_value = @$data[$primary_key_name];
+		$primary_key_value = $data[$primary_key_name] ?? null;
 	
 		if($primary_key_name==$project_primary_key) {
 			// record ID is provided in the user data
@@ -123,7 +123,8 @@ class AppendUpdate extends AbstractImporter
 		 * note: set OVERWRITE_BEHAVIOR_OVERWRITE or blank values will not be saved
 		 */
 		$save_response = \REDCap::saveData($project_id, 'array', $record, Import::OVERWRITE_BEHAVIOR_OVERWRITE);
-		if(empty(@$save_response['errors'])) {
+		$errors = $save_response['errors'] ?? [];
+		if(empty($errors)) {
 			$this->notify(self::NOTIFICATION_DATA_SAVED, compact('save_response', 'record'));
 			$saved_ids = $save_response['ids'] ?: [];
 			$ids_string = implode(',', $saved_ids);
@@ -132,7 +133,6 @@ class AppendUpdate extends AbstractImporter
 			// $this->log($message, compact('project_id','record_id', 'instance_number', 'save_response', 'line'));
 			return Response::SUCCESS;
 		}else {
-			$errors = @$save_response['errors'];
 			if(is_array($errors)) $errorsString = implode("\n", $errors);
 			$message = "Error saving data #{$record_id}, instance #{$instance_number}:\n {$errorsString}";
 			$this->notify(self::NOTIFICATION_DATA_SAVE_ERROR, compact('save_response', 'record', 'errors', 'message'));

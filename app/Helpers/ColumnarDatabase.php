@@ -33,6 +33,9 @@ class ColumnarDatabase
         $this->module = $advancedImport;
     }
 
+
+    public function getModule() { return $this->module; }
+
     public function dropDatabase()
     {
         $moduleId = intval($this->module->getId());
@@ -144,9 +147,9 @@ class ColumnarDatabase
         $metadata = $this->getMetadata($tableName);
         if(!empty($metadata)) return; // exit if exists
 
-        $metadata['fields'] = @$params['fields'] ?: [];
+        $metadata['fields'] = $params['fields'] ?? [];
         if(empty($metadata['fields'])) throw new \Exception("A list of fields must be specified", 400);
-        $primaryKey = @$params['primary_key'] ?: self::DEFAULT_PRIMARY_KEY;
+        $primaryKey = $params['primary_key'] ?? self::DEFAULT_PRIMARY_KEY;
         $metadata['primary_key'] = $primaryKey;
         $metadata['auto_increment'] = 0;
         $this->setMetadata($tableName, $metadata);
@@ -205,7 +208,7 @@ class ColumnarDatabase
     private function getId($table_name)
     {
         $metadata = $this->getMetadata($table_name);
-        $autoIncrement = @$metadata['auto_increment'];
+        $autoIncrement = $metadata['auto_increment'] ?? 1;
         $next = $metadata['auto_increment'] = intval($autoIncrement)+1;
         $this->setMetadata($table_name, $metadata);
         return $next;
@@ -252,7 +255,7 @@ class ColumnarDatabase
         $fields = array_keys($tableData);
         array_multisort($tableData, $fields);
         $valuesReducer = function($accumulator, $fieldName) use($id, $getKey, $data, $tableData, $fields) {
-            $value = @$data[$fieldName];
+            $value = $data[$fieldName] ?? null;
             if(is_array($value)) $value = json_encode($value);
             if(!is_numeric($value)) $value = checkNull($value);
             $key = $getKey($fieldName);
@@ -292,7 +295,7 @@ class ColumnarDatabase
             return false;
         };
         db_query("START TRANSACTION");
-        $primaryKey = @$this->getMetadata($tableName)['primary_key'];
+        $primaryKey = $this->getMetadata($tableName)['primary_key'] ?? null;
         $matches = $this->getEntries($tableName, $whereStatement, $whereParams);
         $ids = array_column($matches, $primaryKey);
         if(empty($ids)) return $stopTransaction();
@@ -330,7 +333,7 @@ class ColumnarDatabase
         };
         db_query("START TRANSACTION");
         $matches = $this->getEntries($tableName, $whereStatement, $whereParams);
-        $primaryKey = @$this->getMetadata($tableName)['primary_key'];
+        $primaryKey = $this->getMetadata($tableName)['primary_key'] ?? null;
         $ids = array_column($matches, $primaryKey);
         if(empty($ids)) return $stopTransaction();
 
@@ -414,7 +417,7 @@ class ColumnarDatabase
 
     private function filterData($metadata, $data)
     {
-        $tableFields = @$metadata['fields'];
+        $tableFields = $metadata['fields'] ?? [];
         $filtered = array_filter($data, function($key) use($tableFields){
             return in_array($key, $tableFields);
         }, ARRAY_FILTER_USE_KEY);
@@ -431,8 +434,8 @@ class ColumnarDatabase
         $metadata = $this->getMetadata($tableName);
         
         $moduleId = $this->module->getId();
-        $fields = @$metadata['fields'];
-        $primary_key = @$metadata['primary_key'] ?: self::DEFAULT_PRIMARY_KEY;
+        $fields = $metadata['fields'] ?? [];
+        $primary_key = $metadata['primary_key'] ?? self::DEFAULT_PRIMARY_KEY;
 
         $groupContacts = array_map(function($fieldName) use($tableName){
             return "GROUP_CONCAT(CASE WHEN `virtual_key`='{$fieldName}' THEN `value` ELSE NULL END ORDER BY `value` ASC SEPARATOR '') AS `{$fieldName}`\n";

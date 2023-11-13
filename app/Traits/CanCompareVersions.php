@@ -13,9 +13,9 @@ trait CanCompareVersions {
         $regExp = "/(?<major>\d+)(?:\.(?<minor>\d+))?(?:\.(?<patch>\d+))?/";
         preg_match($regExp, $versionString, $matches);
         $versioning = [
-            'major' => intval(@$matches['major']),
-            'minor' => intval(@$matches['minor']),
-            'patch' => intval(@$matches['patch']),
+            'major' => intval($matches['major'] ?? 0),
+            'minor' => intval($matches['minor'] ?? 0),
+            'patch' => intval($matches['patch'] ?? 0),
         ];
         return $versioning;
     }
@@ -38,8 +38,10 @@ trait CanCompareVersions {
 			$versioningA = $this->getSemanticVersioning($version_A);
 			$versioningB = $this->getSemanticVersioning($version_B);
 			foreach ($orderedVersionTypes as $type) {
-				if(@$versioningA[$type]>@$versioningB[$type]) return -1;
-				if(@$versioningA[$type]<@$versioningB[$type]) return 1;
+				$versioningAtype = $versioningA[$type] ?? 0;
+				$versioningBtype = $versioningB[$type] ?? 0;
+				if($versioningAtype>$versioningBtype) return -1;
+				if($versioningAtype<$versioningBtype) return 1;
 			}
 			return 0;
 		};

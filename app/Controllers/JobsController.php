@@ -29,11 +29,11 @@ class JobsController extends BaseController
     function index()
     {
         try {
-            $project_id = @$_GET['pid'];
+            $project_id = $_GET['pid'] ?? null;
             $project = new Project($project_id);
-            $start = @$_GET['_start'];
-            $limit =  @$_GET['_limit'];
-            $status =  json_decode(@$_GET['_status'], $assoc=true);
+            $start = $_GET['_start'] ?? null;
+            $limit =  $_GET['_limit'] ?? null;
+            $status =  json_decode($_GET['_status'] ?? null, $assoc=true);
             $queue = new Queue();
             $params = [
                 'start' => $start,
@@ -66,7 +66,7 @@ class JobsController extends BaseController
     private function changeJobStatus($id, $status)
     {
         try {
-            $project_id = @$_GET['pid'];
+            $project_id = $_GET['pid'] ?? null;
             $queue = new Queue();
             $response = $queue->updateJobStatus($project_id, $id, $status);
             $this->printJSON($response, $code=200);
@@ -95,7 +95,7 @@ class JobsController extends BaseController
     function deleteJob($id)
     {
         try {
-            $project_id = @$_GET['pid'];
+            $project_id = $_GET['pid'] ?? null;
             $queue = new Queue();
             $response = $queue->deleteJob($project_id, $id);
             $this->printJSON($response, $code=200);
@@ -113,9 +113,9 @@ class JobsController extends BaseController
     function updateJob($id)
     {
         try {
-            $project_id = @$_GET['pid'];
-            $data = file_get_contents("php://input");
-            $params = json_decode(@$data, $assoc=true);
+            $project_id = $_GET['pid'] ?? null;
+            $data = file_get_contents("php://input") ?? '';
+            $params = json_decode($data, $assoc=true);
             $queue = new Queue();
             $response = [];
             $response = $queue->updateJob($project_id, $id, $params);

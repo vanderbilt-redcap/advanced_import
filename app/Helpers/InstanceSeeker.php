@@ -32,7 +32,7 @@ class InstanceSeeker
         $this->project_id = $project->project_id;
         $this->settings = $settings;
         $form_name = $this->settings->form_name;
-        $this->form_fields = array_keys(@$this->project->forms[$form_name]['fields']);
+        $this->form_fields = array_keys($this->project->forms[$form_name]['fields'] ?? []);
     }
 
     /**
@@ -173,7 +173,7 @@ class InstanceSeeker
       }
       if($row=db_fetch_assoc($result)) {
         // return the first valid match
-        return @$row['normalized_instance'];
+        return $row['normalized_instance'] ?? false;
       }
       return false;
     }
@@ -196,7 +196,7 @@ class InstanceSeeker
       );
       $result = db_query($query_string);
       if($row=db_fetch_assoc($result)) {
-          $next_instance = @$row['next_instance'];
+          $next_instance = $row['next_instance'] ?? null;
           return intval($next_instance);
       }
       throw new \Exception("Error finding the next instance number in project {$this->project_id}, record {$record_id}", 1);

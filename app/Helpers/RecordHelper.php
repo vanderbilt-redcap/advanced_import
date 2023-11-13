@@ -57,15 +57,15 @@ class RecordHelper
     {
         $event_id = $this->settings->event_id;
         $addRepeatingData = function($form_name, $field_name, $value) use($record_id, $event_id, $instance_number, &$record_seed) {
-            @$record_seed[$record_id]['repeat_instances'][$event_id][$form_name][$instance_number][$field_name] = $value;
+            $record_seed[$record_id]['repeat_instances'][$event_id][$form_name][$instance_number][$field_name] = $value;
         };
         $addData = function($field_name, $value) use($record_id, $event_id, &$record_seed) {
-            @$record_seed[$record_id][$event_id][$field_name] = $value;
+            $record_seed[$record_id][$event_id][$field_name] = $value;
         };
         
         $form_name = $this->getFormNameForField($this->project, $field_name);
         $metadata =  $this->getFieldMetadata($this->project, $field_name);
-        $fieldType = @$metadata['element_type'];
+        $fieldType = $metadata['element_type'] ?? null;
         // apply transformations based on field type
         switch ($fieldType) {
             case 'checkbox':
@@ -93,7 +93,7 @@ class RecordHelper
     private function visitCheckbox($field_name, $values=[])
     {
         $checkboxFields = \MetaData::getCheckboxFields($this->project_id);
-        $allCheckboxValues = @$checkboxFields[$field_name];
+        $allCheckboxValues = $checkboxFields[$field_name] ?? [];
         $checkboxValues = [];
         foreach ($allCheckboxValues as $checkboxKey => $checkboxValue) {
             $checkboxValues[$checkboxKey] = in_array($checkboxKey, $values) ? 1 : 0;
@@ -119,7 +119,7 @@ class RecordHelper
         );
         $result = db_query($query_string);
         if($row=db_fetch_assoc($result)) {
-            return @$row['record'];
+            return $row['record'] ?? false;
         }
         return false;
     }
@@ -132,7 +132,7 @@ class RecordHelper
     function getPrimaryKeys()
     {
         $primary_key = $this->project->table_pk;
-        $secondary_key = @$this->project->project['secondary_pk'];
+        $secondary_key = $this->project->project['secondary_pk'] ?? null;
         return [$primary_key, $secondary_key];
     }
 
