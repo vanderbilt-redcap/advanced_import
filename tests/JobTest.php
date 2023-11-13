@@ -12,6 +12,12 @@ use Vanderbilt\AdvancedImport\App\Models\Importers\AppendUpdate;
 
 class JobTest extends \ExternalModules\ModuleBaseTest
 {
+
+    private $project_id;
+    private $jobID;
+    private $user_id;
+    private $csvFile;
+
     /**
      * Undocumented function
      *

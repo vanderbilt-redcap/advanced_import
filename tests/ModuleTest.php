@@ -2,9 +2,6 @@
 
 
 use Records;
-use Vanderbilt\AdvancedImport\AdvancedImport;
-
-
 
 class ModuleTest extends \ExternalModules\ModuleBaseTest
 {

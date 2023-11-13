@@ -102,6 +102,11 @@ class Queue
         return $job;
     }
 
+    /**
+     *
+     * @param [type] $status
+     * @return Job[]
+     */
     public function getJobsByStatus($status=Job::STATUS_READY)
     {
         $db = AdvancedImport::colDb();

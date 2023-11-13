@@ -22,6 +22,8 @@ class ColumnarDatabase
     const EXTERNAL_MODULE_SETTINGS_TABLE = 'redcap_external_module_settings';
     const VALUES_TYPE = 'string'; // type to use when storing data ('type' field in the module settings table )
 
+    private $module;
+
     /**
      *
      * @param AdvancedImport $advancedImport
@@ -249,7 +251,7 @@ class ColumnarDatabase
         ];
         $fields = array_keys($tableData);
         array_multisort($tableData, $fields);
-        $valuesReducer = function($accumulator=[], $fieldName) use($id, $getKey, $data, $tableData, $fields) {
+        $valuesReducer = function($accumulator, $fieldName) use($id, $getKey, $data, $tableData, $fields) {
             $value = @$data[$fieldName];
             if(is_array($value)) $value = json_encode($value);
             if(!is_numeric($value)) $value = checkNull($value);
@@ -263,7 +265,7 @@ class ColumnarDatabase
             return $accumulator;
         };
         
-        $values = array_reduce(array_keys($data), $valuesReducer);
+        $values = array_reduce(array_keys($data), $valuesReducer, $initial=[]);
         
         $query_string = sprintf(
             'INSERT INTO `%s` (%s) VALUES %s',
