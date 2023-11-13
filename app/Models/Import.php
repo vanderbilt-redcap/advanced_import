@@ -141,7 +141,7 @@ class Import extends BaseModel
      * - guess the delimiter
      * - get the column names
      *
-     * @return void
+     * @return array
      */
     function parseFile($text_line, $settings)
     {

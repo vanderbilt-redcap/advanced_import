@@ -5,6 +5,8 @@ use Vanderbilt\AdvancedImport\App\Models\DateTimeFormat;
 class DateTimeValidator implements ValidatorInterface
 {
 
+    private $validation_format;
+
     const FORMATS = [
         'time' => DateTimeFormat::TIME,
         'date' => DateTimeFormat::DATE,
@@ -35,7 +37,7 @@ class DateTimeValidator implements ValidatorInterface
      * rule of the REDCap field
      *
      * @param string $validation_format
-     * @return void
+     * @return string
      */
     private function getDBFormat($validation_format) {
         $redcap_format = DateTimeFormat::getRedcapFormat($validation_format);

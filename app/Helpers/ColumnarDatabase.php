@@ -117,7 +117,7 @@ class ColumnarDatabase
      * 
      * @param string $query_string
      * @param array $params [['s','2'], ['i', 2], etc...]
-     * @return QueryResult
+     * @return Query
      */
     public function runQuery($query_string, $params=[])
     {   
@@ -162,7 +162,7 @@ class ColumnarDatabase
      * @param string $tableName
      * @param string $whereStatement a WHERE statement that can also include ORDER BY, LIMIT and all other supported statements
      * @param array $params paramenters to bind to the query
-     * @return QueryResult
+     * @return Query
      */
     public function search($tableName, $whereStatement='', $params=[]) {
         $whereStatement = preg_replace("/[\s]*WHERE[\s]*/i", '', $whereStatement); //remove WHERE if included
@@ -322,9 +322,9 @@ class ColumnarDatabase
      *
      * @param string $tableName
      * @param array $params associative array [fieldName=>value]
-     * @param array $whereStatement a WHERE statement (WHERE word can be omitted)
+     * @param string $whereStatement a WHERE statement (WHERE word can be omitted)
      * @param array $whereParams params applied to $stmt->bind_param
-     * @return void
+     * @return boolean
      */
     public function update($tableName, $params, $whereStatement='', $whereParams=[]) {
         $stopTransaction = function() {
@@ -369,7 +369,7 @@ class ColumnarDatabase
      *
      * @param array $array
      * @param callable $fn
-     * @return Boolean
+     * @return boolean
      */
     private static function array_any(array $array, callable $fn) {
         foreach ($array as $value) {
@@ -386,7 +386,7 @@ class ColumnarDatabase
      *
      * @param array $array
      * @param callable $fn
-     * @return Boolean
+     * @return boolean
      */
     private static function array_every(array $array, callable $fn) {
         foreach ($array as $value) {

@@ -1,6 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Interfaces;
 
-
+use SplSubject;
 
 interface ObserverInterface
 {
@@ -13,4 +13,5 @@ interface ObserverInterface
      * @return void
      */
     public function update($subject, $event = null, $data = null);
+
 }

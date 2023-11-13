@@ -1,9 +1,12 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Parser;
 
+use Exception;
 use Vanderbilt\AdvancedImport\App\Models\DateTimeFormat;
 
 class DateTimeParser extends AbstractParser
 {
+    private $from;
+    private $validation_format;
 
     /**
      *
@@ -22,7 +25,7 @@ class DateTimeParser extends AbstractParser
      *
      * @param \DateTime $date
      * @param string $validation_format
-     * @return void
+     * @return string
      */
     private function convert($date, $validation_format) {
         $format = DateTimeFormat::getRedcapFormat($validation_format);

@@ -75,7 +75,7 @@ class Logs extends BaseModel
     public function delete($project_id)
     {
         $prefix = $this->module->PREFIX;
-        if(empty($project_id || empty($prfix)))
+        if(empty($project_id || empty($prefix)))
         {
             throw new \Exception("Error: no project_id or module prefix have been specified. Cannot delete.", 400);
         }

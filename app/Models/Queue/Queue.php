@@ -1,5 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Models\Queue;
 
+use Generator;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Traits\Observer\SubjectTrait;
 

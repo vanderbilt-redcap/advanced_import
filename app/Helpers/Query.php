@@ -101,7 +101,7 @@ class Query
      * remove the provided FROM and adjust using the external modules setting table
      *
      * @param string $query_string
-     * @return void
+     * @return string
      */
     private function normalizeQuery($query_string) {
         $fromRegExp = "/\sFROM\s*?['`]?(?<table>[^\s'`]+)['`]?(?<where> ?WHERE)?/i";

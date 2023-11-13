@@ -3,7 +3,6 @@
 use Vanderbilt\AdvancedImport\App\Models\Import;
 use Vanderbilt\AdvancedImport\App\Models\Response;
 use Vanderbilt\AdvancedImport\App\Models\ParserFactory;
-use Vanderbilt\AdvancedImport\App\Traits\Observer\SubjectTrait;
 
 /**
  * Append/Update: add new records or update existing ones
@@ -47,11 +46,11 @@ class AppendUpdate extends AbstractImporter
 	/**
 	 * Undocumented function
 	 *
-	 * @param array $data_to_process
+	 * @param array $data
 	 * @param integer $line
 	 * @return void
 	 */
-	function process($data_to_process, $line)
+	function process($data, $line)
 	{
 		$project_id = $this->project_id;
 		$this->line = $line;
@@ -65,7 +64,7 @@ class AppendUpdate extends AbstractImporter
 		list($project_primary_key, $project_secondary_key) = $this->record_helper->getPrimaryKeys();
 
 		try {
-			$data = $this->preProcess($data_to_process);
+			$data = $this->preProcess($data);
 		}catch (\Exception $e) {
 			$message = "Error pre-processing CSV data:\n".$e->getMessage();
 			$this->notify(self::NOTIFICATION_PROCESS_ERROR, compact('e', 'message'));

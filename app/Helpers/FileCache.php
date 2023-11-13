@@ -1,6 +1,7 @@
 <?php
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
+use Exception;
 use ExternalModules\ExternalModules;
 
 class FileCache
@@ -37,7 +38,7 @@ class FileCache
    */
   private function setCacheDir($path) {
     $realPath = realpath($path);
-    if(!$realPath) throw new \Exception("There was an error setting the cache directory. Please check with your server administrator if {$path} exists", 1);
+    if(!$realPath) throw new Exception("There was an error setting the cache directory. Please check with your server administrator if {$path} exists", 1);
     $this->cacheDir = $realPath;
   }
 

@@ -94,7 +94,7 @@ abstract class Job implements JobInterface, JsonSerializable
      * - update the status based on the action flag
      * - return the status
      *
-     * @return void
+     * @return string
      */
     public function getStatus()
     {

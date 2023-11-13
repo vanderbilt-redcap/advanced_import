@@ -33,12 +33,12 @@ class ImportJob extends Job implements ObserverInterface
     /**
      * react when the observed import sends an update
      *
-     * @param SplSubject $importManager
+     * @param SplSubject $subject
      * @param string $event
      * @param array $data
      * @return void
      */
-    public function update($importManager, $event = null, $data = null)
+    public function update($subject, $event = null, $data = null)
     {
         switch ($event) {
             case Import::NOTIFICATION_PROCESS_STARTED:

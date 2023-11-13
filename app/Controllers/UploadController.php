@@ -1,5 +1,6 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Controllers;
 
+use Exception;
 use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\NameEncryptUploader;
 use Vanderbilt\AdvancedImport\App\Models\ChunkUploader\ChunkUploader;
