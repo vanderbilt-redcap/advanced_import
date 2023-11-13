@@ -1,6 +1,7 @@
 <?php
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
+use Records;
 use Project;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
@@ -109,8 +110,8 @@ class RecordHelper
     {
         $project_id = $this->project_id;
         $query_string = sprintf(
-            "SELECT DISTINCT record FROM redcap_data
-            WHERE project_id=%u
+            "SELECT DISTINCT record FROM ".Records::getDataTable($this->project_id).
+            "WHERE project_id=%u
             AND `field_name`='%s'
             AND `value`=%s",
             $project_id,

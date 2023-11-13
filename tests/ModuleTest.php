@@ -8,6 +8,7 @@ use Vanderbilt\AdvancedImport\AdvancedImport;
 
 class ModuleTest extends \ExternalModules\ModuleBaseTest
 {
+    private $project_id;
     private $createdJobId = null;
 
     /**
@@ -22,7 +23,8 @@ class ModuleTest extends \ExternalModules\ModuleBaseTest
     function testDeleteAllData() {
         define('PROJECT_ID', $this->project_id);
         $getTotal = function() {
-            $dataTotalQueryString = sprintf('SELECT count(`record`) AS `total` FROM `redcap_data` WHERE project_id=%u', $this->project_id);
+            $dataTotalQueryString = sprintf(
+                'SELECT count(`record`) AS `total` FROM '.Records::getDataTable($this->project_id).' WHERE project_id=%u',$this->project_id);
             $result = db_query($dataTotalQueryString);
             $deleted = false;
             if($row = db_fetch_assoc($result)) {
@@ -32,7 +34,7 @@ class ModuleTest extends \ExternalModules\ModuleBaseTest
         };
         $deleteAll = function() {
             $project = new \Project($this->project_id);
-            $dataQueryString = sprintf('SELECT distinct `record` FROM `redcap_data` WHERE project_id=%u', $this->project_id);
+            $dataQueryString = sprintf('SELECT distinct `record` FROM '.Records::getDataTable($this->project_id).' WHERE project_id=%u', $this->project_id);
             $result = db_query($dataQueryString);
             while($row = db_fetch_assoc($result)) {
                 $record = @$row['record'];
