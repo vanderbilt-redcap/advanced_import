@@ -48,6 +48,6 @@
     ],
     "compatibility": {
         "php-version-min": "7.2.0",
-        "redcap-version-min": "11.0.0"
+        "redcap-version-min": "13.10.0"
     }
  }
