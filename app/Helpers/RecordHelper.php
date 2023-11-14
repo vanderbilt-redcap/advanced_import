@@ -112,13 +112,12 @@ class RecordHelper
         $project_id = $this->project_id;
         $query_string = sprintf(
             "SELECT DISTINCT record FROM ".AdvancedImport::getDataTable($this->project_id).
-            " WHERE project_id=%u
-            AND `field_name`='%s'
-            AND `value`=%s",
-            $project_id,
-            $primary_key_field, checkNull($primary_key_value)
+            " WHERE project_id = ?
+            AND `field_name`= ?
+            AND `value`= ?",
+            
         );
-        $result = db_query($query_string);
+        $result = db_query($query_string, [$project_id, $primary_key_field, $primary_key_value]);
         if($row=db_fetch_assoc($result)) {
             return $row['record'] ?? false;
         }

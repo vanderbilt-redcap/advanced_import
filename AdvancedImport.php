@@ -49,11 +49,6 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
     const TABLES_PREFIX = 'advanced_ie_';
     const UPLOAD_FOLDER_NAME = 'uploads';
 
-    function __construct()
-    {
-        parent::__construct();
-    }
-
     function getId()
     {
         if(!$this->id) {
