@@ -1,6 +1,7 @@
 <?php namespace Vanderbilt\AdvancedImport\App\Traits;
 
 use Records;
+use Vanderbilt\AdvancedImport\AdvancedImport;
 
 trait CanGetRecordData
 {
@@ -27,8 +28,8 @@ trait CanGetRecordData
     function getRecordId($project_id, $event_id, $primary_key_field, $primary_key_value)
     {
         $query_string = sprintf(
-            "SELECT record FROM ".Records::getDataTable($this->project_id).
-            "WHERE
+            "SELECT record FROM ".AdvancedImport::getDataTable($this->project_id).
+            " WHERE
             project_id=%u
             AND event_id=%u
             AND field_name=%s

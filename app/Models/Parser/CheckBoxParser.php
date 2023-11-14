@@ -38,7 +38,7 @@ class CheckBoxParser extends AbstractParser
          * else get one value per provided index
          */
         if(count($value)===1) {
-            $index = reset($csvIndexes);
+            $index = reset($value);
             $values = preg_split('/[,;\s]/', $value[$index] ?? '');
             $values = array_filter($values, function($value) {
                 return preg_match('/\d+/', $value);

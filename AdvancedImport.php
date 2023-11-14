@@ -76,6 +76,18 @@ class AdvancedImport extends AbstractExternalModule implements Mediator, Observe
         if(!file_exists($data_directrory)) mkdir($data_directrory, 0777, $recursive=true);
         return realpath($data_directrory);
     }
+
+    public static function getDataTable($project_id) {
+        // Check if the getDataTable method exists in the REDCap class
+        if (method_exists('\REDCap', 'getDataTable')) {
+            // Call the getDataTable method with $project_id as parameter
+            $result = call_user_func_array(['\REDCap', 'getDataTable'], [$project_id]);
+        } else {
+            // If the method does not exist, set a default value
+            $result = "redcap_data";
+        }
+        return $result;
+    }
     
     /**
      * path to the folder where the

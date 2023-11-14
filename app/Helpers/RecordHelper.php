@@ -1,12 +1,13 @@
 <?php
 namespace Vanderbilt\AdvancedImport\App\Helpers;
 
-use Records;
 use Project;
-use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
-use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
-use Vanderbilt\AdvancedImport\App\Traits\CanGetRecordData;
+use Records;
+use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Traits\CanReadCSV;
+use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
+use Vanderbilt\AdvancedImport\App\Traits\CanGetRecordData;
+use Vanderbilt\AdvancedImport\App\Traits\CanGetProjectData;
 
 class RecordHelper
  {
@@ -110,8 +111,8 @@ class RecordHelper
     {
         $project_id = $this->project_id;
         $query_string = sprintf(
-            "SELECT DISTINCT record FROM ".Records::getDataTable($this->project_id).
-            "WHERE project_id=%u
+            "SELECT DISTINCT record FROM ".AdvancedImport::getDataTable($this->project_id).
+            " WHERE project_id=%u
             AND `field_name`='%s'
             AND `value`=%s",
             $project_id,

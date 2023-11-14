@@ -3,6 +3,7 @@ namespace Vanderbilt\AdvancedImport\App\Helpers;
 
 use Project;
 use Records;
+use Vanderbilt\AdvancedImport\AdvancedImport;
 use Vanderbilt\AdvancedImport\App\Models\ImportSettings;
 
 class InstanceSeeker
@@ -100,8 +101,8 @@ class InstanceSeeker
       $query_string = sprintf(
         "SELECT `record`, IFNULL(instance, 1) `normalized_instance`,
             %s
-        FROM ".Records::getDataTable($this->project_id).
-        "WHERE `project_id` = %u
+        FROM ".AdvancedImport::getDataTable($this->project_id).
+        " WHERE `project_id` = %u
         AND `event_id` = %u
         AND `record`=%s
         GROUP BY record, normalized_instance
@@ -187,8 +188,8 @@ class InstanceSeeker
 
       $query_string = sprintf(
         "SELECT COALESCE(MAX(IFNULL(instance,1)),0)+1 AS next_instance
-        FROM ".Records::getDataTable($this->project_id).
-        "WHERE `project_id` = %u
+        FROM ".AdvancedImport::getDataTable($this->project_id).
+        " WHERE `project_id` = %u
         AND `event_id` = %u
         AND `record`=%s
         AND `field_name` IN (%s)",
