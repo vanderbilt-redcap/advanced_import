@@ -40,4 +40,3 @@ $metadata = $db->getMetadata($table_name);
 <?php 
 $page->PrintFooterExt();
 ?>
-
