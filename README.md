@@ -74,3 +74,4 @@ For now the module will only export the structure of an instrument.
 * a specific file is deleted when the associated job is deleted
 * all files are deleted when the module is disabled at system level
 * a cronjob process checks for “ready” jobs every minute and starts them, one at a time. When a process takes too much time, it pauses for a minute and is resumed at the next cron cycle to avoid timeout issues
+
